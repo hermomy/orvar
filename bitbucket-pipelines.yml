@@ -1,0 +1,10 @@
+image: node:6.9.4
+pipelines:
+  branches:
+    dev-master:
+        - step:
+            caches:
+              - node
+            script:
+              - npm install --save-dev
+              - npm run test

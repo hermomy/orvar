@@ -1,0 +1,68 @@
+.top-bar-container {
+    .side-menu-burder {
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: white;
+        padding: 13px 16px;
+    }
+
+    .side-menu-container {
+        .side-menu-overlay {
+            background-color: RGBA(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .side-menu-content {
+            top: 0;
+            bottom: 0;
+            position: fixed;
+            background-color: RGBA(255, 255, 255, 0.92);
+            box-shadow: -2px 0px 5px 0px RGBA(0, 0, 0, 0.5);
+
+            .side-menu-item {
+                background-color: red;
+            }
+        }
+    }
+
+    .orvar-how-to {
+        position: absolute;
+        left: 1rem;
+        top: .75rem;
+        font-weight: bold;
+        border-radius: 15px;
+        padding: 0.15rem 0.65rem;
+        text-decoration: none;
+
+        &:hover {
+            background-color: #FF0066;
+        }
+    }
+
+    .top-bar-side-title {
+        padding: 8px;
+        font-size: 50%;
+        font-weight: 900;
+        letter-spacing: 5px;
+        font-family: cursive;
+        display: inline-block;
+    }
+
+    .top-bar-title {
+        color: white;
+        padding: 8px;
+        font-weight: 900;
+        letter-spacing: 5px;
+        font-family: cursive;
+        display: inline-block;
+
+        &.big {
+            font-size: 150%;
+        }
+    }
+}

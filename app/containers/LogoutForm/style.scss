@@ -1,0 +1,16 @@
+.logoutForm-wrapper {
+    height: 60vh;
+
+    .logoutForm-div {
+        margin: auto;
+        border-radius: 15px;
+        box-shadow: 0px 0px 1px 2px RGBA(0, 0, 0, 0.3);
+        max-width: 350px;
+        text-align: center;
+        padding: 3rem;
+
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}

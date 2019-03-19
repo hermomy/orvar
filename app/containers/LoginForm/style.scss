@@ -1,0 +1,12 @@
+.loginForm-wrapper {
+    max-width: 300px;
+    text-align: center;
+    margin: auto;
+    height: 60vh;
+
+    form.login-form {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
