@@ -38,7 +38,7 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
                 {/* <div><Fancy /></div> */}
                 <Section>
                     <div key="sadfsdf">
-                        <NavLink to={'/'} className="page-select-button hershop-button" title="title">
+                        <NavLink to={'/MallPage'} className="page-select-button hershop-button" title="title">
                             title
                         </NavLink>
                     </div>

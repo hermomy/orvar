@@ -23,7 +23,7 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
 import Notify from 'containers/Notify';
-
+import MallPage from 'containers/MallPage';
 import HomePage from 'containers/HomePage';
 import LogoutForm from 'containers/LogoutForm';
 import NotFoundPage from 'containers/NotFoundPage';
@@ -64,6 +64,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         {/* <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} /> */}
                         <Route exact={true} path="/logout" component={LogoutForm} />
                         <Route exact={true} path="/" component={HomePage} />
+                        <Route exact={true} path="/MallPage" component={MallPage} />
                         {/* <PrivateRoute
                             exact={true}
                             path="/"
