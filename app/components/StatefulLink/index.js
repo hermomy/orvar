@@ -4,7 +4,7 @@
 *
 *  Parameters >>
 *  - [state] State that want to pass to another page
-*  - [path] Navigation Path 
+*  - [path] Navigation Path
 *
 *  Sample Code >>
 *  - <StatefulLink state={{ a: 1 }} path="/mall">title</StatefulLink>
