@@ -26,6 +26,7 @@ import Notify from 'containers/Notify';
 
 import HomePage from 'containers/HomePage';
 import LogoutForm from 'containers/LogoutForm';
+import HerListing from 'containers/HerListing';
 import NotFoundPage from 'containers/NotFoundPage';
 
 // import { dataChecking } from 'globalUtils';
@@ -63,6 +64,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                     <Switch>
                         {/* <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} /> */}
                         <Route exact={true} path="/logout" component={LogoutForm} />
+                        <Route exact={true} path="/HerListing" component={HerListing} />
                         <Route exact={true} path="/" component={HomePage} />
                         {/* <PrivateRoute
                             exact={true}
