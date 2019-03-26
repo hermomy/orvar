@@ -6,7 +6,7 @@ import LoginForm from 'containers/LoginForm';
 const PrivateRoute = ({ component: Component, render: propsRender, token, ...remainingProps }) => {
     const renderContent = (props) => {
         if (!token) {
-            return <LoginForm />;
+            return <LoginForm title="Login to Hermo" />;
         }
 
         if (propsRender) {
