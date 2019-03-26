@@ -24,7 +24,8 @@ function StatefulLink(props) {
                 pathname: props.path,
                 state: props.state,
             }}
-        >{props.children}</NavLink>
+            {...props}
+        />
     );
 }
 
