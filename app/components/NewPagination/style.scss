@@ -1,0 +1,34 @@
+.pagination {
+    padding: 0.5rem 0.75rem;
+    line-height: 1.5;
+    color: #0275d8;
+    text-decoration: none;
+    background-color: #fff;
+
+    .pagination-word {
+        padding: 0.5rem 0.75rem;
+        line-height: 1.5;
+        color: #0275d8;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .pagination-active-word {
+        padding: 0.5rem 0.75rem;
+        line-height: 1.5;
+        color: white;
+        text-decoration: none;
+        background-color: #660033;
+        border: 1px solid #ddd;
+    }
+
+    .disablePagiBtn {
+        padding: 0.5rem 0.75rem;
+        line-height: 1.5;
+        color: #0275d8;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+}

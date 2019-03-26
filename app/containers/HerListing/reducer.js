@@ -9,11 +9,15 @@ import {
     GETDATA,
     GETDATASUCCESS,
     GETDATAFAIL,
+    GETPAGE,
+    GETPAGESUCCESS,
+    GETPAGEFAIL,
 } from './constants';
 
 const initialState = fromJS({});
 
 function herListingReducer(state = initialState, action) {
+    const newdata = { ...state.get('data') };
     switch (action.type) {
         case GETDATA:
             return state
@@ -35,6 +39,20 @@ function herListingReducer(state = initialState, action) {
                         type: 'error',
                     }],
                 });
+
+        case GETPAGE:
+            return state
+                .set('loading', true);
+        case GETPAGESUCCESS:
+            if (newdata.product && newdata.product.result) {
+                newdata.product.result = action.data;
+            }
+            return state
+                .set('data', newdata)
+                .set('loading', false);
+        case GETPAGEFAIL:
+            return state
+                .set('loading', false);
         default:
             return state;
     }
