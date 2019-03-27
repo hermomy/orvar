@@ -1,10 +1,10 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import { LogoutForm } from '../index';
+// import StatefulLink from '../index';
 
-describe('<LogoutForm />', () => {
+describe('<StatefulLink />', () => {
     it('Expect to have unit tests specified', () => {
-        expect(false).toEqual(false);
+        expect(true).toEqual(false);
     });
 });
