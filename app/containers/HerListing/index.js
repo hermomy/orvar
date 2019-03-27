@@ -24,6 +24,7 @@ import { getData,
          getPage,
 } from './actions';
 import NewPagination from '../../components/NewPagination';
+// import ProductCard from '../../components/ProductCard';
 
 export class HerListing extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     componentWillMount() {
@@ -46,6 +47,20 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
             />
         );
     }
+    // prodPage = () => {
+    //     dataChecking(this.props, 'herlisting', 'data', 'product', 'result', 'items') ?
+    //         this.props.herlisting.data.product.result.items.map((product, index) =>
+    //         {
+    //             return (
+    //                 <ProductCard
+    //                     product={product}
+    //                     index={index}
+    //                 />
+    //             );
+    //         }
+    //         )
+    //     :
+    // }
 
     render() {
         return (
@@ -62,20 +77,14 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                 </div>
                 <p><span className="foundItemNumber"></span>items found</p>
                 <div className="itemList">
-                    {
-                        this.Paging()
-                    }
-                    {
-                        dataChecking(this.props, 'herlisting', 'data', 'product', 'result', 'items') ?
-                        this.props.herlisting.data.product.result.items.map((b, index) => (
-                            (<p key={`mall_item_${index}`}>{b.name}</p>)
-                        )) : 'empty'
-                    }
+                    {this.Paging()}
+                    {this.prodPage()}
                 </div>
             </div>
         );
     }
 }
+// <i class="fa fa-heart-o" aria-hidden="true"></i>
 
 HerListing.propTypes = {
     dispatch: PropTypes.func.isRequired,

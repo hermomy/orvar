@@ -1,8 +1,7 @@
 // import { take, call, put, select } from 'redux-saga/effects';
 
 import { takeLatest, call, put } from 'redux-saga/effects';
-import { apiRequest, setCookie } from 'globalUtils';
-import globalScope from 'globalScope';
+import { apiRequest } from 'globalUtils';
 
 import { GETDATA,
          GETPAGE,

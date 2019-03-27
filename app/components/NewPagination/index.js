@@ -74,3 +74,11 @@ NewPagination.propTypes = {
 };
 
 export default NewPagination;
+
+/* <NewPagination
+    dpatch={(page) => {
+        this.props.dispatch(getPage(page));
+    }}
+    meta={data._meta}
+    link={data._links}
+/> */
