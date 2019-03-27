@@ -291,7 +291,6 @@
         "moment-timezone": "^0.5.14",
         "prop-types": "15.5.10",
         "react": "^16.6.3",
-        "react-bootstrap": "^0.32.4",
         "react-datepicker": "^2.1.0",
         "react-dom": "^16.6.3",
         "react-helmet": "5.1.3",
