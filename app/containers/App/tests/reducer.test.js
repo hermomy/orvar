@@ -6,8 +6,18 @@ import languageProviderReducer from '../reducer';
 // } from '../constants';
 
 describe('appReducer', () => {
-    it('returns the initial state', () => {
-        expect(languageProviderReducer(undefined, {})).toEqual(fromJS({}));
+    let state;
+
+    beforeEach(() => {
+        state = fromJS({
+            config: {},
+        });
+    });
+
+    it('should return the initial state', (done) => {
+        const expectedResult = state;
+        expect(languageProviderReducer(undefined, {})).toEqual(fromJS(expectedResult));
+        done();
     });
 
     // it('changes the locale', () => {

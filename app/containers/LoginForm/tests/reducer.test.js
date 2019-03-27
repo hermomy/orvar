@@ -5,17 +5,18 @@ import {
     doLogin,
     // doLogout,
     loginSuccess,
-    // loginFailed,
+    loginFailed,
 } from '../actions';
 
 describe('loginFormReducer', () => {
     let state;
     const responseSuccess = { token: '123' };
-    // const responseFailed = { success: false };
+    const responseFailed = true;
     beforeEach(() => {
         state = fromJS({
             loading: false,
             error: false,
+            loginSuccess: false,
         });
     });
 
@@ -41,14 +42,14 @@ describe('loginFormReducer', () => {
     // });
 
     it('should set loading false when success', (done) => {
-        const expected = state.set('loading', false).set('error', false);
+        const expected = state.set('loading', false).set('error', false).set('loginSuccess', true);
         expect(loginFormReducer(state, loginSuccess(responseSuccess))).toEqual(expected);
         done();
     });
 
     it('should show error if login failed', (done) => {
-        // const expected = state.set('loading', { success: false }).set('error', true);
-        // expect(loginFormReducer(state, loginFailed(responseFailed))).toEqual(expected);
+        const expected = state.set('loading', false).set('error', true);
+        expect(loginFormReducer(state, loginFailed(responseFailed))).toEqual(expected);
         done();
     });
 
