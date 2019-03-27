@@ -31,9 +31,11 @@ export const authkeys = ['username', 'password'];
 
 export const Form = (props) => (
     <form className="login-form" onSubmit={props.action}>
-        {props.keys.map((key) => (
-            <Input key={key} type={key} placeholder={key} name={key} />)
-        )}
+        {
+            props.keys.map((key) => (
+                <Input key={key} type={key} placeholder={key} name={key} />
+            ))
+        }
         {props.error &&
             <ErrorMessage error={props.error} type="danger" />
         }
@@ -55,9 +57,9 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
     loginAction = (evt) => {
         evt.preventDefault();
         const form = {};
-        authkeys.map((key) => (
-            form[key] = evt.target[key].value)
-        );
+        authkeys.forEach((key) => {
+            form[key] = evt.target[key].value;
+        });
         this.props.dispatch(doLogin(form));
     };
 
