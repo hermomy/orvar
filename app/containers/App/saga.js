@@ -1,9 +1,9 @@
-import { call, put } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { staticErrorResponse, request } from 'globalUtils';
 
-// import {
-//     FETCH_CONFIG,
-// } from './constants';
+import {
+    FETCH_CONFIG,
+} from './constants';
 
 import {
     fetchConfigSuccess,
@@ -34,5 +34,5 @@ export function* getConfigData() {
 }
 
 export default function* appSaga() {
-    // yield takeLatest(FETCH_CONFIG, getConfigData);
+    yield takeLatest(FETCH_CONFIG, getConfigData);
 }

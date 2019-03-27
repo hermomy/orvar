@@ -6,36 +6,36 @@ import {
     loginFailed,
 } from '../actions';
 import {
-    LOGIN,
-    LOGOUT,
-    LOGIN_SUCCESS,
-    LOGIN_FAILED,
+    AUTH_LOGIN,
+    AUTH_LOGOUT,
+    AUTH_LOGIN_SUCCESS,
+    AUTH_LOGIN_FAILED,
 } from '../constants';
 
 describe('LoginForm actions', () => {
     describe('doLogin()', () => {
-        it('has a type of LOGIN', () => {
+        it('has a type of AUTH_LOGIN', () => {
             const expected = {
-                type: LOGIN,
+                type: AUTH_LOGIN,
             };
             expect(doLogin()).toEqual(expected);
         });
     });
 
     describe('doLogout()', () => {
-        it('has a type of LOGOUT', () => {
+        it('has a type of AUTH_LOGOUT', () => {
             const expected = {
-                type: LOGOUT,
+                type: AUTH_LOGOUT,
             };
             expect(doLogout()).toEqual(expected);
         });
     });
 
     describe('loginSuccess()', () => {
-        it('has a type of LOGIN_SUCCESS', () => {
+        it('has a type of AUTH_LOGIN_SUCCESS', () => {
             const response = { token: '' };
             const expected = {
-                type: LOGIN_SUCCESS,
+                type: AUTH_LOGIN_SUCCESS,
                 payload: response.token,
             };
             expect(loginSuccess(response)).toEqual(expected);
@@ -43,9 +43,9 @@ describe('LoginForm actions', () => {
     });
 
     describe('loginFailed()', () => {
-        it('has a type of LOGIN_FAILED', () => {
+        it('has a type of AUTH_LOGIN_FAILED', () => {
             const expected = {
-                type: LOGIN_FAILED,
+                type: AUTH_LOGIN_FAILED,
                 payload: undefined,
             };
             expect(loginFailed()).toEqual(expected);

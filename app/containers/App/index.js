@@ -30,7 +30,7 @@ import HerListing from 'containers/HerListing';
 import NotFoundPage from 'containers/NotFoundPage';
 
 // import { dataChecking } from 'globalUtils';
-// import globalScope from 'globalScope';
+import globalScope from 'globalScope';
 
 import {
     makeSelectLocation,
@@ -42,7 +42,7 @@ import {
     fetchConfig,
 } from './actions';
 
-// import PrivateRoute from './PrivateRoute';
+import PrivateRoute from './PrivateRoute';
 
 const topbarHeight = '40px';
 
@@ -65,13 +65,14 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         {/* <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} /> */}
                         <Route exact={true} path="/logout" component={LogoutForm} />
                         <Route exact={true} path="/HerListing" component={HerListing} />
-                        <Route exact={true} path="/" component={HomePage} />
                         {/* <PrivateRoute
+                        {/* <Route exact={true} path="/" component={HomePage} /> */}
+                        <PrivateRoute
                             exact={true}
                             path="/"
                             token={globalScope.token || ''}
                             render={() => <HomePage />}
-                        /> */}
+                        />
                         <Route path="" component={NotFoundPage} />
                     </Switch>
                 </HershopContent>
