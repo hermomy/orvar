@@ -1,8 +1,11 @@
-// import { fromJS } from 'immutable';
-// import { selectProductViewDomain } from '../selectors';
+import { fromJS } from 'immutable';
+import selectProductViewDomain from '../selectors';
+import { initialState } from '../reducer';
 
 describe('selectProductViewDomain', () => {
-    it('Expect to have unit tests specified', () => {
-        expect(true).toEqual(false);
+    it('Should selector select productView from state', () => {
+        const selector = selectProductViewDomain();
+        const mock = fromJS({ productView: initialState });
+        expect(selector(mock)).toEqual(initialState.toJS());
     });
 });
