@@ -19,7 +19,7 @@ import {
 describe('productview Saga', () => {
     const api = 'https://mock-url';
 
-    it('Should worker getProduct() fired when GET_PRODUCT is dispatched', () => {
+    it('Expect worker getProduct() fired when GET_PRODUCT is dispatched', () => {
         const generator = productViewSaga();
         expect(generator.next(getProduct(api)).value).toEqual(takeLatest(GET_PRODUCT, productSaga));
     });

@@ -1,9 +1,9 @@
 .product-image-panel {
-    
+
     .product-image {
+        padding: 20px 0px 20px 0px;
         display: block;
         margin: auto;
-        padding: 20px 0px 20px 0px;
     }
 }
 
@@ -81,5 +81,18 @@
 
     &.bold {
         height: 5px;
+    }
+}
+
+.accordion-panel {
+    background-color: wheat;
+
+    .accordion-container {
+        padding: 20px;
+        
+        .accordion-title {
+            font-size: 1.1em;
+            font-weight: 500;
+        }
     }
 }

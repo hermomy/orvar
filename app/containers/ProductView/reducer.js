@@ -11,7 +11,7 @@ import {
     GET_PRODUCT_SUCCESS,
 } from './constants';
 
-const initialState = fromJS({});
+export const initialState = fromJS({});
 
 function productViewReducer(state = initialState, action) {
     switch (action.type) {

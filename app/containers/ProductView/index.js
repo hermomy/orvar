@@ -12,7 +12,7 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
-import Slider from 'components/Slider';
+import Accordion from 'components/Accordion';
 import HashTag from 'components/HashTag';
 import { dataChecking } from 'globalUtils';
 
@@ -62,18 +62,34 @@ export class ProductView extends React.PureComponent { // eslint-disable-line re
                     </div>
                 </div>
                 <div className="hashtags-panel">
-                    <HashTag tags={product.hashtags || []} />
+                    <HashTag className="hashtags" tags={product.hashtags || []} />
                 </div>
                 <hr className="splitter" />
                 <div className="related-items-panel">
-                    <Slider className="slider">
+                    <div className="slider">
                         <div className="slide">ABC</div>
                         <div className="slide">ABC</div>
                         <div className="slide">ABC</div>
                         <div className="slide">ABC</div>
-                    </Slider>
+                    </div>
                 </div>
                 <hr className="splitter bold" />
+                <Accordion
+                    className="accordion-panel"
+                    height_threshold="162px"
+                    contents={[
+                        {
+                            key: 'product-desc',
+                            title: 'Production Information',
+                            description: product.description,
+                        },
+                        {
+                            key: 'details-usage',
+                            title: 'Details & Usage',
+                            description: product.usage,
+                        },
+                    ]}
+                />
             </div>
         );
     }
