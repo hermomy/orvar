@@ -10,14 +10,13 @@ import PropTypes from 'prop-types';
 
 function HashTag(props) {
     return (
-        <div>
+        <div className={props.className}>
             {
                 props.tags.map((tag) =>
                 (
                     <div
                         key={tag.id}
                         className={`hashtag ${tag.id}`}
-                        // onClick
                     >
                         #{tag.name}
                     </div>
