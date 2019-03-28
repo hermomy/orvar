@@ -1,9 +1,9 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import ProductCard from '../index';
+// import NewPagination from '../index';
 
-describe('<ProductCard />', () => {
+describe('<Pagination />', () => {
     it('Expect to have unit tests specified', () => {
         expect(true).toEqual(true);
     });

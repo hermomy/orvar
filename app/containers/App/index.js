@@ -65,7 +65,6 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         {/* <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} /> */}
                         <Route exact={true} path="/logout" component={LogoutForm} />
                         <Route exact={true} path="/HerListing" component={HerListing} />
-                        {/* <PrivateRoute
                         {/* <Route exact={true} path="/" component={HomePage} /> */}
                         <PrivateRoute
                             exact={true}

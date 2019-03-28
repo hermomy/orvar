@@ -6,51 +6,50 @@
 
 import { fromJS } from 'immutable';
 import {
-    GETDATA,
-    GETDATASUCCESS,
-    GETDATAFAIL,
-    GETPAGE,
-    GETPAGESUCCESS,
-    GETPAGEFAIL,
+    GET_DATA,
+    GET_DATA_SUCCESS,
+    GET_DATA_FAIL,
+    GET_PAGE,
+    GET_PAGE_SUCCESS,
+    GET_PAGE_FAIL,
 } from './constants';
 
-const initialState = fromJS({});
+export const initialState = fromJS({});
 
 function herListingReducer(state = initialState, action) {
     const newdata = { ...state.get('data') };
     switch (action.type) {
-        case GETDATA:
+        case GET_DATA:
             return state
-                .set('GetDataSuccess', false)
+                .set('getDataSuccess', false)
                 .set('loading', true)
                 .set('error', false);
-        case GETDATASUCCESS:
+        case GET_DATA_SUCCESS:
             return state
                 .set('data', action.payload)
-                .set('GetDataSuccess', true)
+                .set('getDataSuccess', true)
                 .set('loading', false)
                 .set('error', false);
-        case GETDATAFAIL:
+        case GET_DATA_FAIL:
             return state
-                .set('loading, false')
-                .setIn(['error'], action.payload || {
-                    message: [{
-                        text: 'please refresh',
+                .set('loading', false)
+                .setIn(['getDataError'], action.payload ||
+                    [{
+                        text: 'error',
                         type: 'error',
                     }],
-                });
-
-        case GETPAGE:
+                );
+        case GET_PAGE:
             return state
                 .set('loading', true);
-        case GETPAGESUCCESS:
+        case GET_PAGE_SUCCESS:
             if (newdata.product && newdata.product.result) {
                 newdata.product.result = action.data;
             }
             return state
                 .set('data', newdata)
                 .set('loading', false);
-        case GETPAGEFAIL:
+        case GET_PAGE_FAIL:
             return state
                 .set('loading', false);
         default:

@@ -7,7 +7,7 @@ import { defineMessages } from 'react-intl';
 
 export default defineMessages({
     header: {
-        id: 'app.components.NewPagination.header',
-        defaultMessage: 'This is the NewPagination component !',
+        id: 'app.components.Pagination.header',
+        defaultMessage: 'This is the Pagination component !',
     },
 });

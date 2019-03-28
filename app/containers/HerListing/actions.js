@@ -5,51 +5,50 @@
  */
 
 import {
-    GETDATA,
-    GETDATASUCCESS,
-    GETDATAFAIL,
-    GETPAGE,
-    GETPAGESUCCESS,
-    GETPAGEFAIL,
+    GET_DATA,
+    GET_DATA_SUCCESS,
+    GET_DATA_FAIL,
+    GET_PAGE,
+    GET_PAGE_SUCCESS,
+    GET_PAGE_FAIL,
 } from './constants';
 
-export function getData(data) {
+export function getData() {
     return {
-        type: GETDATA,
-        data,
+        type: GET_DATA,
     };
 }
 
 export function getDataSuccess(payload) {
     return {
-        type: GETDATASUCCESS,
+        type: GET_DATA_SUCCESS,
         payload,
     };
 }
 
 export function getDataFail(error) {
     return {
-        type: GETDATAFAIL,
+        type: GET_DATA_FAIL,
         error,
     };
 }
 
 export function getPage(api) {
     return {
-        type: GETPAGE,
+        type: GET_PAGE,
         api,
     };
 }
 
 export function getPageSuccess(data) {
     return {
-        type: GETPAGESUCCESS,
+        type: GET_PAGE_SUCCESS,
         data,
     };
 }
 
 export function getPageFail() {
     return {
-        type: GETPAGEFAIL,
+        type: GET_PAGE_FAIL,
     };
 }

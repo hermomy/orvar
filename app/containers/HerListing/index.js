@@ -23,8 +23,8 @@ import './style.scss';
 import { getData,
          getPage,
 } from './actions';
-import NewPagination from '../../components/NewPagination';
-// import ProductCard from '../../components/ProductCard';
+import Pagination from '../../components/Pagination';
+import ProductCard from '../../components/ProductCard';
 
 export class HerListing extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     componentWillMount() {
@@ -33,12 +33,11 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
 
     Paging = () => {
         const data = dataChecking(this.props, 'herlisting', 'data', 'product', 'result');
-        console.log(this.props);
         if (!data || !data._meta) {
-            return <div style={{ backgroundColor: 'yellow' }}>nigga</div>;
+            return null;
         }
         return (
-            <NewPagination
+            <Pagination
                 dpatch={(page) => {
                     this.props.dispatch(getPage(page));
                 }}
@@ -47,22 +46,9 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
             />
         );
     }
-    // prodPage = () => {
-    //     dataChecking(this.props, 'herlisting', 'data', 'product', 'result', 'items') ?
-    //         this.props.herlisting.data.product.result.items.map((product, index) =>
-    //         {
-    //             return (
-    //                 <ProductCard
-    //                     product={product}
-    //                     index={index}
-    //                 />
-    //             );
-    //         }
-    //         )
-    //     :
-    // }
 
     render() {
+        console.log(this.props);
         return (
             <div>
                 <Helmet>
@@ -78,7 +64,15 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                 <p><span className="foundItemNumber"></span>items found</p>
                 <div className="itemList">
                     {this.Paging()}
-                    {this.prodPage()}
+                    {
+                        dataChecking(this.props, 'herlisting', 'data', 'product', 'result', 'items') ?
+                        this.props.herlisting.data.product.result.items.map((product, index) =>
+                            (<ProductCard
+                                product={product}
+                                index={index}
+                            />)
+                        ) : null
+                    }
                 </div>
             </div>
         );

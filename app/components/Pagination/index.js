@@ -7,7 +7,7 @@
 import React from 'react';
 import './style.scss';
 
-class NewPagination extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class Pagination extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     render() {
         return (
             <div className="pagination">
@@ -19,7 +19,7 @@ class NewPagination extends React.PureComponent { // eslint-disable-line react/p
                 }
                 {
                     this.props.meta.currentPage >= 3 ?
-                        <a className="pagination-word" onClick={() => { this.props.dptach(this.props.link.first.href); }}>1</a>
+                        <a className="pagination-word" onClick={() => { this.props.dpatch(this.props.link.first.href); }}>1</a>
                         :
                         null
                 }
@@ -70,10 +70,10 @@ class NewPagination extends React.PureComponent { // eslint-disable-line react/p
     }
 }
 
-NewPagination.propTypes = {
+Pagination.propTypes = {
 };
 
-export default NewPagination;
+export default Pagination;
 
 /* <NewPagination
     dpatch={(page) => {

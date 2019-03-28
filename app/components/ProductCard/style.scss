@@ -1,0 +1,49 @@
+.empty_star{
+    height: 20px;
+    width: 20px;
+}
+
+.star-rating {
+    color: gold;
+    padding: 1px;
+}
+
+.product_card {
+    position: relative;
+    min-height: 1px;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    margin: 5px 0;
+    overflow: hidden;
+    max-height: 490px;
+
+    .product_card_uppper {
+        padding: 50px 12px 30px 12px;
+        position: relative;
+        border: 1px solid #F2F2F2;
+        border-bottom: none;
+        background: #FFF;
+
+        .product_card_tag {
+            position: absolute;
+            width: 40px;
+            left: 0;
+            top: 0;
+        }
+
+    }
+}
+
+
+
+
+.product_card_img {
+    width:100%;
+}
+
+
+
+
+
