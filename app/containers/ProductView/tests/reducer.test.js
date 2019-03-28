@@ -4,8 +4,8 @@ import productViewReducer, { initialState } from '../reducer';
 import {
     getProduct,
     // getProductById,
-    getProductFail,
-    getProductSuccess,
+    doProductFail,
+    doProductSuccess,
 } from '../actions';
 
 describe('productViewReducer', () => {
@@ -15,11 +15,11 @@ describe('productViewReducer', () => {
         state = initialState;
     });
 
-    it('Should return initial state', () => {
+    it('Expect empty reducer return initial state', () => {
         expect(productViewReducer(undefined, {})).toEqual(state);
     });
 
-    it('Should return loading state when getProduct()', () => {
+    it('Expect reducer with getProduct() return loading state', () => {
         const api = 'https://api.hermo.my/mall/10520';
         expect(
             productViewReducer(state, getProduct(api))
@@ -28,19 +28,19 @@ describe('productViewReducer', () => {
         );
     });
 
-    it('Should return fail state when getProductFail()', () => {
+    it('Expect reducer with doProductFail() return fail state', () => {
         expect(
-            productViewReducer(state, getProductFail())
+            productViewReducer(state, doProductFail())
         ).toEqual(state
             .set('loading', false)
             .set('error', 'Error occurs when get products details.')
         );
     });
 
-    it('Should return success state when getProductSuccess()', () => {
+    it('Expect reducer with doProductSuccess() return success state', () => {
         const data = true;
         expect(
-            productViewReducer(state, getProductSuccess(data))
+            productViewReducer(state, doProductSuccess(data))
         ).toEqual(state
             .set('loading', false)
             .set('data', data)

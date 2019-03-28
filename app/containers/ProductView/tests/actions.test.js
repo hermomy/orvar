@@ -13,7 +13,7 @@ import {
 } from '../constants';
 
 describe('ProductView actions', () => {
-    it('Should getProduct() return type of GET_PRODUCT', () => {
+    it('Expect getProduct() return type of GET_PRODUCT', () => {
         const api = 'https://api.hermo.my/mall/10520';
         const expected = {
             type: GET_PRODUCT,
@@ -22,7 +22,7 @@ describe('ProductView actions', () => {
         expect(getProduct(api)).toEqual(expected);
     });
 
-    it('Should getProductById() return type of GET_PRODUCT', () => {
+    it('Expect getProductById() return type of GET_PRODUCT', () => {
         const productId = 10520;
         const expected = {
             type: GET_PRODUCT,
@@ -31,14 +31,14 @@ describe('ProductView actions', () => {
         expect(getProductById(productId)).toEqual(expected);
     });
 
-    it('Should getProductFail() return type of GET_PRODUCT_FAIL', () => {
+    it('Expect getProductFail() return type of GET_PRODUCT_FAIL', () => {
         const expected = {
             type: GET_PRODUCT_FAIL,
         };
         expect(getProductFail()).toEqual(expected);
     });
 
-    it('Should getProductSuccess() return type of GET_PRODUCT_SUCCESS', () => {
+    it('Expect getProductSuccess() return type of GET_PRODUCT_SUCCESS', () => {
         const data = true;
         const expected = {
             type: GET_PRODUCT_SUCCESS,

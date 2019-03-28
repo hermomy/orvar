@@ -9,7 +9,7 @@ import {
 } from '../selectors';
 
 describe('Global Selector', () => {
-    it('should select the global state', () => {
+    it('Expect select the global state', () => {
         const globalState = fromJS({});
         const mock = fromJS({ global: globalState });
         expect(selectGlobal(mock)).toEqual(globalState);
@@ -17,7 +17,7 @@ describe('Global Selector', () => {
 });
 
 describe('Routes Selector', () => {
-    it('should select the routes state', () => {
+    it('Expect select the routes state', () => {
         const routeState = fromJS({
             location: {},
         });
@@ -25,7 +25,7 @@ describe('Routes Selector', () => {
         expect(selectRoute(mock)).toEqual(routeState);
     });
 
-    it('should select the location', () => {
+    it('Expect select the location', () => {
         const selector = makeSelectLocation();
         const d = fromJS({
             location: {
@@ -41,7 +41,7 @@ describe('Routes Selector', () => {
 });
 
 describe('Session Selector', () => {
-    it('should select the session state', () => {
+    it('Expect select the session state', () => {
         const sessionState = fromJS({
             checked: false,
             user: {},
@@ -52,7 +52,7 @@ describe('Session Selector', () => {
         expect(selectSession(mock)).toEqual(sessionState);
     });
 
-    it('should select the checked', () => {
+    it('Expect select the checked', () => {
         const selectChecked = makeSelectChecked();
         const checkedState = fromJS({
             checked: false,
@@ -64,7 +64,7 @@ describe('Session Selector', () => {
         expect(checkedState.get('checked')).toEqual(selectChecked(mock));
     });
 
-    it('should select user data', () => {
+    it('Expect select user data', () => {
         const selectUser = makeSelectUserData();
         const userState = fromJS({
             user: {},

@@ -16,7 +16,7 @@ describe('<PrivateRoute />', () => {
 //         spy = () => <span />;
 //     });
 
-//     it('should render a route', (done) => {
+//     it('Expect render a route', (done) => {
 //         const wrapper = shallow(
 //             <MemoryRouter initialEntries={['/']} initialIndex={0}>
 //                 <PrivateRoute token={token} path="/" component={spy} />
@@ -26,7 +26,7 @@ describe('<PrivateRoute />', () => {
 //         done();
 //     });
 
-//     // it('should not display LoginForm token="some login token", (done) => {
+//     // it('Expect not display LoginForm token="some login token", (done) => {
 //     //     token = 'some login token';
 //     //     const wrapper = shallow(
 //     //         <MemoryRouter initialEntries={['/']} initialIndex={0}>
@@ -40,7 +40,7 @@ describe('<PrivateRoute />', () => {
 //     //     done();
 //     // });
 
-//     // it('should display LoginForm if authenticated=false', (done) => {
+//     // it('Expect display LoginForm if authenticated=false', (done) => {
 //     //     const wrapper = shallow(
 //     //         <MemoryRouter initialEntries={['/']} initialIndex={0}>
 //     //             <PrivateRoute token={token} path="/" component={spy} />
@@ -53,7 +53,7 @@ describe('<PrivateRoute />', () => {
 //     //     done();
 //     // });
 
-//     it('should render mall page route', (done) => {
+//     it('Expect render mall page route', (done) => {
 //         const wrapper = shallow(
 //             <MemoryRouter initialEntries={['/mall']} initialIndex={0}>
 //                 <PrivateRoute token={token} path="/" component={spy} />

@@ -12,15 +12,15 @@ describe('<Navigator />', () => {
 //     const navigator = shallow(<Navigator items={navItems} />);
 //     const verticalNavigator = shallow(<Navigator items={navItems} vertical={isTrue} />);
 
-//     it('should render Navigator Correctly', () => {
+//     it('Expect render Navigator Correctly', () => {
 //         expect(navigator).toMatchSnapshot();
 //     });
 
-//     it('should have a nav element', () => {
+//     it('Expect have a nav element', () => {
 //         expect(navigator.find('nav').length).toEqual(1);
 //     });
 
-//     it('should be arranged in column if vertical is true', () => {
+//     it('Expect be arranged in column if vertical is true', () => {
 //         expect(verticalNavigator.find('.flex-column').length).toEqual(1);
 //     });
 });

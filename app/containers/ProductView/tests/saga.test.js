@@ -24,7 +24,7 @@ describe('productview Saga', () => {
         expect(generator.next(getProduct(api)).value).toEqual(takeLatest(GET_PRODUCT, productSaga));
     });
 
-    it('Should return fail from worker getProduct() with failed response', () => {
+    it('Expect worker getProduct() return failed response when api is not ok', () => {
         const response = { ok: false };
 
         const generator = productSaga(getProduct(api));
@@ -32,7 +32,7 @@ describe('productview Saga', () => {
         expect(generator.next(response).value).toEqual(put(getProductFail()));
     });
 
-    it('Should return success from worker getProduct() with success response', () => {
+    it('Expect worker getProduct() return success response when api is ok', () => {
         const response = { ok: true };
 
         const generator = productSaga(getProduct(api));
@@ -40,7 +40,7 @@ describe('productview Saga', () => {
         expect(generator.next(response).value).toEqual(put(getProductSuccess()));
     });
 
-    it('Should return fail from worker getProduct() when error have throw by apiRequest', () => {
+    it('Expect worker getProduct() return error response when api thrown an error', () => {
         const error = new Error('Error occurs when calling product api');
 
         const generator = productSaga(getProduct(api));

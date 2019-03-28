@@ -1,22 +1,22 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { apiRequest } from 'globalUtils';
-import { getProductSuccess, getProductFail } from './actions';
+import { doProductSuccess, doProductFail } from './actions';
 import { GET_PRODUCT } from './constants';
 
 // Individual exports for testing
 export default function* defaultSaga() {
-    yield takeLatest(GET_PRODUCT, getProduct);
+    yield takeLatest(GET_PRODUCT, productWorker);
 }
 
-export function* getProduct(action) {
+export function* productWorker(action) {
     try {
         const response = yield call(apiRequest, action.api, 'get');
         if (response.ok) {
-            yield put(getProductSuccess(response.data));
+            yield put(doProductSuccess(response.data));
         } else {
-            yield put(getProductFail());
+            yield put(doProductFail());
         }
     } catch (error) {
-        yield put(getProductFail());
+        yield put(doProductFail());
     }
 }

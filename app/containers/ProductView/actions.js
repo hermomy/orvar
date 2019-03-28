@@ -22,13 +22,13 @@ export function getProductById(productId) {
     };
 }
 
-export function getProductFail() {
+export function doProductFail() {
     return {
         type: GET_PRODUCT_FAIL,
     };
 }
 
-export function getProductSuccess(data) {
+export function doProductSuccess(data) {
     return {
         type: GET_PRODUCT_SUCCESS,
         data,
