@@ -1,0 +1,30 @@
+@import 'app/breakpoints';
+
+.grid_view {
+    display: flex;
+    flex-wrap: wrap;
+
+    .product-card-div {
+        width: 50%;
+
+        @include media-breakpoint-up(md) {
+            width: 33%;
+        }
+
+        @include media-breakpoint-up(lg) {
+            width: 25%;
+        }
+    }
+}
+
+.list_view {
+    display: flex;
+    flex-wrap: wrap;
+
+    .product-card-div {
+        width: 100%;
+        @include media-breakpoint-up(lg) {
+            width: 50%;
+        }
+    }
+}

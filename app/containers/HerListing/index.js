@@ -27,6 +27,10 @@ import Pagination from '../../components/Pagination';
 import ProductCard from '../../components/ProductCard';
 
 export class HerListing extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+    state = {
+        listView: false,
+    };
+
     componentWillMount() {
         this.props.dispatch(getData());
     }
@@ -47,10 +51,25 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         );
     }
 
+    sort = (event) => {
+        this.props.dispatch(getPage(`${this.props.herlisting.data.product._links.self.href}?sort=${event.target.value}`));
+        console.log(event.target.value);
+    }
+
+
     render() {
         console.log(this.props);
+
+        if (this.props.herlisting.loading) {
+            return (
+                <div>
+                    <p>Loading</p>
+                </div>
+            );
+        }
+
         return (
-            <div>
+            <div className="container">
                 <Helmet>
                     <title>HerListing</title>
                     <meta name="description" content="Description of HerListing" />
@@ -61,17 +80,42 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                     <p>xinshanlinzhixuan</p>
                     <p>ydsajondfsfdjjgjgjfjgjgjffdkfdkg</p>
                 </div>
-                <p><span className="foundItemNumber"></span>items found</p>
-                <div className="itemList">
-                    {this.Paging()}
+                <input type="submit" onClick={() => { this.setState({ listView: !this.state.listView }); }} value="grid/list" />
+                {this.Paging()}
+                <div>
+                    <select className="sorter" onChange={(value) => { this.setState({ sortValue: value }); this.sort(value); }} >
+                        {
+                            dataChecking(this.props, 'herlisting', 'data', 'sort', 'items') ?
+                            this.props.herlisting.data.sort.items.map((sort) =>
+                            (
+                                <option key={sort.id} value={sort.id}>{sort.text}</option>
+                            ))
+                            :
+                            null
+                        }
+                    </select>
+                    {/* {
+                        dataChecking(this.props, 'herlisting', 'data', 'sort', 'items') ?
+                        this.props.herlisting.data.sort.items.map((sort) =>
+                        (
+                            <p onClick={() => this.sort(sort.id)} >{sort.text}</p>
+                        ))
+                        :
+                        null
+                    } */}
+                </div>
+                <div className={`${this.state.listView ? 'list_view' : 'grid_view'}`}>
                     {
                         dataChecking(this.props, 'herlisting', 'data', 'product', 'result', 'items') ?
-                        this.props.herlisting.data.product.result.items.map((product, index) =>
-                            (<ProductCard
-                                product={product}
-                                index={index}
-                            />)
-                        ) : null
+                        this.props.herlisting.data.product.result.items.map((product) =>
+                            (
+                                <div className={`product-card-div ${this.state.listView ? 'list_view_component' : 'grid_view_component'}`}>
+                                    <ProductCard
+                                        product={product}
+                                        listViewMode={this.state.listView}
+                                    />
+                                </div>
+                        )) : null
                     }
                 </div>
             </div>

@@ -13,8 +13,8 @@ class Price extends React.PureComponent { // eslint-disable-line react/prefer-st
     render() {
         return (
             <div>
-                <span>{this.props.currency.symbol}{this.props.price.retail}</span>
-                <span>{this.props.price.retail === this.props.price.selling ?
+                <span className="original_price">{this.props.currency.symbol}{this.props.price.retail}</span>
+                <span className="discount_price">{this.props.price.retail === this.props.price.selling ?
                     null
                     :
                     this.props.currency.symbol + this.props.price.selling

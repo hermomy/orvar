@@ -15,7 +15,7 @@ import {
 
 export function* getPayload() {
     try {
-        const payload = yield call(apiRequest, '/mall', 'get', null, '');
+        const payload = yield call(apiRequest, '/brand/10', 'get', null, '');
         if (payload && payload.ok) {
             yield put(getDataSuccess(payload.data));
         } else {
