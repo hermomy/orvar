@@ -41,17 +41,17 @@ function herListingReducer(state = initialState, action) {
                 );
         case GET_PAGE:
             return state
-                .set('loading', true);
+                .set('contentLoading', true);
         case GET_PAGE_SUCCESS:
             if (newdata.product && newdata.product.result) {
                 newdata.product.result = action.data;
             }
             return state
                 .set('data', newdata)
-                .set('loading', false);
+                .set('contentLoading', false);
         case GET_PAGE_FAIL:
             return state
-                .set('loading', false);
+                .set('contentLoading', false);
         default:
             return state;
     }
