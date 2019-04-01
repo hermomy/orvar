@@ -23,10 +23,15 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
 import Notify from 'containers/Notify';
-
 import HomePage from 'containers/HomePage';
 import LogoutForm from 'containers/LogoutForm';
 import NotFoundPage from 'containers/NotFoundPage';
+import Cart from 'containers/CartPage';
+
+import Header from 'components/Header';
+import TabBar from 'components/TabBar';
+import globalScope from '../../globalScope';
+import LoginForm from '../LoginForm/index';
 
 // import { dataChecking } from 'globalUtils';
 // import globalScope from 'globalScope';
@@ -58,12 +63,13 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
         return (
             <section>
                 <Notify></Notify>
-
                 <HershopContent id="hershop-content-container">
+                    <Header />
                     <Switch>
-                        {/* <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} /> */}
+                        <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />
                         <Route exact={true} path="/logout" component={LogoutForm} />
                         <Route exact={true} path="/" component={HomePage} />
+                        <Route exact={true} path="/cart" component={Cart} />
                         {/* <PrivateRoute
                             exact={true}
                             path="/"
@@ -72,6 +78,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         /> */}
                         <Route path="" component={NotFoundPage} />
                     </Switch>
+                    <TabBar />
                 </HershopContent>
             </section>
         );

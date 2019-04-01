@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 import { create } from 'apisauce';
-import globalScope from 'globalScope';
 import Cookies from 'universal-cookie';
+import globalScope from 'globalScope';
 
 export const apiRequest = (path, type, body, baseUrl, headerParams) => {
     const apiObject = addHeaderToAPI(baseUrl || globalScope.api);

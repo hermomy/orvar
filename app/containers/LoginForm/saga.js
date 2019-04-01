@@ -29,9 +29,11 @@ export function* doLogin(action) {
                 setCookie(process.env.ADMIN_KEY, globalScope.isAdmin);
                 yield put(loginSuccess(response.data.token));
             } else {
-                globalScope.token = '';
-                response.data.messages[0] = { type: 'error', text: 'Invalid user access level!' };
-                yield put(loginFailed(response.data));
+                // globalScope.token = '';
+                setCookie(process.env.TOKEN_KEY, globalScope.token);
+                // response.data.messages[0] = { type: 'error', text: 'Invalid user access level!' };
+                // yield put(loginFailed(response.data));
+                yield put(loginSuccess(response.data.token));
             }
             // }
         } else {
