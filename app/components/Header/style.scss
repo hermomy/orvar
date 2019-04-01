@@ -8,15 +8,16 @@
 
 .cart-in-header {
     position: relative;
+    cursor: pointer;
 
     .cart-popup-modal {
         position: absolute;
         top: 1.6rem;
         right: 0;
-        background-color: #DDDDDD;
-        border: 1px solid #660033;
+        background-color: white;
+        border: 1px solid #ccc;
         padding: 1rem;
-        z-index: 1;
         width: 400px;
+        box-shadow: 0px 0px 2px 0px rgba(204,204,204,1);
     }
 }
