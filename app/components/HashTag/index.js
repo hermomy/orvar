@@ -5,6 +5,7 @@
 */
 
 import React from 'react';
+import StatefulLink from 'components/StatefulLink';
 import PropTypes from 'prop-types';
 
 
@@ -14,12 +15,14 @@ function HashTag(props) {
             {
                 props.tags.map((tag) =>
                 (
-                    <div
+                    <StatefulLink
                         key={tag.id}
+                        path={tag.url}
+                        state={tag}
                         className={`hashtag ${tag.id}`}
                     >
                         #{tag.name}
-                    </div>
+                    </StatefulLink>
                 ))
             }
         </div>
@@ -27,7 +30,11 @@ function HashTag(props) {
 }
 
 HashTag.propTypes = {
-    tags: PropTypes.array.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+        url: PropTypes.string,
+    })),
 };
 
 export default HashTag;

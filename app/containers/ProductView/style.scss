@@ -1,90 +1,164 @@
-.product-image-panel {
+/*
+    Sample Usage
 
-    .product-image {
-        padding: 20px 0px 20px 0px;
-        display: block;
-        margin: auto;
+    - device(mobile-small)
+    >> @media ( min-width: 320px, max-width: 375px )
+
+    - smaller_device(mobile-small, min) 
+    >> @media ( max-width: 375px )
+
+    - smaller_device(mobile-large, mobile-small)
+    >> @media ( min-width: 320px, max-width 768px )
+
+    - smaller_device(mobile-large, 123px)
+    >> @media ( min-width: 123px, max-width: 768px )
+
+    - larger_device(mobile-large, max)
+    >> @media ( min-width: 425px ) 
+
+    - larger_device(mobile-large, laptop) 
+    >> @media ( min-width: 425px, max-width: 1440px )
+    
+    - larger_device(mobile-large, max)
+    >> @media ( min-width: 425px ) 
+
+    - larger_device(mobile-large, 1234px)
+    >> @media ( min-width: 425px, max-width: 1234px )  
+*/
+
+$min_device: (
+    mobile-small: 320px,
+    mobile-medium: 320px,
+    mobile-large: 425px,
+    tablet: 768px,
+    laptop: 1024px,
+    laptop-large: 1440px
+);
+$max_device: (
+    mobile-small: 375px,
+    mobile-medium: 425px,
+    mobile-large: 768px,
+    tablet: 1024px,
+    laptop: 1440px,
+    laptop-large: 2560px
+);
+
+@mixin larger_device($device, $breakpoint) {
+    $min: if(type-of($device) == string, map-get($min_device, $device), $device);
+    @if $breakpoint == max {
+        @media ( min-width: $min ) {
+            @content;
+        }
+    } @else {
+        $max: if(type-of($breakpoint) == string, map-get($max_device, $device), $breakpoint);
+        @media ( min-width: $min ) and ( max-width: $breakpoint ) {
+            @content;
+        }
     }
 }
 
-.product-info-panel {
-    display: flex;
-
-    .brand-info {
-        flex: 3;
-        text-align: center;
-
-        .brand-logo {
-            border-radius: 50%;
-            box-shadow: 0px 0px 2px grey;
-            width: 50px;
-            height: 50px;
+@mixin smaller_device($device, $breakpoint) {
+    $max: if(type-of($device) == string, map-get($max_device, $device), $device);
+    @if $breakpoint == min {
+        @media ( max-width: $max ) {
+            @content;
         }
-
-        .review {
-            margin-top: 5px;
-            color: grey;
-        }
-    }
-
-    .product-info { 
-        flex: 7;
-        margin-left: 10px;
-
-        .price {
-            font-weight: bold;
-            padding-bottom: 12px;
-        }
-
-        .brand {
-            font-weight: bold;
-            padding-bottom: 12px;
-        }
-
-        .name {
-            font-style: italic;
-            color: grey;
+    } @else {
+        $min: if(type-of($breakpoint) == string, map-get($min_device, $breakpoint), $breakpoint);
+        @media ( min-width: $min ) and ( max-width: $max ) {
+            @content;
         }
     }
 }
 
-.hashtags-panel {
-    padding: 15px;
-
-    .hashtag {
-        color: grey;
-        font-style: italic;
-        background-color: gainsboro;
-        display: inline-block;
-        margin-right: 10px;
-        padding: 5px;
+@mixin device($device) {
+    @media 
+        ( min-width: map-get($min_device, $device) ) and 
+        ( max-width: map-get($max_device $device) )
+    {
+        @content;
     }
 }
 
-.related-items-panel {
-    padding: 10px;
 
-    .slider {
+// PRODUCT PANEL
+.product-panel {
+    // PRODUCT IMAGE
+    .product-image-panel {
+
+        .product-image {
+            padding: 20px 0px 20px 0px;
+            display: block;
+            margin: auto;
+        }
+    }
+    // END PRODUCT IMAGE
+    
+    // PRODUCT INFO
+    .product-info-panel {
+        display: flex;
         
-        .slide {
-            display: inline-block;
-            scroll-behavior: smooth;
+        .brand-info {
+            flex: 3;
+            text-align: center;
+    
+            .brand-logo {
+                border-radius: 50%;
+                box-shadow: 0px 0px 2px grey;
+                width: 50px;
+                height: 50px;
+            }
+    
+            .brand-rating {
+                margin-top: 5px;
+                color: grey;
+            }
+        }
+    
+        .product-info { 
+            flex: 7;
+            margin-left: 10px;
+    
+            .price {
+                font-weight: bold;
+                padding-bottom: 12px;
+            }
+    
+            .brand {
+                font-weight: bold;
+                padding-bottom: 12px;
+            }
+    
+            .name {
+                font-style: italic;
+                color: grey;
+            }
         }
     }
-}
+    // END PRODUCT INFO
+    
+    // HASHTAG PANEL
+    .hashtags-panel {
+        padding: 15px;
 
-
-.splitter {
-    border: none;
-    height: 1px;
-    background-color: gainsboro;
-
-    &.bold {
-        height: 5px;
+        .hashtag {
+            color: grey;
+            text-decoration: none;
+            font-style: italic;
+            background-color: gainsboro;
+            display: inline-block;
+            margin-right: 10px;
+            padding: 5px;
+        }
     }
+    // END HASHTAG PANEL
 }
+// END PRODUCT PANEL
+
+// ACCORDION PANEL
 
 .accordion-panel {
+
     background-color: wheat;
 
     .accordion-container {
@@ -93,6 +167,84 @@
         .accordion-title {
             font-size: 1.1em;
             font-weight: 500;
+            color: black;
+            text-decoration: none;
         }
+    }
+}
+
+// END ACCORDION PANEL
+
+
+// REVIEW PANEL
+
+.review {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    font-family: arial;
+    height: 150px;
+    min-width: 200px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+
+    .review-name {
+        text-align: left;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: grey;
+    }
+
+    .review-comment {
+        margin-top: 10px;
+    }
+}
+
+// END REVIEW PANEL
+
+.content-panel {
+    padding: 10px;
+    float: left;
+} 
+
+.splitter {
+    border: none;
+    height: 1px;
+    background-color: gainsboro;
+
+    &.bold {
+        height: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
+
+.action-panel {
+    display: flex;
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+    @include smaller_device(mobile-large, min) {
+        position: absolute; 
+        left: 0 ; 
+        right: 0; 
+        bottom: 0; 
+    }
+
+    @include larger_device(tablet, 1234px) {
+        margin: 0 auto;
+        align-self: center;
+        width: 50%;
+    }
+
+    .wishlist-btn {
+        flex: 3;
+        padding: 10px;
+        color: #DC143C;
+        background-color: whitesmoke;
+    }
+
+    .add-to-cart-button {
+        flex: 7;
+        padding: 10px;
+        background-color: #DC143C;
     }
 }

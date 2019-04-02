@@ -5,20 +5,23 @@
  */
 
 import {
-    GET_PRODUCT, GET_PRODUCT_FAIL, GET_PRODUCT_SUCCESS,
+    GET_PRODUCT,
+    GET_PRODUCT_FAIL,
+    GET_PRODUCT_SUCCESS,
+    GET_PRODUCT_REVIEW,
 } from './constants';
 
-export function getProduct(api) {
+export function getProductReview(productId) {
     return {
-        type: GET_PRODUCT,
-        api,
+        type: GET_PRODUCT_REVIEW,
+        productId,
     };
 }
 
 export function getProductById(productId) {
     return {
         type: GET_PRODUCT,
-        api: `http://api.hermo.my/mall/${productId}`,
+        productId,
     };
 }
 

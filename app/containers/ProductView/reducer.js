@@ -11,7 +11,7 @@ import {
     GET_PRODUCT_SUCCESS,
 } from './constants';
 
-export const initialState = fromJS({});
+export const initialState = fromJS({ data: {} });
 
 function productViewReducer(state = initialState, action) {
     switch (action.type) {
@@ -25,7 +25,7 @@ function productViewReducer(state = initialState, action) {
         case GET_PRODUCT_SUCCESS:
             return state
                 .set('loading', false)
-                .set('data', action.data);
+                .set('data', Object.assign({ ...state.get('data') }, action.data));
         default:
             return state;
     }

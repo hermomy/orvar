@@ -1,9 +1,8 @@
 
 import {
-    getProduct,
     getProductById,
-    getProductFail,
-    getProductSuccess,
+    doProductFail,
+    doProductSuccess,
 } from '../actions';
 
 import {
@@ -13,20 +12,11 @@ import {
 } from '../constants';
 
 describe('ProductView actions', () => {
-    it('Expect getProduct() return type of GET_PRODUCT', () => {
-        const api = 'https://api.hermo.my/mall/10520';
-        const expected = {
-            type: GET_PRODUCT,
-            api,
-        };
-        expect(getProduct(api)).toEqual(expected);
-    });
-
     it('Expect getProductById() return type of GET_PRODUCT', () => {
         const productId = 10520;
         const expected = {
             type: GET_PRODUCT,
-            api: `http://api.hermo.my/mall/${productId}`,
+            productId,
         };
         expect(getProductById(productId)).toEqual(expected);
     });
@@ -35,7 +25,7 @@ describe('ProductView actions', () => {
         const expected = {
             type: GET_PRODUCT_FAIL,
         };
-        expect(getProductFail()).toEqual(expected);
+        expect(doProductFail()).toEqual(expected);
     });
 
     it('Expect getProductSuccess() return type of GET_PRODUCT_SUCCESS', () => {
@@ -44,6 +34,6 @@ describe('ProductView actions', () => {
             type: GET_PRODUCT_SUCCESS,
             data,
         };
-        expect(getProductSuccess(data)).toEqual(expected);
+        expect(doProductSuccess(data)).toEqual(expected);
     });
 });

@@ -22,10 +22,21 @@ class Accordion extends React.Component { // eslint-disable-line react/prefer-st
             <div className={this.props.className}>
                 {
                     this.props.contents.map((content) => {
+                        if (!content.togglable) {
+                            return (
+                                <div
+                                    className="accordion-container"
+                                    key={content.key}
+                                >
+                                    {content.title}
+                                </div>
+                            );
+                        }
                         const status = this.state[content.key] ? 'active' : '';
                         const height = status ?
                             this.props.height_threshold || '162px' :
                             '0px';
+
                         return (
                             <div
                                 className="accordion-container"
@@ -34,10 +45,17 @@ class Accordion extends React.Component { // eslint-disable-line react/prefer-st
                             >
                                 <div className={`accordion-title ${status}`}>
                                     {content.title}
-                                    <span className={`accordion-icon ${status}`}>&gt;</span>
+                                    <span className="accordion-icon">
+                                        {
+                                            status === 'active' ?
+                                                this.props.active_icon
+                                                :
+                                                this.props.inactive_icon
+                                        }
+                                    </span>
                                 </div>
                                 <div className={`accordion-content ${status}`} style={{ maxHeight: height }}>
-                                    {content.description}
+                                    <div dangerouslySetInnerHTML={{ __html: content.description }} />
                                 </div>
                             </div>
                         );
@@ -51,10 +69,16 @@ class Accordion extends React.Component { // eslint-disable-line react/prefer-st
 Accordion.propTypes = {
     contents: PropTypes.arrayOf(PropTypes.shape({
         key: PropTypes.string,
-        title: PropTypes.string,
+        title: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.element,
+        ]),
         description: PropTypes.string,
+        togglable: PropTypes.bool,
     })),
     height_threshold: PropTypes.string,
+    active_icon: PropTypes.string,
+    inactive_icon: PropTypes.string,
 };
 
 export default Accordion;

@@ -2,8 +2,7 @@
 // import { fromJS } from 'immutable';
 import productViewReducer, { initialState } from '../reducer';
 import {
-    getProduct,
-    // getProductById,
+    getProductById,
     doProductFail,
     doProductSuccess,
 } from '../actions';
@@ -19,10 +18,10 @@ describe('productViewReducer', () => {
         expect(productViewReducer(undefined, {})).toEqual(state);
     });
 
-    it('Expect reducer with getProduct() return loading state', () => {
-        const api = 'https://api.hermo.my/mall/10520';
+    it('Expect reducer with getProductById() return loading state', () => {
+        const api = 10520;
         expect(
-            productViewReducer(state, getProduct(api))
+            productViewReducer(state, getProductById(api))
         ).toEqual(state
             .set('loading', true)
         );
@@ -43,7 +42,7 @@ describe('productViewReducer', () => {
             productViewReducer(state, doProductSuccess(data))
         ).toEqual(state
             .set('loading', false)
-            .set('data', data)
+            .set('data', Object.assign({ ...state.get('data') }, data))
         );
     });
 });
