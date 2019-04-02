@@ -2,10 +2,10 @@
  *
  * App.js
  *
- * This component is the skeleton around the actual pages, and should only
- * contain code that should be seen on all pages. (e.g. navigation bar)
+ * This component is the skeleton around the actual pages, and Expect only
+ * contain code that Expect be seen on all pages. (e.g. navigation bar)
  *
- * NOTE: while this component should technically be a stateless functional
+ * NOTE: while this component Expect technically be a stateless functional
  * component (SFC), hot reloading does not currently support SFCs. If hot
  * reloading is not a necessity for you then you can refactor it and remove
  * the linting exception.
@@ -24,6 +24,7 @@ import injectReducer from 'utils/injectReducer';
 
 import Notify from 'containers/Notify';
 
+import ProductView from 'containers/ProductView';
 import HomePage from 'containers/HomePage';
 import LogoutForm from 'containers/LogoutForm';
 import NotFoundPage from 'containers/NotFoundPage';
@@ -70,6 +71,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                             token={globalScope.token || ''}
                             render={() => <HomePage />}
                         />
+                        <Route exact={true} path="/mall/:productId" component={ProductView} />
                         <Route path="" component={NotFoundPage} />
                     </Switch>
                 </HershopContent>

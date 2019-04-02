@@ -13,26 +13,26 @@ describe('configureStore', () => {
     });
 
     describe('injectedReducers', () => {
-        it('should contain an object for reducers', () => {
+        it('Expect contain an object for reducers', () => {
             expect(typeof store.injectedReducers).toBe('object');
         });
     });
 
     describe('injectedSagas', () => {
-        it('should contain an object for sagas', () => {
+        it('Expect contain an object for sagas', () => {
             expect(typeof store.injectedSagas).toBe('object');
         });
     });
 
     describe('runSaga', () => {
-        it('should contain a hook for `sagaMiddleware.run`', () => {
+        it('Expect contain a hook for `sagaMiddleware.run`', () => {
             expect(typeof store.runSaga).toBe('function');
         });
     });
 });
 
 describe('configureStore params', () => {
-    it('should call window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__', () => {
+    it('Expect call window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__', () => {
         /* eslint-disable no-underscore-dangle */
         const compose = jest.fn();
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ = () => compose;

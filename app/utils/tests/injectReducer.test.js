@@ -34,19 +34,19 @@ describe('injectReducer decorator', () => {
         reducerInjectors.default.mockClear();
     });
 
-    // it('should inject a given reducer', () => {
+    // it('Expect inject a given reducer', () => {
     //     shallow(<ComponentWithReducer />, { context: { store } });
 
     //     expect(injectors.injectReducer).toHaveBeenCalledTimes(1);
     //     expect(injectors.injectReducer).toHaveBeenCalledWith('test', reducer);
     // });
 
-    it('should set a correct display name', () => {
+    it('Expect set a correct display name', () => {
         expect(ComponentWithReducer.displayName).toBe('withReducer(Component)');
         expect(injectReducer({ key: 'test', reducer })(() => null).displayName).toBe('withReducer(Component)');
     });
 
-    // it('should propagate props', () => {
+    // it('Expect propagate props', () => {
     //     const props = { testProp: 'test' };
     //     const renderedComponent = shallow(<ComponentWithReducer {...props} />, { context: { store } });
 

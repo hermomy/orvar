@@ -10,7 +10,7 @@ describe('<NavItem />', () => {
     });
 //     const wrapper = shallow(<NavItem data={navItems[0]} handleLinkClick={jest.fn} />);
 
-//     it('should render NavItem Correctly', () => {
+//     it('Expect render NavItem Correctly', () => {
 //         expect(wrapper).toMatchSnapshot();
 //     });
 });

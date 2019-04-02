@@ -37,7 +37,7 @@ describe('injectSaga decorator', () => {
         sagaInjectors.default.mockClear();
     });
 
-    // it('should inject given saga, mode, and props', () => {
+    // it('Expect inject given saga, mode, and props', () => {
     //     const props = { test: 'test' };
     //     shallow(<ComponentWithSaga {...props} />, { context: { store } });
 
@@ -45,7 +45,7 @@ describe('injectSaga decorator', () => {
     //     expect(injectors.injectSaga).toHaveBeenCalledWith('test', { saga: testSaga, mode: 'testMode' }, props);
     // });
 
-    // it('should eject on unmount with a correct saga key', () => {
+    // it('Expect eject on unmount with a correct saga key', () => {
     //     const props = { test: 'test' };
     //     const renderedComponent = shallow(<ComponentWithSaga {...props} />, { context: { store } });
     //     renderedComponent.unmount();
@@ -54,12 +54,12 @@ describe('injectSaga decorator', () => {
     //     expect(injectors.ejectSaga).toHaveBeenCalledWith('test');
     // });
 
-    it('should set a correct display name', () => {
+    it('Expect set a correct display name', () => {
         expect(ComponentWithSaga.displayName).toBe('withSaga(Component)');
         expect(injectSaga({ key: 'test', saga: testSaga })(() => null).displayName).toBe('withSaga(Component)');
     });
 
-    // it('should propagate props', () => {
+    // it('Expect propagate props', () => {
     //     const props = { testProp: 'test' };
     //     const renderedComponent = shallow(<ComponentWithSaga {...props} />, { context: { store } });
 

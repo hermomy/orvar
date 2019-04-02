@@ -1,0 +1,21 @@
+.slider {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    
+    list-style-type: none;
+    padding: 0;
+
+    display: flex;
+    
+    > li {
+        flex-direction: column;
+        padding: 15px;
+        margin: 10px;
+    }
+}
+
+.slider-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+}

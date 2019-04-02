@@ -7,7 +7,7 @@ describe('<NotFoundPage />', () => {
     it('Expect to have unit tests specified', () => {
         expect(false).toEqual(false);
     });
-    // it('should render the page with the message "The URL is invalid."', () => {
+    // it('Expect render the page with the message "The URL is invalid."', () => {
     //     const page = mount(<NotFoundPage />);
     //     expect(page.html()).toContain('The URL is invalid.');
     // });

@@ -21,7 +21,7 @@ describe('<LanguageProvider />', () => {
     it('Expect to have unit tests specified', () => {
         expect(false).toEqual(false);
     });
-//     it('should render its children', () => {
+//     it('Expect render its children', () => {
 //         const children = (<h1>Test</h1>);
 //         const renderedComponent = shallow(
 //             <LanguageProvider messages={messages} locale="en">
@@ -39,7 +39,7 @@ describe('<LanguageProvider />', () => {
 //         store = configureStore({}, browserHistory);
 //     });
 
-//     it('should render the default language messages', () => {
+//     it('Expect render the default language messages', () => {
 //         const renderedComponent = mount(
 //             <Provider store={store}>
 //                 <ConnectedLanguageProvider messages={translationMessages}>

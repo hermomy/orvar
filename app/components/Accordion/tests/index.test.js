@@ -1,9 +1,9 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import StatefulLink from '../index';
+// import Accordion from '../index';
 
-describe('<StatefulLink />', () => {
+describe('<Accordion />', () => {
     it('Expect to have unit tests specified', () => {
         expect(true).toEqual(true);
     });
