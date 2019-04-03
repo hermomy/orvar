@@ -4,7 +4,7 @@
 // import { HerListing } from '../index';
 
 describe('<HerListing />', () => {
-    it('Expect to have unit tests specified', () => {
+    it('Herlisting index testing expect true', () => {
         expect(true).toEqual(true);
         // TODO : jess test
     });

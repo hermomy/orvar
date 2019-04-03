@@ -1,7 +1,11 @@
-.original_price {
+.original-price-discount {
     text-decoration: line-through;
 }
 
-.discount_price {
+.original-price-no-discount {
+    color:black;
+}
+
+.discount-price {
     height: 40px;
 }

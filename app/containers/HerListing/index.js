@@ -23,6 +23,9 @@ import { getData,
 } from './actions';
 import Pagination from '../../components/Pagination';
 import ProductCard from '../../components/ProductCard';
+import Sort from '../../components/Sort';
+import Filter from '../../components/Filter';
+
 
 export class HerListing extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -30,6 +33,9 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         selectedToggle: {},
         selectedFilter: {},
         currentQueryString: '',
+
+        condi: {},
+        child: {},
     };
 
     componentWillMount() {
@@ -50,7 +56,6 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                     };
                 }
             });
-
             this.setState({ selectedFilter: obj, sortValue, currentQueryString: this.props.location.search });
         } else {
             this.setState({ sortValue: 'default', currentQueryString: 'sort=default' });
@@ -58,52 +63,35 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         this.props.dispatch(getData());
     }
 
-    toggleFilter = (item) => {
-        if (item.items) {
-            const key = `${item.key}_${item.id}`;
-            const obj = { ...this.state.selectedToggle };
-            obj[key] = !obj[key];
-            this.setState({ selectedToggle: obj });
-        } else {
-            this.updateSelectedFilter(item);
+    FilterRender = (list) => {
+        if (dataChecking(list, 'length')) {
+            return (
+                <Filter
+                    list={list}
+                    props={this.props}
+                    dpatch={(selfHref, queryString) => {
+                        this.props.dispatch(getPage(`${selfHref}?${queryString}`));
+                    }}
+                    getCurrentQueryString={() => this.state.currentQueryString}
+                    getSortValue={() => this.state.sortValue}
+                    getSelectedFilter={() => this.state.selectedFilter}
+                    getSelectedToggle={() => this.state.selectedToggle}
+                    setState_CurrentQueryString={(currentQueryString) => {
+                        this.setState({ currentQueryString });
+                    }}
+                    setState_SelectedFilter={(data) => {
+                        this.setState({ selectedFilter: data });
+                    }}
+                    setState_SelectedToggle={(data) => {
+                        this.setState({ selectedToggle: data });
+                    }}
+                />
+            );
         }
+        return null;
     }
 
-    updateSelectedFilter = (item) => {
-        if (!item.id || !item.key || dataChecking(this.props, 'herlisting', 'contentLoading')) { return; }
-
-        const obj = { ...this.state.selectedFilter };
-        if (obj[`${item.key}_${item.id}`]) {
-            delete obj[`${item.key}_${item.id}`];
-        } else {
-            obj[`${item.key}_${item.id}`] = item;
-        }
-        let queryString = '';
-        if (this.state.sortValue) {
-            queryString = `sort=${this.state.sortValue}`;
-        }
-        let query = '';
-        Object.values(obj).forEach((param) => {
-            query = `${query}&${param.key}=${param.id}`;
-        });
-        queryString += query;
-        if (dataChecking(this.props, 'history', 'push')) {
-            this.props.history.push(`${this.props.location.pathname}?${queryString}`);
-        }
-        this.props.dispatch(getPage(`${this.props.herlisting.data.product._links.self.href}?${queryString}`));
-        this.setState({ selectedFilter: obj, currentQueryString: `${queryString}` });
-    }
-
-    sort = (event) => {
-        const currentQueryString = this.state.currentQueryString.replace(this.state.sortValue, event.target.value).replace('?', '');
-        if (dataChecking(this.props, 'history', 'push')) {
-            this.props.history.push(`${this.props.location.pathname}?${currentQueryString}`);
-        }
-        this.props.dispatch(getPage(`${this.props.herlisting.data.product._links.self.href}?${currentQueryString}`));
-        this.setState({ sortValue: event.target.value, currentQueryString });
-    }
-
-    Paging = () => {
+    pagingRender = () => {
         const data = dataChecking(this.props, 'herlisting', 'data', 'product', 'result');
         if (!data || !data._meta) {
             return null;
@@ -119,36 +107,30 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         );
     }
 
-    renderFilterDiv = (list) => {
-        if (dataChecking(list, 'length')) {
-            return list.map((item) => (
-                <div className="filter-item m-quater" key={item.text}>
-                    <input
-                        type="checkbox"
-                        className={`${dataChecking(item, 'id') ? '' : 'invisible'}`}
-                        onChange={() => this.updateSelectedFilter(item)}
-                        checked={this.state.selectedFilter[`${item.key}_${item.id}`] || false}
-                        disabled={dataChecking(this.props, 'herlisting', 'contentLoading')}
-                    />
-                    <div className="filter-item-display ml-quater" onClick={() => this.toggleFilter(item)}>
-                        <span>{item.text}</span>
-                        {item.items ? <span className="toggle-icon pl-quater">{dataChecking(this.state.selectedToggle, `${item.key}_${item.id}`) ? '-' : '+'}</span> : null}
-                    </div>
-                    <div className="filter-children-div ml-1">
-                        {
-                            dataChecking(this.state.selectedToggle, `${item.key}_${item.id}`) ?
-                                this.renderFilterDiv(item.items)
-                                : null
-                        }
-                    </div>
-                </div>
-            ));
+    sortRender = () => {
+        if (!dataChecking(this.props, 'herlisting', 'data', 'sort', 'items')) {
+            return null;
         }
-        return null;
+        return (
+            <Sort
+                props={this.props}
+                setState_SortValue={(value) => {
+                    this.setState({ sortValue: value });
+                }}
+                dpatch={(selfHref, currentQueryString) => {
+                    this.props.dispatch(getPage(`${selfHref}?${currentQueryString}`));
+                }}
+                setState_CurrentQueryString={(currentQueryString) => {
+                    this.setState({ currentQueryString });
+                }}
+                getCurrentQueryString={() => this.state.currentQueryString}
+                getSortValue={() => this.state.sortValue}
+            />
+        );
     }
 
-
     render() {
+        console.log(this.props);
         return (
             <div className="container">
                 <Helmet>
@@ -166,40 +148,24 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                                 <p>ydsajondfsfdjjgjgjfjgjgjffdkfdkg</p>
                             </div>
                             <input type="submit" onClick={() => { this.setState({ listView: !this.state.listView }); }} value="grid/list" />
-                            {this.Paging()}
-                            <div>
-                                <select
-                                    className="sorter"
-                                    onChange={(value) => { this.setState({ sortValue: value }); this.sort(value); }}
-                                    value={this.state.sortValue}
-                                >
-                                    {
-                                        dataChecking(this.props, 'herlisting', 'data', 'sort', 'items') ?
-                                        this.props.herlisting.data.sort.items.map((sort) =>
-                                        (
-                                            <option key={sort.id} value={sort.id}>{sort.text}</option>
-                                        ))
-                                        :
-                                        null
-                                    }
-                                </select>
-                            </div>
+                            {this.pagingRender()}
+                            {this.sortRender()}
                             <div className="filter-container">
-                                {this.renderFilterDiv(dataChecking(this.props, 'herlisting', 'data', 'filters'))}
+                                {this.FilterRender(dataChecking(this.props, 'herlisting', 'data', 'filters'))}
                             </div>
                             <div>
                                 {
                                     dataChecking(this.props, 'herlisting', 'contentLoading') ?
                                         <div>loading</div>
                                         :
-                                        <div className={`${this.state.listView ? 'list_view' : 'grid_view'}`}>
+                                        <div className={`${this.state.listView ? 'list-view' : 'grid-view'}`}>
                                             {
                                                 dataChecking(this.props, 'herlisting', 'data', 'product', 'result', 'items') ?
                                                 this.props.herlisting.data.product.result.items.map((product) =>
                                                     (
                                                         <div
                                                             key={product.id}
-                                                            className={`product-card-div ${this.state.listView ? 'list_view_component' : 'grid_view_component'}`}
+                                                            className={`product-card-div ${this.state.listView ? 'list-view-component' : 'grid-view-component'}`}
                                                         >
                                                             <ProductCard
                                                                 product={product}
@@ -217,7 +183,6 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         );
     }
 }
-// <i class="fa fa-heart-o" aria-hidden="true"></i>
 
 HerListing.propTypes = {
     dispatch: PropTypes.func.isRequired,
