@@ -13,7 +13,7 @@ class Accordion extends React.Component { // eslint-disable-line react/prefer-st
 
     toggleAccordion(key) {
         this.setState({
-            [key]: !this.state[key],
+            [`Accordion_${key}`]: !this.state[key],
         });
     }
 
@@ -44,7 +44,7 @@ class Accordion extends React.Component { // eslint-disable-line react/prefer-st
                                 onClick={() => this.toggleAccordion(content.key)}
                             >
                                 <div className={`accordion-title ${status}`}>
-                                    {content.title}
+                                    <span>{content.title}</span>
                                     <span className="accordion-icon">
                                         {
                                             status === 'active' ?
@@ -77,8 +77,14 @@ Accordion.propTypes = {
         togglable: PropTypes.bool,
     })),
     height_threshold: PropTypes.string,
-    active_icon: PropTypes.string,
-    inactive_icon: PropTypes.string,
+    active_icon: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.element,
+    ]),
+    inactive_icon: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.element,
+    ]),
 };
 
 export default Accordion;

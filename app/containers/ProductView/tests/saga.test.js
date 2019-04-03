@@ -21,15 +21,24 @@ describe('productview Saga', () => {
     //     expect(generator.next(getProductById(api)).value).toEqual(takeLatest(GET_PRODUCT, productWorker));
     // });
 
-    it('Expect worker getProductById() return failed response when api is not ok', () => {
-        const response = { ok: false };
+    it('Expect productWorker() return failed response when api is not ok', () => {
+        const response = {
+            ok: false,
+            data: {
+                message: [
+                    {
+                        text: 'Error here',
+                    },
+                ],
+            },
+        };
 
         const generator = productWorker(getProductById(api));
         expect(generator.next().value).toEqual(call(apiRequest, `/mall/${api}`, 'get'));
-        expect(generator.next(response).value).toEqual(put(doProductFail()));
+        expect(generator.next(response).value).toEqual(put(doProductFail(response.data.message[0].text)));
     });
 
-    it('Expect worker getProductById() return success response when api is ok', () => {
+    it('Expect productWorker() return success response when api is ok', () => {
         const response = {
             ok: true,
             data: '123',
@@ -40,23 +49,32 @@ describe('productview Saga', () => {
         expect(generator.next(response).value).toEqual(put(doProductSuccess({ product: response.data })));
     });
 
-    it('Expect worker getProductById() return error response when api thrown an error', () => {
+    it('Expect productWorker() return error response when api thrown an error', () => {
         const error = new Error('Error occurs when calling product api');
 
         const generator = productWorker(getProductById(api));
         expect(generator.next().value).toEqual(call(apiRequest, `/mall/${api}`, 'get'));
-        expect(generator.throw(error).value).toEqual(put(doProductFail()));
+        expect(generator.throw(error).value).toEqual(put(doProductFail(error.message)));
     });
 
-    it('Expect worker getProductById() return failed response when api is not ok', () => {
-        const response = { ok: false };
+    it('Expect reviewWorker() return failed response when api is not ok', () => {
+        const response = {
+            ok: false,
+            data: {
+                message: [
+                    {
+                        text: 'Error here',
+                    },
+                ],
+            },
+        };
 
         const generator = reviewWorker(getProductReview(api));
         expect(generator.next().value).toEqual(call(apiRequest, `/mall/review?id=${api}`, 'get'));
-        expect(generator.next(response).value).toEqual(put(doProductFail()));
+        expect(generator.next(response).value).toEqual(put(doProductFail(response.data.message[0].text)));
     });
 
-    it('Expect worker getProductById() return success response when api is ok', () => {
+    it('Expect reviewWorker() return success response when api is ok', () => {
         const response = {
             ok: true,
             data: '123',
@@ -67,11 +85,11 @@ describe('productview Saga', () => {
         expect(generator.next(response).value).toEqual(put(doProductSuccess({ reviews: response.data })));
     });
 
-    it('Expect worker getProductById() return error response when api thrown an error', () => {
+    it('Expect reviewWorker() return error response when api thrown an error', () => {
         const error = new Error('Error occurs when calling product api');
 
         const generator = reviewWorker(getProductReview(api));
         expect(generator.next().value).toEqual(call(apiRequest, `/mall/review?id=${api}`, 'get'));
-        expect(generator.throw(error).value).toEqual(put(doProductFail()));
+        expect(generator.throw(error).value).toEqual(put(doProductFail(error.message)));
     });
 });

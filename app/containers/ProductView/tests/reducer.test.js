@@ -28,11 +28,12 @@ describe('productViewReducer', () => {
     });
 
     it('Expect reducer with doProductFail() return fail state', () => {
+        const error = 'Error occurs';
         expect(
-            productViewReducer(state, doProductFail())
+            productViewReducer(state, doProductFail(error))
         ).toEqual(state
             .set('loading', false)
-            .set('error', 'Error occurs when get products details.')
+            .set('error', error)
         );
     });
 

@@ -1,89 +1,4 @@
-/*
-    Sample Usage
-
-    - device(mobile-small)
-    >> @media ( min-width: 320px, max-width: 375px )
-
-    - smaller_device(mobile-small, min) 
-    >> @media ( max-width: 375px )
-
-    - smaller_device(mobile-large, mobile-small)
-    >> @media ( min-width: 320px, max-width 768px )
-
-    - smaller_device(mobile-large, 123px)
-    >> @media ( min-width: 123px, max-width: 768px )
-
-    - larger_device(mobile-large, max)
-    >> @media ( min-width: 425px ) 
-
-    - larger_device(mobile-large, laptop) 
-    >> @media ( min-width: 425px, max-width: 1440px )
-    
-    - larger_device(mobile-large, max)
-    >> @media ( min-width: 425px ) 
-
-    - larger_device(mobile-large, 1234px)
-    >> @media ( min-width: 425px, max-width: 1234px )  
-*/
-
-$min_device: (
-    mobile-small: 320px,
-    mobile-medium: 320px,
-    mobile-large: 425px,
-    tablet: 768px,
-    laptop: 1024px,
-    laptop-large: 1440px
-);
-$max_device: (
-    mobile-small: 375px,
-    mobile-medium: 425px,
-    mobile-large: 768px,
-    tablet: 1024px,
-    laptop: 1440px,
-    laptop-large: 2560px
-);
-
-@mixin larger_device($device, $breakpoint) {
-    $min: if(type-of($device) == string, map-get($min_device, $device), $device);
-    @if $breakpoint == max {
-        @media ( min-width: $min ) {
-            @content;
-        }
-    } @else {
-        $max: if(type-of($breakpoint) == string, map-get($max_device, $device), $breakpoint);
-        @media ( min-width: $min ) and ( max-width: $breakpoint ) {
-            @content;
-        }
-    }
-}
-
-@mixin smaller_device($device, $breakpoint) {
-    $max: if(type-of($device) == string, map-get($max_device, $device), $device);
-    @if $breakpoint == min {
-        @media ( max-width: $max ) {
-            @content;
-        }
-    } @else {
-        $min: if(type-of($breakpoint) == string, map-get($min_device, $breakpoint), $breakpoint);
-        @media ( min-width: $min ) and ( max-width: $max ) {
-            @content;
-        }
-    }
-}
-
-@mixin device($device) {
-    @media 
-        ( min-width: map-get($min_device, $device) ) and 
-        ( max-width: map-get($max_device $device) )
-    {
-        @content;
-    }
-}
-
-
-// PRODUCT PANEL
 .product-panel {
-    // PRODUCT IMAGE
     .product-image-panel {
 
         .product-image {
@@ -92,9 +7,7 @@ $max_device: (
             margin: auto;
         }
     }
-    // END PRODUCT IMAGE
-    
-    // PRODUCT INFO
+
     .product-info-panel {
         display: flex;
         
@@ -135,9 +48,7 @@ $max_device: (
             }
         }
     }
-    // END PRODUCT INFO
     
-    // HASHTAG PANEL
     .hashtags-panel {
         padding: 15px;
 
@@ -151,14 +62,9 @@ $max_device: (
             padding: 5px;
         }
     }
-    // END HASHTAG PANEL
 }
-// END PRODUCT PANEL
-
-// ACCORDION PANEL
 
 .accordion-panel {
-
     background-color: wheat;
 
     .accordion-container {
@@ -172,11 +78,6 @@ $max_device: (
         }
     }
 }
-
-// END ACCORDION PANEL
-
-
-// REVIEW PANEL
 
 .review {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -197,8 +98,6 @@ $max_device: (
         margin-top: 10px;
     }
 }
-
-// END REVIEW PANEL
 
 .content-panel {
     padding: 10px;

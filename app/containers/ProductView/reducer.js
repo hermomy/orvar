@@ -21,7 +21,7 @@ function productViewReducer(state = initialState, action) {
         case GET_PRODUCT_FAIL:
             return state
                 .set('loading', false)
-                .set('error', 'Error occurs when get products details.');
+                .set('error', action.error);
         case GET_PRODUCT_SUCCESS:
             return state
                 .set('loading', false)

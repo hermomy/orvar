@@ -17,10 +17,10 @@ export function* reviewWorker(action) {
         if (response.ok) {
             yield put(doProductSuccess({ reviews: response.data }));
         } else {
-            yield put(doProductFail());
+            yield put(doProductFail(response.data.message[0].text));
         }
     } catch (error) {
-        yield put(doProductFail());
+        yield put(doProductFail(error.message));
     }
 }
 
@@ -30,9 +30,9 @@ export function* productWorker(action) {
         if (response.ok) {
             yield put(doProductSuccess({ product: response.data }));
         } else {
-            yield put(doProductFail());
+            yield put(doProductFail(response.data.message[0].text));
         }
     } catch (error) {
-        yield put(doProductFail());
+        yield put(doProductFail(error.message));
     }
 }

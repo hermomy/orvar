@@ -25,9 +25,10 @@ export function getProductById(productId) {
     };
 }
 
-export function doProductFail() {
+export function doProductFail(error) {
     return {
         type: GET_PRODUCT_FAIL,
+        error,
     };
 }
 
