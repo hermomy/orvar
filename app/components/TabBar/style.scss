@@ -1,0 +1,12 @@
+@import '../../breakpoints';
+
+.TabBar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0px -1px 5px 1px rgba(204,204,204,1);
+    padding: 1rem;
+
+    @include media-breakpoint-up(sm) { display: none; }
+}

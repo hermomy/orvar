@@ -23,14 +23,16 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
 import Notify from 'containers/Notify';
-
 import ProductView from 'containers/ProductView';
 import HomePage from 'containers/HomePage';
 import LogoutForm from 'containers/LogoutForm';
 import NotFoundPage from 'containers/NotFoundPage';
+import Cart from 'containers/CartPage';
 
-// import { dataChecking } from 'globalUtils';
+import Header from 'components/Header';
+import TabBar from 'components/TabBar';
 import globalScope from 'globalScope';
+import LoginForm from '../LoginForm/index';
 
 import {
     makeSelectLocation,
@@ -41,8 +43,6 @@ import saga from './saga';
 import {
     fetchConfig,
 } from './actions';
-
-import PrivateRoute from './PrivateRoute';
 
 const topbarHeight = '40px';
 
@@ -59,21 +59,17 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
         return (
             <section>
                 <Notify></Notify>
-
                 <HershopContent id="hershop-content-container">
+                    <Header />
                     <Switch>
-                        {/* <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} /> */}
+                        <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />
                         <Route exact={true} path="/logout" component={LogoutForm} />
-                        {/* <Route exact={true} path="/" component={HomePage} /> */}
-                        <PrivateRoute
-                            exact={true}
-                            path="/"
-                            token={globalScope.token || ''}
-                            render={() => <HomePage />}
-                        />
                         <Route exact={true} path="/mall/:productId" component={ProductView} />
+                        <Route exact={true} path="/" component={HomePage} />
+                        <Route exact={true} path="/cart" component={Cart} />
                         <Route path="" component={NotFoundPage} />
                     </Switch>
+                    <TabBar />
                 </HershopContent>
             </section>
         );
