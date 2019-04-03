@@ -5,10 +5,7 @@
 */
 
 import React from 'react';
-// import styled from 'styled-components';
-// import { FormattedMessage } from 'react-intl';
 
-// import messages from './messages';
 import { NavLink } from 'react-router-dom';
 import CartPage from 'containers/CartPage';
 
