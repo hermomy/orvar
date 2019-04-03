@@ -79,11 +79,11 @@ export class ProductView extends React.PureComponent { // eslint-disable-line re
         if (reviews) {
             return reviews.items.map((review) =>
             (
-                <li className="review" key={review.id}>
+                <div className="review" key={review.id}>
                     <div className="review-name">{review.username}</div>
                     <div>{review.rating} rating</div>
                     <div className="review-comment">{review.comment}</div>
-                </li>
+                </div>
             ));
         }
         return (
@@ -190,11 +190,7 @@ export class ProductView extends React.PureComponent { // eslint-disable-line re
 
                 <div className="content-panel">
                     <hr className="splitter bold" />
-                    <Slider className="reviews-panel" title="Top Reviews">
-                        {
-                            this.buildReview(reviews)
-                        }
-                    </Slider>
+                    <Slider className="reviews-panel" title="Top Reviews" contents={this.buildReview(reviews)} />
 
                     <hr className="splitter bold" />
                     <Slider className="bought-together-panel" title="Frequently Bought Together">

@@ -14,7 +14,11 @@ function Slider(props) {
         <div className={props.className}>
             <div className="slider-title">{props.title}</div>
             <ul className="slider">
-                {props.children}
+                {
+                    props.contents.map((content) => (
+                        <li>{content}</li>
+                    ))
+                }
             </ul>
         </div>
     );
