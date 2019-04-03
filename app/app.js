@@ -21,7 +21,6 @@ import theme from 'theme';
 
 // Import root app
 import App from 'containers/App';
-import Topbar from 'containers/Topbar';
 
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
@@ -74,12 +73,6 @@ const render = (messages) => {
                     <ConnectedRouter history={history}>
                         <div>
                             <NotificationContainer />
-                            <HershopTopbar
-                                id="hershop-topbar-container"
-                                className=""
-                            >
-                                <Topbar />
-                            </HershopTopbar>
                             <App />
                         </div>
                     </ConnectedRouter>

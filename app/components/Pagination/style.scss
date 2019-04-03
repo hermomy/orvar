@@ -1,6 +1,11 @@
+@import 'app/breakpoints';
+
 .pagination {
     padding: 0.5rem 0.75rem;
     text-decoration: none;
+    float: right;
+    margin-top: 10px;
+
 
     .pagination-word {
         padding: 0.5rem 0.75rem;

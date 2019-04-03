@@ -139,15 +139,13 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                 </Helmet>
                 {
                     dataChecking(this.props, 'herlisting', 'loading') ?
-                        <div>Loading</div>
+                        <img className="loading" src={require('images/preloader-02.gif')} alt="" />
                         :
                         <div>
-                            <img alt="topPicture" />
-                            <div>
-                                <p>xinshanlinzhixuan</p>
-                                <p>ydsajondfsfdjjgjgjfjgjgjffdkfdkg</p>
+                            <img className="banner" src="https://cdn5.hermo.my/hermo/imagelink/2019/april-2019-loreal-paris_01554085356.jpg" alt="" />
+                            <div className="view-button">
+                                <input type="button" onClick={() => { this.setState({ listView: !this.state.listView }); }} value="grid/list" />
                             </div>
-                            <input type="submit" onClick={() => { this.setState({ listView: !this.state.listView }); }} value="grid/list" />
                             {this.pagingRender()}
                             {this.sortRender()}
                             <div className="filter-container">
@@ -156,11 +154,10 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                             <div>
                                 {
                                     dataChecking(this.props, 'herlisting', 'contentLoading') ?
-                                        <div>loading</div>
+                                        <img className="product-loading" src={require('images/preloader-02.gif')} alt="" />
                                         :
                                         <div className={`${this.state.listView ? 'list-view' : 'grid-view'}`}>
-                                            {
-                                                dataChecking(this.props, 'herlisting', 'data', 'product', 'result', 'items') ?
+                                            {dataChecking(this.props, 'herlisting', 'data', 'product', 'result', 'items') ?
                                                 this.props.herlisting.data.product.result.items.map((product) =>
                                                     (
                                                         <div
