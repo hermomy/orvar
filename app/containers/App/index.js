@@ -30,11 +30,8 @@ import Cart from 'containers/CartPage';
 
 import Header from 'components/Header';
 import TabBar from 'components/TabBar';
-import globalScope from '../../globalScope';
+import globalScope from 'globalScope';
 import LoginForm from '../LoginForm/index';
-
-// import { dataChecking } from 'globalUtils';
-// import globalScope from 'globalScope';
 
 import {
     makeSelectLocation,
@@ -45,8 +42,6 @@ import saga from './saga';
 import {
     fetchConfig,
 } from './actions';
-
-// import PrivateRoute from './PrivateRoute';
 
 const topbarHeight = '40px';
 
@@ -70,12 +65,6 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         <Route exact={true} path="/logout" component={LogoutForm} />
                         <Route exact={true} path="/" component={HomePage} />
                         <Route exact={true} path="/cart" component={Cart} />
-                        {/* <PrivateRoute
-                            exact={true}
-                            path="/"
-                            token={globalScope.token || ''}
-                            render={() => <HomePage />}
-                        /> */}
                         <Route path="" component={NotFoundPage} />
                     </Switch>
                     <TabBar />
