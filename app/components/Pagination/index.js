@@ -15,7 +15,7 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
                     this.props.link.prev ?
                         <a className="word pagination-word" onClick={() => { this.props.dpatch(this.props.link.prev.href); }}>&lt;</a>
                         :
-                        <span className="word disablePagiBtn">&lt;</span>
+                        <span className="word disable-pagi-btn">&lt;</span>
                 }
                 {
                     this.props.meta.currentPage >= 3 ?
@@ -63,7 +63,7 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
                     this.props.link.next ?
                         <a className="word pagination-word" onClick={() => { this.props.dpatch(this.props.link.next.href); }}>&gt;</a>
                         :
-                        <span className="word disablePagiBtn">&gt;</span>
+                        <span className="word disable-pagi-btn">&gt;</span>
                 }
             </div>
         );

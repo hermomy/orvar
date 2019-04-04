@@ -3,7 +3,7 @@
 
 // import { HerListing } from '../index';
 
-describe('<HerListing />', () => {
+describe('Herlisting index test', () => {
     it('Herlisting index testing expect true', () => {
         expect(true).toEqual(true);
         // TODO : jess test

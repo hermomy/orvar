@@ -10,7 +10,6 @@
     }
 
     .pagination-word {
-        padding: 0.5rem 0.75rem;
         color: #0275d8;
         text-decoration: none;
         background-color: #fff;
@@ -18,15 +17,13 @@
     }
 
     .pagination-active-word {
-        padding: 0.5rem 0.75rem;
         color: white;
         text-decoration: none;
         background-color: #660033;
         border: 1px solid #ddd;
     }
 
-    .disablePagiBtn {
-        padding: 0.5rem 0.75rem;
+    .disable-pagi-btn {
         color: #0275d8;
         text-decoration: none;
         background-color: #fff;
@@ -36,4 +33,5 @@
 
 .word {
     line-height: 1.5;
+    padding: 0.5rem 0.75rem;
 }
