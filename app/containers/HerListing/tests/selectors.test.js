@@ -2,7 +2,7 @@ import { fromJS } from 'immutable';
 import selectHerListingDomain from '../selectors';
 import { initialState } from '../reducer';
 
-describe('selectHerListingDomain', () => {
+describe('expect selecter test accept initialstate.toJS()', () => {
     it('Expect to have unit tests specified', () => {
         const selector = selectHerListingDomain();
         const mock = fromJS({ herListing: initialState });
