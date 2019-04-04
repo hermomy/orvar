@@ -35,6 +35,7 @@ HashTag.propTypes = {
         name: PropTypes.string,
         url: PropTypes.string,
     })),
+    // from: PropTypes.string.isRequired for ucf purpose
 };
 
 export default HashTag;

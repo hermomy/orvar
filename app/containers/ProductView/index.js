@@ -77,8 +77,7 @@ export class ProductView extends React.PureComponent { // eslint-disable-line re
 
     buildReview(reviews) {
         if (reviews) {
-            return reviews.items.map((review) =>
-            (
+            return reviews.items.map((review) => (
                 <div className="review" key={review.id}>
                     <div className="review-name">{review.username}</div>
                     <div>{review.rating} rating</div>
@@ -122,10 +121,9 @@ export class ProductView extends React.PureComponent { // eslint-disable-line re
                             <div className="name">{product.name}</div>
                         </div>
                     </div>
-                    <HashTag className="hashtags-panel" tags={product.hashtags || []} />
+                    <HashTag className="hashtags-panel" tags={product.hashtags} />
                     <div className="action-panel">
                         <div className="wishlist-btn">
-                            {/* Further update for wishlist checking */}
                             <i className={`${true ? 'far' : 'fas'} fa-heart`} />
                         </div>
                         <div className="add-to-cart-button">
@@ -190,28 +188,32 @@ export class ProductView extends React.PureComponent { // eslint-disable-line re
 
                 <div className="content-panel">
                     <hr className="splitter bold" />
-                    <Slider className="reviews-panel" title="Top Reviews" contents={this.buildReview(reviews)} />
+                    <Slider
+                        className="reviews-panel"
+                        title="Top Reviews"
+                        contents={this.buildReview(reviews)}
+                    />
 
                     <hr className="splitter bold" />
-                    <Slider className="bought-together-panel" title="Frequently Bought Together">
-                        {
-                            this.buildFrequentlyBuy()
-                        }
-                    </Slider>
+                    <Slider
+                        className="bought-together-panel"
+                        title="Frequently Bought Together"
+                        contents={this.buildFrequentlyBuy()}
+                    />
 
                     <hr className="splitter bold" />
-                    <Slider className="related-items-panel" title="Related to items you viewed">
-                        {
-                            this.buildRelatedItems()
-                        }
-                    </Slider>
+                    <Slider
+                        className="related-items-panel"
+                        title="Related to items you viewed"
+                        contents={this.buildRelatedItems()}
+                    />
 
                     <hr className="splitter bold" />
-                    <Slider className="customer-bought-panel" title="Customers who bought this item also bought">
-                        {
-                            this.buildCustomerBought()
-                        }
-                    </Slider>
+                    <Slider
+                        className="customer-bought-panel"
+                        title="Customers who bought this item also bought"
+                        contents={this.buildCustomerBought()}
+                    />
                 </div>
             </div>
         );

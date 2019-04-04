@@ -1,8 +1,11 @@
+@import 'app/breakpoints.scss';
+
 .product-panel {
     .product-image-panel {
-
         .product-image {
-            padding: 20px 0px 20px 0px;
+            max-width: 100%;
+            height: auto;
+            padding-bottom: 20px;
             display: block;
             margin: auto;
         }
@@ -79,30 +82,29 @@
     }
 }
 
-.review {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    font-family: arial;
-    height: 150px;
-    min-width: 200px;
-    overflow: hidden;
-    text-overflow:ellipsis;
-
-    .review-name {
-        text-align: left;
-        font-weight: bold;
-        margin-bottom: 10px;
-        color: grey;
-    }
-
-    .review-comment {
-        margin-top: 10px;
+.reviews-panel {
+    .review {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        font-family: arial;
+        overflow: hidden;
+    
+        padding: 10px;
+        margin: 10px;
+        height: 150px;
+        width: 200px;
+    
+        .review-name {
+            text-align: left;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: grey;
+        }
+    
+        .review-comment {
+            margin-top: 10px;
+        }
     }
 }
-
-.content-panel {
-    padding: 10px;
-    float: left;
-} 
 
 .splitter {
     border: none;
@@ -121,14 +123,14 @@
     text-align: center;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 
-    @include smaller_device(mobile-large, min) {
+    @include media-breakpoint-down(sm) {
         position: absolute; 
         left: 0 ; 
         right: 0; 
         bottom: 0; 
     }
 
-    @include larger_device(tablet, 1234px) {
+    @include media-breakpoint-up(md) {
         margin: 0 auto;
         align-self: center;
         width: 50%;

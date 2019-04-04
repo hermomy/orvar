@@ -13,7 +13,7 @@ class Accordion extends React.Component { // eslint-disable-line react/prefer-st
 
     toggleAccordion(key) {
         this.setState({
-            [`Accordion_${key}`]: !this.state[key],
+            [`Accordion_${key}`]: !this.state[`Accordion_${key}`],
         });
     }
 
@@ -32,7 +32,7 @@ class Accordion extends React.Component { // eslint-disable-line react/prefer-st
                                 </div>
                             );
                         }
-                        const status = this.state[content.key] ? 'active' : '';
+                        const status = this.state[`Accordion_${content.key}`] ? 'active' : '';
                         const height = status ?
                             this.props.height_threshold || '162px' :
                             '0px';
