@@ -3,7 +3,7 @@ const globalScope = {
     isAdmin: false,
     api: process.env.API_URL,
     previousPage: '',
-    config: {}
+    config: {},
 };
 
 export default globalScope;
