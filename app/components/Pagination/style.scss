@@ -3,9 +3,11 @@
 .pagination {
     padding: 0.5rem 0.75rem;
     text-decoration: none;
-    float: right;
     margin-top: 10px;
 
+    @include media-breakpoint-up(md) {
+        width: 100%;
+    }
 
     .pagination-word {
         padding: 0.5rem 0.75rem;

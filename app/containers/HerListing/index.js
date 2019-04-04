@@ -143,11 +143,13 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                         :
                         <div>
                             <img className="banner" src="https://cdn5.hermo.my/hermo/imagelink/2019/april-2019-loreal-paris_01554085356.jpg" alt="" />
-                            <div className="view-button">
-                                <input type="button" onClick={() => { this.setState({ listView: !this.state.listView }); }} value="grid/list" />
+                            <div>
+                                <div className="view-button">
+                                    <input type="button" onClick={() => { this.setState({ listView: !this.state.listView }); }} value="grid/list" />
+                                </div>
+                                {this.sortRender()}
+                                {this.pagingRender()}
                             </div>
-                            {this.pagingRender()}
-                            {this.sortRender()}
                             <div className="filter-container">
                                 {this.FilterRender(dataChecking(this.props, 'herlisting', 'data', 'filters'))}
                             </div>

@@ -27,8 +27,8 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                 key={this.props.product.id}
                 onClick={() => this.passDataToProdView(this.props.product)}
             >
-                <div className="product-card-content">
-                    <div className={`product-card-images ${this.props.product.instock ? '' : 'OOS'}`}>
+                <div className={`product-card-content ${!this.props.product.instock ? '' : 'OOS'}`}>
+                    <div className="product-card-images">
                         <div className="product-card-tag">
                             {
                                 this.props.product.features.map((feature) => (

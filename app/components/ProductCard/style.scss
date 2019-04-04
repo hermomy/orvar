@@ -24,7 +24,10 @@
             padding: 50px 12px 30px 12px;
             position: relative;
 
-            .product-card-img { text-align: center; img { max-width: 100% }}
+            .product-card-img {
+                text-align: center;
+                img { max-width: 100%}
+            }
 
             .product-card-tag {
                 position: absolute;
