@@ -7,22 +7,30 @@
 import {
     GET_DATA,
     GET_DATA_SUCCESS,
+    GET_PRODUCT_SUCCESS,
     GET_DATA_FAIL,
 } from './constants';
 
-export function getData(api, dataname) {
+export function getData(dataType, queryParamString, api) {
     return {
         type: GET_DATA,
+        dataType,
+        queryParamString,
         api,
-        dataname,
     };
 }
 
-export function getDataSuccess(data, dataname) {
+export function getDataSuccess(data) {
     return {
         type: GET_DATA_SUCCESS,
         data,
-        dataname,
+    };
+}
+
+export function getProductSuccess(data) {
+    return {
+        type: GET_PRODUCT_SUCCESS,
+        data,
     };
 }
 

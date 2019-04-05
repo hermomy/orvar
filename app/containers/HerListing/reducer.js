@@ -8,6 +8,7 @@ import { fromJS } from 'immutable';
 import {
     GET_DATA,
     GET_DATA_SUCCESS,
+    GET_PRODUCT_SUCCESS,
     GET_DATA_FAIL,
 } from './constants';
 
@@ -15,6 +16,7 @@ export const initialState = fromJS({
 });
 
 function herListingReducer(state = initialState, action) {
+    const newData = { ...state.get('data') };
     switch (action.type) {
         case GET_DATA:
             return state
@@ -23,7 +25,18 @@ function herListingReducer(state = initialState, action) {
                 .set('error', false);
         case GET_DATA_SUCCESS:
             return state
-                .set(`${action.dataname}`, Object.assign({ ...state.get('data') }, action.data))
+                // .set(`${action.dataname}`, Object.assign({ ...state.get('data') }, action.data))
+                .set('data', action.data)
+                .set('getDataSuccess', true)
+                .set('loading', false)
+                .set('error', false);
+        case GET_PRODUCT_SUCCESS:
+            if (newData && newData.product && newData.product.result) {
+                newData.product.result = action.data;
+            }
+
+            return state
+                .set('data', newData)
                 .set('getDataSuccess', true)
                 .set('loading', false)
                 .set('error', false);

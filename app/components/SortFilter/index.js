@@ -39,7 +39,7 @@ class SortFilter extends React.Component { // eslint-disable-line react/prefer-s
 
     updateSelectedSort = (event) => {
         const currentQueryString = this.state.currentQueryString.replace(this.state.selectedSorter, event.target.value).replace('?', '');
-        this.props.parentProps.dispatch(getData(`${this.props.parentProps.herlisting.data.mall.product._links.self.href}?${currentQueryString}`));
+        this.props.parentProps.dispatch(getData('mallList', currentQueryString));
         this.setState({
             selectedSorter: event.target.value,
             currentQueryString,
@@ -73,7 +73,7 @@ class SortFilter extends React.Component { // eslint-disable-line react/prefer-s
         } else {
             console.warn('History for route not found.');
         }
-        parentProps.dispatch(getData(`${parentProps.herlisting.data.mall.product._links.self.href}?${queryString}`));
+        parentProps.dispatch(getData('mallList', queryString));
         this.setState({ selectedFilter: obj, currentQueryString: queryString });
     }
 
@@ -99,7 +99,7 @@ class SortFilter extends React.Component { // eslint-disable-line react/prefer-s
             >
                 {
                     dataChecking(data, 'items', 'length') ?
-                    this.props.parentProps.herlisting.data.mall.sort.items.map((sort) =>
+                    data.items.map((sort) =>
                     (
                         <option key={sort.id} value={sort.id}>{sort.text}</option>
                     ))
@@ -149,10 +149,10 @@ class SortFilter extends React.Component { // eslint-disable-line react/prefer-s
                     <div>{JSON.stringify(this.state.currentQueryString)}</div>
                 </div> */}
                 <div className="sort-container my-half">
-                    {this.renderSorter(dataChecking(this.props.parentProps, 'herlisting', 'data', 'mall', 'sort'))}
+                    {this.renderSorter(dataChecking(this.props, 'sortData'))}
                 </div>
                 <div className="filter-container">
-                    {this.renderFilter(dataChecking(this.props.parentProps, 'herlisting', 'data', 'mall', 'filters'))}
+                    {this.renderFilter(dataChecking(this.props, 'filterData'))}
                 </div>
             </div>
         );

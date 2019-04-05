@@ -64,7 +64,15 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                     <Switch>
                         <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />
                         <Route exact={true} path="/logout" component={LogoutForm} />
-                        <Route exact={true} path="/HerListing" component={HerListing} />
+                        <Route
+                            exact={true}
+                            path="/HerListing/:pageNum?"
+                            render={() => (
+                                <HerListing
+                                    dataType="mall"
+                                />
+                            )}
+                        />
                         <Route exact={true} path="/" component={HomePage} />
                         <Route exact={true} path="/cart" component={Cart} />
                         <Route path="" component={NotFoundPage} />

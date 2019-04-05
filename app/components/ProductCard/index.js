@@ -20,7 +20,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
             <div
                 className={`product-card ${this.props.listViewMode ? 'list-view-card' : 'grid-view-card'}`}
                 key={this.props.product.id}
-                onClick={() => this.passDataToProdView(this.props.product)}
+                // onClick={() => this.passDataToProdView(this.props.product)}
             >
                 <div className={`product-card-content ${!this.props.product.instock ? '' : 'OOS'}`}>
                     <div className="product-card-images">
