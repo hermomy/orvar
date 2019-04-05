@@ -7,17 +7,12 @@
 import React from 'react';
 // import styled from 'styled-components';
 import './style.scss';
-import StatefulLink from '../StatefulLink';
 import Price from '../Price';
 import Rate from '../Rate';
 
 class ProductCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         wishlist: this.props.product._user.wishlisted,
-    }
-
-    passDataToProdView = (items) => {
-        StatefulLink(items, (`/mall/${items.id}`));
     }
 
     render() {

@@ -5,7 +5,7 @@
 */
 
 import {
-    getPage,
+    getData,
 } from 'containers/HerListing/actions';
 import React from 'react';
 // import styled from 'styled-components';
@@ -13,27 +13,45 @@ import React from 'react';
 import { dataChecking } from 'globalUtils';
 import './style.scss';
 
-class SortFilter extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class SortFilter extends React.Component { // eslint-disable-line react/prefer-stateless-function
     state = {
         listView: false,
-        selectedFilter: { ...this.props.initialSortFilterParams.selectedFilter },
-        sortValue: this.props.initialSortFilterParams.sortValue,
-        currentQueryString: this.props.initialSortFilterParams.currentQueryString,
+        selectedFilter: null,
+        selectedSorter: '',
+        currentQueryString: null,
         selectedToggle: {},
     }
 
-    updateSelectedSort = (event) => {
-        const currentQueryString = this.state.currentQueryString.replace(this.state.sortValue, event.target.value).replace('?', '');
-        if (dataChecking(this.props.parent, 'history', 'push')) {
-            this.props.parent.history.push(`${this.props.parent.location.pathname}?${currentQueryString}`);
+    componentWillMount() {
+        if (this.props.initialSortFilterParams) {
+            this.setState(this.props.initialSortFilterParams);
         }
-        this.props.dpatch(this.props.parent.herlisting.data.product._links.self.href, currentQueryString);
-        this.setState({ sortValue: event.target.value, currentQueryString });
+    }
+
+    // parentProps={this.props}
+    // sortData={dataChecking(this.props, 'herlisting', 'data', 'sort')}
+    // filterData={dataChecking(this.props, 'herlisting', 'data', 'filters')}
+    // initialSortFilterParams: {
+    //     selectedFilter: obj,
+    //     selectedSorter,
+    //     currentQueryString,
+    // },
+
+    updateSelectedSort = (event) => {
+        const currentQueryString = this.state.currentQueryString.replace(this.state.selectedSorter, event.target.value).replace('?', '');
+        this.props.parentProps.dispatch(getData(`${this.props.parentProps.herlisting.data.mall.product._links.self.href}?${currentQueryString}`));
+        this.setState({
+            selectedSorter: event.target.value,
+            currentQueryString,
+        });
+        if (dataChecking(this.props.parentProps, 'history', 'push')) {
+            this.props.parentProps.history.push(`${this.props.parentProps.location.pathname}?${currentQueryString}`);
+        }
     }
 
     updateSelectedFilter = (item) => {
-        const { parent } = this.props;
-        if (!item.id || !item.key || dataChecking(parent, 'herlisting', 'contentLoading')) { return; }
+        const { parentProps } = this.props;
+        if (!item.id || !item.key || dataChecking(this.props.parentProps, 'herlisting', 'loading')) { return; }
 
         const obj = { ...this.state.selectedFilter };
         if (obj[`${item.key}_${item.id}`]) {
@@ -42,20 +60,20 @@ class SortFilter extends React.PureComponent { // eslint-disable-line react/pref
             obj[`${item.key}_${item.id}`] = item;
         }
         let queryString = '';
-        if (this.state.sortValue) {
-            queryString = `sort=${this.state.sortValue}`;
+        if (this.state.selectedSorter) {
+            queryString = `sort=${this.state.selectedSorter}`;
         }
         let query = '';
         Object.values(obj).forEach((param) => {
             query = `${query}&${param.key}=${param.id}`;
         });
         queryString += query;
-        if (dataChecking(parent, 'history', 'push')) {
-            parent.history.push(`${parent.location.pathname}?${queryString}`);
+        if (dataChecking(parentProps, 'history', 'push')) {
+            this.props.parentProps.history.push(`${this.props.parentProps.location.pathname}?${queryString}`);
         } else {
             console.warn('History for route not found.');
         }
-        parent.dispatch(getPage(`${parent.herlisting.data.product._links.self.href}?${queryString}`));
+        parentProps.dispatch(getData(`${parentProps.herlisting.data.mall.product._links.self.href}?${queryString}`));
         this.setState({ selectedFilter: obj, currentQueryString: queryString });
     }
 
@@ -70,6 +88,28 @@ class SortFilter extends React.PureComponent { // eslint-disable-line react/pref
         }
     }
 
+    renderSorter = (data) => {
+        if (!data) { return null; }
+
+        return (
+            <select
+                className="sort-item"
+                onChange={this.updateSelectedSort}
+                value={this.state.selectedSorter}
+            >
+                {
+                    dataChecking(data, 'items', 'length') ?
+                    this.props.parentProps.herlisting.data.mall.sort.items.map((sort) =>
+                    (
+                        <option key={sort.id} value={sort.id}>{sort.text}</option>
+                    ))
+                    :
+                    null
+                }
+            </select>
+        );
+    }
+
     renderFilter = (list) => {
         if (dataChecking(list, 'length')) {
             return list.map((item) => (
@@ -79,7 +119,7 @@ class SortFilter extends React.PureComponent { // eslint-disable-line react/pref
                         className={`${dataChecking(item, 'id') ? '' : 'invisible'}`}
                         onChange={() => this.updateSelectedFilter(item)}
                         checked={this.state.selectedFilter[`${item.key}_${item.id}`] || false}
-                        disabled={dataChecking(this.props.parent, 'herlistng', 'contentLoading')}
+                        disabled={dataChecking(this.props.parentProps, 'herlistng', 'loading')}
                     />
                     <div className="filter-item-display ml-quater" onClick={() => this.toggleFilter(item)}>
                         <span>{item.text}</span>
@@ -101,25 +141,18 @@ class SortFilter extends React.PureComponent { // eslint-disable-line react/pref
     render() {
         return (
             <div>
-                <div>
-                    <select
-                        className="sorter"
-                        onChange={(value) => { this.setState({ sortValue: value }); this.updateSelectedSort(value); }}
-                        value={this.state.sortValue}
-                    >
-                        {
-                            dataChecking(this.props.parent, 'herlisting', 'data', 'sort', 'items') ?
-                            this.props.parent.herlisting.data.sort.items.map((sort) =>
-                            (
-                                <option key={sort.id} value={sort.id}>{sort.text}</option>
-                            ))
-                            :
-                            null
-                        }
-                    </select>
+                {/* <div>
+                    <div>{JSON.stringify(this.state.selectedFilter)}</div>
+                    <hr />
+                    <div>{JSON.stringify(this.state.selectedSorter)}</div>
+                    <hr />
+                    <div>{JSON.stringify(this.state.currentQueryString)}</div>
+                </div> */}
+                <div className="sort-container my-half">
+                    {this.renderSorter(dataChecking(this.props.parentProps, 'herlisting', 'data', 'mall', 'sort'))}
                 </div>
                 <div className="filter-container">
-                    {this.renderFilter(dataChecking(this.props.parent, 'herlisting', 'data', 'filters'))}
+                    {this.renderFilter(dataChecking(this.props.parentProps, 'herlisting', 'data', 'mall', 'filters'))}
                 </div>
             </div>
         );

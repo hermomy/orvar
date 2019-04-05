@@ -20,7 +20,6 @@ import saga from './saga';
 import './style.scss';
 import {
     getData,
-    getPage,
 } from './actions';
 import Pagination from '../../components/Pagination';
 import ProductCard from '../../components/ProductCard';
@@ -32,7 +31,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         super(props);
 
         const obj = {};
-        let sortValue = 'default';
+        let selectedSorter = 'default';
         let currentQueryString = 'sort=default';
 
         if (dataChecking(this.props, 'location', 'search')) {
@@ -41,7 +40,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                 const item = paramItem.split('=');
 
                 if (item[0] === 'sort') {
-                    sortValue = item[1];
+                    selectedSorter = item[1];
                 } else {
                     const key = `${item[0]}_${item[1]}`;
                     obj[key] = {
@@ -55,27 +54,35 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
 
         this.state = {
             listView: false,
+            initialQueryString: currentQueryString,
             initialSortFilterParams: {
                 selectedFilter: obj,
-                sortValue,
+                selectedSorter,
                 currentQueryString,
             },
         };
     }
 
     componentWillMount() {
-        const { mall } = this.props.dispatch(getData());
+        this.props.dispatch(getData('/mall', 'mall'));
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (dataChecking(nextProps, 'herlisting', 'data', 'filters') && this.state.initialQueryString) {
+            this.props.dispatch(getData(`/mall/list?${this.state.initialQueryString}`));
+            this.setState({ initialQueryString: null });
+        }
     }
 
     pagingRender = () => {
-        const data = dataChecking(this.props, 'herlisting', 'data', 'product', 'result');
+        const data = dataChecking(this.props, 'herlisting', 'mall', 'product', 'result');
         if (!data || !data._meta) {
             return null;
         }
         return (
             <Pagination
                 dpatch={(page) => {
-                    this.props.dispatch(getPage(page));
+                    this.props.dispatch(getData(page, 'mall'));
                 }}
                 meta={data._meta}
                 link={data._links}
@@ -85,6 +92,11 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
 
     render() {
         console.log(this.props);
+        if (dataChecking(this.props, 'herlisting', 'mall')) {
+            this.setState({ sortFromMall: this.props.herlisting.mall.sort, filterFromMall: this.props.herlisting.mall.filters });
+            console.log(this.state.sortFromMall);
+            this.props.dispatch(getData('/mall/list', 'mall'));
+        }
         return (
             <div className="container">
                 <Helmet>
@@ -92,8 +104,8 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                     <meta name="description" content="Description of HerListing" />
                 </Helmet>
                 {
-                    dataChecking(this.props, 'herlisting', 'loading') ?
-                        <img className="loading" src={require('images/preloader-02.gif')} alt="" />
+                    dataChecking(this.props, 'herlisting', 'loading') && !dataChecking(this.props.herlisting, 'data') ?
+                        <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
                         :
                         <div>
                             <img className="banner" src="https://cdn5.hermo.my/hermo/imagelink/2019/april-2019-loreal-paris_01554085356.jpg" alt="" />
@@ -105,35 +117,23 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                             </div>
                             <div className="sort-filter-container">
                                 <SortFilter
-                                    parent={mall}
-                                    sortData={dataChecking(this.props, 'herlisting', 'data', 'sort')}
-                                    filterData={dataChecking(this.props, 'herlisting', 'data', 'filters')}
+                                    parentProps={this.props}
+                                    sortData={dataChecking(this.props, 'herlisting', 'data', 'mall', 'sort')}
+                                    filterData={dataChecking(this.props, 'herlisting', 'data', 'mall', 'filters')}
                                     initialSortFilterParams={this.state.initialSortFilterParams}
-                                    dpatch={(selfhref, currentQueryString) => {
-                                        this.props.dispatch(getPage(`${selfhref}?${currentQueryString}`));
-                                    }}
-                                    // getSortValue={() => this.state.sortValue}
-                                    // getSelectedFilter={() => this.state.selectedFilter}
-                                    // getSelectedToggle={() => this.state.selectedToggle}
-                                    // setState_CurrentQueryString={(currentQueryString) => {
-                                    //     this.setState({ currentQueryString });
-                                    // }}
-                                    // setState_SelectedFilter={(data) => {
-                                    //     this.setState({ selectedFilter: data });
-                                    // }}
-                                    // setState_SelectedToggle={(data) => {
-                                    //     this.setState({ selectedToggle: data });
-                                    // }}
                                 />
                             </div>
-                            <div>
+                            <div className="data-container">
                                 {
-                                    dataChecking(this.props, 'herlisting', 'contentLoading') ?
-                                        <img className="product-loading" src={require('images/preloader-02.gif')} alt="" />
+                                    dataChecking(this.props, 'herlisting', 'loading') ?
+                                        <div className="data-loading">
+                                            <img className="herlisting-loading" src={require('images/preloader-02.gif')} alt="" />
+                                        </div>
                                         :
                                         <div className={`${this.state.listView ? 'list-view' : 'grid-view'}`}>
-                                            {dataChecking(this.props, 'herlisting', 'data', 'product', 'result', 'items') ?
-                                                this.props.herlisting.data.product.result.items.map((product) =>
+                                            {
+                                                dataChecking(this.props, 'herlisting', 'mall', 'items') ?
+                                                this.props.herlisting.mall.items.map((product) =>
                                                     (
                                                         <div
                                                             key={product.id}
