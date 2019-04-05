@@ -24,7 +24,7 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
                     newPathName = `${this.props.parentProps.location.pathname}/page-${targetPage}`;
                 }
             });
-            this.props.parentProps.history.push(`${newPathName}`);
+            this.props.parentProps.history.push(`${newPathName}${this.props.parentProps.history.location.search}`);
         }
     }
 
