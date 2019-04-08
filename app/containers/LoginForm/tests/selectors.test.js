@@ -6,7 +6,7 @@ import {
 } from '../selectors';
 
 describe('Session Selectors', () => {
-    it('should select from LoginForm', () => {
+    it('Expect select from LoginForm', () => {
         const loginState = fromJS({});
         const mock = fromJS({ LoginForm: loginState });
         expect(selectSession(mock)).toEqual(loginState);
@@ -14,7 +14,7 @@ describe('Session Selectors', () => {
 });
 
 describe('Auth Selectors', () => {
-    it('should select error LoginForm', () => {
+    it('Expect select error LoginForm', () => {
         const selector = makeSelectAuthError();
         const errorState = fromJS({
             error: false,
@@ -23,7 +23,7 @@ describe('Auth Selectors', () => {
         expect(selector(mock)).toEqual(errorState.get('error'));
     });
 
-    it('should select loading LoginForm', () => {
+    it('Expect select loading LoginForm', () => {
         const selector = makeSelectAuthLoading();
         const loadingSelector = fromJS({
             loading: false,

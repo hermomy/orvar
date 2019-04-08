@@ -1,0 +1,17 @@
+.slider {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    list-style-type: none;
+    display: flex;
+    max-width: 100%;
+
+    > li {
+        flex-direction: column;
+    }
+}
+
+.slider-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+}

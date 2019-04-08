@@ -19,11 +19,11 @@ describe('checkStore', () => {
         };
     });
 
-    it('should not throw if passed valid store shape', () => {
+    it('Expect not throw if passed valid store shape', () => {
         expect(() => checkStore(store)).not.toThrow();
     });
 
-    it('should throw if passed invalid store shape', () => {
+    it('Expect throw if passed invalid store shape', () => {
         expect(() => checkStore({})).toThrow();
         expect(() => checkStore({ ...store, injectedSagas: null })).toThrow();
         expect(() => checkStore({ ...store, injectedReducers: null })).toThrow();

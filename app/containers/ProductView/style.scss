@@ -1,0 +1,151 @@
+@import 'app/breakpoints.scss';
+
+.product-panel {
+    .product-image-panel {
+        .product-image {
+            max-width: 100%;
+            height: auto;
+            padding-bottom: 20px;
+            display: block;
+            margin: auto;
+        }
+    }
+
+    .product-info-panel {
+        display: flex;
+        
+        .brand-info {
+            flex: 3;
+            text-align: center;
+    
+            .brand-logo {
+                border-radius: 50%;
+                box-shadow: 0px 0px 2px grey;
+                width: 50px;
+                height: 50px;
+            }
+    
+            .brand-rating {
+                margin-top: 5px;
+                color: grey;
+            }
+        }
+    
+        .product-info { 
+            flex: 7;
+            margin-left: 10px;
+    
+            .price {
+                font-weight: bold;
+                padding-bottom: 12px;
+            }
+    
+            .brand {
+                font-weight: bold;
+                padding-bottom: 12px;
+            }
+    
+            .name {
+                font-style: italic;
+                color: grey;
+            }
+        }
+    }
+    
+    .hashtags-panel {
+        padding: 15px;
+
+        .hashtag {
+            color: grey;
+            text-decoration: none;
+            font-style: italic;
+            background-color: gainsboro;
+            display: inline-block;
+            margin-right: 10px;
+            padding: 5px;
+        }
+    }
+}
+
+.accordion-panel {
+    background-color: wheat;
+
+    .accordion-container {
+        padding: 20px;
+        
+        .accordion-title {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: black;
+            text-decoration: none;
+        }
+    }
+}
+
+.reviews-panel {
+    .review {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        font-family: arial;
+        overflow: hidden;
+    
+        padding: 10px;
+        margin: 10px;
+        height: 150px;
+        width: 200px;
+    
+        .review-name {
+            text-align: left;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: grey;
+        }
+    
+        .review-comment {
+            margin-top: 10px;
+        }
+    }
+}
+
+.splitter {
+    border: none;
+    height: 1px;
+    background-color: gainsboro;
+
+    &.bold {
+        height: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
+
+.action-panel {
+    display: flex;
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+    @include media-breakpoint-down(sm) {
+        position: absolute; 
+        left: 0 ; 
+        right: 0; 
+        bottom: 0; 
+    }
+
+    @include media-breakpoint-up(md) {
+        margin: 0 auto;
+        align-self: center;
+        width: 50%;
+    }
+
+    .wishlist-btn {
+        flex: 3;
+        padding: 10px;
+        color: #DC143C;
+        background-color: whitesmoke;
+    }
+
+    .add-to-cart-button {
+        flex: 7;
+        padding: 10px;
+        background-color: #DC143C;
+    }
+}
