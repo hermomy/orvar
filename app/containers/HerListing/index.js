@@ -75,6 +75,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                 selectedSorter,
                 currentQueryString,
             },
+            bukatutup: true,
         };
     }
 
@@ -90,6 +91,33 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         }
     }
 
+    abcdefg = () => {
+        if (dataChecking(this.props, 'herlisting', 'data', 'product', 'result', '_links', 'next', 'href')) {
+            this.props.dispatch(getData('mallList', null, this.props.herlisting.data.product.result._links.next.href));
+        } else {
+            if (this.props.herlisting.data.product.result._meta.pageCount === this.props.herlisting.data.product.result._meta.currentPage) {
+                return null;
+            }
+            this.props.dispatch(getData('mallList', null, `${this.props.herlisting.data.product._links.self.href}?page=2`));
+        }
+        this.setState({ currentPage: this.state.currentPage + 1 });
+        let newPathName = '';
+        if (dataChecking(this.props, 'history', 'push') && dataChecking(this.props, 'location', 'pathname')) {
+            this.props.location.pathname.split('/').forEach((param) => {
+                const arr = param.split('-');
+                const temppage = this.state.currentPage + 1;
+                if (arr && arr[0] === 'page') {
+                    newPathName = this.props.location.pathname.replace(param, `page-${temppage}`);
+                } else {
+                    newPathName = `${this.props.location.pathname}/page-${temppage}`;
+                }
+            });
+            this.props.history.push(`${newPathName}${this.props.history.location.search}`);
+        }
+        return null;
+    }
+
+
     renderPaginator = () => {
         const data = dataChecking(this.props, 'herlisting', 'data', 'product', 'result');
         if (!data || !data._meta) {
@@ -103,6 +131,25 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                 currentPage={this.state.currentPage}
             />
         );
+    }
+
+    renderProductCard = () => {
+        const data = dataChecking(this.props, 'herlisting', 'data', 'product', 'result', 'items');
+        if (!data) {
+            return null;
+        }
+        return this.props.herlisting.data.product.result.items.map((product) =>
+        (
+            <div
+                key={product.id}
+                className={`product-card-div ${this.state.listView ? 'list-view-component' : 'grid-view-component'}`}
+            >
+                <ProductCard
+                    product={product}
+                    listViewMode={this.state.listView}
+                />
+            </div>
+        ));
     }
 
     render() {
@@ -142,23 +189,16 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                                         </div>
                                         :
                                         <div className={`${this.state.listView ? 'list-view' : 'grid-view'}`}>
-                                            {
-                                                dataChecking(herlisting, 'data', 'product', 'result', 'items') ?
-                                                    herlisting.data.product.result.items.map((product) =>
-                                                        (
-                                                            <div
-                                                                key={product.id}
-                                                                className={`product-card-div ${this.state.listView ? 'list-view-component' : 'grid-view-component'}`}
-                                                            >
-                                                                <ProductCard
-                                                                    product={product}
-                                                                    listViewMode={this.state.listView}
-                                                                />
-                                                            </div>
-                                                    )) : null
-                                            }
+                                            {this.renderProductCard()}
                                         </div>
                                 }
+                            </div>
+                            <div>
+                                <span className="next-page-bottom" onClick={() => this.abcdefg()}>Next Page</span>
+                                {/* <div style={{ backgroundColor: '#ffccff', width: '1100px', height: '500px' }}> */}
+                                {/* <img className="abc" src={require('images/hermo.png')} alt="" /> */}
+                                {/* <span className="bcd">Partner Voucher</span> */}
+                                {/* </div> */}
                             </div>
                         </div>
                 }
