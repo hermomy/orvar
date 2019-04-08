@@ -1,9 +1,9 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import StatefulLink from '../index';
+// import { ProductView } from '../index';
 
-describe('<StatefulLink />', () => {
+describe('<ProductView />', () => {
     it('Expect to have unit tests specified', () => {
         expect(true).toEqual(true);
     });

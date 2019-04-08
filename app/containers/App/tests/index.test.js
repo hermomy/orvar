@@ -16,20 +16,20 @@ describe('<App />', () => {
     //     app = shallow(<App></App>);
     // });
 
-    // it('should show HershopTopbar', () => {
+    // it('Expect show HershopTopbar', () => {
     //     expect(app.find('#hershop-topbar-container').length).toEqual(1);
     // });
 
-    // it('should show HershopTopbar background colour based on theme colour', () => {
+    // it('Expect show HershopTopbar background colour based on theme colour', () => {
     //     const rendered = shallow(<HershopTopbar theme={{ main_bg: 'salmon' }} />);
     //     expect(rendered).toHaveStyleRule('background-color', 'salmon');
     // });
 
-    // it('should show HershopContent', () => {
+    // it('Expect show HershopContent', () => {
     //     expect(app.find('#hershop-content-container').length).toEqual(1);
     // });
 
-    // it('should render Routes and PrivateRoutes', (done) => {
+    // it('Expect render Routes and PrivateRoutes', (done) => {
     //     const routes = app.find(Route).length;
     //     const privateRoutes = app.find(PrivateRoute).length;
     //     expect(routes).toBeGreaterThan(0);

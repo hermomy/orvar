@@ -25,7 +25,7 @@ let generator;
 describe('authSaga()', () => {
     generator = authSaga();
 
-    it('should yield getToken() when LOGIN is dispatched', (done) => {
+    it('Expect yield getToken() when LOGIN is dispatched', (done) => {
         const mock = generator.next().value;
         const expected = put(doLogin({ username: '', password: '' }));
         expect(mock.PUT).toEqual(expected.FORK);
@@ -37,7 +37,7 @@ describe('authSaga()', () => {
 //     beforeEach(() => {
 //         generator = getToken({ payload: userPayload });
 //     });
-//     it('should trigger loginSuccess() when success', (done) => {
+//     it('Expect trigger loginSuccess() when success', (done) => {
 //         expect(generator.next()).toMatchSnapshot();
 //         const mock = generator.next(successPayload).value;
 //         const expected = put(loginSuccess(successPayload));
@@ -45,7 +45,7 @@ describe('authSaga()', () => {
 //         done();
 //     });
 
-//     it('should trigger loginFailed() when API returned falsy success', (done) => {
+//     it('Expect trigger loginFailed() when API returned falsy success', (done) => {
 //         expect(generator.next()).toMatchSnapshot();
 //         const mock = generator.next(failedPayload).value;
 //         const expected = put(loginFailed(failedPayload));
@@ -53,7 +53,7 @@ describe('authSaga()', () => {
 //         done();
 //     });
 
-//     it('should trigger loginFailed() no response returned', (done) => {
+//     it('Expect trigger loginFailed() no response returned', (done) => {
 //         expect(generator.next()).toMatchSnapshot();
 //         const errorPayload = staticErrorResponse({ text: JSON.stringify('Test Error') });
 //         const mock = generator.next('Test Error').value;
@@ -62,7 +62,7 @@ describe('authSaga()', () => {
 //         done();
 //     });
 
-//     it('should throw loginFailed() if the generator throws error', (done) => {
+//     it('Expect throw loginFailed() if the generator throws error', (done) => {
 //         expect(generator.next()).toMatchSnapshot();
 //         const errorPayload = staticErrorResponse({ text: 'Error: {}' });
 //         const mock = generator.throw({}).value;

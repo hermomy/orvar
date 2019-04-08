@@ -19,7 +19,7 @@ describe('appSaga()', () => {
         generator = appSaga();
     });
 
-    it('should trigger fetchConfig() when FETCH_CONFIG is dispatched', (done) => {
+    it('Expect trigger fetchConfig() when FETCH_CONFIG is dispatched', (done) => {
         const expected = put(fetchConfig());
         const mock = generator.next().value;
         expect(mock.PUT).toEqual(expected.FORK);
@@ -44,7 +44,7 @@ describe('getConfigData()', () => {
     //         response = staticErrorResponse({ text: '' });
     //     });
 
-    //     // it('should trigger fetchConfigSuccess() when response.success is true', (done) => {
+    //     // it('Expect trigger fetchConfigSuccess() when response.success is true', (done) => {
     //     //     response.success = true;
     //     //     const mock = generator.next(response).value;
     //     //     const expected = put(fetchConfigSuccess(response));

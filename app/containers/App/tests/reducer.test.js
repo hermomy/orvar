@@ -14,7 +14,7 @@ describe('appReducer', () => {
         });
     });
 
-    it('should return the initial state', (done) => {
+    it('Expect return the initial state', (done) => {
         const expectedResult = state;
         expect(languageProviderReducer(undefined, {})).toEqual(fromJS(expectedResult));
         done();

@@ -9,7 +9,7 @@ describe('<HomePage />', () => {
     it('Expect to have unit tests specified', () => {
         expect(false).toEqual(false);
     });
-//     it('should render the page message', () => {
+//     it('Expect render the page message', () => {
 //         const renderedComponent = shallow(
 //             <HomePage />
 //         );

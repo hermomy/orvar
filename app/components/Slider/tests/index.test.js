@@ -1,9 +1,9 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import StatefulLink from '../index';
+// import Slider from '../index';
 
-describe('<StatefulLink />', () => {
+describe('<Slider />', () => {
     it('Expect to have unit tests specified', () => {
         expect(true).toEqual(true);
     });

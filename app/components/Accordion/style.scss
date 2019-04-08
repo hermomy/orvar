@@ -1,0 +1,14 @@
+.accordion-container {
+    .accordion-title {
+        .accordion-icon {
+            float: right;
+        }
+    }
+    
+    .accordion-content {
+        transition-property: 'max-height';
+        transition-duration: 0.3s;
+        transition-delay: 0s;
+        overflow: auto;
+    }
+}
