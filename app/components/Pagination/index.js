@@ -11,8 +11,18 @@ import { getData } from 'containers/HerListing/actions';
 import './style.scss';
 
 class Pagination extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+    state = {
+        currentPage: this.props.currentPage,
+    }
+    componentWillMount() {
+        if (this.state.currentPage !== 1) {
+            this.props.parentProps.dispatch(getData('mallList', null, `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${this.state.currentPage}`));
+        }
+    }
+
     onClickPagi = (targetApi, targetPage) => {
         this.props.parentProps.dispatch(getData('mallList', null, targetApi));
+        this.setState({ currentPage: targetPage });
         let newPathName = '';
 
         if (dataChecking(this.props.parentProps, 'history', 'push') && dataChecking(this.props.parentProps, 'location', 'pathname')) {

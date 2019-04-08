@@ -20,6 +20,7 @@ class SortFilter extends React.Component { // eslint-disable-line react/prefer-s
         selectedSorter: '',
         currentQueryString: null,
         selectedToggle: {},
+        defaultPathName: '/HerListing',
     }
 
     componentWillMount() {
@@ -45,7 +46,7 @@ class SortFilter extends React.Component { // eslint-disable-line react/prefer-s
             currentQueryString,
         });
         if (dataChecking(this.props.parentProps, 'history', 'push')) {
-            this.props.parentProps.history.push(`${this.props.parentProps.location.pathname}?${currentQueryString}`);
+            this.props.parentProps.history.push(`${this.state.defaultPathName}/page-1?${currentQueryString}`);
         }
     }
 
@@ -69,11 +70,12 @@ class SortFilter extends React.Component { // eslint-disable-line react/prefer-s
         });
         queryString += query;
         if (dataChecking(parentProps, 'history', 'push')) {
-            this.props.parentProps.history.push(`${this.props.parentProps.location.pathname}?${queryString}`);
+            this.props.parentProps.history.push(`${this.state.defaultPathName}/page-1?${queryString}`);
         } else {
             console.warn('History for route not found.');
         }
         parentProps.dispatch(getData('mallList', queryString));
+        console.log(queryString);
         this.setState({ selectedFilter: obj, currentQueryString: queryString });
     }
 

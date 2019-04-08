@@ -11,6 +11,7 @@
 .filter-item {
     input.invisible { opacity: 0; }
     input.loading { opacity: 0.5; }
+    cursor: default;
 
     .filter-item-display {
         display: inline-block;

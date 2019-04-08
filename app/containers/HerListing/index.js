@@ -54,6 +54,13 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
             currentQueryString = this.props.location.search;
         }
 
+        this.props.location.pathname.split('/').forEach((param) => {
+            const arr = param.split('-');
+            if (arr && arr[0] === 'page') {
+                currentPage = arr[1];
+            }
+        });
+
         const pageNum = dataChecking(this.props, 'match', 'params', 'pageNum');
         if (pageNum) {
             currentPage = pageNum.split('-')[1];
@@ -100,6 +107,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
 
     render() {
         const { herlisting } = this.props;
+        console.log(this.props);
         return (
             <div className="container">
                 <Helmet>
@@ -111,7 +119,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                         <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
                         :
                         <div>
-                            {/* <img className="banner" src="https://cdn5.hermo.my/hermo/imagelink/2019/april-2019-loreal-paris_01554085356.jpg" alt="" /> */}
+                            <img className="banner" src="https://cdn5.hermo.my/hermo/imagelink/2019/april-2019-loreal-paris_01554085356.jpg" alt="" />
                             <div>
                                 <div className="view-button">
                                     <input type="button" onClick={() => { this.setState({ listView: !this.state.listView }); }} value="grid/list" />
@@ -119,12 +127,12 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                                 {this.renderPaginator()}
                             </div>
                             <div className="sort-filter-container">
-                            <SortFilter
-                                parentProps={this.props}
-                                sortData={dataChecking(herlisting, 'data', 'sort')}
-                                filterData={dataChecking(herlisting, 'data', 'filters')}
-                                initialSortFilterParams={this.state.initialSortFilterParams}
-                            />
+                                <SortFilter
+                                    parentProps={this.props}
+                                    sortData={dataChecking(herlisting, 'data', 'sort')}
+                                    filterData={dataChecking(herlisting, 'data', 'filters')}
+                                    initialSortFilterParams={this.state.initialSortFilterParams}
+                                />
                             </div>
                             <div className="data-container">
                                 {
