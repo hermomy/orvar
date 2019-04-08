@@ -105,7 +105,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         if (dataChecking(this.props, 'history', 'push') && dataChecking(this.props, 'location', 'pathname')) {
             this.props.location.pathname.split('/').forEach((param) => {
                 const arr = param.split('-');
-                const temppage = this.state.currentPage + 1;
+                const temppage = this.props.herlisting.data.product.result._meta.currentPage + 1;
                 if (arr && arr[0] === 'page') {
                     newPathName = this.props.location.pathname.replace(param, `page-${temppage}`);
                 } else {
@@ -195,10 +195,6 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                             </div>
                             <div>
                                 <span className="next-page-bottom" onClick={() => this.abcdefg()}>Next Page</span>
-                                {/* <div style={{ backgroundColor: '#ffccff', width: '1100px', height: '500px' }}> */}
-                                {/* <img className="abc" src={require('images/hermo.png')} alt="" /> */}
-                                {/* <span className="bcd">Partner Voucher</span> */}
-                                {/* </div> */}
                             </div>
                         </div>
                 }
