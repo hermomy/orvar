@@ -156,8 +156,8 @@ export class ProductView extends React.PureComponent { // eslint-disable-line re
 
                 <Accordion
                     className="accordion-panel"
-                    active_icon="-"
-                    inactive_icon="+"
+                    active_icon={<i className="fas fa-minus"></i>}
+                    inactive_icon={<i className="fas fa-plus"></i>}
                     height_threshold="220px"
                     contents={[
                         {

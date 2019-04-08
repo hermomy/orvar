@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isArray } from 'util';
+import { isArray } from 'lodash';
 
 import './style.scss';
 
