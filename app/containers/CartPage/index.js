@@ -11,8 +11,9 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import { dataChecking } from 'globalUtils';
 
-import makeSelectCartPage, { makeSelectCartData } from './selectors';
+import makeSelectCartPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
@@ -32,52 +33,55 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
         return (
             <div>
                 {
-                    this.props.cartData ?
+                    dataChecking(this.props.cartpage, 'data', 'merchants') ?
                         <div>
-                           {
-                               this.props.cartData.merchants.map((merchant) => (
-                                       <div key={merchant.id}>
-                                            <div
-                                                style={{
-                                                    backgroundColor: 'black',
-                                                    color: 'white',
-                                                    padding: '.25rem .75rem',
-                                                }}
-                                            >
-                                                {merchant.name}
-                                            </div>
-                                            <div>
-                                                {
-                                                    merchant.items.map((item) => {
-                                                        console.log('list item', item);
-                                                        return (
-                                                            <div
-                                                                key={item.id}
-                                                                style={{
-                                                                    display: 'flex',
-                                                                }}
-                                                            >
-                                                                <div style={{ paddingRight: '1rem' }}>
-                                                                    <img src={item.product.image.small} alt="prod img"width="80px" />
-                                                                </div>
-                                                                <div style={{ paddingRight: '1rem' }}>{item.product.name}</div>
-                                                                <div style={{ paddingRight: '1rem' }}>{item.price.selling}</div>
-                                                                <div style={{ paddingRight: '1rem' }}>
-                                                                    <a onClick={() => this.deleteCart(item.id)}>
-                                                                        <i className="far fa-times-circle"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        );
-                                                    })
-                                                }
-                                            </div>
+                            {
+                                dataChecking(this.props.cartpage, 'data', 'merchants').map((merchant) => (
+                                    <div key={merchant.id}>
+                                        <div
+                                            style={{
+                                                backgroundColor: 'black',
+                                                color: 'white',
+                                                padding: '.25rem .75rem',
+                                            }}
+                                        >
+                                            {merchant.name}
                                         </div>
-                                   ))
-                           }
+                                        <div>
+                                            {
+                                                merchant.items.map((item) => {
+                                                    console.log();
+                                                    return (
+                                                        <div
+                                                            key={item.id}
+                                                            style={{
+                                                                display: 'flex',
+                                                            }}
+                                                        >
+                                                            <div style={{ paddingRight: '1rem' }}>
+                                                                <img src={item.product.image.small} alt="prod img"width="80px" />
+                                                            </div>
+                                                            <div style={{ paddingRight: '1rem' }}>{item.product.name}</div>
+                                                            <div style={{ paddingRight: '1rem' }}>{item.price.selling}</div>
+                                                            <div style={{ paddingRight: '1rem' }}>
+                                                                <a onClick={() => this.deleteCart(item.id)}>
+                                                                    <i className="far fa-times-circle"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })
+                                            }
+                                        </div>
+                                    </div>
+                                   )
+                                )
+                            }
                         </div>
                         :
-                        null
+                        <div>
+                            No Item Added
+                        </div>
                 }
             </div>
         );
@@ -90,7 +94,6 @@ CartPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
     cartpage: makeSelectCartPage(),
-    cartData: makeSelectCartData(),
 });
 
 function mapDispatchToProps(dispatch) {
