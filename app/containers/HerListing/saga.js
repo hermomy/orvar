@@ -10,7 +10,7 @@ import {
     getDataFail,
 } from './actions';
 
-export function* getPayload(actions) {
+export function* fetchData(actions) {
     try {
         let apiUrl = '/mall';
         let baseUrl = '';
@@ -36,6 +36,6 @@ export function* getPayload(actions) {
 }
 
 // Individual exports for testing
-export default function* defaultSaga() {
-    yield takeLatest(GET_DATA, getPayload);
+export default function* herListingSaga() {
+    yield takeLatest(GET_DATA, fetchData);
 }

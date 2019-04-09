@@ -1,6 +1,6 @@
 /**
 *
-* NewPagination
+* Pagination
 *
 */
 
