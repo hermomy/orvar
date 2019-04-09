@@ -4,12 +4,14 @@
 
 /* eslint-disable redux-saga/yield-effects */
 // import { take, call, put, select } from 'redux-saga/effects';
-// import { defaultSaga } from '../saga';
+// import { cartPageSaga } from '../saga';
+import cartPageSaga, { getCheckoutData } from '../saga';
 
-// const generator = defaultSaga();
+// const generator = cartPageSaga();
 
-describe('defaultSaga Saga', () => {
-    it('Expect to have checkout data', () => {
-        expect(true).toEqual(true);
+describe('cartPageSaga', () => {
+    it('Expect to have unit tests specified', () => {
+        const generator = cartPageSaga();
+        expect(generator.next(getCheckoutData()).value).toEqual(true);
     });
 });

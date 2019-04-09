@@ -20,7 +20,6 @@ import './style.scss';
 import { getCheckoutData } from './actions';
 
 export class CartPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-
     componentDidMount() {
         this.props.dispatch(getCheckoutData());
     }
@@ -33,10 +32,10 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
         return (
             <div>
                 {
-                    dataChecking(this.props.cartpage, 'data', 'merchants') ?
+                    dataChecking(this.props.cartPage, 'data', 'merchants') ?
                         <div>
                             {
-                                dataChecking(this.props.cartpage, 'data', 'merchants').map((merchant) => (
+                                dataChecking(this.props.cartPage, 'data', 'merchants').map((merchant) => (
                                     <div key={merchant.id}>
                                         <div
                                             style={{
@@ -93,7 +92,7 @@ CartPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-    cartpage: makeSelectCartPage(),
+    cartPage: makeSelectCartPage(),
 });
 
 function mapDispatchToProps(dispatch) {

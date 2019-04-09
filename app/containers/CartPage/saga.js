@@ -1,9 +1,10 @@
-import { call, takeLatest, put } from 'redux-saga/effects';
+import { takeLatest, put, call } from 'redux-saga/effects';
 import { GET_CHECKOUT_DATA } from './constants';
 import { apiRequest } from '../../globalUtils';
 import { checkoutDataSuccess } from './actions';
 
-function* getCheckoutData() {
+
+export function* getCheckoutData() {
     const response = yield call(apiRequest, '/cart', 'get');
     if (response && response.ok) {
         yield put(checkoutDataSuccess(response.data));
@@ -13,7 +14,6 @@ function* getCheckoutData() {
 }
 
 // Individual exports for testing
-export default function* defaultSaga() {
+export default function* cartPageSaga() {
     yield takeLatest(GET_CHECKOUT_DATA, getCheckoutData);
-    // See example in containers/HomePage/saga.js
 }

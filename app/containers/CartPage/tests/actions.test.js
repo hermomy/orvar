@@ -9,15 +9,20 @@ import {
 } from '../constants';
 
 describe('CartPage actions', () => {
-    it('should expect checkout constant', () => {
-        expect(getCheckoutData()).toEqual({
-            type: GET_CHECKOUT_DATA,
+    describe('get checkout data Action', () => {
+        it('has a type of GET_CHECKOUT_DATA', () => {
+            const expected = {
+                type: GET_CHECKOUT_DATA,
+            };
+            expect(getCheckoutData()).toEqual(expected);
         });
     });
-
-    it('should expect checkout success', () => {
-        expect(checkoutDataSuccess()).toEqual({
-            type: CHECKOUT_DATA_SUCCESS,
+    describe('get checkout data success Action', () => {
+        it('has a type of CHECKOUT_DATA_SUCCESS', () => {
+            const expected = {
+                type: CHECKOUT_DATA_SUCCESS,
+            };
+            expect(checkoutDataSuccess()).toEqual(expected);
         });
     });
 });
