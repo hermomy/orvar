@@ -1,8 +1,11 @@
-// import { fromJS } from 'immutable';
-// import { select{{ properCase name }}Domain } from '../selectors';
+import { fromJS } from 'immutable';
+import { select{{ properCase name }}Domain } from '../selectors';
+import { initialState } from '../reducer';
 
 describe('select{{ properCase name }}Domain', () => {
-    it('Expect to have unit tests specified', () => {
-        expect(true).toEqual(false);
+    it('Expect select{{ properCase name }}Domain to return state from reducer', () => {
+        const selector = select{{ properCase name }}Domain();
+        const mock = fromJS({ {{ properCase name }}: initialState });
+        expect(selector(mock)).toEqual(initialState.toJS());
     });
 });

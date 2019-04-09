@@ -26,6 +26,11 @@ class Header extends React.PureComponent { // eslint-disable-line react/prefer-s
         return (
             <div className="cart-popup-modal">
                 <CartPage />
+                <div className="text-right">
+                    <NavLink className="hershop-button" to="/checkout">
+                        Checkout Now
+                    </NavLink>
+                </div>
             </div>
         );
     }
@@ -49,10 +54,7 @@ class Header extends React.PureComponent { // eslint-disable-line react/prefer-s
                             <NavLink to="/login">login</NavLink>
                     }
                     {
-                        this.state.showCartPopout ?
-                            this.renderCartPopout()
-                            :
-                            null
+                        this.state.showCartPopout && this.renderCartPopout()
                     }
                 </div>
             </div>

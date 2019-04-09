@@ -4,14 +4,15 @@
 
 /* eslint-disable redux-saga/yield-effects */
 // import { take, call, put, select } from 'redux-saga/effects';
-// import { {{ camelCase name }}Saga } from '../saga';
-import {{ camelCase name }}Saga, { defaultWorker } from '../saga';
+// import { checkoutPageSaga } from '../saga';
+import checkoutPageSaga, { defaultWorker } from '../saga';
 
-// const generator = {{ camelCase name }}Saga();
+// const generator = checkoutPageSaga();
 
-describe('{{ camelCase name }}Saga', () => {
+describe('checkoutPageSaga', () => {
     it('Expect to have unit tests specified', () => {
-        const generator = {{ camelCase name }}Saga();
+        expect(true).toEqual(false);
+        const generator = checkoutPageSaga();
         expect(generator.next(defaultWorker()).value).toEqual(true);
     });
 });
