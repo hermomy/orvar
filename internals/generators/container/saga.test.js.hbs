@@ -11,7 +11,6 @@ import {{ camelCase name }}Saga, { defaultWorker } from '../saga';
 
 describe('{{ camelCase name }}Saga', () => {
     it('Expect to have unit tests specified', () => {
-        expect(true).toEqual(false);
         const generator = {{ camelCase name }}Saga();
         expect(generator.next(defaultWorker()).value).toEqual(true);
     });
