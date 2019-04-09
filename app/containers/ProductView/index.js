@@ -24,7 +24,7 @@ import makeSelectProductView from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
-import { getProductById, getProductReview } from './actions';
+import { getProductById, getProductReview, addToCart } from './actions';
 
 export class ProductView extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
@@ -35,6 +35,12 @@ export class ProductView extends React.PureComponent { // eslint-disable-line re
             this.props.dispatch(getProductById(id));
             this.props.dispatch(getProductReview(id));
         }
+    }
+
+    addToCart(id, param, qty, selections) {
+        this.props.dispatch(addToCart({
+            id, param, qty, selections,
+        }));
     }
 
     buildRelatedItems(related) {
@@ -130,9 +136,16 @@ export class ProductView extends React.PureComponent { // eslint-disable-line re
                         <div className="wishlist-btn">
                             <i className={`${true ? 'far' : 'fas'} fa-heart`} />
                         </div>
-                        <div className="add-to-cart-button">
-                            Add To Cart
-                        </div>
+                        {
+                            this.props.productview.adding ?
+                                <div className="add-to-cart-button">
+                                    Adding
+                                </div>
+                                :
+                                <div onClick={() => this.addToCart(product.id)} className="add-to-cart-button">
+                                    Add To Cart
+                                </div>
+                        }
                     </div>
                     <hr className="splitter" />
                 </div>
