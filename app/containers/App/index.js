@@ -27,7 +27,9 @@ import ProductView from 'containers/ProductView';
 import HomePage from 'containers/HomePage';
 import LogoutForm from 'containers/LogoutForm';
 import NotFoundPage from 'containers/NotFoundPage';
-import Cart from 'containers/CartPage';
+// import Cart from 'containers/CartPage';
+import PrivateRoute from 'containers/App/PrivateRoute';
+import CheckoutPage from 'containers/CheckoutPage';
 
 import Header from 'components/Header';
 import TabBar from 'components/TabBar';
@@ -66,7 +68,12 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         <Route exact={true} path="/logout" component={LogoutForm} />
                         <Route exact={true} path="/mall/:productId" component={ProductView} />
                         <Route exact={true} path="/" component={HomePage} />
-                        <Route exact={true} path="/cart" component={Cart} />
+                        <PrivateRoute
+                            exact={true}
+                            path="/checkout"
+                            token={globalScope.token || ''}
+                            render={() => <CheckoutPage />}
+                        />
                         <Route path="" component={NotFoundPage} />
                     </Switch>
                     <TabBar />

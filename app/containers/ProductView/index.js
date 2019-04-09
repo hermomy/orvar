@@ -17,6 +17,7 @@ import Slider from 'components/Slider';
 import Accordion from 'components/Accordion';
 import HashTag from 'components/HashTag';
 import StatefulLink from 'components/StatefulLink';
+import BreadCrumb from 'components/Breadcrumb';
 import { dataChecking } from 'globalUtils';
 
 import makeSelectProductView from './selectors';
@@ -107,6 +108,9 @@ export class ProductView extends React.PureComponent { // eslint-disable-line re
         if (product) {
             return (
                 <div className="product-panel">
+                    <div className="breadcrumb-panel">
+                        <BreadCrumb paths={product.breadcrumbs} />
+                    </div>
                     <div className="product-image-panel">
                         <img className="product-image" src={product.image.large} alt={product.extra_name} />
                     </div>

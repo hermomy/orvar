@@ -26,6 +26,11 @@ class Header extends React.PureComponent { // eslint-disable-line react/prefer-s
         return (
             <div className="cart-popup-modal">
                 <CartPage />
+                <div className="text-right">
+                    <NavLink className="hershop-button" to="/checkout">
+                        Checkout Now
+                    </NavLink>
+                </div>
             </div>
         );
     }
