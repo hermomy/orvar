@@ -1,7 +1,7 @@
 
 import {
-    getCheckoutData,
-    checkoutDataSuccess,
+    getCheckout,
+    checkoutSuccess,
 } from '../actions';
 import {
     GET_CHECKOUT_DATA,
@@ -14,7 +14,7 @@ describe('CartPage actions', () => {
             const expected = {
                 type: GET_CHECKOUT_DATA,
             };
-            expect(getCheckoutData()).toEqual(expected);
+            expect(getCheckout()).toEqual(expected);
         });
     });
     describe('get checkout data success Action', () => {
@@ -22,7 +22,7 @@ describe('CartPage actions', () => {
             const expected = {
                 type: CHECKOUT_DATA_SUCCESS,
             };
-            expect(checkoutDataSuccess()).toEqual(expected);
+            expect(checkoutSuccess()).toEqual(expected);
         });
     });
 });

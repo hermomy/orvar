@@ -30,7 +30,6 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
 
     render() {
         return (
-            dataChecking(this.props, 'cartData', 'merchants') &&
             <div>
                 {
                     dataChecking(this.props.cartPage, 'data', 'merchants') ?
