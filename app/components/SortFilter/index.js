@@ -8,12 +8,11 @@ import {
     getData,
 } from 'containers/HerListing/actions';
 import React from 'react';
-// import styled from 'styled-components';
 
 import { dataChecking } from 'globalUtils';
 import './style.scss';
 
-class SortFilter extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class SortFilter extends React.Component {
     state = {
         listView: false,
         selectedFilter: null,
@@ -28,15 +27,6 @@ class SortFilter extends React.Component { // eslint-disable-line react/prefer-s
             this.setState(this.props.initialSortFilterParams);
         }
     }
-
-    // parentProps={this.props}
-    // sortData={dataChecking(this.props, 'herlisting', 'data', 'sort')}
-    // filterData={dataChecking(this.props, 'herlisting', 'data', 'filters')}
-    // initialSortFilterParams: {
-    //     selectedFilter: obj,
-    //     selectedSorter,
-    //     currentQueryString,
-    // },
 
     updateSelectedSort = (event) => {
         const currentQueryString = this.state.currentQueryString.replace(this.state.selectedSorter, event.target.value).replace('?', '');
@@ -143,13 +133,6 @@ class SortFilter extends React.Component { // eslint-disable-line react/prefer-s
     render() {
         return (
             <div>
-                {/* <div>
-                    <div>{JSON.stringify(this.state.selectedFilter)}</div>
-                    <hr />
-                    <div>{JSON.stringify(this.state.selectedSorter)}</div>
-                    <hr />
-                    <div>{JSON.stringify(this.state.currentQueryString)}</div>
-                </div> */}
                 <div className="sort-container my-half">
                     {this.renderSorter(dataChecking(this.props, 'sortData'))}
                 </div>

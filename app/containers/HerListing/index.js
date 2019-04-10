@@ -36,6 +36,9 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         let currentQueryString = 'sort=default';
         let currentPage = 1;
 
+
+        this.breadCrub();
+
         if (dataChecking(this.props, 'location', 'search')) {
             const params = this.props.location.search.split('?')[1].split('&');
             params.forEach((paramItem) => {
@@ -89,6 +92,43 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
             this.props.dispatch(getData('mallList', this.state.initialQueryString));
             this.setState({ initialQueryString: null });
         }
+    }
+
+    breadCrub = () => {
+        if (dataChecking(this.props, 'location', 'search')) {
+            console.log(this.props);
+            const params = this.props.location.pathname.split('/');
+            let groupId = '';
+            // eslint-disable-next-line consistent-return
+            params.forEach((paramItem) => {
+                if (paramItem === 'skin-care' ||
+                    paramItem === 'make-up' ||
+                    paramItem === 'fragrance' ||
+                    paramItem === 'bath-and-body' ||
+                    paramItem === 'hair') {
+                    groupId = paramItem;
+                } else {
+                    return null;
+                }
+            });
+            const catTemp = this.props.location.pathname.split('/');
+            let categoryId = '';
+            let subcategoryId = '';
+            let count = 0;
+            catTemp.forEach((cat) => {
+                if (!isNaN(cat) && cat) {
+                    if (count === 0) {
+                        categoryId = cat;
+                        count++;
+                    } else {
+                        subcategoryId = cat;
+                    }
+                }
+            });
+            console.log(this.props);
+            this.props.dispatch(getData('mallList', `?${groupId}/${categoryId}/${subcategoryId}`));
+        }
+        return null;
     }
 
     abcdefg = () => {
@@ -194,7 +234,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                                 }
                             </div>
                             <div>
-                                <span className="next-page-bottom" onClick={() => this.abcdefg()}>Next Page</span>
+                                <span className="next-page-bottom" onClick={() => this.abcdefg()} style={{ marginBottom: '50px' }}>Next Page</span>
                             </div>
                         </div>
                 }
