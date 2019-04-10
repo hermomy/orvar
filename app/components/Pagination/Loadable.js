@@ -1,6 +1,6 @@
 /**
  *
- * Asynchronously loads the component for MallPage
+ * Asynchronously loads the component for NewPagination
  *
  */
 

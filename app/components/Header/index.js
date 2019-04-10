@@ -54,10 +54,7 @@ class Header extends React.PureComponent { // eslint-disable-line react/prefer-s
                             <NavLink to="/login">login</NavLink>
                     }
                     {
-                        this.state.showCartPopout ?
-                            this.renderCartPopout()
-                            :
-                            null
+                        this.state.showCartPopout && this.renderCartPopout()
                     }
                 </div>
             </div>

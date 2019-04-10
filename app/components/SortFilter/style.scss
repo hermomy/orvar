@@ -1,0 +1,21 @@
+@import 'app/breakpoints';
+
+.sort-item {
+    height: 25px;
+
+    @include media-breakpoint-down(sm) {
+        height: 30px;
+    }
+}
+
+.filter-item {
+    input.invisible { opacity: 0; }
+    input.loading { opacity: 0.5; }
+    cursor: default;
+
+    .filter-item-display {
+        display: inline-block;
+
+        .toggle-icon { font-size: 120%; font-weight: bold; }
+    }
+}

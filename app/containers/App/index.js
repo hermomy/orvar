@@ -26,6 +26,7 @@ import Notify from 'containers/Notify';
 import ProductView from 'containers/ProductView';
 import HomePage from 'containers/HomePage';
 import LogoutForm from 'containers/LogoutForm';
+import HerListing from 'containers/HerListing';
 import NotFoundPage from 'containers/NotFoundPage';
 // import Cart from 'containers/CartPage';
 import PrivateRoute from 'containers/App/PrivateRoute';
@@ -67,6 +68,15 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                     <Switch>
                         <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />
                         <Route exact={true} path="/logout" component={LogoutForm} />
+                        <Route
+                            exact={true}
+                            path="/HerListing/:pageNum?"
+                            render={() => (
+                                <HerListing
+                                    dataType="mall"
+                                />
+                            )}
+                        />
                         <Route exact={true} path="/mall/:productId" component={ProductView} />
                         <Route exact={true} path="/" component={HomePage} />
                         <Route exact={true} path="/cart" component={CartPage} />
