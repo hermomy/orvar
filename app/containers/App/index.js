@@ -69,7 +69,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         <Route exact={true} path="/logout" component={LogoutForm} />
                         <Route
                             exact={true}
-                            path="/mall/:pageNum?"
+                            path="/HerListing/:pageNum?"
                             render={() => (
                                 <HerListing
                                     dataType="mall"
