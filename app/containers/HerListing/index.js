@@ -36,9 +36,6 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         let currentQueryString = 'sort=default';
         let currentPage = 1;
 
-
-        this.breadCrub();
-
         if (dataChecking(this.props, 'location', 'search')) {
             const params = this.props.location.search.split('?')[1].split('&');
             params.forEach((paramItem) => {
@@ -54,7 +51,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                     };
                 }
             });
-            currentQueryString = this.props.location.search;
+            currentQueryString += this.props.location.search;
         }
 
         this.props.location.pathname.split('/').forEach((param) => {
@@ -83,7 +80,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
     }
 
     componentWillMount() {
-        this.props.dispatch(getData('/mall', this.props.dataType || 'mall'));
+        this.getDataByPathname();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -94,39 +91,57 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         }
     }
 
-    breadCrub = () => {
-        if (dataChecking(this.props, 'location', 'search')) {
-            console.log(this.props);
+    getDataByPathname = () => {
+        if (dataChecking(this.props, 'location')) {
             const params = this.props.location.pathname.split('/');
-            let groupId = '';
-            // eslint-disable-next-line consistent-return
+            let groupNum = -1;
+
             params.forEach((paramItem) => {
-                if (paramItem === 'skin-care' ||
-                    paramItem === 'make-up' ||
-                    paramItem === 'fragrance' ||
-                    paramItem === 'bath-and-body' ||
-                    paramItem === 'hair') {
-                    groupId = paramItem;
-                } else {
-                    return null;
+                switch (paramItem) {
+                    case 'skin-care':
+                        groupNum = 1;
+                        break;
+                    case 'make-up':
+                        groupNum = 2;
+                        break;
+                    case 'fragrance':
+                        groupNum = 3;
+                        break;
+                    case 'bath-and-body':
+                        groupNum = 4;
+                        break;
+                    case 'hair':
+                        groupNum = 6;
+                        break;
+                    default:
+                        break;
                 }
             });
             const catTemp = this.props.location.pathname.split('/');
-            let categoryId = '';
-            let subcategoryId = '';
+            let categoryId = -1;
+            let subcategoryId = -1;
             let count = 0;
             catTemp.forEach((cat) => {
-                if (!isNaN(cat) && cat) {
+                const cat2 = cat.split('-');
+                if (!isNaN(cat2[0]) && isNaN(cat2[1]) && cat2[1]) {
                     if (count === 0) {
-                        categoryId = cat;
+                        categoryId = cat2[0];
+                        console.log(categoryId);
                         count++;
                     } else {
-                        subcategoryId = cat;
+                        subcategoryId = cat2[0];
                     }
                 }
             });
-            console.log(this.props);
-            this.props.dispatch(getData('mallList', `?${groupId}/${categoryId}/${subcategoryId}`));
+            if (subcategoryId !== -1) {
+                this.props.dispatch(getData('subcategory', null, `${subcategoryId}`));
+            } else if (categoryId !== -1) {
+                this.props.dispatch(getData('category', null, `${categoryId}`));
+            } else if (groupNum !== -1) {
+                this.props.dispatch(getData('group', null, `${groupNum}`));
+            } else {
+                this.props.dispatch(getData('/mall', this.props.dataType || 'mall'));
+            }
         }
         return null;
     }

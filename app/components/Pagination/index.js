@@ -14,14 +14,19 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
     state = {
         currentPage: this.props.currentPage,
     }
+
     componentWillMount() {
-        if (this.state.currentPage !== 1) {
-            this.props.parentProps.dispatch(getData('mallList', null, `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${this.state.currentPage}`));
+        if (this.state.currentPage !== 1 && this.state.currentPage) {
+            this.props.parentProps.dispatch(getData('pagination', null, `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${this.state.currentPage}`));
         }
     }
 
     onClickPagi = (targetApi, targetPage) => {
-        this.props.parentProps.dispatch(getData('mallList', null, targetApi));
+        if (dataChecking(this.props.parentProps, 'herlisting', 'data', '_applink', 'type')) {
+            this.props.parentProps.dispatch(getData('mallList', `?${this.props.parentProps.herlisting.data._applink.type}=${this.props.parentProps.herlisting.data._applink.id}&page=${targetPage}`));
+        } else {
+            this.props.parentProps.dispatch(getData('pagination', null, targetApi));
+        }
         this.setState({ currentPage: targetPage });
         let newPathName = '';
 

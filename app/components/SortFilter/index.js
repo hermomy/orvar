@@ -52,7 +52,7 @@ class SortFilter extends React.Component {
         }
         let queryString = '';
         if (this.state.selectedSorter) {
-            queryString = `sort=${this.state.selectedSorter}`;
+            queryString = `?sort=${this.state.selectedSorter}`;
         }
         let query = '';
         Object.values(obj).forEach((param) => {
@@ -60,7 +60,7 @@ class SortFilter extends React.Component {
         });
         queryString += query;
         if (dataChecking(parentProps, 'history', 'push')) {
-            this.props.parentProps.history.push(`${this.state.defaultPathName}/page-1?${queryString}`);
+            this.props.parentProps.history.push(`${this.state.defaultPathName}/page-1${queryString}`);
         } else {
             console.warn('History for route not found.');
         }
