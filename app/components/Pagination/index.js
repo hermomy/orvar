@@ -1,8 +1,4 @@
-/**
-*
-* NewPagination
-*
-*/
+
 
 import React from 'react';
 import { dataChecking } from 'globalUtils';

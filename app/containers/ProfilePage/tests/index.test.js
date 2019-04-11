@@ -1,10 +1,10 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import { MallPage } from '../index';
+// import { ProfilePage } from '../index';
 
-describe('<MallPage />', () => {
+describe('<ProfilePage />', () => {
     it('Expect to have unit tests specified', () => {
-        expect(false).toEqual(false);
+        expect(true).toEqual(false);
     });
 });
