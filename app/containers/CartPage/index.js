@@ -17,11 +17,11 @@ import makeSelectCartPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
-import { getCheckoutData } from './actions';
+import { getCheckout } from './actions';
 
 export class CartPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     componentDidMount() {
-        this.props.dispatch(getCheckoutData());
+        this.props.dispatch(getCheckout());
     }
 
     deleteCart = (id) => {
