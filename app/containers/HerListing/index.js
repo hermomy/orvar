@@ -34,7 +34,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         const obj = {};
         let selectedSorter = 'default';
         let currentQueryString = 'sort=default';
-        let currentPage = 1;
+        let goToPage = null;
 
         if (dataChecking(this.props, 'location', 'search')) {
             const params = this.props.location.search.split('?')[1].split('&');
@@ -54,22 +54,15 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
             currentQueryString = this.props.location.search;
         }
 
-        this.props.location.pathname.split('/').forEach((param) => {
-            const arr = param.split('-');
-            if (arr && arr[0] === 'page') {
-                currentPage = arr[1];
-            }
-        });
-
         const pageNum = dataChecking(this.props, 'match', 'params', 'pageNum');
         if (pageNum) {
-            currentPage = pageNum.split('-')[1];
+            goToPage = pageNum;
         }
 
         this.state = {
             listView: false,
             initialQueryString: currentQueryString,
-            currentPage,
+            goToPage,
             initialSortFilterParams: {
                 selectedFilter: obj,
                 selectedSorter,
@@ -91,7 +84,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         }
     }
 
-    abcdefg = () => {
+    goNextPage = () => {
         if (dataChecking(this.props, 'herlisting', 'data', 'product', 'result', '_links', 'next', 'href')) {
             this.props.dispatch(getData('mallList', null, this.props.herlisting.data.product.result._links.next.href));
         } else {
@@ -100,7 +93,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
             }
             this.props.dispatch(getData('mallList', null, `${this.props.herlisting.data.product._links.self.href}?page=2`));
         }
-        this.setState({ currentPage: this.state.currentPage + 1 });
+        this.setState({ goToPage: this.props.herlisting.data.product.result._meta.currentPage + 1 });
         let newPathName = '';
         if (dataChecking(this.props, 'history', 'push') && dataChecking(this.props, 'location', 'pathname')) {
             this.props.location.pathname.split('/').forEach((param) => {
@@ -128,7 +121,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                 parentProps={this.props}
                 meta={data._meta}
                 link={data._links}
-                currentPage={this.state.currentPage}
+                goToPage={this.state.goToPage}
             />
         );
     }
@@ -194,7 +187,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                                 }
                             </div>
                             <div>
-                                <span className="next-page-bottom" onClick={() => this.abcdefg()}>Next Page</span>
+                                <span className="next-page-bottom" onClick={() => this.goNextPage()}>Next Page</span>
                             </div>
                         </div>
                 }

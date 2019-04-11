@@ -12,17 +12,28 @@ import './style.scss';
 
 class Pagination extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
-        currentPage: this.props.currentPage,
+        activatedPage: null,
     }
+
     componentWillMount() {
-        if (this.state.currentPage !== 1) {
-            this.props.parentProps.dispatch(getData('mallList', null, `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${this.state.currentPage}`));
+        if (this.props.goToPage !== 1) {
+            this.props.parentProps.dispatch(getData('mallList', null, `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${this.props.goToPage}`));
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.goToPage && nextProps.goToPage !== this.props.goToPage) {
+            this.props.parentProps.dispatch(getData('mallList', null, `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${nextProps.goToPage}`));
+        }
+
+        if (dataChecking(nextProps, 'meta', 'currentPage') && dataChecking(nextProps, 'meta', 'currentPage') !== dataChecking(this.props, 'meta', 'currentPage')) {
+            this.setState({ activatedPage: nextProps.meta.currentPage });
         }
     }
 
     onClickPagi = (targetApi, targetPage) => {
         this.props.parentProps.dispatch(getData('mallList', null, targetApi));
-        this.setState({ currentPage: targetPage });
+        this.setState({ activatedPage: null });
         let newPathName = '';
 
         if (dataChecking(this.props.parentProps, 'history', 'push') && dataChecking(this.props.parentProps, 'location', 'pathname')) {
@@ -44,16 +55,16 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
                 {
                     this.props.link.prev ?
                         <a
-                            className="word pagination-word"
+                            className="paginator-button pagination-word"
                             onClick={() => { this.onClickPagi(this.props.link.prev.href, this.props.meta.currentPage - 1); }}
                         >&lt;</a>
                         :
-                        <span className="word disable-pagi-btn">&lt;</span>
+                        <span className="paginator-button disable-pagi-btn">&lt;</span>
                 }
                 {
                     this.props.meta.currentPage >= 3 ?
                         <a
-                            className="word pagination-word"
+                            className="paginator-button pagination-word"
                             onClick={() => { this.onClickPagi(this.props.link.first.href, 1); }}
                         >1</a>
                         :
@@ -61,14 +72,14 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
                 }
                 {
                     this.props.meta.currentPage >= 4 ?
-                        <span className="word pagination-word">...</span>
+                        <span className="paginator-button pagination-word">...</span>
                         :
                         null
                 }
                 {
                     this.props.link.prev ?
                         <a
-                            className="word pagination-word"
+                            className="paginator-button pagination-word"
                             onClick={() => { this.onClickPagi(this.props.link.prev.href, this.props.meta.currentPage - 1); }}
                         >{this.props.meta.currentPage - 1}</a>
                         :
@@ -76,14 +87,14 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
                 }
                 {
                     this.props.link.self ?
-                        <span className="word pagination-active-word">{this.props.meta.currentPage}</span>
+                        <span className={`paginator-button pagination-active-word ${`${this.state.activatedPage}` === `${this.props.meta.currentPage}` ? 'activated' : ''}`}>{this.props.meta.currentPage}</span>
                         :
                         null
                 }
                 {
                     this.props.meta.currentPage !== this.props.meta.pageCount ?
                         <a
-                            className="word pagination-word"
+                            className="paginator-button pagination-word"
                             onClick={() => { this.onClickPagi(this.props.link.next.href, this.props.meta.currentPage + 1); }}
                         >{this.props.meta.currentPage + 1}</a>
                         :
@@ -93,12 +104,12 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
                     this.props.meta.pageCount - this.props.meta.currentPage < 3 ?
                         null
                         :
-                        <span className="word pagination-word">...</span>
+                        <span className="paginator-button pagination-word">...</span>
                 }
                 {
                     this.props.meta.pageCount - this.props.meta.currentPage >= 2 ?
                         <a
-                            className="word pagination-word"
+                            className="paginator-button pagination-word"
                             onClick={() => { this.onClickPagi(this.props.link.last.href, this.props.meta.pageCount); }}
                         >
                             {this.props.meta.pageCount}
@@ -109,11 +120,11 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
                 {
                     this.props.link.next ?
                         <a
-                            className="word pagination-word"
+                            className="paginator-button pagination-word"
                             onClick={() => { this.onClickPagi(this.props.link.next.href, this.props.meta.currentPage + 1); }}
                         >&gt;</a>
                         :
-                        <span className="word disable-pagi-btn">&gt;</span>
+                        <span className="paginator-button disable-pagi-btn">&gt;</span>
                 }
             </div>
         );
