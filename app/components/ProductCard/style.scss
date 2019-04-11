@@ -1,3 +1,5 @@
+@import 'app/breakpoints';
+
 .empty-star{
     height: 20px;
     width: 20px;
@@ -80,6 +82,9 @@
 .list-view-card {
     .product-card-images {
         display: inline-block;
+        @include media-breakpoint-down(sm) {
+            width: 20%;
+        }
     }
 
     .product-card-info {

@@ -27,13 +27,15 @@ import {
     getData,
 } from './actions';
 
+const SORT_DEFAULT = 'sort=default';
+
 export class HerListing extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
         super(props);
 
         const obj = {};
         let selectedSorter = 'default';
-        let currentQueryString = 'sort=default';
+        let currentQueryString = SORT_DEFAULT;
         let goToPage = null;
 
         if (dataChecking(this.props, 'location', 'search')) {
@@ -43,7 +45,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
 
                 if (item[0] === 'sort') {
                     selectedSorter = item[1];
-                } else {
+                } else if (item[0] === 'group_id' || item[0] === 'category_id' || item[0] === 'subcategory_id') {
                     const key = `${item[0]}_${item[1]}`;
                     obj[key] = {
                         key: item[0],
@@ -51,17 +53,19 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                     };
                 }
             });
-            currentQueryString = this.props.location.search;
+            if (selectedSorter !== 'defau;t' && Object.keys(obj).length) {
+                currentQueryString = this.props.location.search;
+            }
         }
 
         const pageNum = dataChecking(this.props, 'match', 'params', 'pageNum');
-        if (pageNum) {
+        if (pageNum && pageNum !== 1) {
             goToPage = pageNum;
         }
 
         this.state = {
             listView: false,
-            initialQueryString: currentQueryString,
+            initialQueryString: currentQueryString === SORT_DEFAULT ? '' : currentQueryString,
             goToPage,
             initialSortFilterParams: {
                 selectedFilter: obj,
@@ -73,7 +77,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
     }
 
     componentWillMount() {
-        this.props.dispatch(getData('/mall', this.props.dataType || 'mall'));
+        this.getDataByPathname();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -82,6 +86,50 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
             this.props.dispatch(getData('mallList', this.state.initialQueryString));
             this.setState({ initialQueryString: null });
         }
+    }
+
+    getDataByPathname = () => {
+        if (dataChecking(this.props, 'match', 'params')) {
+            if (dataChecking(this.props, 'match', 'params', 'subcategoryParam')) {
+                const subcategoryId = this.props.match.params.subcategoryParam.split('-')[0];
+                this.props.dispatch(getData('subcategory', null, `${subcategoryId}`));
+            } else if (dataChecking(this.props, 'match', 'params', 'categoryParam')) {
+                const categoryId = this.props.match.params.categoryParam.split('-')[0];
+                this.props.dispatch(getData('category', null, `${categoryId}`));
+            } else if (dataChecking(this.props, 'match', 'params', 'groupName')) {
+                const groupName = dataChecking(this.props, 'match', 'params', 'groupName');
+                let groupId = 1;
+                switch (groupName) {
+                    case 'skin-care':
+                        groupId = 1;
+                        break;
+                    case 'make-up':
+                        groupId = 2;
+                        break;
+                    case 'fragrance':
+                        groupId = 3;
+                        break;
+                    case 'bath-and-body':
+                        groupId = 4;
+                        break;
+                    case 'set-item':
+                        groupId = 5;
+                        break;
+                    case 'hair':
+                        groupId = 6;
+                        break;
+                    case 'beauty-and-wellness':
+                        groupId = 7;
+                        break;
+                    default:
+                        break;
+                }
+                this.props.dispatch(getData('group', null, `${groupId}`));
+            } else {
+                this.props.dispatch(getData('/mall', this.props.dataType || 'mall'));
+            }
+        }
+        return null;
     }
 
     goNextPage = () => {

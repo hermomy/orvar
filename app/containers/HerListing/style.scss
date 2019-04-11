@@ -1,5 +1,6 @@
 @import 'app/breakpoints';
 
+
 .grid-view {
     display: flex;
     flex-wrap: wrap;
@@ -24,7 +25,7 @@
     .product-card-div {
         width: 100%;
         @include media-breakpoint-up(lg) {
-            width: 50%;
+            width: 100%;
         }
     }
 }

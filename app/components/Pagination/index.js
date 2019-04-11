@@ -1,8 +1,4 @@
-/**
-*
-* Pagination
-*
-*/
+
 
 import React from 'react';
 import { dataChecking } from 'globalUtils';
@@ -16,8 +12,12 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
     }
 
     componentWillMount() {
-        if (this.props.goToPage !== 1) {
+        if (this.props.goToPage && this.props.goToPage !== 1) {
             this.props.parentProps.dispatch(getData('mallList', null, `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${this.props.goToPage}`));
+        }
+
+        if (dataChecking(this.props, 'meta', 'currentPage')) {
+            this.setState({ activatedPage: this.props.meta.currentPage });
         }
     }
 
@@ -34,6 +34,11 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
     onClickPagi = (targetApi, targetPage) => {
         this.props.parentProps.dispatch(getData('mallList', null, targetApi));
         this.setState({ activatedPage: null });
+        // if (dataChecking(this.props.parentProps, 'herlisting', 'data', '_applink', 'type')) {
+        //     this.props.parentProps.dispatch(getData('mallList', `?${this.props.parentProps.herlisting.data._applink.type}=${this.props.parentProps.herlisting.data._applink.id}&page=${targetPage}`));
+        // } else {
+        //     this.props.parentProps.dispatch(getData('pagination', null, targetApi));
+        // }
         let newPathName = '';
 
         if (dataChecking(this.props.parentProps, 'history', 'push') && dataChecking(this.props.parentProps, 'location', 'pathname')) {
