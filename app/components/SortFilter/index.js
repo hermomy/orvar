@@ -12,7 +12,7 @@ import React from 'react';
 import { dataChecking } from 'globalUtils';
 import './style.scss';
 
-class SortFilter extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class SortFilter extends React.Component {
     state = {
         listView: false,
         selectedFilter: null,
@@ -52,7 +52,7 @@ class SortFilter extends React.Component { // eslint-disable-line react/prefer-s
         }
         let queryString = '';
         if (this.state.selectedSorter) {
-            queryString = `sort=${this.state.selectedSorter}`;
+            queryString = `?sort=${this.state.selectedSorter}`;
         }
         let query = '';
         Object.values(obj).forEach((param) => {
@@ -60,7 +60,7 @@ class SortFilter extends React.Component { // eslint-disable-line react/prefer-s
         });
         queryString += query;
         if (dataChecking(parentProps, 'history', 'push')) {
-            this.props.parentProps.history.push(`${this.state.defaultPathName}/page-1?${queryString}`);
+            this.props.parentProps.history.push(`${this.state.defaultPathName}/page-1${queryString}`);
         } else {
             console.warn('History for route not found.');
         }
