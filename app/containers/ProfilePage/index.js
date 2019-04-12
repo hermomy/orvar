@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import { NavLink } from 'react-router-dom';
 // import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -27,16 +28,21 @@ const buttonSection = [
         section: 1,
         child: [
             {
-                name: 'My Wallet',
+                // name: 'My Wallet',
             },
             {
-                name: 'My Vouchers',
+                // name: 'My Vouchers',
             },
             {
                 name: 'My Orders',
+                key: 'profile/order',
             },
             {
-                name: 'My Rewards',
+                // name: 'My Rewards',
+            },
+            {
+                name: 'My WishList',
+                key: 'profile/wishlist',
             },
         ],
     },
@@ -44,10 +50,10 @@ const buttonSection = [
         section: 2,
         child: [
             {
-                name: 'Contact Us',
+                // name: 'Contact Us',
             },
             {
-                name: 'FAQ',
+                // name: 'FAQ',
             },
         ],
     },
@@ -100,6 +106,7 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
         }
     }
     render() {
+        console.log(this.props);
         return (
             <div>
                 <Helmet>
@@ -168,7 +175,11 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
                                     <div className="profile-page-button">
                                         {
                                             section.child.map((c) => (
-                                                <span onClick={() => this.routeTo(c.name)} className="profile-page-button-text">{c.name}</span>
+                                                <NavLink
+                                                    to={`${c.key}`}
+                                                >
+                                                    <span onClick={() => this.routeTo(c.name)} className="profile-page-button-text">{c.name}</span>
+                                                </NavLink>
                                             ))
                                         }
                                     </div>

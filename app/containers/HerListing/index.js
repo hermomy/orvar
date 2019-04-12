@@ -89,20 +89,10 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
     }
 
     getDataByPathname = () => {
-        if (dataChecking(this.props, 'match', 'params', 'categoryQueries')) {
-            console.log(this.props.match.params.categoryQueries);
-            const categoryParams = this.props.match.params.categoryQueries.split('/');
-            if (categoryParams.length >= 2) {
-                alert('subcategory');
-            } else {
-                alert('category');
-            }
-            // sub or cate
-            //     const subcategoryId = this.props.match.params.subcategoryParam.split('-')[0];
-            //     this.props.dispatch(getData('subcategory', null, `${subcategoryId}`));
-            // } else if (dataChecking(this.props, 'match', 'params', 'categoryParam')) {
-            //     const categoryId = this.props.match.params.categoryParam.split('-')[0];
-            //     this.props.dispatch(getData('category', null, `${categoryId}`));
+        if (dataChecking(this.props, 'match', 'params', 'subCategoryQueries')) {
+            this.props.dispatch(getData(`/subcategory/${this.props.match.params.categoryQueries.split('-')[0]}`, 'mall'));
+        } else if (dataChecking(this.props, 'match', 'params', 'categoryQueries')) {
+            this.props.dispatch(getData(`/category/${this.props.match.params.categoryQueries.split('-')[0]}`, 'mall'));
         } else if (dataChecking(this.props, 'match', 'params', 'groupName')) {
             const groupName = dataChecking(this.props, 'match', 'params', 'groupName');
             let groupId = 1;

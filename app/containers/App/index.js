@@ -32,6 +32,8 @@ import NotFoundPage from 'containers/NotFoundPage';
 import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
 import ProfilePage from 'containers/ProfilePage';
+import ProfileOrder from 'containers/ProfileOrder';
+import ProfileWishlist from 'containers/ProfileWishlist';
 
 import Header from 'components/Header';
 import TabBar from 'components/TabBar';
@@ -86,6 +88,26 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                                 />
                             )}
                         />
+
+                        <Route
+                            exact={true}
+                            path="/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries/:subCategoryQueries?/page-:pageNum(\d+)"
+                            render={() => (
+                                <HerListing
+                                    dataType="mall"
+                                />
+                            )}
+                        />
+                        <Route
+                            exact={true}
+                            path="/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries/:subCategoryQueries"
+                            render={() => (
+                                <HerListing
+                                    dataType="mall"
+                                />
+                            )}
+                        />
+
                         <Route
                             exact={true}
                             path="/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?/page-:pageNum(\d+)"
@@ -105,6 +127,8 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                             )}
                         />
                         <Route exact={true} path="/mall/:productId" component={ProductView} />
+                        <Route exact={true} path="/order" component={ProfileOrder} />
+                        <Route exact={true} path="/wishlist" component={ProfileWishlist} />
                         <Route exact={true} path="/" component={HomePage} />
                         <Route exact={true} path="/profile" component={ProfilePage} />
                         <PrivateRoute

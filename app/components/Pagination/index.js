@@ -3,6 +3,7 @@
 import React from 'react';
 import { dataChecking } from 'globalUtils';
 import { getData } from 'containers/HerListing/actions';
+import { getOrder } from 'containers/ProfileOrder/actions';
 
 import './style.scss';
 
@@ -12,55 +13,61 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
     }
 
     componentWillMount() {
-        if (this.props.goToPage && this.props.goToPage !== 1) {
-            let selfApiUrl = this.props.parentProps.herlisting.data.product.result._links.self.href;
-            if (selfApiUrl.indexOf('page=') !== -1) {
-                selfApiUrl = selfApiUrl.replace(`page=${this.props.parentProps.herlisting.data.product.result._meta.currentPage}`, `page=${this.props.goToPage}`);
-            } else {
-                selfApiUrl += `${selfApiUrl.indexOf('?' !== -1) ? '&' : '?'}page=${this.props.goToPage}`;
+        if (!this.props.checking) {
+            if (this.props.goToPage && this.props.goToPage !== 1) {
+                let selfApiUrl = this.props.parentProps.herlisting.data.product.result._links.self.href;
+                if (selfApiUrl.indexOf('page=') !== -1) {
+                    selfApiUrl = selfApiUrl.replace(`page=${this.props.parentProps.herlisting.data.product.result._meta.currentPage}`, `page=${this.props.goToPage}`);
+                } else {
+                    selfApiUrl += `${selfApiUrl.indexOf('?' !== -1) ? '&' : '?'}page=${this.props.goToPage}`;
+                }
+                this.props.parentProps.dispatch(getData(
+                    '', // path
+                    'mallList', // datatype
+                    selfApiUrl,
+                ));
             }
-            this.props.parentProps.dispatch(getData(
-                '', // path
-                'mallList', // datatype
-                selfApiUrl,
-            ));
-        }
 
-        if (dataChecking(this.props, 'meta', 'currentPage')) {
-            this.setState({ activatedPage: this.props.meta.currentPage });
+            if (dataChecking(this.props, 'meta', 'currentPage')) {
+                this.setState({ activatedPage: this.props.meta.currentPage });
+            }
+        } else if (this.props.checking === 1) {
+            this.setState({ activatedPage: 1 });
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.goToPage && nextProps.goToPage !== this.props.goToPage) {
-            this.props.parentProps.dispatch(getData('', 'mallList', `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${nextProps.goToPage}`));
-        }
+        if (!this.props.checking) {
+            if (nextProps.goToPage && nextProps.goToPage !== this.props.goToPage) {
+                this.props.parentProps.dispatch(getData('', 'mallList', `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${nextProps.goToPage}`));
+            }
 
-        if (dataChecking(nextProps, 'meta', 'currentPage') && dataChecking(nextProps, 'meta', 'currentPage') !== dataChecking(this.props, 'meta', 'currentPage')) {
-            this.setState({ activatedPage: nextProps.meta.currentPage });
+            if (dataChecking(nextProps, 'meta', 'currentPage') && dataChecking(nextProps, 'meta', 'currentPage') !== dataChecking(this.props, 'meta', 'currentPage')) {
+                this.setState({ activatedPage: nextProps.meta.currentPage });
+            }
         }
     }
 
     onClickPagi = (targetApi, targetPage) => {
-        this.props.parentProps.dispatch(getData('', 'mallList', targetApi));
-        this.setState({ activatedPage: null });
-        // if (dataChecking(this.props.parentProps, 'herlisting', 'data', '_applink', 'type')) {
-        //     this.props.parentProps.dispatch(getData('mallList', `?${this.props.parentProps.herlisting.data._applink.type}=${this.props.parentProps.herlisting.data._applink.id}&page=${targetPage}`));
-        // } else {
-        //     this.props.parentProps.dispatch(getData('pagination', null, targetApi));
-        // }
-        let newPathName = '';
+        if (!this.props.checking) {
+            this.props.parentProps.dispatch(getData('', 'mallList', targetApi));
+            this.setState({ activatedPage: null });
+            let newPathName = '';
 
-        if (dataChecking(this.props.parentProps, 'history', 'push') && dataChecking(this.props.parentProps, 'location', 'pathname')) {
-            this.props.parentProps.location.pathname.split('/').forEach((param) => {
-                const arr = param.split('-');
-                if (arr && arr[0] === 'page') {
-                    newPathName = this.props.parentProps.location.pathname.replace(param, `page-${targetPage}`);
-                } else {
-                    newPathName = `${this.props.parentProps.location.pathname}/page-${targetPage}`;
-                }
-            });
-            this.props.parentProps.history.push(`${newPathName}${this.props.parentProps.history.location.search}`);
+            if (dataChecking(this.props.parentProps, 'history', 'push') && dataChecking(this.props.parentProps, 'location', 'pathname')) {
+                this.props.parentProps.location.pathname.split('/').forEach((param) => {
+                    const arr = param.split('-');
+                    if (arr && arr[0] === 'page') {
+                        newPathName = this.props.parentProps.location.pathname.replace(param, `page-${targetPage}`);
+                    } else {
+                        newPathName = `${this.props.parentProps.location.pathname}/page-${targetPage}`;
+                    }
+                });
+                this.props.parentProps.history.push(`${newPathName}${this.props.parentProps.history.location.search}`);
+            }
+        } else if (this.props.checking === 1) {
+            this.props.parentProps.dispatch(getOrder(targetPage));
+            this.setState({ activatedPage: targetPage });
         }
     }
 
