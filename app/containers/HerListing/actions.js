@@ -11,12 +11,13 @@ import {
     GET_DATA_FAIL,
 } from './constants';
 
-export function getData(dataType, queryParamString, api) {
+export function getData(path, dataType, api, queryParamString) {
     return {
         type: GET_DATA,
+        path,
         dataType,
-        queryParamString,
         api,
+        queryParamString,
     };
 }
 

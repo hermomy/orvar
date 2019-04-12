@@ -83,63 +83,70 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
     componentWillReceiveProps(nextProps) {
         // initial a fillter/sort when receive initialQueryString from the url
         if (dataChecking(nextProps, 'herlisting', 'data', 'filters') && this.state.initialQueryString) {
-            this.props.dispatch(getData('mallList', this.state.initialQueryString));
+            this.props.dispatch(getData('', 'mallList', this.state.initialQueryString));
             this.setState({ initialQueryString: null });
         }
     }
 
     getDataByPathname = () => {
-        if (dataChecking(this.props, 'match', 'params')) {
-            if (dataChecking(this.props, 'match', 'params', 'subcategoryParam')) {
-                const subcategoryId = this.props.match.params.subcategoryParam.split('-')[0];
-                this.props.dispatch(getData('subcategory', null, `${subcategoryId}`));
-            } else if (dataChecking(this.props, 'match', 'params', 'categoryParam')) {
-                const categoryId = this.props.match.params.categoryParam.split('-')[0];
-                this.props.dispatch(getData('category', null, `${categoryId}`));
-            } else if (dataChecking(this.props, 'match', 'params', 'groupName')) {
-                const groupName = dataChecking(this.props, 'match', 'params', 'groupName');
-                let groupId = 1;
-                switch (groupName) {
-                    case 'skin-care':
-                        groupId = 1;
-                        break;
-                    case 'make-up':
-                        groupId = 2;
-                        break;
-                    case 'fragrance':
-                        groupId = 3;
-                        break;
-                    case 'bath-and-body':
-                        groupId = 4;
-                        break;
-                    case 'set-item':
-                        groupId = 5;
-                        break;
-                    case 'hair':
-                        groupId = 6;
-                        break;
-                    case 'beauty-and-wellness':
-                        groupId = 7;
-                        break;
-                    default:
-                        break;
-                }
-                this.props.dispatch(getData('group', null, `${groupId}`));
+        if (dataChecking(this.props, 'match', 'params', 'categoryQueries')) {
+            console.log(this.props.match.params.categoryQueries);
+            const categoryParams = this.props.match.params.categoryQueries.split('/');
+            if (categoryParams.length >= 2) {
+                alert('subcategory');
             } else {
-                this.props.dispatch(getData('/mall', this.props.dataType || 'mall'));
+                alert('category');
             }
+            // sub or cate
+            //     const subcategoryId = this.props.match.params.subcategoryParam.split('-')[0];
+            //     this.props.dispatch(getData('subcategory', null, `${subcategoryId}`));
+            // } else if (dataChecking(this.props, 'match', 'params', 'categoryParam')) {
+            //     const categoryId = this.props.match.params.categoryParam.split('-')[0];
+            //     this.props.dispatch(getData('category', null, `${categoryId}`));
+        } else if (dataChecking(this.props, 'match', 'params', 'groupName')) {
+            const groupName = dataChecking(this.props, 'match', 'params', 'groupName');
+            let groupId = 1;
+            switch (groupName) {
+                case 'skin-care':
+                    groupId = 1;
+                    break;
+                case 'make-up':
+                    groupId = 2;
+                    break;
+                case 'fragrance':
+                    groupId = 3;
+                    break;
+                case 'bath-and-body':
+                    groupId = 4;
+                    break;
+                case 'set-item':
+                    groupId = 5;
+                    break;
+                case 'hair':
+                    groupId = 6;
+                    break;
+                case 'beauty-and-wellness':
+                    groupId = 7;
+                    break;
+                default:
+                    break;
+            }
+            this.props.dispatch(getData(`/group/${groupId}`, 'mall'));
+        } else {
+            this.props.dispatch(getData('/mall', this.props.dataType || 'mall'));
         }
+
         return null;
     }
 
     goNextPage = () => {
         if (dataChecking(this.props, 'herlisting', 'data', 'product', 'result', '_links', 'next', 'href')) {
-            this.props.dispatch(getData('mallList', null, this.props.herlisting.data.product.result._links.next.href));
+            this.props.dispatch(getData('', 'mallList', this.props.herlisting.data.product.result._links.next.href));
         } else {
             if (this.props.herlisting.data.product.result._meta.pageCount === this.props.herlisting.data.product.result._meta.currentPage) {
                 return null;
             }
-            this.props.dispatch(getData('mallList', null, `${this.props.herlisting.data.product._links.self.href}?page=2`));
+            this.props.dispatch(getData('', 'mallList', `${this.props.herlisting.data.product._links.self.href}?page=2`));
         }
         this.setState({ goToPage: this.props.herlisting.data.product.result._meta.currentPage + 1 });
         let newPathName = '';
@@ -215,12 +222,15 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                                 {this.renderPaginator()}
                             </div>
                             <div className="sort-filter-container">
-                                <SortFilter
-                                    parentProps={this.props}
-                                    sortData={dataChecking(herlisting, 'data', 'sort')}
-                                    filterData={dataChecking(herlisting, 'data', 'filters')}
-                                    initialSortFilterParams={this.state.initialSortFilterParams}
-                                />
+                                {
+                                    dataChecking(herlisting, 'data') &&
+                                        <SortFilter
+                                            parentProps={this.props}
+                                            sortData={dataChecking(herlisting.data, 'sort')}
+                                            filterData={dataChecking(herlisting.data, 'filters')}
+                                            initialSortFilterParams={this.state.initialSortFilterParams}
+                                        />
+                                }
                             </div>
                             <div className="data-container">
                                 {

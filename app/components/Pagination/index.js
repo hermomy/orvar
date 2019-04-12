@@ -13,7 +13,17 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
 
     componentWillMount() {
         if (this.props.goToPage && this.props.goToPage !== 1) {
-            this.props.parentProps.dispatch(getData('mallList', null, `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${this.props.goToPage}`));
+            let selfApiUrl = this.props.parentProps.herlisting.data.product.result._links.self.href;
+            if (selfApiUrl.indexOf('page=') !== -1) {
+                selfApiUrl = selfApiUrl.replace(`page=${this.props.parentProps.herlisting.data.product.result._meta.currentPage}`, `page=${this.props.goToPage}`);
+            } else {
+                selfApiUrl += `${selfApiUrl.indexOf('?' !== -1) ? '&' : '?'}page=${this.props.goToPage}`;
+            }
+            this.props.parentProps.dispatch(getData(
+                '', // path
+                'mallList', // datatype
+                selfApiUrl,
+            ));
         }
 
         if (dataChecking(this.props, 'meta', 'currentPage')) {
@@ -23,7 +33,7 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.goToPage && nextProps.goToPage !== this.props.goToPage) {
-            this.props.parentProps.dispatch(getData('mallList', null, `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${nextProps.goToPage}`));
+            this.props.parentProps.dispatch(getData('', 'mallList', `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${nextProps.goToPage}`));
         }
 
         if (dataChecking(nextProps, 'meta', 'currentPage') && dataChecking(nextProps, 'meta', 'currentPage') !== dataChecking(this.props, 'meta', 'currentPage')) {
@@ -32,7 +42,7 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
     }
 
     onClickPagi = (targetApi, targetPage) => {
-        this.props.parentProps.dispatch(getData('mallList', null, targetApi));
+        this.props.parentProps.dispatch(getData('', 'mallList', targetApi));
         this.setState({ activatedPage: null });
         // if (dataChecking(this.props.parentProps, 'herlisting', 'data', '_applink', 'type')) {
         //     this.props.parentProps.dispatch(getData('mallList', `?${this.props.parentProps.herlisting.data._applink.type}=${this.props.parentProps.herlisting.data._applink.id}&page=${targetPage}`));

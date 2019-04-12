@@ -88,7 +88,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route
                             exact={true}
-                            path="/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryParam?/:subcategoryParam?"
+                            path="/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?/page-:pageNum(\d+)"
                             render={() => (
                                 <HerListing
                                     dataType="mall"
@@ -97,7 +97,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route
                             exact={true}
-                            path="/groupName:(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryParam?/:subcategoryParam?/page-:pageNum(\d+)"
+                            path="/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?"
                             render={() => (
                                 <HerListing
                                     dataType="mall"

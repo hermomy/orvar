@@ -19,7 +19,7 @@ class SortFilter extends React.Component {
         selectedSorter: '',
         currentQueryString: null,
         selectedToggle: {},
-        defaultPathName: dataChecking(this.props, 'parentProps', 'location', 'pathname'),
+        pagelessPath: this.props.parentProps.location.pathname,
     }
 
     componentWillMount() {
@@ -27,17 +27,32 @@ class SortFilter extends React.Component {
         if (this.props.initialSortFilterParams) {
             this.setState(this.props.initialSortFilterParams);
         }
+        // this.setState({});
+        // pagelessPath: dataChecking(this.props, 'parentProps', 'location', 'pathname')
+        //     .replace(`page-${this.props.parentProps.herlisting.data.product.result._meta.currentPage}`, ''),
+        if (this.state.pagelessPath) {
+            let tempStr = '';
+            this.state.pagelessPath.split('/').forEach((param) => {
+                const arr = param.split('-');
+                if (arr && arr[0] === 'page') {
+                    tempStr = this.state.pagelessPath.replace(`/${param}`, '');
+                }
+            });
+            this.setState({
+                pagelessPath: tempStr,
+            });
+        }
     }
 
     updateSelectedSort = (event) => {
         const currentQueryString = this.state.currentQueryString.replace(this.state.selectedSorter, event.target.value).replace('?', '');
-        this.props.parentProps.dispatch(getData('mallList', currentQueryString));
+        this.props.parentProps.dispatch(getData('', 'mallList', '', currentQueryString));
         this.setState({
             selectedSorter: event.target.value,
             currentQueryString,
         });
         if (dataChecking(this.props.parentProps, 'history', 'push')) {
-            this.props.parentProps.history.push(`${this.state.defaultPathName}/page-1?${currentQueryString}`);
+            this.props.parentProps.history.push(`${this.state.pagelessPath}?${currentQueryString}`);
         }
     }
 
@@ -61,11 +76,11 @@ class SortFilter extends React.Component {
         });
         queryString += query;
         if (dataChecking(parentProps, 'history', 'push')) {
-            this.props.parentProps.history.push(`${this.state.defaultPathName}/page-1${queryString}`);
+            this.props.parentProps.history.push(`${this.state.pagelessPath}${queryString}`);
         } else {
             console.warn('History for route not found.');
         }
-        parentProps.dispatch(getData('mallList', queryString));
+        parentProps.dispatch(getData('', 'mallList', '', queryString));
         console.log(queryString);
         this.setState({ selectedFilter: obj, currentQueryString: queryString });
     }
