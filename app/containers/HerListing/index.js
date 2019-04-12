@@ -27,14 +27,16 @@ import {
     getData,
 } from './actions';
 
+const SORT_DEFAULT = 'sort=default';
+
 export class HerListing extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
         super(props);
 
         const obj = {};
         let selectedSorter = 'default';
-        let currentQueryString = 'sort=default';
-        let currentPage = 1;
+        let currentQueryString = SORT_DEFAULT;
+        let goToPage = null;
 
         if (dataChecking(this.props, 'location', 'search')) {
             const params = this.props.location.search.split('?')[1].split('&');
@@ -43,7 +45,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
 
                 if (item[0] === 'sort') {
                     selectedSorter = item[1];
-                } else {
+                } else if (item[0] === 'group_id' || item[0] === 'category_id' || item[0] === 'subcategory_id') {
                     const key = `${item[0]}_${item[1]}`;
                     obj[key] = {
                         key: item[0],
@@ -51,25 +53,20 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                     };
                 }
             });
-            currentQueryString += this.props.location.search;
+            if (selectedSorter !== 'defau;t' && Object.keys(obj).length) {
+                currentQueryString = this.props.location.search;
+            }
         }
 
-        this.props.location.pathname.split('/').forEach((param) => {
-            const arr = param.split('-');
-            if (arr && arr[0] === 'page') {
-                currentPage = arr[1];
-            }
-        });
-
         const pageNum = dataChecking(this.props, 'match', 'params', 'pageNum');
-        if (pageNum) {
-            currentPage = pageNum.split('-')[1];
+        if (pageNum && pageNum !== 1) {
+            goToPage = pageNum;
         }
 
         this.state = {
             listView: false,
-            initialQueryString: currentQueryString,
-            currentPage,
+            initialQueryString: currentQueryString === SORT_DEFAULT ? '' : currentQueryString,
+            goToPage,
             initialSortFilterParams: {
                 selectedFilter: obj,
                 selectedSorter,
@@ -86,76 +83,72 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
     componentWillReceiveProps(nextProps) {
         // initial a fillter/sort when receive initialQueryString from the url
         if (dataChecking(nextProps, 'herlisting', 'data', 'filters') && this.state.initialQueryString) {
-            this.props.dispatch(getData('mallList', this.state.initialQueryString));
+            this.props.dispatch(getData('', 'mallList', this.state.initialQueryString));
             this.setState({ initialQueryString: null });
         }
     }
 
     getDataByPathname = () => {
-        if (dataChecking(this.props, 'location')) {
-            const params = this.props.location.pathname.split('/');
-            let groupNum = -1;
-
-            params.forEach((paramItem) => {
-                switch (paramItem) {
-                    case 'skin-care':
-                        groupNum = 1;
-                        break;
-                    case 'make-up':
-                        groupNum = 2;
-                        break;
-                    case 'fragrance':
-                        groupNum = 3;
-                        break;
-                    case 'bath-and-body':
-                        groupNum = 4;
-                        break;
-                    case 'hair':
-                        groupNum = 6;
-                        break;
-                    default:
-                        break;
-                }
-            });
-            const catTemp = this.props.location.pathname.split('/');
-            let categoryId = -1;
-            let subcategoryId = -1;
-            let count = 0;
-            catTemp.forEach((cat) => {
-                const cat2 = cat.split('-');
-                if (!isNaN(cat2[0]) && isNaN(cat2[1]) && cat2[1]) {
-                    if (count === 0) {
-                        categoryId = cat2[0];
-                        console.log(categoryId);
-                        count++;
-                    } else {
-                        subcategoryId = cat2[0];
-                    }
-                }
-            });
-            if (subcategoryId !== -1) {
-                this.props.dispatch(getData('subcategory', null, `${subcategoryId}`));
-            } else if (categoryId !== -1) {
-                this.props.dispatch(getData('category', null, `${categoryId}`));
-            } else if (groupNum !== -1) {
-                this.props.dispatch(getData('group', null, `${groupNum}`));
+        if (dataChecking(this.props, 'match', 'params', 'categoryQueries')) {
+            console.log(this.props.match.params.categoryQueries);
+            const categoryParams = this.props.match.params.categoryQueries.split('/');
+            if (categoryParams.length >= 2) {
+                alert('subcategory');
             } else {
-                this.props.dispatch(getData('/mall', this.props.dataType || 'mall'));
+                alert('category');
             }
+            // sub or cate
+            //     const subcategoryId = this.props.match.params.subcategoryParam.split('-')[0];
+            //     this.props.dispatch(getData('subcategory', null, `${subcategoryId}`));
+            // } else if (dataChecking(this.props, 'match', 'params', 'categoryParam')) {
+            //     const categoryId = this.props.match.params.categoryParam.split('-')[0];
+            //     this.props.dispatch(getData('category', null, `${categoryId}`));
+        } else if (dataChecking(this.props, 'match', 'params', 'groupName')) {
+            const groupName = dataChecking(this.props, 'match', 'params', 'groupName');
+            let groupId = 1;
+            switch (groupName) {
+                case 'skin-care':
+                    groupId = 1;
+                    break;
+                case 'make-up':
+                    groupId = 2;
+                    break;
+                case 'fragrance':
+                    groupId = 3;
+                    break;
+                case 'bath-and-body':
+                    groupId = 4;
+                    break;
+                case 'set-item':
+                    groupId = 5;
+                    break;
+                case 'hair':
+                    groupId = 6;
+                    break;
+                case 'beauty-and-wellness':
+                    groupId = 7;
+                    break;
+                default:
+                    break;
+            }
+            this.props.dispatch(getData(`/group/${groupId}`, 'mall'));
+        } else {
+            this.props.dispatch(getData('/mall', this.props.dataType || 'mall'));
         }
+
         return null;
     }
 
-    abcdefg = () => {
+    goNextPage = () => {
         if (dataChecking(this.props, 'herlisting', 'data', 'product', 'result', '_links', 'next', 'href')) {
-            this.props.dispatch(getData('mallList', null, this.props.herlisting.data.product.result._links.next.href));
+            this.props.dispatch(getData('', 'mallList', this.props.herlisting.data.product.result._links.next.href));
         } else {
             if (this.props.herlisting.data.product.result._meta.pageCount === this.props.herlisting.data.product.result._meta.currentPage) {
                 return null;
             }
-            this.props.dispatch(getData('mallList', null, `${this.props.herlisting.data.product._links.self.href}?page=2`));
+            this.props.dispatch(getData('', 'mallList', `${this.props.herlisting.data.product._links.self.href}?page=2`));
         }
-        this.setState({ currentPage: this.state.currentPage + 1 });
+        this.setState({ goToPage: this.props.herlisting.data.product.result._meta.currentPage + 1 });
         let newPathName = '';
         if (dataChecking(this.props, 'history', 'push') && dataChecking(this.props, 'location', 'pathname')) {
             this.props.location.pathname.split('/').forEach((param) => {
@@ -183,7 +176,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                 parentProps={this.props}
                 meta={data._meta}
                 link={data._links}
-                currentPage={this.state.currentPage}
+                goToPage={this.state.goToPage}
             />
         );
     }
@@ -229,12 +222,15 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                                 {this.renderPaginator()}
                             </div>
                             <div className="sort-filter-container">
-                                <SortFilter
-                                    parentProps={this.props}
-                                    sortData={dataChecking(herlisting, 'data', 'sort')}
-                                    filterData={dataChecking(herlisting, 'data', 'filters')}
-                                    initialSortFilterParams={this.state.initialSortFilterParams}
-                                />
+                                {
+                                    dataChecking(herlisting, 'data') &&
+                                        <SortFilter
+                                            parentProps={this.props}
+                                            sortData={dataChecking(herlisting.data, 'sort')}
+                                            filterData={dataChecking(herlisting.data, 'filters')}
+                                            initialSortFilterParams={this.state.initialSortFilterParams}
+                                        />
+                                }
                             </div>
                             <div className="data-container">
                                 {
@@ -249,7 +245,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                                 }
                             </div>
                             <div>
-                                <span className="next-page-bottom" onClick={() => this.abcdefg()} style={{ marginBottom: '50px' }}>Next Page</span>
+                                <span className="next-page-bottom" onClick={() => this.goNextPage()}>Next Page</span>
                             </div>
                         </div>
                 }

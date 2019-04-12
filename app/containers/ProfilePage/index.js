@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
+// import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
@@ -17,6 +18,7 @@ import { dataChecking } from 'globalUtils';
 import makeSelectProfilePage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
+// import messages from './messages';
 import { getProfile } from './actions';
 import './style.scss';
 
@@ -113,7 +115,7 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
                                     <img className="profile-page-avatar" src={dataChecking(this.props.profilePage, 'data', 'avatar')} alt="" />
                                     <div className="profile-page-user-content">
                                         <span className="profile-page-username">{dataChecking(this.props.profilePage, 'data', 'name')}</span>
-                                        {/* <span className="profile-page-edit">View and edit profile > </span> */}
+                                        <span className="profile-page-edit">View and edit profile &#62; </span>
                                     </div>
                                 </div>
                             </div>
