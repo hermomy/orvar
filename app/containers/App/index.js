@@ -78,6 +78,15 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                                 />
                             )}
                         />
+                        <Route
+                            exact={true}
+                            path="/HerListing/(skin-care|make-up|fragrance|bath-and-body|hair)/:categoryId?/:subcategoryId?"
+                            render={() => (
+                                <HerListing
+                                    dataType="mall"
+                                />
+                            )}
+                        />
                         <Route exact={true} path="/mall/:productId" component={ProductView} />
                         <Route exact={true} path="/" component={HomePage} />
                         <Route exact={true} path="/cart" component={CartPage} />
