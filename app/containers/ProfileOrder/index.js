@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { dataChecking } from 'globalUtils';
+import { NavLink } from 'react-router-dom';
 import Pagination from 'components/Pagination';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -83,82 +84,84 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                                 <th>Courier</th>
                                 <th>Order Status</th>
                             </tr>
-                            <tr>
-                                <td></td>
-                                {dataChecking(orderlistdetail, 'tracking_number') ? <td>{orderlistdetail.tracking_number}</td> : null}
-                                {dataChecking(orderlistdetail, 'courier') ? <td>{orderlistdetail.courier}</td> : null}
-                                {dataChecking(orderlistdetail, 'status') ? <td>{orderlistdetail.status}</td> : null}
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div>
-                        <div>
-                            <span>Sold and Shipped By</span>
                             {
                                 dataChecking(orderlistdetail, 'merchants') ?
-                                orderlistdetail.merchants.map((merchant) => (
-                                    <div style={{ float: 'right' }}>
-                                        <span>{merchant.logo.brief}<br /></span>
-                                        <span>{merchant.shipping.estimate_arrival}</span>
-                                    </div>
+                                orderlistdetail.merchants.map((merchant, index) => (
+                                    <tr key={index}>
+                                        <td>{merchant.name}</td>
+                                        <td>{merchant.tracking_number ? `${merchant.tracking_number}` : '-'}</td>
+                                        <td>{merchant.summary.shipping.name}</td>
+                                        <td>{merchant.summary.shipping.status}</td>
+                                    </tr>
                                 ))
                                 :
                                 null
                             }
-                        </div>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
-
                 <div>
-                    <br />
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th></th>
-                                <th>CART ITEM</th>
-                                <th>UNIT PRICE</th>
-                                <th>QTY</th>
-                                <th>TOTAL</th>
-                            </tr>
-                            {
-                                dataChecking(orderlistdetail, 'merchants') ?
-                                orderlistdetail.merchants.map((merchant) => (
-                                    dataChecking(merchant, 'items') ?
-                                    merchant.items.map((item) => (
+                    {
+                        dataChecking(orderlistdetail, 'merchants') ?
+                        orderlistdetail.merchants.map((merchant, index) => (
+                            <div>
+                                <div>
+                                    <span>Sold and Shipped By</span>
+                                    <span>{merchant.name}</span>
+                                </div>
+                                <div key={index} style={{ float: 'right' }}>
+                                    <span>{merchant.logo.brief}<br /></span>
+                                    <span>{merchant.shipping.estimate_arrival}</span>
+                                </div>
+                                <br />
+                                <table>
+                                    <tbody>
                                         <tr>
-                                            <img src={item.product.image.small} alt="" />
-                                            <td>{item.product.name}</td>
-                                            <td>{orderlistdetail.currency.symbol}{item.price.selling}</td>
-                                            <td>{item.qty}</td>
-                                            <td>{orderlistdetail.currency.symbol}{item.subtotal}</td>
+                                            <th></th>
+                                            <th>CART ITEM</th>
+                                            <th>UNIT PRICE</th>
+                                            <th>QTY</th>
+                                            <th>TOTAL</th>
                                         </tr>
+                                        {
+                                            dataChecking(merchant, 'items') ?
+                                            merchant.items.map((item) => (
+                                                <tr key={index}>
+                                                    <NavLink to={`${item._applink ? `/mall/${item._applink.id}` : '/mall'}`} >
+                                                        <td><img src={item.product.image.small} alt="" /></td>
+                                                        <td>{item.product.name}</td>
+                                                        <td>{orderlistdetail.currency.symbol}{item.price.selling}</td>
+                                                        <td>{item.qty}</td>
+                                                        <td>{orderlistdetail.currency.symbol}{item.subtotal}</td>
+                                                    </NavLink>
+                                                </tr>
+                                            ))
+                                            :
+                                            null
+                                        }
+                                    </tbody>
+                                </table>
+                                {
+                                    dataChecking(orderlistdetail, 'summary', 'subtotal') ?
+                                    orderlistdetail.summary.subtotal.map((subtotal) => (
+                                        <div key={index}>
+                                            <span>Subtotal</span>
+                                            <span>{orderlistdetail.currency.symbol}{subtotal.subtotal}</span>
+                                            <span>Shipping Fee</span>
+                                            <span>{orderlistdetail.currency.symbol}{subtotal.shipping}</span>
+                                            <span>Total</span>
+                                            <span>{orderlistdetail.currency.symbol}{subtotal.total}</span>
+                                        </div>
                                     ))
                                     :
                                     null
-                                ))
-                                :
-                                null
-                            }
-                        </tbody>
-                    </table>
+                                }
+                            </div>
+                        ))
+                        :
+                        null
+                    }
                 </div>
-
-                {
-                    dataChecking(orderlistdetail, 'summary', 'subtotal') ?
-                    orderlistdetail.summary.subtotal.map((subtotal) => (
-                        <div>
-                            <span>Subtotal</span>
-                            <span>{orderlistdetail.currency.symbol}{subtotal.subtotal}</span>
-                            <span>Shipping Fee</span>
-                            <span>{orderlistdetail.currency.symbol}{subtotal.shipping}</span>
-                            <span>Total</span>
-                            <span>{orderlistdetail.currency.symbol}{subtotal.total}</span>
-                        </div>
-                    ))
-                    :
-                    null
-                }
-
                 {this.renderPaymentInformation(orderlistdetail)}
                 {this.renderShippingInformation(orderlistdetail)}
             </div>
@@ -168,50 +171,60 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     // ????? WHERE TO GET FROM HERMO
     // shipping fee need?
     renderPaymentInformation = (orderlistdetail) => (
-        <div>
+        <div style={{ backgroundColor: 'lime' }}>
             <div>
                 <span>Subtotal</span>
             </div>
             <div>
-                <span>FROM HERMO</span>
                 {
-                    dataChecking(orderlistdetail, 'summary', 'subtotal') ?
-                    orderlistdetail.summary.subtotal.map((subtotal) => (
-                        <span>{orderlistdetail.currency.symbol}{subtotal.subtotal}</span>
-                    ))
+                    dataChecking(orderlistdetail, 'merchants') ?
+                        orderlistdetail.merchants.map((merchant, index) => (
+                            <div key={index}>
+                                <span>FROM {merchant.name}</span>
+                                <span>{orderlistdetail.currency.symbol}{merchant.summary.subtotal}</span>
+                            </div>
+                        ))
                     :
                     null
                 }
             </div>
-            <div>
-                {
-                    dataChecking(orderlistdetail, 'summary', 'discount', 'items') ?
-                    orderlistdetail.summary.discount.items.map((item) => (
+            {
+                dataChecking(orderlistdetail, 'summary', 'shipping') ?
+                    orderlistdetail.summary.shipping.total !== 0 ?
                         <div>
-                            <span>{item.text}</span>
-                            <span>-{orderlistdetail.currency.symbol}{item.value}</span>
+                            <span>Shipping Fee</span>
+                            <span>{orderlistdetail.currency.symbol}{orderlistdetail.summary.shipping.total}</span>
                         </div>
-                    ))
                     :
                     null
-                }
-            </div>
+                :
+                null
+            }
+            {
+                dataChecking(orderlistdetail, 'summary', 'discount', 'items') ?
+                orderlistdetail.summary.discount.items.map((item, index) => (
+                    <div key={index}>
+                        <span>{item.text}</span>
+                        <span>-{orderlistdetail.currency.symbol}{item.value}</span>
+                    </div>
+                ))
+                :
+                null
+            }
             <div>
                 <span>TOTAL</span>
                 {
-                    dataChecking(orderlistdetail, 'summary', 'subtotal') ?
-                    orderlistdetail.summary.subtotal.map((subtotal) => (
-                        <span>{orderlistdetail.currency.symbol}{subtotal.subtotal}</span>
-                    ))
-                    :
-                    null
+                    dataChecking(orderlistdetail, 'summary', 'grand_total') ?
+                        <span>{orderlistdetail.currency.symbol}{orderlistdetail.summary.grand_total}</span>
+                        :
+                        null
                 }
             </div>
             <div>
                 {
                     dataChecking(orderlistdetail, 'remarks') ?
-                    orderlistdetail.remarks.map((remark) => (
-                        remark.key === 'subtotal' ? <span>{remark.value}</span> : null
+                    orderlistdetail.remarks.map((remark, index) => (
+                        remark.key === 'subtotal' ? <span key={index}>{remark.value}</span> : null
                     ))
                     :
                     null
