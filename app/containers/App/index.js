@@ -36,7 +36,6 @@ import ProfilePage from 'containers/ProfilePage';
 import Header from 'components/Header';
 import TabBar from 'components/TabBar';
 import globalScope from 'globalScope';
-import CartPage from 'containers/CartPage';
 import LoginForm from '../LoginForm/index';
 
 import {
@@ -107,7 +106,6 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route exact={true} path="/mall/:productId" component={ProductView} />
                         <Route exact={true} path="/" component={HomePage} />
-                        <Route exact={true} path="/cart" component={CartPage} />
                         <Route exact={true} path="/profile" component={ProfilePage} />
                         <PrivateRoute
                             exact={true}

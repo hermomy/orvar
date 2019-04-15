@@ -17,7 +17,7 @@ import makeSelectCartPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
-import { getCheckout } from './actions';
+import { getCheckout, updateQty } from './actions';
 
 export class CartPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     componentDidMount() {
@@ -28,59 +28,98 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
         console.log('prod id: ', id);
     }
 
+    addQty = (type, qty, id) => {
+        if (qty <= 1 && type === 'remove') {
+            return;
+        }
+        let quantity = qty;
+        quantity = type === 'add' ? quantity += 1 : quantity -= 1;
+        this.props.dispatch(updateQty(quantity, id));
+    }
+
+    cartList = () => (
+        <div>
+            {
+                dataChecking(this.props.cartPage, 'data', 'merchants').map((merchant) => (
+                    <div key={merchant.id}>
+                        <div
+                            className="p-1"
+                            style={{
+                                'backgroundColor': 'black',
+                                'color': 'white',
+                            }}
+                        >
+                            Sold and shipped by
+                            <div className="text-uppercase">
+                                <b>{merchant.name}</b>
+                            </div>
+                        </div>
+                        <div
+                            className="text-xs-center"
+                            style={{ 'display': 'flex' }}
+                        >
+                            <div style={{ 'width': '383px' }}>cart item</div>
+                            <div style={{ 'width': '100px' }}>unit price</div>
+                            <div style={{ 'width': '100px' }}>qty</div>
+                            <div style={{ 'width': '100px' }}>total</div>
+                        </div>
+                        {
+                            merchant.items.map((item) => (
+                                <div
+                                    className="text-xs-center"
+                                    style={{
+                                        'display': 'flex',
+                                        'alignItems': 'center',
+                                    }}
+                                    key={item.id}
+                                >
+                                    <div>
+                                        <img src={item.product.image.small} alt="prod img"width="80px" />
+                                    </div>
+                                    <div style={{ 'width': '300px' }}>{item.product.name}</div>
+                                    <div style={{ 'width': '100px' }}>RM {item.price.selling}</div>
+                                    <div style={{ 'width': '100px' }}>
+                                        <span
+                                            className="px-quater"
+                                            style={{ 'cursor': 'pointer' }}
+                                            onClick={() => this.addQty('remove', item.qty, item.id)}
+                                        >
+                                            <i className="fa fa-caret-left"></i>
+                                        </span>
+                                        <span>
+                                            {item.qty}
+                                        </span>
+                                        <span
+                                            className="px-quater"
+                                            style={{ 'cursor': 'pointer' }}
+                                            onClick={() => this.addQty('add', item.qty, item.id)}
+                                        >
+                                            <i className="fa fa-caret-right"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+                    )
+                )
+            }
+            {/* <a onClick={() => this.deleteCart(item.id)}>
+                                            <i className="far fa-times-circle"></i>
+                                        </a> */}
+        </div>
+    )
+
     render() {
         return (
             <div>
                 {
                     dataChecking(this.props.cartPage, 'data', 'merchants') ?
-                        <div>
-                            {
-                                dataChecking(this.props.cartPage, 'data', 'merchants').map((merchant) => (
-                                    <div key={merchant.id}>
-                                        <div
-                                            style={{
-                                                backgroundColor: 'black',
-                                                color: 'white',
-                                                padding: '.25rem .75rem',
-                                            }}
-                                        >
-                                            {merchant.name}
-                                        </div>
-                                        <div>
-                                            {
-                                                merchant.items.map((item) => {
-                                                    console.log();
-                                                    return (
-                                                        <div
-                                                            key={item.id}
-                                                            style={{
-                                                                display: 'flex',
-                                                            }}
-                                                        >
-                                                            <div style={{ paddingRight: '1rem' }}>
-                                                                <img src={item.product.image.small} alt="prod img"width="80px" />
-                                                            </div>
-                                                            <div style={{ paddingRight: '1rem' }}>{item.product.name}</div>
-                                                            <div style={{ paddingRight: '1rem' }}>{item.price.selling}</div>
-                                                            <div style={{ paddingRight: '1rem' }}>
-                                                                <a onClick={() => this.deleteCart(item.id)}>
-                                                                    <i className="far fa-times-circle"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })
-                                            }
-                                        </div>
-                                    </div>
-                                   )
-                                )
-                            }
-                        </div>
-                        :
-                        <div>
-                            No Item Added
-                        </div>
+                    this.cartList()
+                    :
+                    <div>
+                        No Item Added
+                    </div>
                 }
             </div>
         );
