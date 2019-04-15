@@ -9,9 +9,10 @@ import {
     GET_WISHLIST_FAIL,
 } from './constants';
 
-export function getWishlist() {
+export function getWishlist(targetpage) {
     return {
         type: GET_WISHLIST,
+        targetpage,
     };
 }
 

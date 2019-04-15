@@ -66,7 +66,7 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
                 this.props.parentProps.history.push(`${newPathName}${this.props.parentProps.history.location.search}`);
             }
         } else if (this.props.checking === 1) {
-            this.props.parentProps.dispatch(getOrder(targetPage));
+            this.props.callBack(targetPage);
             this.setState({ activatedPage: targetPage });
         }
     }

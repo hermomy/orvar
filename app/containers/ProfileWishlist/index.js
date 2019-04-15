@@ -7,17 +7,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { dataChecking } from 'globalUtils';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import ProductCard from 'components/ProductCard';
+import Pagination from 'components/Pagination';
 
 import makeSelectProfileWishlist from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import messages from './messages';
 import { getWishlist } from './actions';
 import './style.scss';
 
@@ -26,15 +26,48 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
         this.props.dispatch(getWishlist());
     }
 
+    renderPagination = () => {
+        if (!dataChecking(this.props, 'profileWishlist', 'data')) {
+            return null;
+        }
+        return (
+            <Pagination
+                parentProps={this.props}
+                meta={this.props.profileWishlist.data._meta}
+                link={this.props.profileWishlist.data._links}
+                goToPage={1}
+                checking={1}
+                callBack={(targetpage) => { this.props.dispatch(getWishlist(targetpage)); }}
+            />
+        );
+    }
+
+    renderProductCard = () => {
+        if (!dataChecking(this.props, 'profileWishlist', 'data', 'items')) {
+            return null;
+        }
+        return this.props.profileWishlist.data.items.map((item, index) => (
+            <div
+                className="product-card-div"
+                key={index}
+            >
+                <ProductCard
+                    product={item.product}
+                    url={item.product.brand.url}
+                    listViewMode={true}
+                />
+            </div>
+        ));
+    }
+
     render() {
         console.log(this.props);
         return (
             <div>
-                <Helmet>
-                    <title>ProfileWishlist</title>
-                    <meta name="description" content="Description of ProfileWishlist" />
-                </Helmet>
-                <FormattedMessage {...messages.header} />
+                {this.renderPagination()}
+                <div className="grid-view">
+                    {this.renderProductCard()}
+                </div>
             </div>
         );
     }
