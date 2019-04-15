@@ -35,14 +35,14 @@ const buttonSection = [
             },
             {
                 name: 'My Orders',
-                key: 'profile/order',
+                key: '/order',
             },
             {
                 // name: 'My Rewards',
             },
             {
                 name: 'My WishList',
-                key: 'profile/wishlist',
+                key: '/wishlist',
             },
         ],
     },

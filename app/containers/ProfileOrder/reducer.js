@@ -23,11 +23,11 @@ function profileOrderReducer(state = initialState, action) {
         case GET_ORDER_DETAIL:
             return state
                 .set('loading', true)
+                .set('success', true)
                 .set('error', false);
         case GET_ORDER_SUCCESS:
             return state
                 .set('data', Object.assign({ ...state.get('data') }, action.payload))
-                .set('success', true)
                 .set('loading', false)
                 .set('error', false);
         case GET_ORDER_FAIL:

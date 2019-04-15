@@ -68,28 +68,179 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     }
 
     renderOrderDetail = () => {
-        if (!this.state.popupOrder && !this.props.profileOrder.data.getOrderDetail) {
+        if (!this.state.popupOrder && !dataChecking(this.props, 'profileOrder', 'data', 'orderListDetail')) {
             return null;
         }
+        const orderlistdetail = dataChecking(this.props, 'profileOrder', 'data', 'orderListDetail');
         return (
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Sold and Shipped By</th>
-                        <th>Tracking No</th>
-                        <th>Courier</th>
-                        <th>Order Status</th>
-                    </tr>
-                    <tr>
-                        <tr>{}</tr>
-                        <tr></tr>
-                        <tr></tr>
-                        <tr></tr>
-                    </tr>
-                </tbody>
-            </table>
+            <div>
+                <div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>Sold and Shipped By</th>
+                                <th>Tracking No</th>
+                                <th>Courier</th>
+                                <th>Order Status</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                {dataChecking(orderlistdetail, 'tracking_number') ? <td>{orderlistdetail.tracking_number}</td> : null}
+                                {dataChecking(orderlistdetail, 'courier') ? <td>{orderlistdetail.courier}</td> : null}
+                                {dataChecking(orderlistdetail, 'status') ? <td>{orderlistdetail.status}</td> : null}
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <div>
+                            <span>Sold and Shipped By</span>
+                            {
+                                dataChecking(orderlistdetail, 'merchants') ?
+                                orderlistdetail.merchants.map((merchant) => (
+                                    <div style={{ float: 'right' }}>
+                                        <span>{merchant.logo.brief}<br /></span>
+                                        <span>{merchant.shipping.estimate_arrival}</span>
+                                    </div>
+                                ))
+                                :
+                                null
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <br />
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th></th>
+                                <th>CART ITEM</th>
+                                <th>UNIT PRICE</th>
+                                <th>QTY</th>
+                                <th>TOTAL</th>
+                            </tr>
+                            {
+                                dataChecking(orderlistdetail, 'merchants') ?
+                                orderlistdetail.merchants.map((merchant) => (
+                                    dataChecking(merchant, 'items') ?
+                                    merchant.items.map((item) => (
+                                        <tr>
+                                            <img src={item.product.image.small} alt="" />
+                                            <td>{item.product.name}</td>
+                                            <td>{orderlistdetail.currency.symbol}{item.price.selling}</td>
+                                            <td>{item.qty}</td>
+                                            <td>{orderlistdetail.currency.symbol}{item.subtotal}</td>
+                                        </tr>
+                                    ))
+                                    :
+                                    null
+                                ))
+                                :
+                                null
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                {
+                    dataChecking(orderlistdetail, 'summary', 'subtotal') ?
+                    orderlistdetail.summary.subtotal.map((subtotal) => (
+                        <div>
+                            <span>Subtotal</span>
+                            <span>{orderlistdetail.currency.symbol}{subtotal.subtotal}</span>
+                            <span>Shipping Fee</span>
+                            <span>{orderlistdetail.currency.symbol}{subtotal.shipping}</span>
+                            <span>Total</span>
+                            <span>{orderlistdetail.currency.symbol}{subtotal.total}</span>
+                        </div>
+                    ))
+                    :
+                    null
+                }
+
+                {this.renderPaymentInformation(orderlistdetail)}
+                {this.renderShippingInformation(orderlistdetail)}
+            </div>
         );
     }
+
+    // ????? WHERE TO GET FROM HERMO
+    // shipping fee need?
+    renderPaymentInformation = (orderlistdetail) => (
+        <div>
+            <div>
+                <span>Subtotal</span>
+            </div>
+            <div>
+                <span>FROM HERMO</span>
+                {
+                    dataChecking(orderlistdetail, 'summary', 'subtotal') ?
+                    orderlistdetail.summary.subtotal.map((subtotal) => (
+                        <span>{orderlistdetail.currency.symbol}{subtotal.subtotal}</span>
+                    ))
+                    :
+                    null
+                }
+            </div>
+            <div>
+                {
+                    dataChecking(orderlistdetail, 'summary', 'discount', 'items') ?
+                    orderlistdetail.summary.discount.items.map((item) => (
+                        <div>
+                            <span>{item.text}</span>
+                            <span>-{orderlistdetail.currency.symbol}{item.value}</span>
+                        </div>
+                    ))
+                    :
+                    null
+                }
+            </div>
+            <div>
+                <span>TOTAL</span>
+                {
+                    dataChecking(orderlistdetail, 'summary', 'subtotal') ?
+                    orderlistdetail.summary.subtotal.map((subtotal) => (
+                        <span>{orderlistdetail.currency.symbol}{subtotal.subtotal}</span>
+                    ))
+                    :
+                    null
+                }
+            </div>
+            <div>
+                {
+                    dataChecking(orderlistdetail, 'remarks') ?
+                    orderlistdetail.remarks.map((remark) => (
+                        remark.key === 'subtotal' ? <span>{remark.value}</span> : null
+                    ))
+                    :
+                    null
+                }
+            </div>
+        </div>
+    )
+
+    renderShippingInformation = (orderlistdetail) => (
+        <div>
+            {
+                dataChecking(orderlistdetail, 'address') ?
+                    <div>
+                        <span>Order No.</span>
+                        {dataChecking(orderlistdetail, 'number') ? <span>{orderlistdetail.number}</span> : null}
+                        <span>Receiver Name</span>
+                        <span>{orderlistdetail.address.receiver_name}</span>
+                        <span>Shipping Address</span>
+                        <span>{orderlistdetail.address.full_address}</span>
+                        <span>Contract No.</span>
+                        <span>{orderlistdetail.address.full_contact}</span>
+                        <span>Payment Method</span>
+                        {dataChecking(orderlistdetail, 'gateway_name') ? <span>{orderlistdetail.gateway_name}</span> : null}
+                    </div>
+                :
+                null
+            }
+        </div>
+    )
 
     render() {
         console.log(this.props);
