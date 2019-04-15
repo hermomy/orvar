@@ -3,7 +3,6 @@
 import React from 'react';
 import { dataChecking } from 'globalUtils';
 import { getData } from 'containers/HerListing/actions';
-import { getOrder } from 'containers/ProfileOrder/actions';
 
 import './style.scss';
 
