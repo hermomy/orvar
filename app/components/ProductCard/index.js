@@ -13,7 +13,6 @@ import Price from '../Price';
 import Rate from '../Rate';
 
 class ProductCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-
     renderFeatures() {
         const features = dataChecking(this.props, 'features');
         const extra_features = dataChecking(this.props, 'extra_feature');
@@ -37,27 +36,39 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
     }
 
     renderPrice = () => {
-        if (dataChecking(this.props.product, 'currency') && dataChecking(this.props.product, 'price')) {
+        if (!dataChecking(this.props.product, 'currency') && !dataChecking(this.props.price)) {
             return null;
         }
         return (
             <Price
                 currency={this.props.product.currency}
-                price={this.props.product.price}
+                price={this.props.price}
             />
+        );
+    }
+
+    renderCross = () => {
+        if (!this.props.cross) {
+            return null;
+        }
+        return (
+            <div onClick={() => this.props.deleteFromWishlist()}>
+                <i className="fa fa-times cross-icon" aria-hidden="true"></i>
+            </div>
         );
     }
 
     render() {
         return (
-            <NavLink to={this.props.url}>
-                <div
-                    className={`product-card ${this.props.listViewMode ? 'grid-view-card' : 'list-view-card'}`}
-                    key={this.props.product.id}
-                >
-                    <div className={`product-card-content ${!this.props.product.instock ? '' : 'OOS'}`}>
-                        <div className="product-card-images">
-                            {this.renderFeatures()}
+            <div
+                className={`product-card ${this.props.listViewMode ? 'grid-view-card' : 'list-view-card'}`}
+                key={this.props.product.id}
+            >
+                <div className={`product-card-content ${!this.props.product.instock ? '' : 'OOS'}`}>
+                    <div className="product-card-images">
+                        {this.renderCross()}
+                        {this.renderFeatures()}
+                        <NavLink to={this.props.url}>
                             {
                                 !this.props.product.instock &&
                                     <div>
@@ -72,8 +83,10 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                                     :
                                     null
                             }
-                        </div>
-                        <div className="product-card-info">
+                        </NavLink>
+                    </div>
+                    <div className="product-card-info">
+                        <NavLink to={this.props.url}>
                             <div className="product-card-wishlist">
                                 <i
                                     className={`wishlist-btn fa fa-heart ${true ? 'wishlist-btn-clicked' : ''}`}
@@ -94,17 +107,17 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                                         null
                                 }
                             </div>
-                        </div>
-                        {
-                            this.props.listViewMode ?
-
-                                <div className="product-card-list-view-actions">special action only show in list view mode</div>
-                                :
-                                null
-                        }
+                        </NavLink>
                     </div>
+                    {
+                        this.props.listViewMode ?
+
+                            <div className="product-card-list-view-actions">special action only show in list view mode</div>
+                            :
+                            null
+                    }
                 </div>
-            </NavLink>
+            </div>
         );
     }
 }

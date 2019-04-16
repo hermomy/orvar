@@ -44,6 +44,8 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
             if (dataChecking(nextProps, 'meta', 'currentPage') && dataChecking(nextProps, 'meta', 'currentPage') !== dataChecking(this.props, 'meta', 'currentPage')) {
                 this.setState({ activatedPage: nextProps.meta.currentPage });
             }
+        } else if (this.props.checking === 1) {
+            this.setState({ activatedPage: nextProps.meta.currentPage });
         }
     }
 

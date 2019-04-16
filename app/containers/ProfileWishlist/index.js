@@ -18,10 +18,14 @@ import Pagination from 'components/Pagination';
 import makeSelectProfileWishlist from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { getWishlist } from './actions';
+import { getWishlist, deleteWishlist } from './actions';
 import './style.scss';
 
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+    // state = {
+    //     page: 1,
+    // }
+
     componentWillMount() {
         this.props.dispatch(getWishlist());
     }
@@ -53,8 +57,12 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
             >
                 <ProductCard
                     product={item.product}
+                    review={false}
+                    // price={false}
                     url={item.product.brand.url}
                     listViewMode={true}
+                    cross={true}
+                    deleteFromWishlist={() => { this.props.dispatch(deleteWishlist(item.id)); }}
                 />
             </div>
         ));

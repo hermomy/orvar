@@ -185,6 +185,8 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                     product={product}
                     review={product.review}
                     url={product.url}
+                    price={dataChecking(product, 'price')}
+                    cross={false}
                     listViewMode={!this.state.listView}
                 />
             </div>

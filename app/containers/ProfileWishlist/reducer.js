@@ -9,6 +9,7 @@ import {
     GET_WISHLIST,
     GET_WISHLIST_SUCCESS,
     GET_WISHLIST_FAIL,
+    DELETE_WISHLIST,
 } from './constants';
 
 export const initialState = fromJS({});
@@ -28,6 +29,11 @@ function profileWishlistReducer(state = initialState, action) {
         case GET_WISHLIST_FAIL:
             return state
                 .set('data', action.payload)
+                .set('loading', false)
+                .set('error', action.payload);
+        case DELETE_WISHLIST:
+            return state
+                .set('delete', true)
                 .set('loading', false)
                 .set('error', action.payload);
         default:
