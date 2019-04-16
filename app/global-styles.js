@@ -11,13 +11,7 @@ injectGlobal`
         width: 100%;
     }
 
-    body {
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
-
-    body.fontLoaded {
-        font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
+    body { font-family: "Poppins", sans-serif; }
 
     #app {
         background-color: #fafafa;
