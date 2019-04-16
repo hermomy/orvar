@@ -5,10 +5,8 @@
 */
 
 import React from 'react';
-
 import { NavLink } from 'react-router-dom';
-import CartPage from 'containers/CartPage';
-
+import CheckoutPage from 'containers/CheckoutPage';
 import globalScope from '../../globalScope';
 import './style.scss';
 
@@ -25,7 +23,7 @@ class Header extends React.PureComponent { // eslint-disable-line react/prefer-s
         console.log();
         return (
             <div className="cart-popup-modal">
-                <CartPage />
+                <CheckoutPage header="true" />
                 <div className="text-right">
                     <NavLink className="hershop-button" to="/checkout">
                         Checkout Now

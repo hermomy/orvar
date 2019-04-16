@@ -17,25 +17,8 @@ import makeSelectCartPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
-import { getCheckout, updateQty, removeItemInCart } from './actions';
 
 export class CartPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-    componentDidMount() {
-        this.props.dispatch(getCheckout());
-    }
-
-    deleteCart = (id) => {
-        this.props.dispatch(removeItemInCart(id));
-    }
-
-    addQty = (type, qty, id) => {
-        if (qty <= 1 && type === 'remove') {
-            return;
-        }
-        let quantity = qty;
-        quantity = type === 'add' ? quantity += 1 : quantity -= 1;
-        this.props.dispatch(updateQty(quantity, id));
-    }
 
     is_qty_adjustable = (item) => {
         if (item.attribute.is_qty_adjustable) {
@@ -44,7 +27,7 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
                     <span
                         className="px-quater"
                         style={{ cursor: 'pointer' }}
-                        onClick={() => this.addQty('remove', item.qty, item.id)}
+                        onClick={() => this.props.addQty('remove', item.qty, item.id)}
                     >
                         <i className="fa fa-caret-left hermo-pink"></i>
                     </span>
@@ -54,7 +37,7 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
                     <span
                         className="px-quater"
                         style={{ cursor: 'pointer' }}
-                        onClick={() => this.addQty('add', item.qty, item.id)}
+                        onClick={() => this.props.addQty('add', item.qty, item.id)}
                     >
                         <i className="fa fa-caret-right hermo-pink"></i>
                     </span>
@@ -73,7 +56,7 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
     cartList = () => (
         <div>
             {
-                dataChecking(this.props.cartPage, 'data', 'merchants').map((merchant) => (
+                dataChecking(this.props.data, 'data', 'merchants').map((merchant) => (
                     <div key={merchant.id}>
                         <div
                             className="p-half"
@@ -116,7 +99,7 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
                                     <div className="text-xs-center" style={{ width: '100px' }}>
                                         <span
                                             className="px-quater"
-                                            onClick={() => this.deleteCart(item.id)}
+                                            onClick={() => this.props.deleteCart(item.id)}
                                             style={{ cursor: 'pointer' }}
                                         >
                                             <i className="far fa-times-circle"></i>
@@ -136,7 +119,7 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
         return (
             <div>
                 {
-                    dataChecking(this.props.cartPage, 'data', 'merchants') ?
+                    dataChecking(this.props.data, 'data', 'merchants') ?
                     this.cartList()
                     :
                     <div>
@@ -149,7 +132,7 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
 }
 
 CartPage.propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    // dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
