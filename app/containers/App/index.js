@@ -34,6 +34,7 @@ import CheckoutPage from 'containers/CheckoutPage';
 import ProfilePage from 'containers/ProfilePage';
 import ProfileOrder from 'containers/ProfileOrder';
 import ProfileWishlist from 'containers/ProfileWishlist';
+import ProfileWallet from 'containers/ProfileWallet';
 
 import Header from 'components/Header';
 import TabBar from 'components/TabBar';
@@ -129,6 +130,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         <Route exact={true} path="/mall/:productId" component={ProductView} />
                         <Route exact={true} path="/order" component={ProfileOrder} />
                         <Route exact={true} path="/wishlist" component={ProfileWishlist} />
+                        <Route exact={true} path="/wallet" component={ProfileWallet} />
                         <Route exact={true} path="/" component={HomePage} />
                         <Route exact={true} path="/profile" component={ProfilePage} />
                         <PrivateRoute

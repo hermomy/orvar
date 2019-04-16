@@ -28,10 +28,12 @@ const buttonSection = [
         section: 1,
         child: [
             {
-                // name: 'My Wallet',
+                name: 'My Wallet',
+                key: '/wallet',
             },
             {
-                // name: 'My Vouchers',
+                name: 'My Review',
+                key: '/review',
             },
             {
                 name: 'My Orders',

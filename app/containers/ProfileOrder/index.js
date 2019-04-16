@@ -27,10 +27,11 @@ import {
 export class ProfileOrder extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         popupOrder: false,
+        category: '',
     }
 
     componentWillMount() {
-        this.props.dispatch(getOrder());
+        this.props.dispatch(getOrder(''));
     }
 
     renderOrderlist = () => {
@@ -64,7 +65,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                 link={this.props.profileOrder.data.orderListData._links}
                 goToPage={1}
                 checking={1}
-                callBack={(targetpage) => { this.props.dispatch(getOrder(targetpage)); }}
+                callBack={(targetpage) => { this.props.dispatch(getOrder('', targetpage)); }}
             />
         );
     }
@@ -260,6 +261,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         console.log(this.props);
         return (
             <div>
+                <input type="button" onClick={() => { this.props.dispatch(getOrder('')); }} value="All Orders" />
+                <input type="button" onClick={() => { this.props.dispatch(getOrder('/reviewable')); }} value="Reviewable Orders" />
                 {this.renderPagination()}
                 <table border="1">
                     <tbody>

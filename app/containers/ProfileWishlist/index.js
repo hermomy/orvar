@@ -22,10 +22,6 @@ import { getWishlist, deleteWishlist } from './actions';
 import './style.scss';
 
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-    // state = {
-    //     page: 1,
-    // }
-
     componentWillMount() {
         this.props.dispatch(getWishlist());
     }

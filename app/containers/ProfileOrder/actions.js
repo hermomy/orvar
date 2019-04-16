@@ -11,9 +11,10 @@ import {
     GET_ORDER_FAIL,
 } from './constants';
 
-export function getOrder(numOfPage) {
+export function getOrder(category, numOfPage) {
     return {
         type: GET_ORDER,
+        category,
         numOfPage,
     };
 }

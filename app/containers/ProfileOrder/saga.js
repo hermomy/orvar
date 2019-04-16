@@ -7,9 +7,9 @@ import { getOrderSuccess, getOrderFail } from './actions';
 export function* orderDataWorker(action) {
     let res = null;
     if (!action.numOfPage) {
-        res = yield call(apiRequest, '/order', 'get', null);
+        res = yield call(apiRequest, `/order${action.category}`, 'get', null);
     } else {
-        res = yield call(apiRequest, `/order?page=${action.numOfPage}`, 'get', null);
+        res = yield call(apiRequest, `/order${action.category}?page=${action.numOfPage}`, 'get', null);
     }
     if (res && res.ok) {
         yield put(getOrderSuccess({ orderListData: res.data }));
