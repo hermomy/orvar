@@ -49,11 +49,11 @@ export class CheckoutPage extends React.PureComponent { // eslint-disable-line r
                 </Helmet>
                 {
                     this.props.header ?
-                    <CartPage
-                        addQty={this.addQty}
-                        deleteCart={this.deleteCart}
-                        data={dataChecking(this.props, 'checkoutpage')}
-                    />
+                        <CartPage
+                            addQty={this.addQty}
+                            deleteCart={this.deleteCart}
+                            data={dataChecking(this.props, 'checkoutpage')}
+                        />
                     :
                     <div>
                         <CartPage
