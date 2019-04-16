@@ -11,6 +11,8 @@ import {
     CHECKOUT_DATA_SUCCESS,
     QTY_UPDATE,
     QTY_UPDATE_SUCCESS,
+    ITEM_DELETE,
+    ITEM_DELETE_SUCCESS,
 } from './constants';
 
 export const initialState = fromJS({
@@ -35,6 +37,15 @@ function cartPageReducer(state = initialState, action) {
                 .set('loading', true)
                 .set('error', false);
         case QTY_UPDATE_SUCCESS:
+            return state
+                .set('loading', false)
+                .set('error', false)
+                .set('data', dataChecking(action, 'r', 'cart'));
+        case ITEM_DELETE:
+            return state
+                .set('loading', true)
+                .set('error', false);
+        case ITEM_DELETE_SUCCESS:
             return state
                 .set('loading', false)
                 .set('error', false)

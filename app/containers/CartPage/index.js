@@ -17,7 +17,7 @@ import makeSelectCartPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
-import { getCheckout, updateQty } from './actions';
+import { getCheckout, updateQty, removeItemInCart } from './actions';
 
 export class CartPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     componentDidMount() {
@@ -25,7 +25,7 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
     }
 
     deleteCart = (id) => {
-        console.log('prod id: ', id);
+        this.props.dispatch(removeItemInCart(id));
     }
 
     addQty = (type, qty, id) => {
@@ -37,16 +37,49 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
         this.props.dispatch(updateQty(quantity, id));
     }
 
+    is_qty_adjustable = (item) => {
+        if (item.attribute.is_qty_adjustable) {
+            return (
+                <div className="text-xs-center" style={{ width: '100px' }}>
+                    <span
+                        className="px-quater"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => this.addQty('remove', item.qty, item.id)}
+                    >
+                        <i className="fa fa-caret-left hermo-pink"></i>
+                    </span>
+                    <span>
+                        {item.qty}
+                    </span>
+                    <span
+                        className="px-quater"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => this.addQty('add', item.qty, item.id)}
+                    >
+                        <i className="fa fa-caret-right hermo-pink"></i>
+                    </span>
+                </div>
+            );
+        }
+        return (
+            <div className="text-xs-center" style={{ width: '100px' }}>
+                <span>
+                    {item.qty}
+                </span>
+            </div>
+        );
+    }
+
     cartList = () => (
         <div>
             {
                 dataChecking(this.props.cartPage, 'data', 'merchants').map((merchant) => (
                     <div key={merchant.id}>
                         <div
-                            className="p-1"
+                            className="p-half"
                             style={{
-                                'backgroundColor': 'black',
-                                'color': 'white',
+                                backgroundColor: 'black',
+                                color: 'white',
                             }}
                         >
                             Sold and shipped by
@@ -55,46 +88,38 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
                             </div>
                         </div>
                         <div
-                            className="text-xs-center"
-                            style={{ 'display': 'flex' }}
+                            className="text-xs-center mt-1"
+                            style={{ display: 'flex' }}
                         >
-                            <div style={{ 'width': '383px' }}>cart item</div>
-                            <div style={{ 'width': '100px' }}>unit price</div>
-                            <div style={{ 'width': '100px' }}>qty</div>
-                            <div style={{ 'width': '100px' }}>total</div>
+                            <div className="text-uppercase" style={{ width: '400px' }}>cart item</div>
+                            <div className="text-uppercase" style={{ width: '100px' }}>unit price</div>
+                            <div className="text-uppercase" style={{ width: '100px' }}>qty</div>
+                            <div className="text-uppercase" style={{ width: '100px' }}>total</div>
                         </div>
                         {
                             merchant.items.map((item) => (
                                 <div
-                                    className="text-xs-center"
+                                    className="mb-1"
                                     style={{
-                                        'display': 'flex',
-                                        'alignItems': 'center',
+                                        display: 'flex',
+                                        alignItems: 'center',
                                     }}
                                     key={item.id}
                                 >
-                                    <div>
+                                    <div style={{ width: '100px' }}>
                                         <img src={item.product.image.small} alt="prod img"width="80px" />
                                     </div>
-                                    <div style={{ 'width': '300px' }}>{item.product.name}</div>
-                                    <div style={{ 'width': '100px' }}>RM {item.price.selling}</div>
-                                    <div style={{ 'width': '100px' }}>
+                                    <div className="line-elips" style={{ width: '300px' }}>{item.product.name}</div>
+                                    <div className="text-xs-center" style={{ width: '100px' }}>RM {item.price.selling}</div>
+                                    {this.is_qty_adjustable(item)}
+                                    <div className="text-xs-center" style={{ width: '100px' }}>RM {item.total.selling}</div>
+                                    <div className="text-xs-center" style={{ width: '100px' }}>
                                         <span
                                             className="px-quater"
-                                            style={{ 'cursor': 'pointer' }}
-                                            onClick={() => this.addQty('remove', item.qty, item.id)}
+                                            onClick={() => this.deleteCart(item.id)}
+                                            style={{ cursor: 'pointer' }}
                                         >
-                                            <i className="fa fa-caret-left"></i>
-                                        </span>
-                                        <span>
-                                            {item.qty}
-                                        </span>
-                                        <span
-                                            className="px-quater"
-                                            style={{ 'cursor': 'pointer' }}
-                                            onClick={() => this.addQty('add', item.qty, item.id)}
-                                        >
-                                            <i className="fa fa-caret-right"></i>
+                                            <i className="far fa-times-circle"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -104,9 +129,6 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
                     )
                 )
             }
-            {/* <a onClick={() => this.deleteCart(item.id)}>
-                                            <i className="far fa-times-circle"></i>
-                                        </a> */}
         </div>
     )
 

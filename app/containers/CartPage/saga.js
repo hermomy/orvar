@@ -5,11 +5,13 @@ import { apiRequest } from '../../globalUtils';
 import {
     GET_CHECKOUT_DATA,
     QTY_UPDATE,
+    ITEM_DELETE,
 } from './constants';
 import {
     checkoutSuccess,
     updateQtySuccess,
     checkoutFailed,
+    removeItemInCartSuccess,
 } from './actions';
 
 export function* getCheckoutData() {
@@ -36,8 +38,19 @@ export function* updateQtyInCart(action) {
     }
 }
 
+export function* deleteItemInCart(action) {
+    const response = yield call(apiRequest, `/cart/${action.id}`, 'delete');
+    if (response && response.ok) {
+        yield put(removeItemInCartSuccess(response.data));
+        notifySuccess(response.data.messages[0].text);
+    } else {
+        // yield put(listingRequestFailed(response.data));
+    }
+}
+
 // Individual exports for testing
 export default function* cartPageSaga() {
     yield takeLatest(GET_CHECKOUT_DATA, getCheckoutData);
     yield takeLatest(QTY_UPDATE, updateQtyInCart);
+    yield takeLatest(ITEM_DELETE, deleteItemInCart);
 }
