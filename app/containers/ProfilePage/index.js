@@ -179,6 +179,7 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
                                             section.child.map((c) => (
                                                 <NavLink
                                                     to={`${c.key}`}
+                                                    style={{ marginTop: '5rem' }}
                                                 >
                                                     <span onClick={() => this.routeTo(c.name)} className="profile-page-button-text">{c.name}</span>
                                                 </NavLink>

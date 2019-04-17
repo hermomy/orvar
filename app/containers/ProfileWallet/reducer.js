@@ -9,6 +9,8 @@ import {
     GET_VOUCHER,
     GET_DATA_SUCCESS,
     GET_DATA_FAIL,
+    GET_BALANCE,
+    GET_PROFILE,
 } from './constants';
 
 export const initialState = fromJS({});
@@ -29,6 +31,14 @@ function profileWalletReducer(state = initialState, action) {
                 .set('loading', false)
                 .set('success', false)
                 .set('error', action.payload);
+        case GET_BALANCE:
+            return state
+                .set('loading', true)
+                .set('success', false);
+        case GET_PROFILE:
+            return state
+                .set('loading', true)
+                .set('success', false);
         default:
             return state;
     }
