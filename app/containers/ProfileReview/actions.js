@@ -11,11 +11,12 @@ import {
     POST_REVIEW,
 } from './constants';
 
-export function getReview(API, pageNum) {
+export function getReview(API, APIName, pageNum) {
     return {
         type: GET_REVIEW,
         pageNum,
         API,
+        APIName,
     };
 }
 

@@ -38,9 +38,9 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         if (!dataChecking(this.props, 'profileOrder', 'data', 'orderListData', 'items')) {
             return null;
         }
-        return this.props.profileOrder.data.orderListData.items.map((Order, index) =>
+        return this.props.profileOrder.data.orderListData.items.map((Order) =>
         (
-            <tr key={index}>
+            <tr key={Order.id}>
                 <td>
                     <div onClick={() => { this.setState({ popupOrder: !this.state.popupOrder }); this.props.dispatch(getOrderDetail(Order._links.self.href)); }}>
                         {Order.number}
@@ -88,8 +88,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                             </tr>
                             {
                                 dataChecking(orderlistdetail, 'merchants') ?
-                                orderlistdetail.merchants.map((merchant, index) => (
-                                    <tr key={index}>
+                                orderlistdetail.merchants.map((merchant) => (
+                                    <tr key={merchant.id}>
                                         <td>{merchant.name}</td>
                                         <td>{merchant.tracking_number ? `${merchant.tracking_number}` : '-'}</td>
                                         <td>{merchant.summary.shipping.name}</td>
@@ -105,13 +105,13 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                 <div>
                     {
                         dataChecking(orderlistdetail, 'merchants') ?
-                        orderlistdetail.merchants.map((merchant, index) => (
-                            <div>
+                        orderlistdetail.merchants.map((merchant) => (
+                            <div key={merchant.id}>
                                 <div>
                                     <span>Sold and Shipped By</span>
                                     <span>{merchant.name}</span>
                                 </div>
-                                <div key={index} style={{ float: 'right' }}>
+                                <div style={{ float: 'right' }}>
                                     <span>{merchant.logo.brief}<br /></span>
                                     <span>{merchant.shipping.estimate_arrival}</span>
                                 </div>
@@ -128,7 +128,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                                         {
                                             dataChecking(merchant, 'items') ?
                                             merchant.items.map((item) => (
-                                                <tr key={index}>
+                                                <tr key={item.id}>
                                                     <NavLink to={`${item._applink ? `/mall/${item._applink.id}` : '/mall'}`} >
                                                         <td><img src={item.product.image.small} alt="" /></td>
                                                         <td>{item.product.name}</td>
@@ -146,7 +146,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                                 {
                                     dataChecking(orderlistdetail, 'summary', 'subtotal') ?
                                     orderlistdetail.summary.subtotal.map((subtotal) => (
-                                        <div key={index}>
+                                        <div key={subtotal.id}>
                                             <span>Subtotal</span>
                                             <span>{orderlistdetail.currency.symbol}{subtotal.subtotal}</span>
                                             <span>Shipping Fee</span>
@@ -261,8 +261,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         console.log(this.props);
         return (
             <div>
-                <input type="button" onClick={() => { this.props.dispatch(getOrder('')); }} value="All Orders" />
-                <input type="button" onClick={() => { this.props.dispatch(getOrder('/reviewable')); }} value="Reviewable Orders" />
+                <input type="button" onClick={() => { this.props.dispatch(getOrder('')); this.setState({ category: '' }); }} value="All Orders" />
+                <input type="button" onClick={() => { this.props.dispatch(getOrder('/reviewable')); this.setState({ category: '/reviewable' }); }} value="Reviewable Orders" />
                 {this.renderPagination()}
                 <table border="1">
                     <tbody>

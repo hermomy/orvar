@@ -7,19 +7,22 @@ export function* reviewDataWorker(action) {
     let res;
 
     if (!action.pageNum) {
-        res = yield call(apiRequest, `/mall/reviewable${action.API}?reviewed=0`, 'get');
+        res = yield call(apiRequest, `${action.API}`, 'get');
     } else {
-        res = yield call(apiRequest, `/mall/reviewable${action.API}?reviewed=0&page=${action.pageNum}`, 'get');
+        res = yield call(apiRequest, `${action.API}&page=${action.pageNum}`, 'get');
     }
 
     if (res && res.ok) {
-        yield put(getReviewSuccess({ reviewData: res.data }));
+        if (action.APIName === 'reviewData') {
+            yield put(getReviewSuccess({ reviewData: res.data }));
+        } else if (action.APIName === 'reviewedData') {
+            yield put(getReviewSuccess({ reviewedData: res.data }));
+        }
     } else {
         yield put(getReviewFail(res.data));
     }
 }
 
-// fix post later :(
 export function* postReviewWorker(action) {
     const temp = action.wholeproduct;
     temp.comment = action.comment;
@@ -29,7 +32,7 @@ export function* postReviewWorker(action) {
     const res = yield call(apiRequest, '/review', 'post', temp);
 
     if (res && res.ok) {
-        yield put(getReview(''));
+        yield put(getReview('/review/by-me?per-page=5', 'reviewedData'));
     } else {
         yield put(getReviewFail(res.data));
     }
