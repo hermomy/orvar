@@ -28,6 +28,8 @@ import HomePage from 'containers/HomePage';
 import LogoutForm from 'containers/LogoutForm';
 import HerListing from 'containers/HerListing';
 import NotFoundPage from 'containers/NotFoundPage';
+import ProfileWholePage from 'containers/ProfileWholePage';
+import ProfileEditInform from 'containers/ProfileEditInform';
 // import Cart from 'containers/CartPage';
 import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
@@ -129,11 +131,13 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                             )}
                         />
                         <Route exact={true} path="/mall/:productId" component={ProductView} />
+                        <Route exact={true} path="/profile/me" component={ProfileEditInform} />
                         <Route exact={true} path="/order" component={ProfileOrder} />
                         <Route exact={true} path="/wishlist" component={ProfileWishlist} />
                         <Route exact={true} path="/wallet" component={ProfileWallet} />
                         <Route exact={true} path="/review" component={ProfileReview} />
                         <Route exact={true} path="/" component={HomePage} />
+                        <Route exact={true} path="/profile1/" component={ProfileWholePage} />
                         <Route exact={true} path="/profile" component={ProfilePage} />
                         <PrivateRoute
                             exact={true}
