@@ -30,9 +30,28 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         this.props.dispatch(getPaymentBank());
     }
 
+    renderSidebar = () => (
+        <div>
+            <span>WHO ARE WE</span><br />
+            <a href="#aboutUs"><span>About Us</span></a><br />
+            <a href="#joinUs"><span>Join Us</span></a><br />
+            <a href="#partnership"><span>Partnership</span></a><br />
+            <span>SHOPPING GUIDE</span><br />
+            <a href="#credits"><span>Credits</span></a><br />
+            <a href="#shipping"><span>Shipping</span></a><br />
+            <a href="#returnPolicy"><span>Return Policy</span></a><br />
+            <a href="#membership"><span>Membership</span></a><br />
+            <a href="#contactUs"><span>Contact Us</span></a><br />
+            <span>TERMS</span><br />
+            <a href="#privacyPolicy"><span>Privacy Policy</span></a><br />
+            <a href="#userTerm"><span>User Term</span></a><br />
+            <a href="#FAQ"><span>FAQ</span></a><br />
+        </div>
+    )
+
     renderAboutUs = () => (
         <div>
-            <span>ABOUT US</span><br />
+            <a id="aboutUs"><span>ABOUT US</span></a><br />
             <span>We want you to be gorgeous with us.</span><br />
             <span>Women are from Venus, </span><br />
             <span>a representation of exceptional beauty.</span><br />
@@ -92,7 +111,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         }
         return (
             <div>
-                <span>JOIN US</span>
+                <a id="joinUs"><span>JOIN US</span></a><br />
                 <span>#TeamHermo</span>
                 <span>We&#39;re hiring. Come work at Malaysia&#39;s #1 beauty e-commerce site!</span>
                 <span>
@@ -131,7 +150,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderPartnership = () => (
         <div>
-            <span>PARTNERSHIPS</span><br />
+            <a id="partnership"><span>PARTNERSHIPS</span></a><br />
             <span>Be Part of Our Revolution</span><br />
             <span>
                 Are you a beauty product supplier, distributor or a beauty company?<br />
@@ -155,7 +174,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderCredit = () => (
         <div>
-            <span>CREDITS</span><br />
+            <a id="credits"><span>CREDITS</span></a><br />
             <span>Top 6 Tips to Get Hermo&#39;s Credits</span><br />
             <span>Hermo Credits let you shop till you drop at further, insane discount.</span><br />
             <span>
@@ -205,7 +224,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderShipping = () => (
         <div>
-            <span>SHIPPING</span><br />
+            <a id="shipping"><span>SHIPPING</span></a><br />
             <span>Our Shipping Policy</span><br />
             <span>
                 Currently, we only provide shipping to Singapore and Malaysia.<br />
@@ -324,7 +343,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderMembership = () => (
         <div>
-            <span>MEMBERSHIP</span><br />
+            <a id="membership"><span>MEMBERSHIP</span></a><br />
             <span>VIP Level & Privileges</span><br />
             <img src="https://devshop2.hermo.my/hershop/modules/static/privilege.jpg" alt="" />
             <span>MEMBERSHIP</span><br />
@@ -361,7 +380,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderContactUs = () => (
         <div>
-            <span>CONTACT US</span><br />
+            <a id="contactUs"><span>CONTACT US</span></a><br />
             <span>We want your experience with Hermo to be worry-free.</span><br />
             <span>Please contact us if you have any questions or encountered any problems when shopping at Hermo.</span><br />
             <span>YOU CAN CONTACT US VIA:</span><br />
@@ -387,6 +406,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderPrivacyPolicy = () => (
         <div>
+            <a id="privacyPolicy"><span>PRIVACY POLICY</span></a><br />
             <span>
                 At Hermo MY, we take your privacy seriously! Please read this Statement of Privacy to be more aware about our policy on collecting, using and disclosing personal information. Hermo MY<br />
                 occasionally update this Statement of Privacy to reflect company and user’s feedback. We encourage you to review this Statement periodically to be informed of how we are protecting your<br />
@@ -415,7 +435,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderUserTerm = () => (
         <div>
-            <span>USER TERM</span><br />
+            <a id="userTerm"><span>USER TERM</span></a><br />
             <span>
                 Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our<br />
                 privacy policy govern Hermo’s relationship with you in relation to this website. If you disagree with any part of these terms and conditions, please do not use our website.
@@ -470,7 +490,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderFAQ = () => (
         <div>
-            <span>FAQ</span><br />
+            <a id="FAQ"><span>FAQ</span></a><br />
             <span>How Can We Help You?</span><br />
             <span>GENERAL</span><br />
             <ul>
@@ -706,6 +726,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         console.log(this.props);
         return (
             <div>
+                {this.renderSidebar()}
                 {this.renderAboutUs()}
                 {this.renderSellingPoint()}
                 {this.renderJoinUs()}
