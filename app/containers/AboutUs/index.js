@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { dataChecking } from 'globalUtils';
+import { NavLink } from 'react-router-dom';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Accordion from 'components/Accordion';
@@ -69,18 +70,18 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
             <span>Shocking deals</span><br />
             <span>Passing savings onto you every day with regular promotions bound to surprise you and your friends. Flying off the racks each time, stay glued to Hermo and snatch your share of bounties.</span><br />
             <span>Trusted Since 2012</span><br />
-            <span>Reviewed by all (bloggers, celebrities, and most importantly YOU), check out our Beauty Wall for the rave reviews. We love your feed-back more than anything, it&#39;s our journey together after all.</span><br />
+            <span>Reviewed by all (bloggers, celebrities, and most importantly YOU), check out our <a href="https://www.youtube.com/watch?v=_SxKO-tVfkc">Beauty Wall</a> for the rave reviews. We love your feed-back more than anything, it&#39;s our journey together after all.</span><br />
             <span>100% Authentic Products</span><br />
             <span>With over 9,000 authentic products in stock - numbers steadily growing as you read this - you&#39;ll find almost anything here. If not, make a ruckus and we might just swim across Pacific to fulfill your heart&#39;s desire!</span><br />
             <span>14 Days Refundable</span><br />
-            <span>Not satisfied with what your received? No question asked, enjoy our 14 days Unconditional Refund. Please read our Return Policy here</span>
+            <span>Not satisfied with what your received? No question asked, enjoy our 14 days Unconditional Refund. Please read our <a href="#returnPolicy">Return Policy</a> here</span>
             <span>FREE Flash Shipping Nationwide</span><br />
             <span>Get your order(s) in a flash at no extra cost! To qualify, just spend above the minimum purchase requirement: RM 50 for Peninsular Malaysia (WM) and RM 150 for Sabah & Sarawak (EM). Additional terms and conditions may apply - read our Shipping Policy HERE! </span><br />
             <ul><li>&#183;   For Shipping under FAQ, do suggest what kind of questions we should add so I can prepare copies accordingly. Let me know if you need clarifications. Thanks! :)</li></ul>
             <span>Hermo is Made in Malaysia</span><br />
             <span>Best of the Best of all, Hermo is handcrafted by Malaysians in Malaysia. Support “Made in Malaysia”, we strive to be a national pride as we continue to grow and expand onto an International platform!</span><br />
             <span>More than 10,000 trusted reviews</span><br />
-            <span>Never trusted an online beauty store? Here at Hermo, you can count on us for your life&#39;s supply of the best cosmetic products. Check out our Product Reviews .</span><br />
+            <span>Never trusted an online beauty store? Here at Hermo, you can count on us for your life&#39;s supply of the best cosmetic products. Check out our <NavLink to={'/mall'}>Product Reviews</NavLink> .</span><br />
             <hr />
         </div>
     )
@@ -103,23 +104,26 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 </span>
                 <span>Whether you’re passionate about product, people, numbers, words, code, or strategy, we have a place for you.</span>
                 <hr />
-                {
-                    this.props.aboutUs.data.careerData.items.map((item) => (
-                        <Accordion
-                            key={item.id}
-                            height_threshold="220px"
-                            contents={[
-                                {
-                                    key: item.id,
-                                    title: item.name,
-                                    description: item.content,
-                                    togglable: true,
-                                },
-                            ]}
-                        />
-                    ))
-                }
-                <span>If this sounds like the work situation of your dreams, please email your resume/profile to hr@hermo.my. We can’t wait to meet you! Positions to be based full-time in Johor Bahru.</span>
+                <div>
+                    <span>Join Hermo Family</span>
+                    {
+                        this.props.aboutUs.data.careerData.items.map((item) => (
+                            <Accordion
+                                key={item.id}
+                                height_threshold="220px"
+                                contents={[
+                                    {
+                                        key: item.id,
+                                        title: item.name,
+                                        description: item.content,
+                                        togglable: true,
+                                    },
+                                ]}
+                            />
+                        ))
+                    }
+                </div>
+                <span>If this sounds like the work situation of your dreams, please email your resume/profile to <a href="mailto:hr@hermo.my">hr@hermo.my</a>. We can’t wait to meet you! Positions to be based full-time in Johor Bahru.</span>
                 <hr />
             </div>
         );
@@ -138,12 +142,12 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
             </span>
             <span>
                 <i className="fa fa-envelope" aria-hidden="true"></i>
-                EMAIL: brands@hermo.my
+                EMAIL: <a href="mailto:brands@hermo.my">brands@hermo.my</a>
             </span><br />
             <span>For any marketing related enquiries, </span><br />
             <span>
                 <i className="fa fa-envelope" aria-hidden="true"></i>
-                EMAIL: marketing@hermo.my
+                EMAIL: <a href="mailto:marketing@hermo.my">marketing@hermo.my</a>
             </span><br />
             <hr />
         </div>
@@ -253,7 +257,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 Taman Perniagaan Setia,<br />
                 81100, Johor bahru, Johor.
             </span><br />
-            <span>Please contact 07-5623567 or admin@hermo.my for further information and please provide your order details .</span><br />
+            <span>Please contact <a href="tel:07-5623567">07-5623567</a> or <a href="mailto:admin@hermo.my">admin@hermo.my</a>admin@hermo.my for further information and please provide your order details .</span><br />
             <span>Delivery Time</span><br />
             <span>
                 We try our best to prepare your orders and send them out as soon as we can but orders can only be shipped during working days and hours. We hope our beloved customers might note that<br />
@@ -268,7 +272,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
             </span><br />
             <span>
                 For more details or inquiries on shipping issues,<br />
-                Please contact us at: 07-5623567 or admin@hermo.my
+                Please contact us at: <a href="tel:07-5623567">07-5623567</a> or <a href="mailto:admin@hermo.my">admin@hermo.my</a>
             </span><br />
             <hr />
         </div>
@@ -276,7 +280,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderReturnPolicy = () => (
         <div>
-            <span>RETURN POLICY</span><br />
+            <a id="returnPolicy"><span>RETURN POLICY</span></a><br />
             <span>Unconditional Return Policy</span><br />
             <span>If you are not satisfied with your purchase (damaged during shipment or wrong item/type/shade/etc), you can send it back to us.</span><br />
             <ul>
@@ -296,7 +300,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 Customers would have to bear the postage fees for shipping item(s) back to us during the return process,<br />
                 then we will refund a maximum of RM 5.00 for your return shipping charges to your account.<br />
                 Please allow 14 working days for this process to be completed.<br />
-                For more information, kindly email to admin@hermo.my<br />
+                For more information, kindly email to <a href="mailto:admin@hermo.my">admin@hermo.my</a><br />
             </span>
             <span>How can I return my purchase?</span><br />
             <span>
@@ -311,7 +315,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
             </span><br />
             <span>I need more information about this. Who do I contact?</span><br />
             <span>
-                You can contact our customer service at 07-5623567 or email your inquiry to admin@hermo.my<br />
+                You can contact our customer service at <a href="tel:07-5623567">07-5623567</a>  or email your inquiry to <a href="mailto:admin@hermo.my">admin@hermo.my</a><br />
                 Our customer service will contact you during working days and hours.<br />
             </span>
             <hr />
@@ -361,9 +365,9 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
             <span>We want your experience with Hermo to be worry-free.</span><br />
             <span>Please contact us if you have any questions or encountered any problems when shopping at Hermo.</span><br />
             <span>YOU CAN CONTACT US VIA:</span><br />
-            <span><i className="fa fa-envelope" aria-hidden="true"></i>EMAIL: admin@hermo.my</span><br />
+            <span><i className="fa fa-envelope" aria-hidden="true"></i>EMAIL: <a href="mailto:admin@hermo.my">admin@hermo.my</a></span><br />
             <span>We will reply to your inquiry within 48 working hours.</span><br />
-            <span><i className="fa fa-phone" aria-hidden="true"></i>PHONE: 07-5623567</span><br />
+            <span><i className="fa fa-phone" aria-hidden="true"></i>PHONE: <a href="tel:07-5623567">07-5623567</a></span><br />
             <span>Mon - fri (except public holiday) 9.00AM - 6.00PM </span><br />
             <span>(UTC +08:00) Malaysia Time</span><br />
             <span><i className="fa fa-map-marker" aria-hidden="true"></i>ADDRESS</span><br />
@@ -374,9 +378,9 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 81100, Johor bahru, Johor.
             </span><br />
             <span>Follow our journey to beauty daily</span><br />
-            <span><i className="fa fa-facebook-square"></i></span>
-            <span><i className="fa fa-google-plus-official" aria-hidden="true"></i></span>
-            <span><i className="fa fa-instagram" aria-hidden="true"></i></span>
+            <span><a href="https://www.facebook.com/HermoMalaysia"><i className="fa fa-facebook-square"></i></a></span>
+            <span><a href="mailto:admin@hermo.my"><i className="fa fa-google-plus-official" aria-hidden="true"></i></a></span>
+            <span><a href="https://www.instagram.com/hermomy/"><i className="fa fa-instagram" aria-hidden="true"></i></a></span>
             <hr />
         </div>
     )
@@ -550,7 +554,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
     )
 
     renderFAQPayment = () => {
-        if (dataChecking(this.props, 'aboutUs', 'data', 'paymentBankData')) {
+        if (!dataChecking(this.props, 'aboutUs', 'data', 'paymentBankData')) {
             return null;
         }
         return (
