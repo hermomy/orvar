@@ -55,7 +55,8 @@ const buttonSection = [
                 // name: 'Contact Us',
             },
             {
-                // name: 'FAQ',
+                name: 'FAQ',
+                key: '/about#FAQ',
             },
         ],
     },

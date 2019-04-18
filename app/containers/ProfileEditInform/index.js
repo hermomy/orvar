@@ -23,6 +23,7 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
     state = {
         datestyle: 'show',
         year: new Date(Date.now()).getUTCFullYear(),
+        oriCheckboxData: null,
     }
 
     componentWillMount() {
@@ -30,15 +31,14 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
         this.props.dispatch(getUserInform());
     }
 
-    compareCheckboxBetweenTwo = (item, userchoice) => {
-        userchoice.map((choice) => {
-            if (choice.id === item.id) {
-                console.log(choice.id === item.id);
-                return true;
-            }
-            return false;
+    setDataToState(choice) {
+        const tempData = { ...this.state.oriCheckboxData };
+        console.log(choice);
+        Object.values(tempData).forEach((choose) => {
+            tempData[`${choose.id}`] = choose;
         });
-        return false;
+        this.setState({ oriCheckboxData: tempData });
+        return true;
     }
 
     renderForm = () => {
@@ -89,7 +89,7 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
                 {
                     choice.skin_tone.items.map((item) => (
                         <div key={item.id}>
-                            <input type="radio" value={item} defaultChecked={item.id === user.skin.tone.id} />{item.name}
+                            <input name="skin_tone" type="radio" value={item} defaultChecked={item.id === user.skin.tone.id} />{item.name}
                         </div>
                     ))
                 }
@@ -97,17 +97,20 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
                 {
                     choice.skin_type.items.map((item) => (
                         <div key={item.id}>
-                            <input type="radio" value={item} defaultChecked={item.id === user.skin.type.id} />{item.name}
+                            <input name="skin_type" type="radio" value={item} defaultChecked={item.id === user.skin.type.id} />{item.name}
                         </div>
                     ))
                 }
                 <span>Skin Concern</span>
                 {
+                    this.setDataToState(dataChecking(user, 'skin', 'concerns')) ?
                     choice.skin_problem.items.map((item) => (
                         <div key={item.id}>
-                            <input type="checkbox" value={item} defaultChecked={this.compareCheckboxBetweenTwo(item, user.skin.concerns)} />{item.name}
+                            <input name="skin_concern[]" type="checkbox" value={item} defaultChecked={this.state.oriCheckboxData[`${item.id}`] || false} />{item.name}
                         </div>
                     ))
+                    :
+                    null
                 }
             </div>
         );
