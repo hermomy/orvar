@@ -201,14 +201,14 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderShipping = () => (
         <div>
-            <span>SHIPPING</span>
-            <span>Our Shipping Policy</span>
+            <span>SHIPPING</span><br />
+            <span>Our Shipping Policy</span><br />
             <span>
-                Currently, we only provide shipping to Singapore and Malaysia.
-                Friends from Singapore can make your purchases through our Singapore official website - www.hermo.sg,
+                Currently, we only provide shipping to Singapore and Malaysia.<br />
+                Friends from Singapore can make your purchases through our Singapore official website - www.hermo.sg,<br />
                 Friends from Malaysia can make your purchases through our Malaysia official website - www.hermo.my.
-            </span>
-            <span>Delivery Fees</span>
+            </span><br />
+            <span>Delivery Fees</span><br />
             <ul>
                 <li>HERMO delivers across Malaysia! The shipping rates are as follows:</li>
                 <ol>
@@ -234,43 +234,232 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
             </ul>
             <span>Additional Information</span>
             <ul>
-                <li>Kindly ensure your shipping address is accurate, as we don’t allow amendments after your order number is generated.</li>
-                <li>Our courier service providers are GDex, Pos Laju, and DHL eCommerce.</li>
-                <li>We are unable to deliver to P.O. Box addresses. For university/college campus addresses, your orders can only be delivered to the administration office or mail room.</li>
-                <li>For orders with HERMO and HERMO Global products, items will be delivered separately by HERMO and our international supplier(s) respectively.</li>
-                <li>For orders with HERMO and HERMO Global products, but only the HERMO purchase meets the Free Shipping requirement, shipping fee will be charged for your HERMO Global purchase.</li>
+                <li>Kindly ensure your shipping address is accurate, as we don’t allow amendments after your order number is generated.</li><br />
+                <li>Our courier service providers are GDex, Pos Laju, and DHL eCommerce.</li><br />
+                <li>We are unable to deliver to P.O. Box addresses. For university/college campus addresses, your orders can only be delivered to the administration office or mail room.</li><br />
+                <li>For orders with HERMO and HERMO Global products, items will be delivered separately by HERMO and our international supplier(s) respectively.</li><br />
+                <li>For orders with HERMO and HERMO Global products, but only the HERMO purchase meets the Free Shipping requirement, shipping fee will be charged for your HERMO Global purchase.</li><br />
             </ul>
             <span>
-                Your parcels are delivered using the following courier services DHL eCommerce/GDEX/GDEX COD/J&T Express /Motorex/Poslaju
-                Currently we only available to ship to Peninsular Malaysia, Sabah and Sarawak.
+                Your parcels are delivered using the following courier services DHL eCommerce/GDEX/GDEX COD/J&T Express /Motorex/Poslaju<br />
+                Currently we only available to ship to Peninsular Malaysia, Sabah and Sarawak.<br />
                 All addresses are unable to make any adjustment once already in processing. (unless special case)
-            </span>
-            <span>Self-Collect</span>
-            <span>You can choose to collect your purchases at Hermo’s Office, located in Johor Bahru, Johor.</span>
+            </span><br />
+            <span>Self-Collect</span><br />
+            <span>You can choose to collect your purchases at Hermo’s Office, located in Johor Bahru, Johor.</span><br />
             <span>
-                Setia Business Park 2,
-                28, Jalan Perniagaan Setia 1/5,
-                Taman Perniagaan Setia,
+                Setia Business Park 2,<br />
+                28, Jalan Perniagaan Setia 1/5,<br />
+                Taman Perniagaan Setia,<br />
                 81100, Johor bahru, Johor.
-            </span>
-            <span>Please contact 07-5623567 or admin@hermo.my for further information and please provide your order details .</span>
-            <span>Delivery Time</span>
+            </span><br />
+            <span>Please contact 07-5623567 or admin@hermo.my for further information and please provide your order details .</span><br />
+            <span>Delivery Time</span><br />
             <span>
-                We try our best to prepare your orders and send them out as soon as we can but orders can only be shipped during working days and hours. We hope our beloved customers might note that
-                HERMO does not represent courier companies, and as much as we hope for parcels to arrive on time, parcels can suffer delays beyond our control. However, please rest assured we&#39;re on
+                We try our best to prepare your orders and send them out as soon as we can but orders can only be shipped during working days and hours. We hope our beloved customers might note that<br />
+                HERMO does not represent courier companies, and as much as we hope for parcels to arrive on time, parcels can suffer delays beyond our control. However, please rest assured we&#39;re on<br />
                 your side and will help in any way we can.
-            </span>
-            <span>Office Hours are from Monday to Friday, excluding Public Holidays.</span>
-            <span>During Promotion Periods</span>
+            </span><br />
+            <span>Office Hours are from Monday to Friday, excluding Public Holidays.</span><br />
+            <span>During Promotion Periods</span><br />
             <span>
-                During peak periods, there may be some delay in shipping. Please bear with us as we could not fulfil the usual next day delivery promise due to large volume of orders, transaction and
+                During peak periods, there may be some delay in shipping. Please bear with us as we could not fulfil the usual next day delivery promise due to large volume of orders, transaction and<br />
                 availability issues.
-            </span>
+            </span><br />
             <span>
-                For more details or inquiries on shipping issues,
+                For more details or inquiries on shipping issues,<br />
                 Please contact us at: 07-5623567 or admin@hermo.my
+            </span><br />
+            <hr />
+        </div>
+    )
+
+    renderReturnPolicy = () => (
+        <div>
+            <span>RETURN POLICY</span><br />
+            <span>Unconditional Return Policy</span><br />
+            <span>If you are not satisfied with your purchase (damaged during shipment or wrong item/type/shade/etc), you can send it back to us.</span><br />
+            <ul>
+                <li>Returns must be made within 14 days from date of purchase.</li><br />
+                <li>Damaged items must be returned together with their original box and receipt.</li><br />
+                <li>Items bought from Hermo Global or promotional events (e.g. Anniversary, MyCyberSale or X&#39;MAS) are not eligible for return and exchange.</li><br />
+            </ul>
+            <span>
+                Kindly inform Customer Service before returning the item otherwise the request will not be processed.<br />
+                Your return item will be assigned to a courier of our choosing.<br />
+                Please provide the return parcel tracking number for all items.
+            </span><br />
+            <span>What will I get back after returning the item(s)?</span><br />
+            <span>You can choose to have either a prorated refund ( if order has applied promotion code ) to your Hermo Account or bank account ( within 1-14 working days)</span><br />
+            <span>What about postage charges?</span><br />
+            <span>
+                Customers would have to bear the postage fees for shipping item(s) back to us during the return process,<br />
+                then we will refund a maximum of RM 5.00 for your return shipping charges to your account.<br />
+                Please allow 14 working days for this process to be completed.<br />
+                For more information, kindly email to admin@hermo.my<br />
+            </span>
+            <span>How can I return my purchase?</span><br />
+            <span>
+                Kindly email your inquiry to admin@hermo.my with the subject “Return Item”. We will assist you as soon as possible.<br />
+                Please allow 7 working days for your inquiry to be processed.<br />
+                To make the process run smoother and faster, do email your inquiry with picture(s) of your item(s) & its condition and your order details for record purpose.<br />
+            </span>
+            <span>How long will it take to receive my refund/new item(s)?</span><br />
+            <span>
+                Please allow a minimum of 14 working days from the date we receive your return package.<br />
+                Refund will based on customer actual paid - Final payment to refund, voucher cannot change into cash term
+            </span><br />
+            <span>I need more information about this. Who do I contact?</span><br />
+            <span>
+                You can contact our customer service at 07-5623567 or email your inquiry to admin@hermo.my<br />
+                Our customer service will contact you during working days and hours.<br />
             </span>
             <hr />
+        </div>
+    )
+
+    renderMembership = () => (
+        <div>
+            <span>MEMBERSHIP</span><br />
+            <span>VIP Level & Privileges</span><br />
+            <img src="https://devshop2.hermo.my/hershop/modules/static/privilege.jpg" alt="" />
+            <span>MEMBERSHIP</span><br />
+            <hr />
+            <span>GOLD & PLATINUM MEMBERSHIP</span><br />
+            <span>Thank you for your continuous support! You mean so much to us.</span><br />
+            <div>
+                <div>
+                    <span>GOLD MEMBER</span>
+                    <img src="https://devshop2.hermo.my/hershop/modules/static/15.png" alt="" />
+                    <span>ENJOY</span>
+                    <span>1.5%OFF</span>
+                    <span>EVERYTIME CHECKOUT</span>
+                    <span>Awarded to who spends more than RM 1000 in HERMO</span>
+                </div>
+                <div>
+                    <span>PLATINUM MEMBER</span>
+                    <img src="https://devshop2.hermo.my/hershop/modules/static/30.png" alt="" />
+                    <span>ENJOY</span>
+                    <span>3.0%OFF</span>
+                    <span>EVERYTIME CHECKOUT</span>
+                    <span>Awarded to who spends more than RM 2000 in HERMO</span>
+                </div>
+            </div>
+            <span>
+                Whenever you have reached a certain total expenditure on our website, we will automatically upgrade your account to Gold Member or Platinum Member. With the exclusive membership,<br />
+                you can enjoy further discounts when you are shopping with us and you can even unlock different kinds of new features on our new website!
+            </span><br />
+            <span>What are you still waiting for? Come and experience it!</span><br />
+            <span>Privilege discounts are not valid for use during event period and not applicable when a promotion/voucher code has been applied to an order. T&C apply.</span><br />
+            <hr />
+        </div>
+    )
+
+    renderContactUs = () => (
+        <div>
+            <span>CONTACT US</span><br />
+            <span>We want your experience with Hermo to be worry-free.</span><br />
+            <span>Please contact us if you have any questions or encountered any problems when shopping at Hermo.</span><br />
+            <span>YOU CAN CONTACT US VIA:</span><br />
+            <span><i className="fa fa-envelope" aria-hidden="true"></i>EMAIL: admin@hermo.my</span><br />
+            <span>We will reply to your inquiry within 48 working hours.</span><br />
+            <span><i className="fa fa-phone" aria-hidden="true"></i>PHONE: 07-5623567</span><br />
+            <span>Mon - fri (except public holiday) 9.00AM - 6.00PM </span><br />
+            <span>(UTC +08:00) Malaysia Time</span><br />
+            <span><i className="fa fa-map-marker" aria-hidden="true"></i>ADDRESS</span><br />
+            <span>
+                Setia Business Park 2,<br />
+                28, Jalan Perniagaan Setia 1/5,<br />
+                Taman Perniagaan Setia,<br />
+                81100, Johor bahru, Johor.
+            </span><br />
+            <span>Follow our journey to beauty daily</span><br />
+            <span><i className="fa fa-facebook-square"></i></span>
+            <span><i className="fa fa-google-plus-official" aria-hidden="true"></i></span>
+            <span><i className="fa fa-instagram" aria-hidden="true"></i></span>
+            <hr />
+        </div>
+    )
+
+    renderPrivacyPolicy = () => (
+        <div>
+            <span>
+                At Hermo MY, we take your privacy seriously! Please read this Statement of Privacy to be more aware about our policy on collecting, using and disclosing personal information. Hermo MY<br />
+                occasionally update this Statement of Privacy to reflect company and user’s feedback. We encourage you to review this Statement periodically to be informed of how we are protecting your<br />
+                personal information.
+            </span><br />
+            <span>Privacy Statement</span><br />
+            <span>Hermo MY treats personal information, such as your name, email address or telephone number as confidential. We promise your personal information will not be disclosed to any third parties. We will not use or sell your personal information to third party unless:</span><br />
+            <ul>
+                <li>Users agreed to share with third party;</li><br />
+                <li>Users make known to public of their personal information voluntarily and willingly in order to enjoy products or services;</li><br />
+                <li>Violation of Hermo MY&#39;s Terms of Use, or as otherwise required by the law.</li><br />
+            </ul>
+            <span>Instructions For Use</span><br />
+            <span>
+                Hermo MY is committed to protecting the security of your personal information. We use password set up by users to help protect your personal information from unauthorized access, use,<br />
+                or disclosure. Users are fully responsible for protecting their password. If users are using public computer, please logout before leaving to prevent disclosure of personal information.
+            </span><br />
+            <span>Terms</span><br />
+            <span>
+                By using this site and providing information as a registered user, you are in agreement with our privacy policy. We are not responsible for the breach of our privacy statement or other<br />
+                contents on websites outside the Hermo MY domain name.
+            </span><br />
+            <hr />
+        </div>
+    )
+
+    renderUserTerm = () => (
+        <div>
+            <span>USER TERM</span>
+            <span>
+                Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our
+                privacy policy govern Hermo’s relationship with you in relation to this website. If you disagree with any part of these terms and conditions, please do not use our website.
+            </span>
+            <span>The term &#39;Hermo&#39; or ‘us’ or ‘we’ refers to the owner of the website. The term ‘you’ refers to the user or viewer of our <website className=""></website></span>
+            <span>The use of this website is subject to the following terms of use:</span>
+            <ul>
+                <li>The content of the pages of this website is for your general information and use only. It is subject to change without notice.</li>
+                <li>This website uses cookies to monitor browsing preferences. If you do allow cookies to be used, the following personal information may be stored by us for use by third parties.</li>
+                <li>
+                    Neither we nor any third parties provide any warranty or guarantee as to the accuracy, timeliness, performance, completeness or suitability of the information and materials found
+                    or offered on this website for any particular purpose. You acknowledge that such information and materials may contain inaccuracies or errors and we expressly exclude liability for
+                    any such inaccuracies or errors to the fullest extent permitted by law.
+                </li>
+                <li>
+                    Your use of any information or materials on this website is entirely at your own risk, for which we shall not be liable. It shall be your own responsibility to ensure that any products,
+                    services or information available through this website meet your specific requirements.
+                </li>
+                <li>
+                    This website contains material which is owned by or licensed to us. This material includes, but is not limited to, the design, layout, look, appearance and graphics. Reproduction is
+                    prohibited other than in accordance with the copyright notice, which forms part of these terms and conditions.
+                </li>
+                <li>All trademarks reproduced in this website, which are not the property of, or licensed to the operator, are acknowledged on the website.</li>
+                <li>Unauthorised use of this website may give rise to a claim for damages and/or be a criminal offence.</li>
+                <li>
+                    From time to time, this website may also include links to other websites. These links are provided for your convenience to provide further information. They do not signify that we endorse
+                    the website(s). We have no responsibility for the content of the linked website(s).
+                </li>
+                <li>Your use of this website and any dispute arising out of such use of the website is subject to the laws of Malaysia.</li>
+            </ul>
+            <span>Website Disclaimer</span>
+            <span>
+                The information contained in this website is for general information purposes only. The information is provided by Hermo and while we endeavour to keep the information up to date and correct,
+                we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the website or the information,
+                products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is therefore strictly at your own risk.
+            </span>
+            <span>
+                In no event will we be liable for any loss or damage including without limitation, indirect or consequential loss or damage, or any loss or damage whatsoever arising from loss of data or
+                profits arising out of, or in connection with, the use of this website.
+            </span>
+            <span>
+                Through this website you are able to link to other websites which are not under the control of Hermo. We have no control over the nature, content and availability of those sites. The inclusion
+                of any links does not necessarily imply a recommendation or endorse the views expressed within them.
+            </span>
+            <span>
+                Every effort is made to keep the website up and running smoothly. However, Hermo takes no responsibility for, and will not be liable for, the website being temporarily unavailable due to
+                technical issues beyond our control.
+            </span>
         </div>
     )
 
@@ -284,6 +473,11 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 {this.renderPartnership()}
                 {this.renderCredit()}
                 {this.renderShipping()}
+                {this.renderReturnPolicy()}
+                {this.renderMembership()}
+                {this.renderContactUs()}
+                {this.renderPrivacyPolicy()}
+                {this.renderUserTerm()}
             </div>
         );
     }
