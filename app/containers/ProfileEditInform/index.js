@@ -22,11 +22,23 @@ import { getInformChoice, getUserInform } from './actions';
 export class ProfileEditInform extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         datestyle: 'show',
+        year: new Date(Date.now()).getUTCFullYear(),
     }
 
     componentWillMount() {
         this.props.dispatch(getInformChoice());
         this.props.dispatch(getUserInform());
+    }
+
+    compareCheckboxBetweenTwo = (item, userchoice) => {
+        userchoice.map((choice) => {
+            if (choice.id === item.id) {
+                console.log(choice.id === item.id);
+                return true;
+            }
+            return false;
+        });
+        return false;
     }
 
     renderForm = () => {
@@ -57,35 +69,43 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
                         :
                         <div>
                             <select>
+                                <option value="Month">Year</option>
+                                {[...Array(this.state.year - 1918)].map((e, i) => <option key={this.state.year - i}>{ this.state.year - i }</option>)}
+                            </select>
+                            <select>
                                 <option value="Month">Month</option><option value="Jan">Jan</option><option value="Feb">Feb</option>
                                 <option value="Mar">Mar</option><option value="Apr">Apr</option><option value="May">May</option>
                                 <option value="Jun">Jun</option><option value="Jul">Jul</option><option value="Aug">Aug</option>
                                 <option value="Sep">Sep</option><option value="Oct">Oct</option><option value="Nov">Nov</option>
                                 <option value="Dec">Dec</option>
                             </select>
+                            <select>
+                                <option value="Month">Day</option>
+                                {[...Array(31)].map((e, i) => <option key={i}>{i + 1}</option>)}
+                            </select>
                         </div>
                 }
                 <span>Skin Tone</span>
                 {
                     choice.skin_tone.items.map((item) => (
-                        <div>
-                            <input type="radio" value={item} checked={item.id === user.skin.tone.id} />{item.name}
+                        <div key={item.id}>
+                            <input type="radio" value={item} defaultChecked={item.id === user.skin.tone.id} />{item.name}
                         </div>
                     ))
                 }
                 <span>Skin Type</span>
                 {
                     choice.skin_type.items.map((item) => (
-                        <div>
-                            <input type="radio" value={item} checked={item.id === user.skin.type.id} />{item.name}
+                        <div key={item.id}>
+                            <input type="radio" value={item} defaultChecked={item.id === user.skin.type.id} />{item.name}
                         </div>
                     ))
                 }
                 <span>Skin Concern</span>
                 {
                     choice.skin_problem.items.map((item) => (
-                        <div>
-                            <input type="checkbox" value={item} checked={user.skin.concerns.items.includes(item)} />{item.name}
+                        <div key={item.id}>
+                            <input type="checkbox" value={item} defaultChecked={this.compareCheckboxBetweenTwo(item, user.skin.concerns)} />{item.name}
                         </div>
                     ))
                 }

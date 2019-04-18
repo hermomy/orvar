@@ -64,6 +64,7 @@ const buttonSection = [
         child: [
             {
                 name: 'About',
+                key: '/about',
             },
             {
                 name: 'Privacy Policy',

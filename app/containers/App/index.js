@@ -38,6 +38,7 @@ import ProfileOrder from 'containers/ProfileOrder';
 import ProfileWishlist from 'containers/ProfileWishlist';
 import ProfileWallet from 'containers/ProfileWallet';
 import ProfileReview from 'containers/ProfileReview';
+import AboutUs from 'containers/AboutUs';
 
 import Header from 'components/Header';
 import TabBar from 'components/TabBar';
@@ -136,6 +137,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         <Route exact={true} path="/wishlist" component={ProfileWishlist} />
                         <Route exact={true} path="/wallet" component={ProfileWallet} />
                         <Route exact={true} path="/review" component={ProfileReview} />
+                        <Route exact={true} path="/about" component={AboutUs} />
                         <Route exact={true} path="/" component={HomePage} />
                         <Route exact={true} path="/profile1/" component={ProfileWholePage} />
                         <Route exact={true} path="/profile" component={ProfilePage} />

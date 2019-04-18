@@ -170,7 +170,6 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         );
     }
 
-    // ????? WHERE TO GET FROM HERMO
     // shipping fee need?
     renderPaymentInformation = (orderlistdetail) => (
         <div style={{ backgroundColor: 'lime' }}>
