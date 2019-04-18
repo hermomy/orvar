@@ -411,54 +411,289 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderUserTerm = () => (
         <div>
-            <span>USER TERM</span>
+            <span>USER TERM</span><br />
             <span>
-                Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our
+                Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our<br />
                 privacy policy govern Hermo’s relationship with you in relation to this website. If you disagree with any part of these terms and conditions, please do not use our website.
-            </span>
-            <span>The term &#39;Hermo&#39; or ‘us’ or ‘we’ refers to the owner of the website. The term ‘you’ refers to the user or viewer of our <website className=""></website></span>
-            <span>The use of this website is subject to the following terms of use:</span>
+            </span><br />
+            <span>The term &#39;Hermo&#39; or ‘us’ or ‘we’ refers to the owner of the website. The term ‘you’ refers to the user or viewer of our <website className=""></website></span><br />
+            <span>The use of this website is subject to the following terms of use:</span><br />
             <ul>
-                <li>The content of the pages of this website is for your general information and use only. It is subject to change without notice.</li>
-                <li>This website uses cookies to monitor browsing preferences. If you do allow cookies to be used, the following personal information may be stored by us for use by third parties.</li>
+                <li>The content of the pages of this website is for your general information and use only. It is subject to change without notice.</li><br />
+                <li>This website uses cookies to monitor browsing preferences. If you do allow cookies to be used, the following personal information may be stored by us for use by third parties.</li><br />
                 <li>
-                    Neither we nor any third parties provide any warranty or guarantee as to the accuracy, timeliness, performance, completeness or suitability of the information and materials found
-                    or offered on this website for any particular purpose. You acknowledge that such information and materials may contain inaccuracies or errors and we expressly exclude liability for
+                    Neither we nor any third parties provide any warranty or guarantee as to the accuracy, timeliness, performance, completeness or suitability of the information and materials found<br />
+                    or offered on this website for any particular purpose. You acknowledge that such information and materials may contain inaccuracies or errors and we expressly exclude liability for<br />
                     any such inaccuracies or errors to the fullest extent permitted by law.
-                </li>
+                </li><br />
                 <li>
-                    Your use of any information or materials on this website is entirely at your own risk, for which we shall not be liable. It shall be your own responsibility to ensure that any products,
+                    Your use of any information or materials on this website is entirely at your own risk, for which we shall not be liable. It shall be your own responsibility to ensure that any products,<br />
                     services or information available through this website meet your specific requirements.
-                </li>
+                </li><br />
                 <li>
-                    This website contains material which is owned by or licensed to us. This material includes, but is not limited to, the design, layout, look, appearance and graphics. Reproduction is
+                    This website contains material which is owned by or licensed to us. This material includes, but is not limited to, the design, layout, look, appearance and graphics. Reproduction is<br />
                     prohibited other than in accordance with the copyright notice, which forms part of these terms and conditions.
-                </li>
-                <li>All trademarks reproduced in this website, which are not the property of, or licensed to the operator, are acknowledged on the website.</li>
-                <li>Unauthorised use of this website may give rise to a claim for damages and/or be a criminal offence.</li>
+                </li><br />
+                <li>All trademarks reproduced in this website, which are not the property of, or licensed to the operator, are acknowledged on the website.</li><br />
+                <li>Unauthorised use of this website may give rise to a claim for damages and/or be a criminal offence.</li><br />
                 <li>
-                    From time to time, this website may also include links to other websites. These links are provided for your convenience to provide further information. They do not signify that we endorse
+                    From time to time, this website may also include links to other websites. These links are provided for your convenience to provide further information. They do not signify that we endorse<br />
                     the website(s). We have no responsibility for the content of the linked website(s).
-                </li>
-                <li>Your use of this website and any dispute arising out of such use of the website is subject to the laws of Malaysia.</li>
+                </li><br />
+                <li>Your use of this website and any dispute arising out of such use of the website is subject to the laws of Malaysia.</li><br />
             </ul>
             <span>Website Disclaimer</span>
             <span>
-                The information contained in this website is for general information purposes only. The information is provided by Hermo and while we endeavour to keep the information up to date and correct,
-                we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the website or the information,
+                The information contained in this website is for general information purposes only. The information is provided by Hermo and while we endeavour to keep the information up to date and correct,<br />
+                we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the website or the information,<br />
                 products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is therefore strictly at your own risk.
-            </span>
+            </span><br />
             <span>
-                In no event will we be liable for any loss or damage including without limitation, indirect or consequential loss or damage, or any loss or damage whatsoever arising from loss of data or
+                In no event will we be liable for any loss or damage including without limitation, indirect or consequential loss or damage, or any loss or damage whatsoever arising from loss of data or<br />
                 profits arising out of, or in connection with, the use of this website.
-            </span>
+            </span><br />
             <span>
-                Through this website you are able to link to other websites which are not under the control of Hermo. We have no control over the nature, content and availability of those sites. The inclusion
+                Through this website you are able to link to other websites which are not under the control of Hermo. We have no control over the nature, content and availability of those sites. The inclusion<br />
                 of any links does not necessarily imply a recommendation or endorse the views expressed within them.
+            </span><br />
+            <span>
+                Every effort is made to keep the website up and running smoothly. However, Hermo takes no responsibility for, and will not be liable for, the website being temporarily unavailable due to<br />
+                technical issues beyond our control.
+            </span><br />
+            <hr />
+        </div>
+    )
+
+    renderFAQ = () => (
+        <div>
+            <span>FAQ</span><br />
+            <span>How Can We Help You?</span><br />
+            <span>GENERAL</span><br />
+            <ul>
+                <li>What is Hermo? How does Hermo work?</li><br />
+                <li>Help! I don’t know how to buy things online.</li><br />
+            </ul>
+            <span>PAYMENT</span><br />
+            <ul>
+                <li>How to make payment?</li><br />
+                <li>What if I can’t make payment online?</li><br />
+            </ul>
+            <span>SHIPPING</span><br />
+            <ul>
+                <li>How much is your delivery fees?</li><br />
+                <li>When will I receive my purchase?</li><br />
+                <li>Can I just buy 2 Beauty Grab’s items and get free shipping?</li><br />
+            </ul>
+            <span>ORDER</span><br />
+            <ul>
+                <li>How can I check the status of my order(s)?</li><br />
+                <li>What will I get back after returning the item(s) or order item is out of stock?</li><br />
+                <li>Why is the item in my shopping cart out of stock?</li><br />
+                <li>What can I do if I fail to checkout due to an item being out of stock?</li><br />
+            </ul>
+            <span>RETURN</span><br />
+            <ul>
+                <li>How do I return an item?</li><br />
+            </ul>
+            <span>PROMOTIONS</span><br />
+            <ul>
+                <li>Do you offer free samples?</li><br />
+                <li>What is gift with purchase (GWP)?</li><br />
+                <li>Are the products offered at Hermo original since we get so much discount?</li><br />
+                <li>Why is my order cancelled?</li><br />
+            </ul>
+            <span>CREDITS</span><br />
+            <ul>
+                <li>Can I post 3 photos of 1 photo on my Instagram and get 150 credits?</li><br />
+                <li>Are my credits transferable to cash?</li><br />
+            </ul>
+            <span>PARTNERSHIP</span><br />
+            <ul>
+                <li>How can we sell on Hermo?</li><br />
+            </ul>
+        </div>
+    )
+
+    renderFAQGeneral = () => (
+        <div>
+            <span>GENERAL</span><br />
+            <hr />
+            <span>What is Hermo? How does Hermo work?</span><br />
+            <span>
+                Hermo MY is an online beauty shop - a beauty collection, - whose mission is to bring gorgeousness straight to you by offering your favourite beauty products from across Asia. There are<br />
+                thousands of people who choose to buy their skincare and beauty products online, but what makes us different? Our aim is to make your shopping experience simple and affordable, with<br />
+                the best range of brands available. Hermo is where you discover beauty products offered at shocking prices and share your beauty tips with friends.
+            </span><br />
+            <span>
+                We are certified partners and distributors of the brands we carry so you&#39;ll only get 100% Authentic products delivered to you. As we are an online beauty store with no physical shops and<br />
+                overheads, you know we are passing great savings on to you, ensuring that you are offered only the best value in the comfort of your home!
+            </span><br />
+            <span>Help! I don’t know how to buy things online.</span><br />
+            <span>Here we will show you a quick and simple guide of steps from register till make payment.</span><br />
+            <ol>
+                <li>Register an account as a user at www.hermo.my</li><br />
+                <li>Shopping in the website</li><br />
+                <li>Add to cart the desire item(s)</li><br />
+                <li>Check out the shopping cart</li><br />
+                <li>Check the desired item quantity or other detail</li><br />
+                <li>Click “Checkout now” for your shopping cart</li><br />
+                <li>Fill up shipping information and click “Add new address”</li><br />
+                <li>Choose for courier arrangement</li><br />
+                <li>Choose the payment method</li><br />
+                <li>Apply if ANY promotion/voucher code OR credits OR balance</li><br />
+                <li>Check out order</li><br />
+                <li>Get the order ID</li><br />
+                <li>Make payment</li><br />
+                <li>Inform payment thru call/email/FB inbox</li><br />
+            </ol>
+        </div>
+    )
+
+    renderFAQPayment = () => {
+        if (dataChecking(this.props, 'aboutUs', 'data', 'paymentBankData')) {
+            return null;
+        }
+        return (
+            <div>
+                <span>PAYMENT</span><br />
+                <hr />
+                <span>How to make payment?</span><br />
+                <span>
+                    Hermo MY supports MOL Pay Gateway currently is the best, safest and award-winning online payment gateway that facilitates online merchants or e-commerce merchants&#39; online store in<br />
+                    Malaysia to process online transactions in Ringgit Malaysia currency ( MYR ) in large extent and securely.You will only see the payment page after clicked ‘check out’ button. MOL Pay accepts<br />
+                    comprehensive of Online Payment Options such as:
+                </span><br />
+                <span>What if I can&#39;t make payment online?</span><br />
+                <span>You can choose &#39;&#39;Manual Transfer&#39;&#39; when you check out. Then, send an email to admin@hermo.my to inform regarding your successful payment. Payment details must provide and order ID.</span><br />
+                {
+                    this.props.aboutUs.data.paymentBankData.map((bankData) => (
+                        <div key={bankData.id}>
+                            <span>Bank Name : {bankData.name}</span>
+                            <span>Account Name : {bankData.account_holder}</span>
+                            <span>Account No. : {bankData.account_number}</span>
+                        </div>
+                    ))
+                }
+            </div>
+        );
+    }
+
+    renderFAQShipping = () => (
+        <div>
+            <span>SHIPPING</span>
+            <hr />
+            <span>How much is your delivery fees?</span><br />
+            <span>Shipping fee calculation is as below :</span><br />
+            <span>
+                West Malaysia - RM 6.80 for all courier service for single item purchased except Taqbin.<br />
+                East Malaysia - RM 12 for Poslaju courier service. Free shipping available if you spend RM 150 and above in a single receipt.
+            </span><br />
+            <span>
+                We now also provide TaQBin service for those who want to receive their purchase over the weekends or holidays. A flat rate of RM 10 shipping fee is applicable in order to use this awesome<br />
+                Japanese courier service. TaQBin is only available in West Malaysia certain area as they have yet to expand their services to regions in East Malaysia.
+            </span><br />
+            <span>When will I receive my purchase?</span><br />
+            <span>
+                Our customers call it &#39;&#39;Flash Shipping&#39;&#39;!<br />
+                Hermo aims to deliver within the time agreed upon when you checkout. Under normal circumstance, you will be able to receive your purchase within 1-3 working days.
+            </span><br />
+            <span>
+                However, we are unable to guarantee that all orders will be delivered within the stipulated time frame. Our aim is to have your items shipped out from our warehouse as fast as possible<br />
+                except for some circumstances where unfortunately it is beyond our control for example courier service delays, emergency, or items out of stock.
+            </span><br />
+            <span>Please do not hesitate to contact us for help via email: admin@hermo.my.</span><br />
+            <span>Can I buy 2 Beauty Grab’s items and get free shipping?</span><br />
+            <span>No, Beauty Grab items not entitled for FREE shipping.</span><br />
+        </div>
+    )
+
+    renderFAQOrder = () => (
+        <div>
+            <span>ORDER</span><br />
+            <hr />
+            <span>How can I check the status of my order(s)?</span><br />
+            <span>Please check in &#39;&#39;Order&#39;&#39;. After your order is posted out, your Order status will change from &#39;&#39;Paid&#39;&#39; to &#39;&#39;Posted&#39;&#39; with a courier company tracking number attached. ( with link )</span><br />
+            <span>What will I get back after returning the item(s) or order item is out of stock?</span><br />
+            <span>You can choose to have either a prorated refund ( if promotion code has been applied to order ) to your Hermo Account or bank account ( within 1-14 working days)</span><br />
+            <span>Why is the item in my shopping cart out of stock?</span><br />
+            <span>Hermo will not guarantee the availability of items until the checkout process is completed with payment.</span><br />
+            <span>What can I do if I fail to checkout due to an item being out of stock?</span><br />
+            <span>You will have to remove the out of stock items from your cart before proceeding to check out.</span><br />
+        </div>
+    )
+
+    renderFAQReturn = () => (
+        <div>
+            <span>RETURN</span>
+            <hr />
+            <span>How do I return an item?</span><br />
+            <span>We want you to absolutely love your Hermo purchase. If you&#39;d like to return or exchange an item, we will do everything we can (within reason) on this journey to gorgeousness together!</span><br />
+            <span>Please e-mail us a Refund Application Form in the following format:</span><br />
+            <span>
+                Name: HERMO Account Username<br />
+                Register email:<br />
+                Address:<br />
+                Contact No.: Telephone / Mobile<br />
+                Order No.:<br />
+                Product Name:<br />
+                Receive Date:<br />
+                Return Date:<br />
+                Reason: (For feedback purposes)<br />
+                Price:<br />
+                Postage/Mailing Cost: (Please attach a copy of postag receipt/document<br />
+                Bank account details (full name/bank account number/which bank)<br />
             </span>
             <span>
-                Every effort is made to keep the website up and running smoothly. However, Hermo takes no responsibility for, and will not be liable for, the website being temporarily unavailable due to
-                technical issues beyond our control.
+                Once you have completed the form, please email it to us at admin@hermo.my. If you have any difficulties or problems, please do not hesitate to contact us at 07-5623567 . Our administrator<br />
+                will contact you once your request is confirmed, and then we will refund to you within 1 -14 working days.
+            </span><br />
+        </div>
+    )
+
+    renderFAQPromotion = () => (
+        <div>
+            <span>PROMOTION</span>
+            <hr />
+            <span>Do you offer free samples?</span><br />
+            <span>Yes. All our free samples are supplied by our supplier, we will giving to our customer free sample while stock last .</span><br />
+            <span>What is gift with purchase (GWP)?</span><br />
+            <span>
+                Gift With Purchase it’s actually a way to try a new product that provided by our supplier , it’s limited in stock , therefore kindly add your GWP before your check out. Items featured in Beauty<br />
+                Bundle Box, Hermo Pick, and Beauty Grab are not entitled for free gift redemption with their purchases.
+            </span><br />
+            <span>Are the products offered at Hermo original since we get so much discount?</span><br />
+            <span>
+                Yes! At Hermo MY, we promise you that every product that are being group sold is 100% authentic. Providing you with the highest quality service and original goods is our top priority. Beauty<br />
+                products for you at low prices with many great deals you will love! Also, we are able to pass on the savings to you since we do not have a physical storefront and related overhead expenses.<br />
+                :)
+            </span><br />
+            <span>Why is my order cancelled?</span><br />
+            <span>
+                Hermo reserves the right to cancel or modify any order if a customer’s purchase behaviour is seen to be suspicious or potentially fraudulent. If you have an enquiries, kindly contact our<br />
+                Customer Service via admin@hermo.my.
+            </span><br />
+        </div>
+    )
+
+    renderFAQCredit = () => (
+        <div>
+            <span>CREDIT</span>
+            <hr />
+            <span>Can I post 3 photos of 1 photo on my Instagram and get 150 credits?</span><br />
+            <span>No. One order only can redeem one instagram credit .</span><br />
+            <span>Are my credits transferable to cash?</span><br />
+            <span>No. All the voucher cannot transfer to cash or credits.</span><br />
+        </div>
+    )
+
+    renderFAQPartnership = () => (
+        <div>
+            <span>PARTNERSHIP</span>
+            <hr />
+            <span>How can we sell on Hermo?</span>
+            <span>
+                We are always on the lookout for beauty suppliers and brand corporations.<br />
+                Please write to us at marketing@hermo.my , our team member will respond to you as soon as possible.
             </span>
         </div>
     )
@@ -478,6 +713,15 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 {this.renderContactUs()}
                 {this.renderPrivacyPolicy()}
                 {this.renderUserTerm()}
+                {this.renderFAQ()}
+                {this.renderFAQGeneral()}
+                {this.renderFAQPayment()}
+                {this.renderFAQShipping()}
+                {this.renderFAQOrder()}
+                {this.renderFAQReturn()}
+                {this.renderFAQPromotion()}
+                {this.renderFAQCredit()}
+                {this.renderFAQPartnership()}
             </div>
         );
     }
