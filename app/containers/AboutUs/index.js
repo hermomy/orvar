@@ -474,46 +474,46 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
             <span>How Can We Help You?</span><br />
             <span>GENERAL</span><br />
             <ul>
-                <li>What is Hermo? How does Hermo work?</li><br />
-                <li>Help! I don’t know how to buy things online.</li><br />
+                <a href="#general1"><li>What is Hermo? How does Hermo work?</li></a><br />
+                <a href="#general2"><li>Help! I don’t know how to buy things online.</li></a><br />
             </ul>
             <span>PAYMENT</span><br />
             <ul>
-                <li>How to make payment?</li><br />
-                <li>What if I can’t make payment online?</li><br />
+                <a href="#payment1"><li>How to make payment?</li></a><br />
+                <a href="#payment1"><li>What if I can’t make payment online?</li></a><br />
             </ul>
             <span>SHIPPING</span><br />
             <ul>
-                <li>How much is your delivery fees?</li><br />
-                <li>When will I receive my purchase?</li><br />
-                <li>Can I just buy 2 Beauty Grab’s items and get free shipping?</li><br />
+                <a href="#shipping1"><li>How much is your delivery fees?</li></a><br />
+                <a href="#shipping2"><li>When will I receive my purchase?</li></a><br />
+                <a href="#shipping3"><li>Can I just buy 2 Beauty Grab’s items and get free shipping?</li></a><br />
             </ul>
             <span>ORDER</span><br />
             <ul>
-                <li>How can I check the status of my order(s)?</li><br />
-                <li>What will I get back after returning the item(s) or order item is out of stock?</li><br />
-                <li>Why is the item in my shopping cart out of stock?</li><br />
-                <li>What can I do if I fail to checkout due to an item being out of stock?</li><br />
+                <a href="#order1"><li>How can I check the status of my order(s)?</li></a><br />
+                <a href="#order2"><li>What will I get back after returning the item(s) or order item is out of stock?</li></a><br />
+                <a href="#order3"><li>Why is the item in my shopping cart out of stock?</li></a><br />
+                <a href="#order4"><li>What can I do if I fail to checkout due to an item being out of stock?</li></a><br />
             </ul>
             <span>RETURN</span><br />
             <ul>
-                <li>How do I return an item?</li><br />
+                <a href="#return1"><li>How do I return an item?</li></a><br />
             </ul>
             <span>PROMOTIONS</span><br />
             <ul>
-                <li>Do you offer free samples?</li><br />
-                <li>What is gift with purchase (GWP)?</li><br />
-                <li>Are the products offered at Hermo original since we get so much discount?</li><br />
-                <li>Why is my order cancelled?</li><br />
+                <a href="#promotion1"><li>Do you offer free samples?</li></a><br />
+                <a href="#promotion2"><li>What is gift with purchase (GWP)?</li></a><br />
+                <a href="#promotion3"><li>Are the products offered at Hermo original since we get so much discount?</li></a><br />
+                <a href="#promotion4"><li>Why is my order cancelled?</li></a><br />
             </ul>
             <span>CREDITS</span><br />
             <ul>
-                <li>Can I post 3 photos of 1 photo on my Instagram and get 150 credits?</li><br />
-                <li>Are my credits transferable to cash?</li><br />
+                <a href="#credit1"><li>Can I post 3 photos of 1 photo on my Instagram and get 150 credits?</li></a><br />
+                <a href="#credit2"><li>Are my credits transferable to cash?</li></a><br />
             </ul>
             <span>PARTNERSHIP</span><br />
             <ul>
-                <li>How can we sell on Hermo?</li><br />
+                <a href="#partnership1"><li>How can we sell on Hermo?</li></a><br />
             </ul>
         </div>
     )
@@ -522,7 +522,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>GENERAL</span><br />
             <hr />
-            <span>What is Hermo? How does Hermo work?</span><br />
+            <a id="genral1"><span>What is Hermo? How does Hermo work?</span></a><br />
             <span>
                 Hermo MY is an online beauty shop - a beauty collection, - whose mission is to bring gorgeousness straight to you by offering your favourite beauty products from across Asia. There are<br />
                 thousands of people who choose to buy their skincare and beauty products online, but what makes us different? Our aim is to make your shopping experience simple and affordable, with<br />
@@ -532,7 +532,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 We are certified partners and distributors of the brands we carry so you&#39;ll only get 100% Authentic products delivered to you. As we are an online beauty store with no physical shops and<br />
                 overheads, you know we are passing great savings on to you, ensuring that you are offered only the best value in the comfort of your home!
             </span><br />
-            <span>Help! I don’t know how to buy things online.</span><br />
+            <a id="genral2"><span>Help! I don’t know how to buy things online.</span></a><br />
             <span>Here we will show you a quick and simple guide of steps from register till make payment.</span><br />
             <ol>
                 <li>Register an account as a user at www.hermo.my</li><br />
@@ -561,14 +561,14 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
             <div>
                 <span>PAYMENT</span><br />
                 <hr />
-                <span>How to make payment?</span><br />
+                <a id="payment1"><span>How to make payment?</span></a><br />
                 <span>
                     Hermo MY supports MOL Pay Gateway currently is the best, safest and award-winning online payment gateway that facilitates online merchants or e-commerce merchants&#39; online store in<br />
                     Malaysia to process online transactions in Ringgit Malaysia currency ( MYR ) in large extent and securely.You will only see the payment page after clicked ‘check out’ button. MOL Pay accepts<br />
                     comprehensive of Online Payment Options such as:
                 </span><br />
-                <span>What if I can&#39;t make payment online?</span><br />
-                <span>You can choose &#39;&#39;Manual Transfer&#39;&#39; when you check out. Then, send an email to admin@hermo.my to inform regarding your successful payment. Payment details must provide and order ID.</span><br />
+                <a id="payment2"><span>What if I can&#39;t make payment online?</span></a><br />
+                <span>You can choose &#39;&#39;Manual Transfer&#39;&#39; when you check out. Then, send an email to <a href="mailto:admin@hermo.my">admin@hermo.my</a> to inform regarding your successful payment. Payment details must provide and order ID.</span><br />
                 {
                     this.props.aboutUs.data.paymentBankData.map((bankData) => (
                         <div key={bankData.id}>
@@ -586,7 +586,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>SHIPPING</span>
             <hr />
-            <span>How much is your delivery fees?</span><br />
+            <a id="shipping1"><span>How much is your delivery fees?</span></a><br />
             <span>Shipping fee calculation is as below :</span><br />
             <span>
                 West Malaysia - RM 6.80 for all courier service for single item purchased except Taqbin.<br />
@@ -596,7 +596,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 We now also provide TaQBin service for those who want to receive their purchase over the weekends or holidays. A flat rate of RM 10 shipping fee is applicable in order to use this awesome<br />
                 Japanese courier service. TaQBin is only available in West Malaysia certain area as they have yet to expand their services to regions in East Malaysia.
             </span><br />
-            <span>When will I receive my purchase?</span><br />
+            <a id="shipping2"><span>When will I receive my purchase?</span></a><br />
             <span>
                 Our customers call it &#39;&#39;Flash Shipping&#39;&#39;!<br />
                 Hermo aims to deliver within the time agreed upon when you checkout. Under normal circumstance, you will be able to receive your purchase within 1-3 working days.
@@ -605,8 +605,8 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 However, we are unable to guarantee that all orders will be delivered within the stipulated time frame. Our aim is to have your items shipped out from our warehouse as fast as possible<br />
                 except for some circumstances where unfortunately it is beyond our control for example courier service delays, emergency, or items out of stock.
             </span><br />
-            <span>Please do not hesitate to contact us for help via email: admin@hermo.my.</span><br />
-            <span>Can I buy 2 Beauty Grab’s items and get free shipping?</span><br />
+            <span>Please do not hesitate to contact us for help via email: <a href="mailto:admin@hermo.my">admin@hermo.my</a>.</span><br />
+            <a id="shipping3"><span>Can I buy 2 Beauty Grab’s items and get free shipping?</span></a><br />
             <span>No, Beauty Grab items not entitled for FREE shipping.</span><br />
         </div>
     )
@@ -615,13 +615,13 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>ORDER</span><br />
             <hr />
-            <span>How can I check the status of my order(s)?</span><br />
+            <a id="order1"><span>How can I check the status of my order(s)?</span></a><br />
             <span>Please check in &#39;&#39;Order&#39;&#39;. After your order is posted out, your Order status will change from &#39;&#39;Paid&#39;&#39; to &#39;&#39;Posted&#39;&#39; with a courier company tracking number attached. ( with link )</span><br />
-            <span>What will I get back after returning the item(s) or order item is out of stock?</span><br />
+            <a id="order2"><span>What will I get back after returning the item(s) or order item is out of stock?</span></a><br />
             <span>You can choose to have either a prorated refund ( if promotion code has been applied to order ) to your Hermo Account or bank account ( within 1-14 working days)</span><br />
-            <span>Why is the item in my shopping cart out of stock?</span><br />
+            <a id="order3"><span>Why is the item in my shopping cart out of stock?</span></a><br />
             <span>Hermo will not guarantee the availability of items until the checkout process is completed with payment.</span><br />
-            <span>What can I do if I fail to checkout due to an item being out of stock?</span><br />
+            <a id="order4"><span>What can I do if I fail to checkout due to an item being out of stock?</span></a><br />
             <span>You will have to remove the out of stock items from your cart before proceeding to check out.</span><br />
         </div>
     )
@@ -630,7 +630,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>RETURN</span>
             <hr />
-            <span>How do I return an item?</span><br />
+            <a id="return1"><span>How do I return an item?</span></a><br />
             <span>We want you to absolutely love your Hermo purchase. If you&#39;d like to return or exchange an item, we will do everything we can (within reason) on this journey to gorgeousness together!</span><br />
             <span>Please e-mail us a Refund Application Form in the following format:</span><br />
             <span>
@@ -658,23 +658,23 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>PROMOTION</span>
             <hr />
-            <span>Do you offer free samples?</span><br />
+            <a id="promotion1"><span>Do you offer free samples?</span></a><br />
             <span>Yes. All our free samples are supplied by our supplier, we will giving to our customer free sample while stock last .</span><br />
-            <span>What is gift with purchase (GWP)?</span><br />
+            <a id="promotion2"><span>What is gift with purchase (GWP)?</span></a><br />
             <span>
                 Gift With Purchase it’s actually a way to try a new product that provided by our supplier , it’s limited in stock , therefore kindly add your GWP before your check out. Items featured in Beauty<br />
                 Bundle Box, Hermo Pick, and Beauty Grab are not entitled for free gift redemption with their purchases.
             </span><br />
-            <span>Are the products offered at Hermo original since we get so much discount?</span><br />
+            <a id="promotion3"><span>Are the products offered at Hermo original since we get so much discount?</span></a><br />
             <span>
                 Yes! At Hermo MY, we promise you that every product that are being group sold is 100% authentic. Providing you with the highest quality service and original goods is our top priority. Beauty<br />
                 products for you at low prices with many great deals you will love! Also, we are able to pass on the savings to you since we do not have a physical storefront and related overhead expenses.<br />
                 :)
             </span><br />
-            <span>Why is my order cancelled?</span><br />
+            <a id="promotion4"><span>Why is my order cancelled?</span></a><br />
             <span>
                 Hermo reserves the right to cancel or modify any order if a customer’s purchase behaviour is seen to be suspicious or potentially fraudulent. If you have an enquiries, kindly contact our<br />
-                Customer Service via admin@hermo.my.
+                Customer Service via <a href="mailto:admin@hermo.my">admin@hermo.my</a>.
             </span><br />
         </div>
     )
@@ -683,22 +683,22 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>CREDIT</span>
             <hr />
-            <span>Can I post 3 photos of 1 photo on my Instagram and get 150 credits?</span><br />
+            <a id="credit1"><span>Can I post 3 photos of 1 photo on my Instagram and get 150 credits?</span></a><br />
             <span>No. One order only can redeem one instagram credit .</span><br />
-            <span>Are my credits transferable to cash?</span><br />
+            <a id="credit2"><span>Are my credits transferable to cash?</span></a><br />
             <span>No. All the voucher cannot transfer to cash or credits.</span><br />
         </div>
     )
 
     renderFAQPartnership = () => (
         <div>
-            <span>PARTNERSHIP</span>
+            <span>PARTNERSHIP</span><br />
             <hr />
-            <span>How can we sell on Hermo?</span>
+            <a id="partnership1"><span>How can we sell on Hermo?</span></a><br />
             <span>
                 We are always on the lookout for beauty suppliers and brand corporations.<br />
-                Please write to us at marketing@hermo.my , our team member will respond to you as soon as possible.
-            </span>
+                Please write to us at <a href="mailto:marketing@hermo.my">marketing@hermo.my</a> , our team member will respond to you as soon as possible.
+            </span><br />
         </div>
     )
 
