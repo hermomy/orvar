@@ -78,7 +78,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         return (
             <div>
                 <div>
-                    <table>
+                    <br />
+                    <table border="1">
                         <tbody>
                             <tr>
                                 <th>Sold and Shipped By</th>
@@ -106,36 +107,38 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                     {
                         dataChecking(orderlistdetail, 'merchants') ?
                         orderlistdetail.merchants.map((merchant) => (
-                            <div key={merchant.id}>
-                                <div>
-                                    <span>Sold and Shipped By</span>
-                                    <span>{merchant.name}</span>
-                                </div>
-                                <div style={{ float: 'right' }}>
-                                    <span>{merchant.logo.brief}<br /></span>
-                                    <span>{merchant.shipping.estimate_arrival}</span>
-                                </div>
-                                <br />
-                                <table>
+                            <div key={merchant.id} >
+                                <table border="1">
                                     <tbody>
                                         <tr>
-                                            <th></th>
-                                            <th>CART ITEM</th>
-                                            <th>UNIT PRICE</th>
-                                            <th>QTY</th>
-                                            <th>TOTAL</th>
+                                            <td>
+                                                <span>Sold and Shipped By</span><br />
+                                                <span>{merchant.name}</span>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <span>{merchant.logo.brief}<br /></span><br />
+                                                <span>{merchant.shipping.estimate_arrival}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>CART ITEM</td>
+                                            <td>UNIT PRICE</td>
+                                            <td>QTY</td>
+                                            <td>TOTAL</td>
                                         </tr>
                                         {
                                             dataChecking(merchant, 'items') ?
                                             merchant.items.map((item) => (
                                                 <tr key={item.id}>
-                                                    <NavLink to={`${item._applink ? `/mall/${item._applink.id}` : '/mall'}`} >
-                                                        <td><img src={item.product.image.small} alt="" /></td>
-                                                        <td>{item.product.name}</td>
-                                                        <td>{orderlistdetail.currency.symbol}{item.price.selling}</td>
-                                                        <td>{item.qty}</td>
-                                                        <td>{orderlistdetail.currency.symbol}{item.subtotal}</td>
-                                                    </NavLink>
+                                                    <NavLink to={`${item._applink ? `/mall/${item._applink.id}` : '/mall'}`} ><td><img src={item.product.image.small} alt="" /></td></NavLink>
+                                                    <td>{item.product.name}</td>
+                                                    <td>{orderlistdetail.currency.symbol}{item.price.selling}</td>
+                                                    <td>{item.qty}</td>
+                                                    <td>{orderlistdetail.currency.symbol}{item.subtotal}</td>
                                                 </tr>
                                             ))
                                             :
@@ -146,13 +149,13 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                                 {
                                     dataChecking(orderlistdetail, 'summary', 'subtotal') ?
                                     orderlistdetail.summary.subtotal.map((subtotal) => (
-                                        <div key={subtotal.id}>
-                                            <span>Subtotal</span>
-                                            <span>{orderlistdetail.currency.symbol}{subtotal.subtotal}</span>
-                                            <span>Shipping Fee</span>
-                                            <span>{orderlistdetail.currency.symbol}{subtotal.shipping}</span>
-                                            <span>Total</span>
-                                            <span>{orderlistdetail.currency.symbol}{subtotal.total}</span>
+                                        <div key={subtotal.id} style={{ backgroundColor: 'pink' }}>
+                                            <span>Subtotal</span><br />
+                                            <span>{orderlistdetail.currency.symbol}{subtotal.subtotal}</span><br />
+                                            <span>Shipping Fee</span><br />
+                                            <span>{orderlistdetail.currency.symbol}{subtotal.shipping}</span><br />
+                                            <span>Total</span><br />
+                                            <span>{orderlistdetail.currency.symbol}{subtotal.total}</span><br />
                                         </div>
                                     ))
                                     :
@@ -205,8 +208,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                 dataChecking(orderlistdetail, 'summary', 'discount', 'items') ?
                 orderlistdetail.summary.discount.items.map((item, index) => (
                     <div key={index}>
-                        <span>{item.text}</span>
-                        <span>-{orderlistdetail.currency.symbol}{item.value}</span>
+                        <span>{item.text}</span><br />
+                        <span>-{orderlistdetail.currency.symbol}{item.value}</span><br />
                     </div>
                 ))
                 :
@@ -235,20 +238,20 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     )
 
     renderShippingInformation = (orderlistdetail) => (
-        <div>
+        <div style={{ backgroundColor: 'yellow' }}>
             {
                 dataChecking(orderlistdetail, 'address') ?
-                    <div>
-                        <span>Order No.</span>
-                        {dataChecking(orderlistdetail, 'number') ? <span>{orderlistdetail.number}</span> : null}
-                        <span>Receiver Name</span>
-                        <span>{orderlistdetail.address.receiver_name}</span>
-                        <span>Shipping Address</span>
-                        <span>{orderlistdetail.address.full_address}</span>
-                        <span>Contract No.</span>
-                        <span>{orderlistdetail.address.full_contact}</span>
-                        <span>Payment Method</span>
-                        {dataChecking(orderlistdetail, 'gateway_name') ? <span>{orderlistdetail.gateway_name}</span> : null}
+                    <div >
+                        <span>Order No.</span><br />
+                        {dataChecking(orderlistdetail, 'number') ? <span>{orderlistdetail.number}</span> : null}<br />
+                        <span>Receiver Name</span><br />
+                        <span>{orderlistdetail.address.receiver_name}</span><br />
+                        <span>Shipping Address</span><br />
+                        <span>{orderlistdetail.address.full_address}</span><br />
+                        <span>Contract No.</span><br />
+                        <span>{orderlistdetail.address.full_contact}</span><br />
+                        <span>Payment Method</span><br />
+                        {dataChecking(orderlistdetail, 'gateway_name') ? <span>{orderlistdetail.gateway_name}</span> : null}<br />
                     </div>
                 :
                 null
