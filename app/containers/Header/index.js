@@ -58,31 +58,60 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                             <img src="https://cdn5.hermo.my/hermo/imagelink/2017/hermo-logo_01522372998.png" alt="Hermo Logo" width="100%"></img>
                         </NavLink>
                     </div>
-                    <div>
-                        <div className="top-nav">
-                            {
-                                dataChecking(this.props.header, 'data') ?
-                                    dataChecking(this.props.header, 'data').map((val) => (
-                                        <div className="mr-1" key={val.code}>
-                                            {val.text}
-                                        </div>
-                                    ))
-                                :
-                                    <div>xde</div>
-                            }
-                        </div>
+                    <div className="top-nav">
+                        {
+                            dataChecking(this.props.header, 'data') ?
+                                dataChecking(this.props.header, 'data').map((val) => (
+                                    <span className="pr-1" key={val.code}>
+                                        {val.text}
+                                    </span>
+                                ))
+                            :
+                                <div>xde</div>
+                        }
                     </div>
                 </div>
                 <div className="right-side">
+                    <div>
+                        <i
+                            className="pr-1 fas fa-search"
+                            style={{ color: 'grey' }}
+                        ></i>
+                    </div>
+                    <div>
+                        {
+                            globalScope.token ?
+                                <i
+                                    className="pr-1 fas fa-user"
+                                    style={{ color: 'grey' }}
+                                ></i>
+                            :
+                                <NavLink to="/login">
+                                    <i
+                                        className="pr-1 fas fa-user"
+                                        style={{ color: 'grey' }}
+                                    ></i>
+                                </NavLink>
+                        }
+                    </div>
                     <div className="cart-in-header">
                         {
                             globalScope.token ?
-                                <div
-                                    className="cart-popout-trigger"
-                                    onClick={() => this.setState({ showCartPopout: !this.state.showCartPopout })}
-                                >Cart</div>
-                                :
-                                <NavLink to="/login">login</NavLink>
+                                <i
+                                    className="pr-1 fas fa-shopping-cart"
+                                    onClick={() => this.setState({
+                                        showCartPopout: !this.state.showCartPopout,
+                                        cartPopoutActive: !this.state.cartPopoutActive,
+                                    })}
+                                    style={{ color: 'grey' }}
+                                ></i>
+                            :
+                                <NavLink to="/login">
+                                    <i
+                                        className="pr-1 fas fa-shopping-cart"
+                                        style={{ color: 'grey' }}
+                                    ></i>
+                                </NavLink>
                         }
                         {
                             this.state.showCartPopout && this.renderCartPopout()
