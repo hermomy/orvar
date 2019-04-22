@@ -1,18 +1,26 @@
 /**
-*
-* Header
-*
-*/
+ *
+ * Header
+ *
+ */
 
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+import injectSaga from 'utils/injectSaga';
+import injectReducer from 'utils/injectReducer';
 
 import { NavLink } from 'react-router-dom';
 import CartPage from 'containers/CartPage';
-
-import globalScope from '../../globalScope';
+import makeSelectHeader from './selectors';
+import reducer from './reducer';
+import saga from './saga';
 import './style.scss';
+import globalScope from '../../globalScope';
 
-class Header extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class Header extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
         super(props);
 
@@ -63,7 +71,26 @@ class Header extends React.PureComponent { // eslint-disable-line react/prefer-s
 }
 
 Header.propTypes = {
-
+    dispatch: PropTypes.func.isRequired,
 };
 
-export default Header;
+const mapStateToProps = createStructuredSelector({
+    header: makeSelectHeader(),
+});
+
+function mapDispatchToProps(dispatch) {
+    return {
+        dispatch,
+    };
+}
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
+const withReducer = injectReducer({ key: 'header', reducer });
+const withSaga = injectSaga({ key: 'header', saga });
+
+export default compose(
+    withReducer,
+    withSaga,
+    withConnect,
+)(Header);

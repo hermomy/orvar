@@ -33,7 +33,7 @@ import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
 import ProfilePage from 'containers/ProfilePage';
 
-import Header from 'components/Header';
+import Header from 'containers/Header';
 import TabBar from 'components/TabBar';
 import globalScope from 'globalScope';
 import CartPage from 'containers/CartPage';
