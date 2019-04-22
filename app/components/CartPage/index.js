@@ -1,24 +1,15 @@
 /**
- *
- * CartPage
- *
- */
+*
+* CartPage
+*
+*/
 
 import React from 'react';
-// import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
-import injectSaga from 'utils/injectSaga';
-import injectReducer from 'utils/injectReducer';
 import { dataChecking } from 'globalUtils';
 
-import makeSelectCartPage from './selectors';
-import reducer from './reducer';
-import saga from './saga';
 import './style.scss';
 
-export class CartPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class CartPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
     is_qty_adjustable = (item) => {
         if (item.attribute.is_qty_adjustable) {
@@ -132,26 +123,7 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
 }
 
 CartPage.propTypes = {
-    // dispatch: PropTypes.func.isRequired,
+
 };
 
-const mapStateToProps = createStructuredSelector({
-    cartPage: makeSelectCartPage(),
-});
-
-function mapDispatchToProps(dispatch) {
-    return {
-        dispatch,
-    };
-}
-
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
-
-const withReducer = injectReducer({ key: 'cartPage', reducer });
-const withSaga = injectSaga({ key: 'cartPage', saga });
-
-export default compose(
-    withReducer,
-    withSaga,
-    withConnect,
-)(CartPage);
+export default CartPage;

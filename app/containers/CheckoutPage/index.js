@@ -13,7 +13,7 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
-import CartPage from 'containers/CartPage';
+import CartPage from 'components/CartPage';
 
 import { dataChecking } from 'globalUtils';
 import makeSelectCheckoutPage from './selectors';
@@ -55,14 +55,14 @@ export class CheckoutPage extends React.PureComponent { // eslint-disable-line r
                             data={dataChecking(this.props, 'checkoutpage')}
                         />
                     :
-                    <div>
-                        <CartPage
-                            addQty={this.addQty}
-                            deleteCart={this.deleteCart}
-                            data={dataChecking(this.props, 'checkoutpage')}
-                        />
-                        lorem
-                    </div>
+                        <div>
+                            <CartPage
+                                addQty={this.addQty}
+                                deleteCart={this.deleteCart}
+                                data={dataChecking(this.props, 'checkoutpage')}
+                            />
+                            lorem
+                        </div>
                 }
             </div>
         );

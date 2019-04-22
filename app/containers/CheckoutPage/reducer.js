@@ -31,7 +31,7 @@ function checkoutPageReducer(state = initialState, action) {
             return state
                 .set('loading', false)
                 .set('error', false)
-                .set('data', action.r);
+                .set('data', action.response);
         case QTY_UPDATE:
             return state
                 .set('loading', true)
@@ -40,7 +40,7 @@ function checkoutPageReducer(state = initialState, action) {
             return state
                 .set('loading', false)
                 .set('error', false)
-                .set('data', dataChecking(action, 'r', 'cart'));
+                .set('data', dataChecking(action, 'response', 'cart'));
         case ITEM_DELETE:
             return state
                 .set('loading', true)
@@ -49,7 +49,7 @@ function checkoutPageReducer(state = initialState, action) {
             return state
                 .set('loading', false)
                 .set('error', false)
-                .set('data', dataChecking(action, 'r', 'cart'));
+                .set('data', dataChecking(action, 'response', 'cart'));
         default:
             return state;
     }
