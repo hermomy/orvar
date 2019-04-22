@@ -39,7 +39,7 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
         skinConcernData: null,
         monthList: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 
-        addressId: null,
+        editaddress: null,
         stateList: ['Malaysia', 'Johor', 'Kedah', 'Kelantan', 'Melaka', 'Negeri Sembilan', 'Pahang', 'Pulau Pinang', 'Perak', 'Perlis', 'Selangor', 'Terengganu', 'Sabah', 'Sarawak', 'Kuala Lumpur', 'Labuan', 'Putrajaya'],
         createAddress: null,
     }
@@ -88,6 +88,7 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
 
     createShippingInform = () => (
         <div style={{ backgroundColor: 'lime', marginBottom: '80px' }}>
+            <span style={{ backgroundColor: 'red' }} onClick={() => this.setState({ createAddress: null })}>X</span>
             <span>NEW ADDRESS</span><br />
             <span>RECEIVER</span><br />
             <input type="text" id="new_address_name" textHolder={'Name'} /><br />
@@ -179,7 +180,7 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
                 {
                     this.props.profileEditInform.data.Address.items.map((item) => (
                         <div key={item.id} style={{ marginTop: '20px' }}>
-                            <i className="fa fa-pen" onClick={() => { this.setState({ addressId: item.id }); this.props.dispatch(getUserAddress(item.id)); }}></i>
+                            <i className="fa fa-pen" onClick={() => { this.setState({ editaddress: item.id }); this.props.dispatch(getUserAddress(item.id)); }}></i>
                             <span>{item.receiver_name}</span>
                             <span>{item.full_contact}</span>
                             <span>{item.full_address}</span>
@@ -198,6 +199,7 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
         const addressdetail = this.props.profileEditInform.data.AddressDetail;
         return (
             <div style={{ backgroundColor: 'lime', marginBottom: '80px' }}>
+                <span style={{ backgroundColor: 'red' }} onClick={() => this.setState({ editaddress: null })}>X</span>
                 <span>NEW ADDRESS</span><br />
                 <span>RECEIVER</span><br />
                 <input type="text" id="address_name" defaultValue={addressdetail.receiver_name} /><br />
@@ -239,8 +241,8 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
                 <input type="text" defaultValue={addressdetail.sms_number} id="address_phone_number" /><br />
                 <span>OTHER NO.</span><br />
                 <input type="text" defaultValue={addressdetail.contact_number} id="address_phone_other" />
-                <input type="button" defaultValue="Save" onClick={() => { this.submitEditAddress(); this.setState({ addressId: null }); }} />
-                <input type="button" defaultValue="Delete" onClick={() => { this.deleteAddress(); this.setState({ addressId: null }); }} />
+                <input type="button" defaultValue="Save" onClick={() => { this.submitEditAddress(); this.setState({ editaddress: null }); }} />
+                <input type="button" defaultValue="Delete" onClick={() => { this.deleteAddress(); this.setState({ editaddress: null }); }} />
             </div>
         );
     }
@@ -356,7 +358,7 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
             <div>
                 {this.renderForm()}
                 {this.renderShippingInform()}
-                {this.state.addressId ? this.renderEditShippingForm() : null}
+                {this.state.editaddress ? this.renderEditShippingForm() : null}
                 {this.state.createAddress ? this.createShippingInform() : null}
             </div>
         );
