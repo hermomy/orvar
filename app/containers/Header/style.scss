@@ -1,23 +1,32 @@
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+#header {
     padding: .5rem 1rem;
-    box-shadow: 0px 2px 5px -1px rgba(204,204,204,1);
-}
+    box-shadow: 0px 2px 5px -1px #cccccc;
+    display: flex;
+    justify-content: space-between;
+    
+    .left-side {
+        display: flex;
+        justify-content: space-between;
 
-.cart-in-header {
-    position: relative;
-    cursor: pointer;
-
-    .cart-popup-modal {
-        position: absolute;
-        top: 1.6rem;
-        right: 0;
-        background-color: white;
-        border: 1px solid #ccc;
-        padding: 1rem;
-        width: 400px;
-        box-shadow: 0px 0px 2px 0px rgba(204,204,204,1);
+        .logo { width: 100px; }
+        .top-nav { display: flex; }
+    }
+    
+    .right-side {
+        .cart-in-header {
+            position: relative;
+            cursor: pointer;
+        
+            .cart-popup-modal {
+                position: absolute;
+                top: 1.6rem;
+                right: 0;
+                background-color: white;
+                border: 1px solid #ccc;
+                padding: 1rem;
+                width: 400px;
+                box-shadow: 0px 0px 2px 0px rgba(204,204,204,1);
+            }
+        }
     }
 }

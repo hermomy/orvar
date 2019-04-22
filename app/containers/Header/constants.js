@@ -5,4 +5,6 @@
  */
 
 const page = 'app/Header/';
-export const DEFAULT_ACTION = `${page}DEFAULT_ACTION`;
+export const LAYOUT_TOP_NAV = `${page}/LAYOUT_TOP_NAV`;
+export const LAYOUT_TOP_NAV_SUCCESS = `${page}/LAYOUT_TOP_NAV_SUCCESS`;
+export const LAYOUT_TOP_NAV_FAIL = `${page}/LAYOUT_TOP_NAV_FAIL`;

@@ -5,11 +5,26 @@
  */
 
 import {
-    DEFAULT_ACTION,
+    LAYOUT_TOP_NAV,
+    LAYOUT_TOP_NAV_SUCCESS,
+    LAYOUT_TOP_NAV_FAIL,
 } from './constants';
 
-export function defaultAction() {
+export function layoutTopNav() {
     return {
-        type: DEFAULT_ACTION,
+        type: LAYOUT_TOP_NAV,
+    };
+}
+
+export function layoutTopNavSuccess(response) {
+    return {
+        type: LAYOUT_TOP_NAV_SUCCESS,
+        response,
+    };
+}
+
+export function layoutTopNavFail() {
+    return {
+        type: LAYOUT_TOP_NAV_FAIL,
     };
 }

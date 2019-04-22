@@ -14,6 +14,8 @@ import injectReducer from 'utils/injectReducer';
 
 import { NavLink } from 'react-router-dom';
 import CartPage from 'containers/CartPage';
+import { dataChecking } from 'globalUtils';
+import { layoutTopNav } from './actions';
 import makeSelectHeader from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -27,6 +29,10 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         this.state = {
             showCartPopout: false,
         };
+    }
+
+    componentDidMount() {
+        this.props.dispatch(layoutTopNav());
     }
 
     renderCartPopout = () => {
@@ -45,25 +51,43 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
 
     render() {
         return (
-            <div className="header">
-                <div className="logo">
-                    <NavLink to="/">
-                        <img src="https://cdn5.hermo.my/hermo/imagelink/2017/hermo-logo_01522372998.png" alt="Hermo Logo" width="30%"></img>
-                    </NavLink>
+            <div id="header">
+                <div className="left-side">
+                    <div className="logo mr-1">
+                        <NavLink to="/">
+                            <img src="https://cdn5.hermo.my/hermo/imagelink/2017/hermo-logo_01522372998.png" alt="Hermo Logo" width="100%"></img>
+                        </NavLink>
+                    </div>
+                    <div>
+                        <div className="top-nav">
+                            {
+                                dataChecking(this.props.header, 'data') ?
+                                    dataChecking(this.props.header, 'data').map((val) => (
+                                        <div className="mr-1" key={val.code}>
+                                            {val.text}
+                                        </div>
+                                    ))
+                                :
+                                    <div>xde</div>
+                            }
+                        </div>
+                    </div>
                 </div>
-                <div className="cart-in-header">
-                    {
-                        globalScope.token ?
-                            <div
-                                className="cart-popout-trigger"
-                                onClick={() => this.setState({ showCartPopout: !this.state.showCartPopout })}
-                            >Cart</div>
-                            :
-                            <NavLink to="/login">login</NavLink>
-                    }
-                    {
-                        this.state.showCartPopout && this.renderCartPopout()
-                    }
+                <div className="right-side">
+                    <div className="cart-in-header">
+                        {
+                            globalScope.token ?
+                                <div
+                                    className="cart-popout-trigger"
+                                    onClick={() => this.setState({ showCartPopout: !this.state.showCartPopout })}
+                                >Cart</div>
+                                :
+                                <NavLink to="/login">login</NavLink>
+                        }
+                        {
+                            this.state.showCartPopout && this.renderCartPopout()
+                        }
+                    </div>
                 </div>
             </div>
         );

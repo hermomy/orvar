@@ -6,15 +6,34 @@
 
 import { fromJS } from 'immutable';
 import {
-    DEFAULT_ACTION,
+    LAYOUT_TOP_NAV,
+    LAYOUT_TOP_NAV_SUCCESS,
+    LAYOUT_TOP_NAV_FAIL,
 } from './constants';
 
-export const initialState = fromJS({});
+
+export const initialState = fromJS({
+    loading: false,
+    error: false,
+    data: null,
+});
 
 function headerReducer(state = initialState, action) {
     switch (action.type) {
-        case DEFAULT_ACTION:
-            return state;
+        case LAYOUT_TOP_NAV:
+            return state
+                .set('loading', true)
+                .set('error', false);
+        case LAYOUT_TOP_NAV_SUCCESS:
+            return state
+                .set('loading', false)
+                .set('error', false)
+                .set('data', action.response);
+        case LAYOUT_TOP_NAV_FAIL:
+            return state
+                .set('loading', false)
+                .set('error', true)
+                .set('data', action.response);
         default:
             return state;
     }
