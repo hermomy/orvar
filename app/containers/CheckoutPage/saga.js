@@ -10,7 +10,9 @@ import {
     checkoutSuccess,
     checkoutFailed,
     updateQtySuccess,
+    updateQtyFail,
     removeItemInCartSuccess,
+    removeItemInCartFail,
 } from './actions';
 
 export function* getCheckoutData() {
@@ -33,7 +35,8 @@ export function* updateQtyInCart(action) {
         yield put(updateQtySuccess(response.data));
         notifySuccess(response.data.messages[0].text);
     } else {
-        // yield put(listingRequestFailed(response.data));
+        yield put(updateQtyFail(response.data));
+        notifyError(response.data.messages[0].text);
     }
 }
 
@@ -43,7 +46,8 @@ export function* deleteItemInCart(action) {
         yield put(removeItemInCartSuccess(response.data));
         notifySuccess(response.data.messages[0].text);
     } else {
-        // yield put(listingRequestFailed(response.data));
+        yield put(removeItemInCartFail(response.data));
+        notifyError(response.data.messages[0].text);
     }
 }
 // Individual exports for testing
