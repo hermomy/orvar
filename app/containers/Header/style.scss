@@ -1,16 +1,17 @@
-#header {
-    padding: .5rem 1rem;
+#header{
     box-shadow: 0px 2px 5px -1px #cccccc;
+    padding: 2rem 3rem;
     display: flex;
-    justify-content: space-between;
-    
+    justify-content: flex-end;
+
     .left-side {
         display: flex;
-        justify-content: space-between;
-
         .logo { width: 100px; }
+        .top-nav {
+            display: flex;
+        }
     }
-    
+    .left-side.hide-search-bar { display: none; }
     .right-side {
         display: flex;
         .cart-in-header {
@@ -27,6 +28,13 @@
                 width: 400px;
                 box-shadow: 0px 0px 2px 0px rgba(204,204,204,1);
             }
+        }
+        .a1 {
+            width: 20px;
+            transition: width 3s;
+        }
+        .a1._show {
+            width: 82vw;
         }
     }
 }

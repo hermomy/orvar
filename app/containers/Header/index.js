@@ -28,6 +28,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
 
         this.state = {
             showCartPopout: false,
+            hideSearchBar: true,
         };
     }
 
@@ -35,25 +36,22 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         this.props.dispatch(layoutTopNav());
     }
 
-    renderCartPopout = () => {
-        console.log();
-        return (
-            <div className="cart-popup-modal">
-                <CartPage />
-                <div className="text-right">
-                    <NavLink className="hershop-button" to="/checkout">
-                        Checkout Now
-                    </NavLink>
-                </div>
+    renderCartPopout = () => (
+        <div className="cart-popup-modal">
+            <CartPage />
+            <div className="text-right">
+                <NavLink className="hershop-button" to="/checkout">
+                    Checkout Now
+                </NavLink>
             </div>
-        );
-    }
+        </div>
+    )
 
     render() {
         return (
             <div id="header">
-                <div className="left-side">
-                    <div className="logo mr-1">
+                <div className={`left-side ${!this.state.hideSearchBar ? 'hide-search-bar' : ''}`}>
+                    <div className="logo">
                         <NavLink to="/">
                             <img src="https://cdn5.hermo.my/hermo/imagelink/2017/hermo-logo_01522372998.png" alt="Hermo Logo" width="100%"></img>
                         </NavLink>
@@ -62,54 +60,90 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                         {
                             dataChecking(this.props.header, 'data') ?
                                 dataChecking(this.props.header, 'data').map((val) => (
-                                    <span className="pr-1" key={val.code}>
+                                    <div className="ml-2" key={val.code}>
                                         {val.text}
-                                    </span>
+                                    </div>
                                 ))
-                            :
-                                <div>xde</div>
+                                :
+                                null
                         }
                     </div>
                 </div>
                 <div className="right-side">
-                    <div>
-                        <i
-                            className="pr-1 fas fa-search"
-                            style={{ color: 'grey' }}
-                        ></i>
+                    <div className={`ml-2 a1 ${!this.state.hideSearchBar ? '_show' : ''}`}>
+                        {
+                            this.state.hideSearchBar ?
+                                <i
+                                    className="fas fa-search"
+                                    onClick={() => this.setState({
+                                        hideSearchBar: !this.state.hideSearchBar,
+                                    })}
+                                    style={{
+                                        color: 'grey',
+                                        fontSize: '1.5rem',
+                                        cursor: 'pointer',
+                                    }}
+                                ></i>
+                            :
+                                <span>
+                                    <input type="text" placeholder="Search..."></input>
+                                    <i
+                                        className="fas fa-times"
+                                        onClick={() => this.setState({
+                                            hideSearchBar: !this.state.hideSearchBar,
+                                        })}
+                                        style={{
+                                            color: 'grey',
+                                            fontSize: '1.5rem',
+                                            cursor: 'pointer',
+                                        }}
+                                    ></i>
+                                </span>
+                        }
                     </div>
-                    <div>
+                    <div className="ml-2">
                         {
                             globalScope.token ?
                                 <i
-                                    className="pr-1 fas fa-user"
-                                    style={{ color: 'grey' }}
+                                    className="fas fa-user"
+                                    style={{
+                                        color: 'grey',
+                                        fontSize: '1.5rem',
+                                    }}
                                 ></i>
                             :
                                 <NavLink to="/login">
                                     <i
-                                        className="pr-1 fas fa-user"
-                                        style={{ color: 'grey' }}
+                                        className="fas fa-user"
+                                        style={{
+                                            color: 'grey',
+                                            fontSize: '1.5rem',
+                                        }}
                                     ></i>
                                 </NavLink>
                         }
                     </div>
-                    <div className="cart-in-header">
+                    <div className="ml-2 cart-in-header">
                         {
                             globalScope.token ?
                                 <i
-                                    className="pr-1 fas fa-shopping-cart"
+                                    className="fas fa-shopping-cart"
                                     onClick={() => this.setState({
                                         showCartPopout: !this.state.showCartPopout,
-                                        cartPopoutActive: !this.state.cartPopoutActive,
                                     })}
-                                    style={{ color: 'grey' }}
+                                    style={{
+                                        color: 'grey',
+                                        fontSize: '1.5rem',
+                                    }}
                                 ></i>
                             :
                                 <NavLink to="/login">
                                     <i
-                                        className="pr-1 fas fa-shopping-cart"
-                                        style={{ color: 'grey' }}
+                                        className="fas fa-shopping-cart"
+                                        style={{
+                                            color: 'grey',
+                                            fontSize: '1.5rem',
+                                        }}
                                     ></i>
                                 </NavLink>
                         }
