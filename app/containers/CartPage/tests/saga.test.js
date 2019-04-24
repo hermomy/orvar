@@ -3,13 +3,22 @@
  */
 
 /* eslint-disable redux-saga/yield-effects */
-// import { take, call, put, select } from 'redux-saga/effects';
-// import { defaultSaga } from '../saga';
+import { put, call } from 'redux-saga/effects';
+import { apiRequest } from 'globalUtils';
 
-// const generator = defaultSaga();
+import cartPageSaga, { getCheckoutData } from '../saga';
+import { getCheckout } from '../actions';
 
-describe('defaultSaga Saga', () => {
-    it('Expect to have unit tests specified', () => {
-        expect(true).toEqual(false);
+describe('cartPageSaga', () => {
+    it('Expect to contain GET_CHECKOUT_DATA when cartPageSage is triggered', () => {
+        const generator = cartPageSaga();
+        const mock = generator.next().value.FORK.args[0];
+        const expected = put(getCheckout()).PUT.action.type;
+        expect(mock).toEqual(expected);
+    });
+
+    it('Expect to return API when trigged getCheckData', () => {
+        const generator = getCheckoutData();
+        expect(generator.next().value).toEqual(call(apiRequest, '/cart', 'get'));
     });
 });

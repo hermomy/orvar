@@ -10,7 +10,7 @@ import {
     CHECKOUT_DATA_SUCCESS,
 } from './constants';
 
-const initialState = fromJS({
+export const initialState = fromJS({
     loading: false,
     error: false,
     data: null,
@@ -21,8 +21,7 @@ function cartPageReducer(state = initialState, action) {
         case GET_CHECKOUT_DATA:
             return state
                 .set('loading', true)
-                .set('error', false)
-                .set('data', null);
+                .set('error', false);
         case CHECKOUT_DATA_SUCCESS:
             return state
                 .set('loading', false)

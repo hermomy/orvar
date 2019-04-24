@@ -4,6 +4,10 @@ import cartPageReducer from '../reducer';
 
 describe('cartPageReducer', () => {
     it('returns the initial state', () => {
-        expect(cartPageReducer(undefined, {})).toEqual(fromJS({}));
+        expect(cartPageReducer(undefined, {})).toEqual(fromJS({
+            loading: false,
+            error: false,
+            data: null,
+        }));
     });
 });
