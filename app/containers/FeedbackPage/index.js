@@ -11,6 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import { FormattedMessage } from 'react-intl';
 
 import makeSelectFeedbackPage from './selectors';
 import reducer from './reducer';
@@ -18,6 +19,7 @@ import saga from './saga';
 import './style.scss';
 import { postFeedback } from './actions';
 import Rate from '../../components/Rate';
+import messages from './messages';
 
 export class FeedbackPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -45,7 +47,7 @@ export class FeedbackPage extends React.PureComponent { // eslint-disable-line r
 
     renderFeedbackForm = () => (
         <div>
-            <span>COMMENT</span><span>*</span><br />
+            <span><FormattedMessage {...messages.comment} /></span><span>*</span><br />
             <textarea rows="5" cols="60" id="feedback_comment" placeholder="How do you think about us?" /><br />
             <span>SUGGEST PRODUCT</span><br />
             <textarea rows="5" cols="60" id="feedback_suggestproduct" placeholder="I want Hermo to sell...?" /><br />

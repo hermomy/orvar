@@ -18,7 +18,8 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import { dataChecking } from 'globalUtils';
-// import { NavLink } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
 
 import makeSelectProfileWholePage from './selectors';
 import reducer from './reducer';
@@ -51,13 +52,13 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                 <span>Usable Balance {user.balance.usable}</span><br />
 
                 <div style={{ float: 'left' }}>
-                    <span onClick={() => this.setState({ subpage: 'ProfileEditInform' })}>Profile</span><br />
-                    <span onClick={() => this.setState({ subpage: 'ProfileOrder' })}>Order</span><br />
-                    <span onClick={() => this.setState({ subpage: 'ProfileWallet' })}>Wallet</span><br />
-                    <span onClick={() => this.setState({ subpage: 'ProfileReview' })}>Review</span><br />
-                    <span onClick={() => this.setState({ subpage: 'ProfileWishlist' })}>Wishlist ({user.wishlist.total} )</span><br />
-                    <span onClick={() => this.setState({ subpage: 'ProfileSetting' })}>Setting</span><br />
-                    <span onClick={() => this.setState({ subpage: 'LogoutForm' })}>Logout</span><br />
+                    <span onClick={() => this.setState({ subpage: 'ProfileEditInform' })}><FormattedMessage {...messages.Profile} /></span><br />
+                    <span onClick={() => this.setState({ subpage: 'ProfileOrder' })}><FormattedMessage {...messages.Order} /></span><br />
+                    <span onClick={() => this.setState({ subpage: 'ProfileWallet' })}><FormattedMessage {...messages.Wallet} /></span><br />
+                    <span onClick={() => this.setState({ subpage: 'ProfileReview' })}><FormattedMessage {...messages.Review} /></span><br />
+                    <span onClick={() => this.setState({ subpage: 'ProfileWishlist' })}><FormattedMessage {...messages.Wishlist} /> ({user.wishlist.total} )</span><br />
+                    <span onClick={() => this.setState({ subpage: 'ProfileSetting' })}><FormattedMessage {...messages.Setting} /></span><br />
+                    <span onClick={() => this.setState({ subpage: 'LogoutForm' })}><FormattedMessage {...messages.Logout} /></span><br />
                 </div>
                 {this.state.subpage === 'ProfileEditInform' ? <div style={{ float: 'right' }}><ProfileEditInform /></div> : null}
                 {this.state.subpage === 'ProfileOrder' ? <div style={{ float: 'right' }}><ProfileOrder /></div> : null}
