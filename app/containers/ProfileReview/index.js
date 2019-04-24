@@ -95,10 +95,7 @@ export class ProfileReview extends React.PureComponent { // eslint-disable-line 
     }
 
     renderPagination = () => {
-        if (this.state.category === '/mall/reviewable?reviewed=0&per-page=5' && dataChecking(this.props, 'profileReview', 'data', 'reviewData', '_meta')) {
-            if (this.props.profileReview.data.reviewData._meta.pageCount <= 1) {
-                return;
-            }
+        if (this.state.category === '/mall/reviewable?reviewed=0&per-page=5' && dataChecking(this.props, 'profileReview', 'data', 'reviewData', '_meta') && this.props.profileReview.data.reviewData._meta.pageCount > 1) {
             return (
                 <Pagination
                     parentProps={this.props}
@@ -109,10 +106,7 @@ export class ProfileReview extends React.PureComponent { // eslint-disable-line 
                     callBack={(targetpage) => { this.props.dispatch(getReview('mall/reviewable?reviewed=0&per-page=5', 'reviewData', targetpage)); }}
                 />
             );
-        } else if (this.state.category === '/review/by-me?per-page=5' && dataChecking(this.props, 'profileReview', 'data', 'reviewedData', '_meta')) {
-            if (this.props.profileReview.data.reviewedData._meta.pageCount <= 1) {
-                return;
-            }
+        } else if (this.state.category === '/review/by-me?per-page=5' && dataChecking(this.props, 'profileReview', 'data', 'reviewedData', '_meta') && this.props.profileReview.data.reviewedData._meta.pageCount > 1) {
             return (
                 <Pagination
                     parentProps={this.props}

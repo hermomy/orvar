@@ -404,9 +404,9 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 81100, Johor bahru, Johor.
             </span><br />
             <span>Follow our journey to beauty daily</span><br />
-            <span><a href="https://www.facebook.com/HermoMalaysia"><i className="fa fa-facebook-square"></i></a></span>
-            <span><a href="mailto:admin@hermo.my"><i className="fa fa-google-plus-official" aria-hidden="true"></i></a></span>
-            <span><a href="https://www.instagram.com/hermomy/"><i className="fa fa-instagram" aria-hidden="true"></i></a></span>
+            <span><a href="https://www.facebook.com/HermoMalaysia">FACEBOOK ICON</a></span>
+            <span><a href="mailto:admin@hermo.my">ADMIN ICON</a></span>
+            <span><a href="https://www.instagram.com/hermomy/">INSTAGRAM ICON</a></span>
             <hr />
         </div>
     )
