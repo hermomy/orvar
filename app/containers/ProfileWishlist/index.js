@@ -36,7 +36,7 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                 meta={this.props.profileWishlist.data._meta}
                 link={this.props.profileWishlist.data._links}
                 goToPage={1}
-                checking={1}
+                isHerlisting={false}
                 callBack={(targetpage) => { this.props.dispatch(getWishlist(targetpage)); }}
             />
         );
@@ -57,7 +57,8 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                     // price={false}
                     url={item.product.brand.url}
                     listViewMode={true}
-                    cross={true}
+                    allowDelete={true}
+                    allowWishlistButton={false}
                     deleteFromWishlist={() => { this.props.dispatch(deleteWishlist(item.id)); }}
                 />
             </div>

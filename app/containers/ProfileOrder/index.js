@@ -64,7 +64,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                 meta={this.props.profileOrder.data.orderListData._meta}
                 link={this.props.profileOrder.data.orderListData._links}
                 goToPage={1}
-                checking={1}
+                isHerlisting={false}
                 callBack={(targetpage) => { this.props.dispatch(getOrder('', targetpage)); }}
             />
         );

@@ -139,10 +139,19 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         <Route exact={true} path="/wallet" component={ProfileWallet} />
                         <Route exact={true} path="/review" component={ProfileReview} />
                         <Route exact={true} path="/about" component={AboutUs} />
+                        <Route
+                            exact={true}
+                            path="/about/:abouthermo(joinus|contactus|shippinginfo|returnpolicy|membership|privacypolicy|termandcondition)?"
+                            render={() => (
+                                <AboutUs
+                                    dataType="theme"
+                                />
+                            )}
+                        />
                         <Route exact={true} path="/feedback" component={FeedbackPage} />
                         <Route exact={true} path="/" component={HomePage} />
-                        <Route exact={true} path="/profile1/" component={ProfileWholePage} />
-                        <Route exact={true} path="/profile" component={ProfilePage} />
+                        <Route exact={true} path="/profileweb" component={ProfileWholePage} />
+                        <Route exact={true} path="/profilesmallscreen" component={ProfilePage} />
                         <PrivateRoute
                             exact={true}
                             path="/checkout"

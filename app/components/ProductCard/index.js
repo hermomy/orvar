@@ -48,7 +48,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
     }
 
     renderCross = () => {
-        if (!this.props.cross) {
+        if (!this.props.allowDelete) {
             return null;
         }
         return (
@@ -66,7 +66,11 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
             >
                 <div className={`product-card-content ${!this.props.product.instock ? '' : 'OOS'}`}>
                     <div className="product-card-images">
-                        {this.renderCross()}
+                        {this.props.allowDelete &&
+                            <div onClick={() => this.props.deleteFromWishlist()}>
+                                <i className="fa fa-times cross-icon" aria-hidden="true"></i>
+                            </div>
+                        }
                         {this.renderFeatures()}
                         <NavLink to={this.props.url}>
                             {
@@ -86,13 +90,18 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                         </NavLink>
                     </div>
                     <div className="product-card-info">
-                        <NavLink to={this.props.url}>
-                            <div className="product-card-wishlist">
+                        <div className="product-card-wishlist">
+                            {
+                                this.props.allowWishlistButton &&
                                 <i
-                                    className={`wishlist-btn fa fa-heart ${true ? 'wishlist-btn-clicked' : ''}`}
+                                    className={`wishlist-btn fa fa-heart ${this.props.product._user.wishlisted ? 'wishlist-btn-clicked' : ''}`}
                                     aria-hidden="true"
+                                    onClick={() => this.props.addOrDeleteWishlist()}
                                 ></i>
-                            </div>
+                            }
+
+                        </div>
+                        <NavLink to={this.props.url}>
                             {this.renderPrice()}
                             <div className="product-card-name">
                                 {dataChecking(this.props.product, 'brand', 'name') ? <p className="product-name">{this.props.product.brand.name}</p> : null}

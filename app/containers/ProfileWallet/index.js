@@ -49,7 +49,7 @@ export class ProfileWallet extends React.PureComponent { // eslint-disable-line 
                             meta={this.props.profileWallet.data.walletData._meta}
                             link={this.props.profileWallet.data.walletData._links}
                             goToPage={1}
-                            checking={1}
+                            isHerlisting={false}
                             callBack={(targetpage) => { this.props.dispatch(getVoucher(this.state.wallet, targetpage)); }}
                         />
                         :

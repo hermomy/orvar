@@ -34,7 +34,7 @@ export class ProfileReview extends React.PureComponent { // eslint-disable-line 
 
     insertRateDataToReviewData = (mark, id) => {
         const obj = { ...this.state.reviewData };
-        obj[`${id}`] = mark;
+        obj[id] = mark;
         this.setState({ reviewData: obj });
     }
 
@@ -42,8 +42,8 @@ export class ProfileReview extends React.PureComponent { // eslint-disable-line 
         if (document.getElementById(`textarea_${id}`).value.replace(/\s+/g, '').length >= 30) {
             const obj = { ...this.state.reviewData };
 
-            if (obj[`${id}`]) {
-                this.props.dispatch(postReview(obj[`${id}`].mark, document.getElementById(`textarea_${id}`).value, item));
+            if (obj[id]) {
+                this.props.dispatch(postReview(obj[id].mark, document.getElementById(`textarea_${id}`).value, item));
             } else {
                 alert('rating must be given');
             }
@@ -102,7 +102,7 @@ export class ProfileReview extends React.PureComponent { // eslint-disable-line 
                     meta={this.props.profileReview.data.reviewData._meta}
                     link={this.props.profileReview.data.reviewData._links}
                     goToPage={1}
-                    checking={1}
+                    isHerlisting={false}
                     callBack={(targetpage) => { this.props.dispatch(getReview('mall/reviewable?reviewed=0&per-page=5', 'reviewData', targetpage)); }}
                 />
             );
@@ -113,7 +113,7 @@ export class ProfileReview extends React.PureComponent { // eslint-disable-line 
                     meta={this.props.profileReview.data.reviewedData._meta}
                     link={this.props.profileReview.data.reviewedData._links}
                     goToPage={1}
-                    checking={1}
+                    isHerlisting={false}
                     callBack={(targetpage) => { this.props.dispatch(getReview('/review/by-me?per-page=5', 'reviewedData', targetpage)); }}
                 />
             );

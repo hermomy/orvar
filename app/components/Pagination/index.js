@@ -12,7 +12,7 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
     }
 
     componentWillMount() {
-        if (!this.props.checking) {
+        if (this.props.isHerlisting) {
             if (this.props.goToPage && this.props.goToPage !== 1) {
                 let selfApiUrl = this.props.parentProps.herlisting.data.product.result._links.self.href;
                 if (selfApiUrl.indexOf('page=') !== -1) {
@@ -30,13 +30,13 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
             if (dataChecking(this.props, 'meta', 'currentPage')) {
                 this.setState({ activatedPage: this.props.meta.currentPage });
             }
-        } else if (this.props.checking === 1) {
+        } else if (!this.props.isHerlisting) {
             this.setState({ activatedPage: 1 });
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!this.props.checking) {
+        if (this.props.isHerlisting) {
             if (nextProps.goToPage && nextProps.goToPage !== this.props.goToPage) {
                 this.props.parentProps.dispatch(getData('', 'mallList', `${this.props.parentProps.herlisting.data.product._links.self.href}?page=${nextProps.goToPage}`));
             }
@@ -44,13 +44,13 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
             if (dataChecking(nextProps, 'meta', 'currentPage') && dataChecking(nextProps, 'meta', 'currentPage') !== dataChecking(this.props, 'meta', 'currentPage')) {
                 this.setState({ activatedPage: nextProps.meta.currentPage });
             }
-        } else if (this.props.checking === 1) {
+        } else if (!this.props.isHerlisting) {
             this.setState({ activatedPage: nextProps.meta.currentPage });
         }
     }
 
     onClickPagi = (targetApi, targetPage) => {
-        if (!this.props.checking) {
+        if (this.props.isHerlisting) {
             this.props.parentProps.dispatch(getData('', 'mallList', targetApi));
             this.setState({ activatedPage: null });
             let newPathName = '';
@@ -66,7 +66,7 @@ class Pagination extends React.PureComponent { // eslint-disable-line react/pref
                 });
                 this.props.parentProps.history.push(`${newPathName}${this.props.parentProps.history.location.search}`);
             }
-        } else if (this.props.checking === 1) {
+        } else if (!this.props.isHerlisting) {
             this.props.callBack(targetPage);
             this.setState({ activatedPage: targetPage });
         }

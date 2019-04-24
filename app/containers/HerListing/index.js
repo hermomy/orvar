@@ -25,6 +25,7 @@ import saga from './saga';
 import './style.scss';
 import {
     getData,
+    postWishlist,
 } from './actions';
 
 const SORT_DEFAULT = 'sort=default';
@@ -166,6 +167,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                 meta={data._meta}
                 link={data._links}
                 goToPage={this.state.goToPage}
+                isHerlisting={true}
             />
         );
     }
@@ -175,6 +177,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         if (!data) {
             return null;
         }
+        console.log(this.props);
         return this.props.herlisting.data.product.result.items.map((product) =>
         (
             <div
@@ -186,8 +189,10 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                     review={product.review}
                     url={product.url}
                     price={dataChecking(product, 'price')}
-                    cross={false}
+                    allowDelete={false}
                     listViewMode={!this.state.listView}
+                    allowWishlistButton={true}
+                    addOrDeleteWishlist={() => this.props.dispatch(postWishlist(product.id))}
                 />
             </div>
         ));
