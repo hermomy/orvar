@@ -96,6 +96,9 @@ export class ProfileReview extends React.PureComponent { // eslint-disable-line 
 
     renderPagination = () => {
         if (this.state.category === '/mall/reviewable?reviewed=0&per-page=5' && dataChecking(this.props, 'profileReview', 'data', 'reviewData', '_meta')) {
+            if (this.props.profileReview.data.reviewData._meta.pageCount <= 1) {
+                return;
+            }
             return (
                 <Pagination
                     parentProps={this.props}
@@ -107,6 +110,9 @@ export class ProfileReview extends React.PureComponent { // eslint-disable-line 
                 />
             );
         } else if (this.state.category === '/review/by-me?per-page=5' && dataChecking(this.props, 'profileReview', 'data', 'reviewedData', '_meta')) {
+            if (this.props.profileReview.data.reviewedData._meta.pageCount <= 1) {
+                return;
+            }
             return (
                 <Pagination
                     parentProps={this.props}

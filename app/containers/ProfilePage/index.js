@@ -52,11 +52,12 @@ const buttonSection = [
         section: 2,
         child: [
             {
-                // name: 'Contact Us',
+                name: 'Contact Us',
+                key: '/about/contactus',
             },
             {
                 name: 'FAQ',
-                key: '/about#FAQ',
+                key: '/about/faq',
             },
         ],
     },
@@ -69,6 +70,7 @@ const buttonSection = [
             },
             {
                 name: 'Privacy Policy',
+                key: '/about/privacypolicy',
             },
         ],
     },
@@ -77,9 +79,11 @@ const buttonSection = [
         child: [
             {
                 name: 'Give Us Feedback',
+                key: '/feedback',
             },
             {
                 name: 'Join Us',
+                key: '/about/joinus',
             },
             {
                 name: 'Language',
@@ -91,6 +95,7 @@ const buttonSection = [
         child: [
             {
                 name: 'Log Out',
+                key: '/logout',
             },
         ],
     },
@@ -155,20 +160,36 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
                             <div className="profile-page-order-content">
                                 <div className="profile-page-order-icon-container">
                                     <div className="profile-page-order-icon">
-                                        <img src={require('images/toPay-icon.png')} alt="" />
-                                        <span>To Pay</span>
+                                        <NavLink
+                                            to={'/order/to-paid'}
+                                        >
+                                            <img src={require('images/toPay-icon.png')} alt="" />
+                                            <span>To Pay</span>
+                                        </NavLink>
                                     </div>
                                     <div className="profile-page-order-icon">
-                                        <img src={require('images/toShip-icon.png')} alt="" />
-                                        <span>To Ship</span>
+                                        <NavLink
+                                            to={'/order/to-ship'}
+                                        >
+                                            <img src={require('images/toShip-icon.png')} alt="" />
+                                            <span>To Ship</span>
+                                        </NavLink>
                                     </div>
                                     <div className="profile-page-order-icon">
-                                        <img src={require('images/toReview-icon.png')} alt="" />
-                                        <span>To Review</span>
+                                        <NavLink
+                                            to={'review'}
+                                        >
+                                            <img src={require('images/toReview-icon.png')} alt="" />
+                                            <span>To Review</span>
+                                        </NavLink>
                                     </div>
                                     <div className="profile-page-order-icon">
-                                        <img src={require('images/cancelled-icon.png')} alt="" />
-                                        <span>Cancelled</span>
+                                        <NavLink
+                                            to={'/order/canceled'}
+                                        >
+                                            <img src={require('images/cancelled-icon.png')} alt="" />
+                                            <span>Cancelled</span>
+                                        </NavLink>
                                     </div>
                                 </div>
                             </div>

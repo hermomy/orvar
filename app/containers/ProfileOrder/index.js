@@ -31,7 +31,11 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     }
 
     componentWillMount() {
-        this.props.dispatch(getOrder(''));
+        if (dataChecking(this.props, 'match', 'params', 'status')) {
+            this.props.dispatch(getOrder(`/${this.props.match.params.status}`));
+        } else {
+            this.props.dispatch(getOrder(''));
+        }
     }
 
     renderOrderlist = () => {
@@ -56,6 +60,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
 
     renderPagination = () => {
         if (!dataChecking(this.props, 'profileOrder', 'data', 'orderListData', 'items')) {
+            return null;
+        } else if (this.props.profileOrder.data.orderListData._meta.pageCount <= 1) {
             return null;
         }
         return (

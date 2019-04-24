@@ -25,33 +25,40 @@ import {
 } from './actions';
 
 export class AboutUs extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+    state = {
+        dataWantToView: null,
+    }
+
     componentWillMount() {
         this.props.dispatch(getCareer());
         this.props.dispatch(getPaymentBank());
+
+        this.setState({ dataWantToView: this.props.match.params.abouthermo });
     }
 
     renderSidebar = () => (
         <div>
-            <span>WHO ARE WE</span><br />
-            <a href="#aboutUs"><span>About Us</span></a><br />
-            <a href="#joinUs"><span>Join Us</span></a><br />
-            <a href="#partnership"><span>Partnership</span></a><br />
-            <span>SHOPPING GUIDE</span><br />
-            <a href="#credits"><span>Credits</span></a><br />
-            <a href="#shipping"><span>Shipping</span></a><br />
-            <a href="#returnPolicy"><span>Return Policy</span></a><br />
-            <a href="#membership"><span>Membership</span></a><br />
-            <a href="#contactUs"><span>Contact Us</span></a><br />
-            <span>TERMS</span><br />
-            <a href="#privacyPolicy"><span>Privacy Policy</span></a><br />
-            <a href="#userTerm"><span>User Term</span></a><br />
-            <a href="#FAQ"><span>FAQ</span></a><br />
+            <span className="aboutus-sidebar-title">WHO ARE WE</span><br />
+            <span onClick={() => this.setState({ dataWantToView: null })} className={`${!this.state.dataWantToView ? 'aboutus-clicked-sidebar' : ''}`}>About Us</span><br />
+            <span onClick={() => this.setState({ dataWantToView: 'joinus' })} className={`${this.state.dataWantToView === 'joinus' ? 'aboutus-clicked-sidebar' : ''}`}>Join Us</span><br />
+            <span onClick={() => this.setState({ dataWantToView: 'partnership' })} className={`${this.state.dataWantToView === 'partnership' ? 'aboutus-clicked-sidebar' : ''}`}>Partnership</span><br />
+            <span className="aboutus-sidebar-title">SHOPPING GUIDE</span><br />
+            <span onClick={() => this.setState({ dataWantToView: 'credit' })} className={`${this.state.dataWantToView === 'credit' ? 'aboutus-clicked-sidebar' : ''}`}>Credits</span><br />
+            <span onClick={() => this.setState({ dataWantToView: 'shippinginfo' })} className={`${this.state.dataWantToView === 'shippinginfo' ? 'aboutus-clicked-sidebar' : ''}`}>Shipping</span><br />
+            <span onClick={() => this.setState({ dataWantToView: 'returnpolicy' })} className={`${this.state.dataWantToView === 'returnpolicy' ? 'aboutus-clicked-sidebar' : ''}`}>Return Policy</span><br />
+            <span onClick={() => this.setState({ dataWantToView: 'membership' })} className={`${this.state.dataWantToView === 'membership' ? 'aboutus-clicked-sidebar' : ''}`}>Membership</span><br />
+            <span onClick={() => this.setState({ dataWantToView: 'contactus' })} className={`${this.state.dataWantToView === 'contactus' ? 'aboutus-clicked-sidebar' : ''}`}>Contact Us</span><br />
+            <span className="aboutus-sidebar-title">TERMS</span><br />
+            <span onClick={() => this.setState({ dataWantToView: 'privacypolicy' })} className={`${this.state.dataWantToView === 'privacypolicy' ? 'aboutus-clicked-sidebar' : ''}`}>Privacy Policy</span><br />
+            <span onClick={() => this.setState({ dataWantToView: 'userterm' })} className={`${this.state.dataWantToView === 'userterm' ? 'aboutus-clicked-sidebar' : ''}`}>User Term</span><br />
+            <span onClick={() => this.setState({ dataWantToView: 'faq' })} className={`${this.state.dataWantToView === 'faq' ? 'aboutus-clicked-sidebar' : ''}`}>FAQ</span><br />
+            <br />
         </div>
     )
 
     renderAboutUs = () => (
         <div>
-            <a id="aboutUs"><span>ABOUT US</span></a><br />
+            <span>ABOUT US</span><br />
             <span>We want you to be gorgeous with us.</span><br />
             <span>Women are from Venus, </span><br />
             <span>a representation of exceptional beauty.</span><br />
@@ -111,7 +118,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         }
         return (
             <div>
-                <a id="joinUs"><span>JOIN US</span></a><br />
+                <span>JOIN US</span><br />
                 <span>#TeamHermo</span>
                 <span>We&#39;re hiring. Come work at Malaysia&#39;s #1 beauty e-commerce site!</span>
                 <span>
@@ -150,7 +157,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderPartnership = () => (
         <div>
-            <a id="partnership"><span>PARTNERSHIPS</span></a><br />
+            <span>PARTNERSHIPS</span><br />
             <span>Be Part of Our Revolution</span><br />
             <span>
                 Are you a beauty product supplier, distributor or a beauty company?<br />
@@ -174,7 +181,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderCredit = () => (
         <div>
-            <a id="credits"><span>CREDITS</span></a><br />
+            <span>CREDITS</span><br />
             <span>Top 6 Tips to Get Hermo&#39;s Credits</span><br />
             <span>Hermo Credits let you shop till you drop at further, insane discount.</span><br />
             <span>
@@ -224,7 +231,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderShipping = () => (
         <div>
-            <a id="shipping"><span>SHIPPING</span></a><br />
+            <span>SHIPPING</span><br />
             <span>Our Shipping Policy</span><br />
             <span>
                 Currently, we only provide shipping to Singapore and Malaysia.<br />
@@ -299,7 +306,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderReturnPolicy = () => (
         <div>
-            <a id="returnPolicy"><span>RETURN POLICY</span></a><br />
+            <span>RETURN POLICY</span><br />
             <span>Unconditional Return Policy</span><br />
             <span>If you are not satisfied with your purchase (damaged during shipment or wrong item/type/shade/etc), you can send it back to us.</span><br />
             <ul>
@@ -343,7 +350,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderMembership = () => (
         <div>
-            <a id="membership"><span>MEMBERSHIP</span></a><br />
+            <span>MEMBERSHIP</span><br />
             <span>VIP Level & Privileges</span><br />
             <img src="https://devshop2.hermo.my/hershop/modules/static/privilege.jpg" alt="" />
             <span>MEMBERSHIP</span><br />
@@ -380,7 +387,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderContactUs = () => (
         <div>
-            <a id="contactUs"><span>CONTACT US</span></a><br />
+            <span>CONTACT US</span><br />
             <span>We want your experience with Hermo to be worry-free.</span><br />
             <span>Please contact us if you have any questions or encountered any problems when shopping at Hermo.</span><br />
             <span>YOU CAN CONTACT US VIA:</span><br />
@@ -406,7 +413,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderPrivacyPolicy = () => (
         <div>
-            <a id="privacyPolicy"><span>PRIVACY POLICY</span></a><br />
+            <span>PRIVACY POLICY</span><br />
             <span>
                 At Hermo MY, we take your privacy seriously! Please read this Statement of Privacy to be more aware about our policy on collecting, using and disclosing personal information. Hermo MY<br />
                 occasionally update this Statement of Privacy to reflect company and user’s feedback. We encourage you to review this Statement periodically to be informed of how we are protecting your<br />
@@ -435,7 +442,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderUserTerm = () => (
         <div>
-            <a id="userTerm"><span>USER TERM</span></a><br />
+            <span>USER TERM</span><br />
             <span>
                 Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our<br />
                 privacy policy govern Hermo’s relationship with you in relation to this website. If you disagree with any part of these terms and conditions, please do not use our website.
@@ -490,7 +497,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
 
     renderFAQ = () => (
         <div>
-            <a id="FAQ"><span>FAQ</span></a><br />
+            <span>FAQ</span><br />
             <span>How Can We Help You?</span><br />
             <span>GENERAL</span><br />
             <ul>
@@ -542,7 +549,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>GENERAL</span><br />
             <hr />
-            <a id="genral1"><span>What is Hermo? How does Hermo work?</span></a><br />
+            <span>What is Hermo? How does Hermo work?</span><br />
             <span>
                 Hermo MY is an online beauty shop - a beauty collection, - whose mission is to bring gorgeousness straight to you by offering your favourite beauty products from across Asia. There are<br />
                 thousands of people who choose to buy their skincare and beauty products online, but what makes us different? Our aim is to make your shopping experience simple and affordable, with<br />
@@ -552,7 +559,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 We are certified partners and distributors of the brands we carry so you&#39;ll only get 100% Authentic products delivered to you. As we are an online beauty store with no physical shops and<br />
                 overheads, you know we are passing great savings on to you, ensuring that you are offered only the best value in the comfort of your home!
             </span><br />
-            <a id="genral2"><span>Help! I don’t know how to buy things online.</span></a><br />
+            <span>Help! I don’t know how to buy things online.</span><br />
             <span>Here we will show you a quick and simple guide of steps from register till make payment.</span><br />
             <ol>
                 <li>Register an account as a user at www.hermo.my</li><br />
@@ -581,13 +588,13 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
             <div>
                 <span>PAYMENT</span><br />
                 <hr />
-                <a id="payment1"><span>How to make payment?</span></a><br />
+                <span>How to make payment?</span><br />
                 <span>
                     Hermo MY supports MOL Pay Gateway currently is the best, safest and award-winning online payment gateway that facilitates online merchants or e-commerce merchants&#39; online store in<br />
                     Malaysia to process online transactions in Ringgit Malaysia currency ( MYR ) in large extent and securely.You will only see the payment page after clicked ‘check out’ button. MOL Pay accepts<br />
                     comprehensive of Online Payment Options such as:
                 </span><br />
-                <a id="payment2"><span>What if I can&#39;t make payment online?</span></a><br />
+                <span>What if I can&#39;t make payment online?</span><br />
                 <span>You can choose &#39;&#39;Manual Transfer&#39;&#39; when you check out. Then, send an email to <a href="mailto:admin@hermo.my">admin@hermo.my</a> to inform regarding your successful payment. Payment details must provide and order ID.</span><br />
                 {
                     this.props.aboutUs.data.paymentBankData.map((bankData) => (
@@ -606,7 +613,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>SHIPPING</span>
             <hr />
-            <a id="shipping1"><span>How much is your delivery fees?</span></a><br />
+            <span>How much is your delivery fees?</span><br />
             <span>Shipping fee calculation is as below :</span><br />
             <span>
                 West Malaysia - RM 6.80 for all courier service for single item purchased except Taqbin.<br />
@@ -616,7 +623,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 We now also provide TaQBin service for those who want to receive their purchase over the weekends or holidays. A flat rate of RM 10 shipping fee is applicable in order to use this awesome<br />
                 Japanese courier service. TaQBin is only available in West Malaysia certain area as they have yet to expand their services to regions in East Malaysia.
             </span><br />
-            <a id="shipping2"><span>When will I receive my purchase?</span></a><br />
+            <span>When will I receive my purchase?</span><br />
             <span>
                 Our customers call it &#39;&#39;Flash Shipping&#39;&#39;!<br />
                 Hermo aims to deliver within the time agreed upon when you checkout. Under normal circumstance, you will be able to receive your purchase within 1-3 working days.
@@ -626,7 +633,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
                 except for some circumstances where unfortunately it is beyond our control for example courier service delays, emergency, or items out of stock.
             </span><br />
             <span>Please do not hesitate to contact us for help via email: <a href="mailto:admin@hermo.my">admin@hermo.my</a>.</span><br />
-            <a id="shipping3"><span>Can I buy 2 Beauty Grab’s items and get free shipping?</span></a><br />
+            <span>Can I buy 2 Beauty Grab’s items and get free shipping?</span><br />
             <span>No, Beauty Grab items not entitled for FREE shipping.</span><br />
         </div>
     )
@@ -635,13 +642,13 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>ORDER</span><br />
             <hr />
-            <a id="order1"><span>How can I check the status of my order(s)?</span></a><br />
+            <span>How can I check the status of my order(s)?</span><br />
             <span>Please check in &#39;&#39;Order&#39;&#39;. After your order is posted out, your Order status will change from &#39;&#39;Paid&#39;&#39; to &#39;&#39;Posted&#39;&#39; with a courier company tracking number attached. ( with link )</span><br />
-            <a id="order2"><span>What will I get back after returning the item(s) or order item is out of stock?</span></a><br />
+            <span>What will I get back after returning the item(s) or order item is out of stock?</span><br />
             <span>You can choose to have either a prorated refund ( if promotion code has been applied to order ) to your Hermo Account or bank account ( within 1-14 working days)</span><br />
-            <a id="order3"><span>Why is the item in my shopping cart out of stock?</span></a><br />
+            <span>Why is the item in my shopping cart out of stock?</span><br />
             <span>Hermo will not guarantee the availability of items until the checkout process is completed with payment.</span><br />
-            <a id="order4"><span>What can I do if I fail to checkout due to an item being out of stock?</span></a><br />
+            <span>What can I do if I fail to checkout due to an item being out of stock?</span><br />
             <span>You will have to remove the out of stock items from your cart before proceeding to check out.</span><br />
         </div>
     )
@@ -650,7 +657,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>RETURN</span>
             <hr />
-            <a id="return1"><span>How do I return an item?</span></a><br />
+            <span>How do I return an item?</span><br />
             <span>We want you to absolutely love your Hermo purchase. If you&#39;d like to return or exchange an item, we will do everything we can (within reason) on this journey to gorgeousness together!</span><br />
             <span>Please e-mail us a Refund Application Form in the following format:</span><br />
             <span>
@@ -678,20 +685,20 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>PROMOTION</span>
             <hr />
-            <a id="promotion1"><span>Do you offer free samples?</span></a><br />
+            <span>Do you offer free samples?</span><br />
             <span>Yes. All our free samples are supplied by our supplier, we will giving to our customer free sample while stock last .</span><br />
-            <a id="promotion2"><span>What is gift with purchase (GWP)?</span></a><br />
+            <span>What is gift with purchase (GWP)?</span><br />
             <span>
                 Gift With Purchase it’s actually a way to try a new product that provided by our supplier , it’s limited in stock , therefore kindly add your GWP before your check out. Items featured in Beauty<br />
                 Bundle Box, Hermo Pick, and Beauty Grab are not entitled for free gift redemption with their purchases.
             </span><br />
-            <a id="promotion3"><span>Are the products offered at Hermo original since we get so much discount?</span></a><br />
+            <span>Are the products offered at Hermo original since we get so much discount?</span><br />
             <span>
                 Yes! At Hermo MY, we promise you that every product that are being group sold is 100% authentic. Providing you with the highest quality service and original goods is our top priority. Beauty<br />
                 products for you at low prices with many great deals you will love! Also, we are able to pass on the savings to you since we do not have a physical storefront and related overhead expenses.<br />
                 :)
             </span><br />
-            <a id="promotion4"><span>Why is my order cancelled?</span></a><br />
+            <span>Why is my order cancelled?</span><br />
             <span>
                 Hermo reserves the right to cancel or modify any order if a customer’s purchase behaviour is seen to be suspicious or potentially fraudulent. If you have an enquiries, kindly contact our<br />
                 Customer Service via <a href="mailto:admin@hermo.my">admin@hermo.my</a>.
@@ -703,9 +710,9 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>CREDIT</span>
             <hr />
-            <a id="credit1"><span>Can I post 3 photos of 1 photo on my Instagram and get 150 credits?</span></a><br />
+            <span>Can I post 3 photos of 1 photo on my Instagram and get 150 credits?</span><br />
             <span>No. One order only can redeem one instagram credit .</span><br />
-            <a id="credit2"><span>Are my credits transferable to cash?</span></a><br />
+            <span>Are my credits transferable to cash?</span><br />
             <span>No. All the voucher cannot transfer to cash or credits.</span><br />
         </div>
     )
@@ -714,7 +721,7 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         <div>
             <span>PARTNERSHIP</span><br />
             <hr />
-            <a id="partnership1"><span>How can we sell on Hermo?</span></a><br />
+            <span>How can we sell on Hermo?</span><br />
             <span>
                 We are always on the lookout for beauty suppliers and brand corporations.<br />
                 Please write to us at <a href="mailto:marketing@hermo.my">marketing@hermo.my</a> , our team member will respond to you as soon as possible.
@@ -727,26 +734,26 @@ export class AboutUs extends React.PureComponent { // eslint-disable-line react/
         return (
             <div>
                 {this.renderSidebar()}
-                {this.renderAboutUs()}
-                {this.renderSellingPoint()}
-                {this.renderJoinUs()}
-                {this.renderPartnership()}
-                {this.renderCredit()}
-                {this.renderShipping()}
-                {this.renderReturnPolicy()}
-                {this.renderMembership()}
-                {this.renderContactUs()}
-                {this.renderPrivacyPolicy()}
-                {this.renderUserTerm()}
-                {this.renderFAQ()}
-                {this.renderFAQGeneral()}
-                {this.renderFAQPayment()}
-                {this.renderFAQShipping()}
-                {this.renderFAQOrder()}
-                {this.renderFAQReturn()}
-                {this.renderFAQPromotion()}
-                {this.renderFAQCredit()}
-                {this.renderFAQPartnership()}
+                {!this.state.dataWantToView ? this.renderAboutUs() : null}
+                {!this.state.dataWantToView ? this.renderSellingPoint() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'joinus' ? this.renderJoinUs() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'partnership' ? this.renderPartnership() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'credit' ? this.renderCredit() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'shippinginfo' ? this.renderShipping() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'returnpolicy' ? this.renderReturnPolicy() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'membership' ? this.renderMembership() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'contactus' ? this.renderContactUs() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'privacypolicy' ? this.renderPrivacyPolicy() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'userterm' ? this.renderUserTerm() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'faq' ? this.renderFAQ() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'faq' ? this.renderFAQGeneral() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'faq' || this.state.dataWantToView === 'hermobankaccount' ? this.renderFAQPayment() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'faq' ? this.renderFAQShipping() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'faq' ? this.renderFAQOrder() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'faq' ? this.renderFAQReturn() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'faq' ? this.renderFAQPromotion() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'faq' ? this.renderFAQCredit() : null}
+                {!this.state.dataWantToView || this.state.dataWantToView === 'faq' ? this.renderFAQPartnership() : null}
             </div>
         );
     }
