@@ -1,4 +1,8 @@
+.text-xs-center { text-align: center; }
+.text-xs-right { text-align: right; }
 
+.text-uppercase { text-transform: uppercase; }
+.text-capitalize { text-transform: capitalize; }
 
 .color-transparent { color: transparent; }
 .disabled { color: lightgray }
@@ -106,3 +110,17 @@
 @media (min-width:768px) {.container{max-width:720px}}
 @media (min-width:992px) {.container{max-width:940px}}
 @media (min-width:1200px){.container{max-width:1140px}}
+
+//mixin
+@mixin line-elips($font-size, $line-height, $lines-to-show) {
+    display: block;
+    display: -webkit-box;
+    max-width: 400px;
+    max-height: $font-size*$line-height*$lines-to-show;
+    font-size: $font-size;
+    line-height: $line-height;
+    -webkit-line-clamp: $lines-to-show;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

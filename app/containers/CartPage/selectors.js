@@ -19,13 +19,7 @@ const makeSelectCartPage = () => createSelector(
     (substate) => substate.toJS()
 );
 
-const makeSelectCartData = () => createSelector(
-    selectCartPageDomain,
-    (substate) => substate.get('data')
-);
-
 export default makeSelectCartPage;
 export {
     selectCartPageDomain,
-    makeSelectCartData,
 };

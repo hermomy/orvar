@@ -1,8 +1,11 @@
 @import 'custom-bootstrap-style';
 
-a {outline : none !important;}
+html { font-size: 15px; }
 
-body { font-size: 12px; }
+.hermo-red { color: #660033 !important; }
+.hermo-pink { color: #FF0068 !important; } //lighten($hermo-red, 40%);
+
+a {outline : none !important;}
 
 ::placeholder {
     color: rgb(196, 187, 201);

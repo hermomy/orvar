@@ -9,13 +9,13 @@ import {
     CHECKOUT_DATA_SUCCESS,
 } from './constants';
 
-export function getCheckoutData() {
+export function getCheckout() {
     return {
         type: GET_CHECKOUT_DATA,
     };
 }
 
-export function checkoutDataSuccess(r) {
+export function checkoutSuccess(r) {
     return {
         type: CHECKOUT_DATA_SUCCESS,
         r,
