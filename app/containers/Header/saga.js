@@ -1,5 +1,5 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import { LAYOUT_TOP_NAV } from './constants';
+import { LAYOUT_TOP_NAV, SEARCH_RESULT } from './constants';
 import { layoutTopNavSuccess, layoutTopNavFail } from './actions';
 import { apiRequest } from '../../globalUtils';
 
@@ -12,7 +12,22 @@ export function* getTopNav() {
     }
 }
 
+export function* querySearchResult(action) {
+    const body = JSON.stringify({
+        action: 'suggestion',
+        keyword: action.keyword,
+    });
+    const response = yield call(apiRequest, '/search/suggestion', 'post', body);
+    console.log(response);
+    // if (response && response.ok) {
+    //     yield put(layoutTopNavSuccess(response.data));
+    // } else {
+    //     yield put(layoutTopNavFail(response.data));
+    // }
+}
+
 // Individual exports for testing
 export default function* headerSaga() {
     yield takeLatest(LAYOUT_TOP_NAV, getTopNav);
+    yield takeLatest(SEARCH_RESULT, querySearchResult);
 }
