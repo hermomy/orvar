@@ -27,6 +27,7 @@ import ProductView from 'containers/ProductView';
 import HomePage from 'containers/HomePage';
 import LogoutForm from 'containers/LogoutForm';
 import HerListing from 'containers/HerListing';
+import MallPage from 'containers/MallPage';
 import NotFoundPage from 'containers/NotFoundPage';
 import ProfileWholePage from 'containers/ProfileWholePage';
 import ProfileEditInform from 'containers/ProfileEditInform';
@@ -77,9 +78,49 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                     <Switch>
                         <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />
                         <Route exact={true} path="/logout" component={LogoutForm} />
+                        <Route exact={true} path="/mall" render={() => <MallPage urlType="normalurl" />} />
+                        <Route exact={true} path="/mall/page-:pageNum?" render={() => <MallPage urlType="normalurl" />} />
                         <Route
                             exact={true}
-                            path="/mall"
+                            path="/mall/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?/:subCategoryQueries?/page-:pageNum(\d+)"
+                            render={() => (
+                                <MallPage
+                                    urlType="normalurl"
+                                />
+                            )}
+                        />
+                        <Route
+                            exact={true}
+                            path="/mall/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries/:subCategoryQueries"
+                            render={() => (
+                                <MallPage
+                                    urlType="normalurl"
+                                />
+                            )}
+                        />
+
+                        <Route
+                            exact={true}
+                            path="/mall/groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?/page-:pageNum(\d+)"
+                            render={() => (
+                                <MallPage
+                                    urlType="normalurl"
+                                />
+                            )}
+                        />
+                        <Route
+                            exact={true}
+                            path="/mall/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?"
+                            render={() => (
+                                <MallPage
+                                    urlType="normalurl"
+                                />
+                            )}
+                        />
+
+                        <Route
+                            exact={true}
+                            path="/mall1"
                             render={() => (
                                 <HerListing
                                     dataType="mall"
@@ -88,7 +129,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route
                             exact={true}
-                            path="/mall/page-:pageNum?"
+                            path="/mall1/page-:pageNum?"
                             render={() => (
                                 <HerListing
                                     dataType="mall"
@@ -98,7 +139,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
 
                         <Route
                             exact={true}
-                            path="/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries/:subCategoryQueries?/page-:pageNum(\d+)"
+                            path="/mall1/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries/:subCategoryQueries?/page-:pageNum(\d+)"
                             render={() => (
                                 <HerListing
                                     dataType="mall"
@@ -107,7 +148,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route
                             exact={true}
-                            path="/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries/:subCategoryQueries"
+                            path="/mall1/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries/:subCategoryQueries"
                             render={() => (
                                 <HerListing
                                     dataType="mall"
@@ -117,7 +158,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
 
                         <Route
                             exact={true}
-                            path="/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?/page-:pageNum(\d+)"
+                            path="/mall1/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?/page-:pageNum(\d+)"
                             render={() => (
                                 <HerListing
                                     dataType="mall"
@@ -126,7 +167,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route
                             exact={true}
-                            path="/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?"
+                            path="/mall1/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?"
                             render={() => (
                                 <HerListing
                                     dataType="mall"

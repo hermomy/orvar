@@ -1,0 +1,100 @@
+@import 'app/breakpoints';
+
+
+.grid-view {
+    display: flex;
+    flex-wrap: wrap;
+
+    .product-card-div {
+        width: 50%;
+
+        @include media-breakpoint-up(md) {
+            width: 33%;
+        }
+
+        @include media-breakpoint-up(lg) {
+            width: 25%;
+        }
+    }
+}
+
+.list-view {
+    display: flex;
+    flex-wrap: wrap;
+
+    .product-card-div {
+        width: 100%;
+        @include media-breakpoint-up(lg) {
+            width: 100%;
+        }
+    }
+}
+
+.herlisting-loading {
+    width: 60px;
+}
+
+.content-loading {
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 50%;
+    position: absolute;
+    transform: translateY(-50%);
+}
+
+.data-loading {
+    padding: 5rem;
+    text-align: center;
+}
+
+.sort-filter-container {
+    background-color: RGBA(255, 255, 255, 0.7);
+    max-width: 250px;
+    float: left;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+
+    @include media-breakpoint-down(sm) {
+        text-align: center;
+        z-index: 10;
+        max-width: unset;
+        float: unset;
+
+        .filter-container { display: none; }
+
+        .sort-item {
+            width: 95%;
+            margin: 0.4rem 0;
+        }
+    }
+}
+
+.banner {
+    width: 560;
+    height: 200;
+    margin: 0 auto;
+    display: block;
+
+    @include media-breakpoint-down(md) {
+        width: 80%;
+    }
+
+    @include media-breakpoint-down(sm) {
+        width: 70%;
+    }
+}
+
+.view-button {
+    background-color:red;
+    color: green;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.next-page-bottom {
+    border: 1px solid #ddd;
+    padding: 0.5rem 0.75rem;
+    float:right;
+}
