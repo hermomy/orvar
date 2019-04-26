@@ -9,7 +9,7 @@ import {
     GET_MALL_SUCCESS,
     GET_MALL_FAIL,
     GET_PRODUCT,
-    POST_WISHLIST
+    POST_WISHLIST,
 } from './constants';
 
 export function getMall(api) {
