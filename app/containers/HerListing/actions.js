@@ -9,6 +9,7 @@ import {
     GET_DATA_SUCCESS,
     GET_PRODUCT_SUCCESS,
     GET_DATA_FAIL,
+    POST_WISHLIST,
 } from './constants';
 
 export function getData(path, dataType, api, queryParamString) {
@@ -39,5 +40,12 @@ export function getDataFail(error) {
     return {
         type: GET_DATA_FAIL,
         error,
+    };
+}
+
+export function postWishlist(id) {
+    return {
+        type: POST_WISHLIST,
+        id,
     };
 }
