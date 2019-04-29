@@ -175,16 +175,6 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                             )}
                         />
                         <Route exact={true} path="/mall/:productId" component={ProductView} />
-                        <Route exact={true} path="/profile/me" component={ProfileEditInform} />
-                        <Route exact={true} path="/order" component={ProfileOrder} />
-                        <Route
-                            exact={true}
-                            path="/order/:status(canceled|to-paid|to-ship)?"
-                            component={ProfileOrder}
-                        />
-                        <Route exact={true} path="/wishlist" component={ProfileWishlist} />
-                        <Route exact={true} path="/wallet" component={ProfileWallet} />
-                        <Route exact={true} path="/review" component={ProfileReview} />
                         <Route exact={true} path="/about" component={AboutUs} />
                         <Route
                             exact={true}
@@ -193,7 +183,12 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route exact={true} path="/feedback" component={FeedbackPage} />
                         <Route exact={true} path="/" component={HomePage} />
-                        <Route exact={true} path="/profileweb" component={ProfileWholePage} />
+                        <Route exact={true} path="/profile/:profilePart(me|wallet|order|review|wishlist|setting|logout)?" component={ProfileWholePage} />
+                        <Route
+                            exact={true}
+                            path="/profile/:order/:profilePart(canceled|to-paid|to-ship)?"
+                            component={ProfileWholePage}
+                        />
                         <Route exact={true} path="/cart" component={CartPage} />
                         <Route exact={true} path="/profilesmallscreen" component={ProfilePage} />
                         <PrivateRoute

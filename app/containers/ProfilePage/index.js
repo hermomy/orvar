@@ -29,22 +29,22 @@ const buttonSection = [
         child: [
             {
                 name: 'My Wallet',
-                key: '/wallet',
+                key: '/profile/wallet',
             },
             {
                 name: 'My Review',
-                key: '/review',
+                key: '/profile/review',
             },
             {
                 name: 'My Orders',
-                key: '/order',
+                key: '/profile/order',
             },
             {
                 // name: 'My Rewards',
             },
             {
                 name: 'My WishList',
-                key: '/wishlist',
+                key: '/profile/wishlist',
             },
         ],
     },
@@ -161,7 +161,7 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
                                 <div className="profile-page-order-icon-container">
                                     <div className="profile-page-order-icon">
                                         <NavLink
-                                            to={'/order/to-paid'}
+                                            to={'/profile/order/to-paid'}
                                         >
                                             <img src={require('images/toPay-icon.png')} alt="" />
                                             <span>To Pay</span>
@@ -169,7 +169,7 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
                                     </div>
                                     <div className="profile-page-order-icon">
                                         <NavLink
-                                            to={'/order/to-ship'}
+                                            to={'/profile/order/to-ship'}
                                         >
                                             <img src={require('images/toShip-icon.png')} alt="" />
                                             <span>To Ship</span>
@@ -177,7 +177,7 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
                                     </div>
                                     <div className="profile-page-order-icon">
                                         <NavLink
-                                            to={'review'}
+                                            to={'/profile/review'}
                                         >
                                             <img src={require('images/toReview-icon.png')} alt="" />
                                             <span>To Review</span>
@@ -185,7 +185,7 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
                                     </div>
                                     <div className="profile-page-order-icon">
                                         <NavLink
-                                            to={'/order/canceled'}
+                                            to={'/profile/order/canceled'}
                                         >
                                             <img src={require('images/cancelled-icon.png')} alt="" />
                                             <span>Cancelled</span>

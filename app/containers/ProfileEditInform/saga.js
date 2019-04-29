@@ -66,6 +66,7 @@ export function* putUserInformWorker(action) {
     if (res && res.ok) {
         yield put(getInformChoice());
         yield put(getUserInform());
+        window.location.reload();
     } else {
         yield put(getDataFail(res.data));
     }

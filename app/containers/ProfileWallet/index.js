@@ -100,26 +100,32 @@ export class ProfileWallet extends React.PureComponent { // eslint-disable-line 
                     :
                     null
                 }
-                <table border="1">
-                    <tbody>
-                        <tr>
-                            <td>Reference</td>
-                            <td>Reference Value</td>
-                            <td>Amount</td>
-                            <td>Date Created</td>
-                        </tr>
-                        {
-                            this.props.profileWallet.data.balanceData.items.map((item) => (
-                                <tr key={item.id}>
-                                    <td>{item.reference}</td>
-                                    <td>{item.reference_value}</td>
-                                    <td>{item.amount}</td>
-                                    <td>{item.created_at}</td>
+                {
+                    dataChecking(this.props, 'profileWallet', 'data', 'balanceData', 'items', length) ?
+                        <table border="1">
+                            <tbody>
+                                <tr>
+                                    <td>Reference</td>
+                                    <td>Reference Value</td>
+                                    <td>Amount</td>
+                                    <td>Date Created</td>
                                 </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
+                                {
+                                    this.props.profileWallet.data.balanceData.items.map((item) => (
+                                        <tr key={item.id}>
+                                            <td>{item.reference}</td>
+                                            <td>{item.reference_value}</td>
+                                            <td>{item.amount}</td>
+                                            <td>{item.created_at}</td>
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    :
+                    null
+                }
+
             </div>
         );
     }

@@ -199,7 +199,7 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
         const addressdetail = this.props.profileEditInform.data.AddressDetail;
         return (
             <div style={{ backgroundColor: 'lime', marginBottom: '80px' }}>
-                <span style={{ backgroundColor: 'red' }} onClick={() => this.setState({ editaddress: null })}>X</span>
+                <span style={{ backgroundColor: 'red', float: 'right', width: '20px' }} onClick={() => this.setState({ editaddress: null })}>X</span>
                 <span>NEW ADDRESS</span><br />
                 <span>RECEIVER</span><br />
                 <input type="text" id="address_name" defaultValue={addressdetail.receiver_name} /><br />
@@ -334,7 +334,7 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
                 <br />
                 {this.renderCheckbox(user, choice)}
                 <br />
-                <input type="button" value="Save Change" onClick={() => this.submitInform()} />
+                <input type="button" value="Save Change" onClick={() => { this.submitInform(); }} />
             </div>
         );
     }

@@ -10,10 +10,11 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { dataChecking } from 'globalUtils';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import Pagination from 'components/Pagination';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+
 
 import makeSelectProfileOrder from './selectors';
 import reducer from './reducer';
@@ -31,8 +32,12 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     }
 
     componentWillMount() {
-        if (dataChecking(this.props, 'match', 'params', 'status')) {
-            this.props.dispatch(getOrder(`/${this.props.match.params.status}`));
+        if (dataChecking(this.props, 'match', 'params', 'profilePart')) {
+            if (this.props.match.params.profilePart === 'canceled' ||
+                this.props.match.params.profilePart === 'to-paid' ||
+                this.props.match.params.profilePart === 'to-ship') {
+                this.props.dispatch(getOrder(`/${this.props.match.params.profilePart}`));
+            }
         } else {
             this.props.dispatch(getOrder(''));
         }
@@ -303,6 +308,7 @@ const withReducer = injectReducer({ key: 'profileOrder', reducer });
 const withSaga = injectSaga({ key: 'profileOrder', saga });
 
 export default compose(
+    withRouter,
     withReducer,
     withSaga,
     withConnect,

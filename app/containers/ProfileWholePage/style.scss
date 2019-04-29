@@ -1,0 +1,17 @@
+.ProfileWholePage-container {
+    display: flex;
+    justify-content: start;
+}
+
+
+.ProfileWholePage-content {
+    flex: 9;
+}
+
+
+.ProfileWholePage-sidebar {
+    float:left;
+    width: 200px;
+    flex: 1;
+    display: block;
+}

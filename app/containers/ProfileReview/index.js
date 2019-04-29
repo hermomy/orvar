@@ -57,17 +57,21 @@ export class ProfileReview extends React.PureComponent { // eslint-disable-line 
             return null;
         }
         return this.props.profileReview.data.reviewData.items.map((item) => (
-            <div key={item.id} style={{ marginTop: '3rem' }}>
-                <NavLink to={`${item.url ? `${item.url}` : '/mall'}`} >
-                    <img src={item.image.small} alt="" />
-                </NavLink>
-                <span>{item.display_name}</span>
-                <textarea rows="5" cols="20" placeholder="Write your review" id={`textarea_${item.id}`} />
-                <span>Rate your product</span>
-                <Rate
-                    rating={-1}
-                    giveRate={(mark) => { this.insertRateDataToReviewData(mark, item.id); }}
-                />
+            <div key={item.id} className="ProfileReview-review-container">
+                <div className="ProfileReview-review-image">
+                    <NavLink to={`${item.url ? `${item.url}` : '/mall'}`} >
+                        <img src={item.image.small} alt="" />
+                    </NavLink>
+                </div>
+                <div className="ProfileReview-review-content">
+                    <span>{item.display_name}</span><br />
+                    <textarea rows="5" cols="40" placeholder="Write your review" id={`textarea_${item.id}`} /><br />
+                    <span>Rate your product</span>
+                    <Rate
+                        rating={-1}
+                        giveRate={(mark) => { this.insertRateDataToReviewData(mark, item.id); }}
+                    />
+                </div>
                 <input type="button" onClick={() => this.submitReview(item.id, item)} value="Submit Review" />
             </div>
         ));

@@ -31,11 +31,19 @@ import {
 
 export class ProfileWholePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
-        subpage: 'ProfilePage',
+        subpage: null,
     }
 
     componentWillMount() {
         this.props.dispatch(mainGetProfile());
+        if (dataChecking(this.props, 'match', 'params', 'profilePart')) {
+            this.setState({ subpage: this.props.match.params.profilePart });
+        }
+    }
+
+    clickSidebarButtonAction = (tempsubpage) => {
+        this.setState({ subpage: tempsubpage });
+        this.props.history.push(`/profile/${tempsubpage}`);
     }
 
     renderSideBar = () => {
@@ -44,30 +52,42 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         }
         const user = this.props.profileWholePage.data.mainProfileData;
         return (
-            <div>
-                {/* <img src={user.avatar} alt="" /> */}
-                <span>{user.name}</span><br />
-                <span>{user.membership.name}</span><br />
-                <span>Usable Credits {user.credit.usable}</span><br />
-                <span>Usable Balance {user.balance.usable}</span><br />
+            <div className="ProfileWholePage-container">
+                <div className="ProfileWholePage-sidebar">
+                    {/* <img src={user.avatar} alt="" /> */}
+                    <span>{user.name}</span><br />
+                    <span>{user.membership.name}</span><br />
+                    <span>Usable Credits {user.credit.usable}</span><br />
+                    <span>Usable Balance {user.balance.usable}</span><br />
 
-                <div style={{ float: 'left' }}>
-                    <span onClick={() => this.setState({ subpage: 'ProfileEditInform' })}><FormattedMessage {...messages.Profile} /></span><br />
-                    <span onClick={() => this.setState({ subpage: 'ProfileOrder' })}><FormattedMessage {...messages.Order} /></span><br />
-                    <span onClick={() => this.setState({ subpage: 'ProfileWallet' })}><FormattedMessage {...messages.Wallet} /></span><br />
-                    <span onClick={() => this.setState({ subpage: 'ProfileReview' })}><FormattedMessage {...messages.Review} /></span><br />
-                    <span onClick={() => this.setState({ subpage: 'ProfileWishlist' })}><FormattedMessage {...messages.Wishlist} /> ({user.wishlist.total} )</span><br />
-                    <span onClick={() => this.setState({ subpage: 'ProfileSetting' })}><FormattedMessage {...messages.Setting} /></span><br />
-                    <span onClick={() => this.setState({ subpage: 'LogoutForm' })}><FormattedMessage {...messages.Logout} /></span><br />
+                    <span onClick={() => this.clickSidebarButtonAction('me')}><FormattedMessage {...messages.Profile} /></span><br />
+                    <span onClick={() => this.clickSidebarButtonAction('order')}><FormattedMessage {...messages.Order} /></span><br />
+                    <span onClick={() => this.clickSidebarButtonAction('wallet')}><FormattedMessage {...messages.Wallet} /></span><br />
+                    <span onClick={() => this.clickSidebarButtonAction('review')}><FormattedMessage {...messages.Review} /></span><br />
+                    <span onClick={() => this.clickSidebarButtonAction('wishlist')}><FormattedMessage {...messages.Wishlist} /> ({user.wishlist.total} )</span><br />
+                    <span onClick={() => this.clickSidebarButtonAction('setting')}><FormattedMessage {...messages.Setting} /></span><br />
+                    <span onClick={() => this.clickSidebarButtonAction('logout')}><FormattedMessage {...messages.Logout} /></span><br />
                 </div>
-                {this.state.subpage === 'ProfileEditInform' ? <div style={{ float: 'right' }}><ProfileEditInform /></div> : null}
-                {this.state.subpage === 'ProfileOrder' ? <div style={{ float: 'right' }}><ProfileOrder /></div> : null}
-                {this.state.subpage === 'ProfileWallet' ? <div style={{ float: 'right' }}><ProfileWallet /></div> : null}
-                {this.state.subpage === 'ProfileReview' ? <div style={{ float: 'right' }}><ProfileReview /></div> : null}
-                {this.state.subpage === 'ProfileWishlist' ? <div style={{ float: 'right' }}><ProfileWishlist /></div> : null}
-                {/* {this.state.subpage === 'ProfileSetting' ? <ProfileSetting /> : null} */}
-                {this.state.subpage === 'LogoutForm' ? <div style={{ float: 'right' }}><LogoutForm /></div> : null}
-
+                <div className="ProfileWholePage-content">
+                    {this.state.subpage === 'me' ? <div><ProfileEditInform /></div> : null}
+                    {
+                        this.state.subpage === 'order' ||
+                        this.state.subpage === 'canceled' ||
+                        this.state.subpage === 'to-paid' ||
+                        this.state.subpage === 'to-ship'
+                            ?
+                                <div>
+                                    <ProfileOrder />
+                                </div>
+                            :
+                            null
+                    }
+                    {this.state.subpage === 'wallet' ? <div><ProfileWallet /></div> : null}
+                    {this.state.subpage === 'review' ? <div><ProfileReview /></div> : null}
+                    {this.state.subpage === 'wishlist' ? <div><ProfileWishlist /></div> : null}
+                    {/* {this.state.subpage === 'ProfileSetting' ? <ProfileSetting /> : null} */}
+                    {this.state.subpage === 'logout' ? <div><LogoutForm /></div> : null}
+                </div>
             </div>
         );
     }
