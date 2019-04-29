@@ -22,11 +22,11 @@ function profileWholePageReducer(state = initialState, action) {
         case MAIN_GET_PROFILE_SUCCESS:
             return state
                 .set('data', Object.assign({ ...state.get('data') }, action.payload))
-                .set('loading', true)
-                .set('success', false);
+                .set('loading', false)
+                .set('success', true);
         case MAIN_GET_PROFILE_FAIL:
             return state
-                .set('loading', true)
+                .set('loading', false)
                 .set('success', false);
         default:
             return state;

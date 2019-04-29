@@ -1,11 +1,11 @@
 import { fromJS } from 'immutable';
-import { selectProfileReviewDomain } from '../selectors';
+import selectProfileReviewDomain from '../selectors';
 import { initialState } from '../reducer';
 
 describe('selectProfileReviewDomain', () => {
-    it('Expect selectProfileReviewDomain to return state from reducer', () => {
+    it('Expect selector select profileReview from state', () => {
         const selector = selectProfileReviewDomain();
-        const mock = fromJS({ ProfileReview: initialState });
+        const mock = fromJS({ profileReview: initialState });
         expect(selector(mock)).toEqual(initialState.toJS());
     });
 });

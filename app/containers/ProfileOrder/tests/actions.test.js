@@ -1,18 +1,49 @@
+import {
+    getOrder,
+    getOrderDetail,
+    getOrderSuccess,
+    getOrderFail,
+} from '../actions';
 
 import {
-    defaultAction,
-} from '../actions';
-import {
-    DEFAULT_ACTION,
+    GET_ORDER,
+    GET_ORDER_DETAIL,
+    GET_ORDER_SUCCESS,
+    GET_ORDER_FAIL,
 } from '../constants';
 
-describe('ProfileOrder actions', () => {
-    describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
-            const expected = {
-                type: DEFAULT_ACTION,
-            };
-            expect(defaultAction()).toEqual(expected);
-        });
+describe('getOrder action', () => {
+    it('has a type of GET_ORDER', () => {
+        const expected = {
+            type: GET_ORDER,
+        };
+        expect(getOrder()).toEqual(expected);
+    });
+});
+
+describe('getOrderDetail action', () => {
+    it('has a type of GET_ORDER_DETAIL', () => {
+        const expected = {
+            type: GET_ORDER_DETAIL,
+        };
+        expect(getOrderDetail()).toEqual(expected);
+    });
+});
+
+describe('getOrderSuccess action', () => {
+    it('has a type of GET_ORDER_SUCCESS', () => {
+        const expected = {
+            type: GET_ORDER_SUCCESS,
+        };
+        expect(getOrderSuccess()).toEqual(expected);
+    });
+});
+
+describe('getOrderFail action', () => {
+    it('has a type of GET_ORDER_FAIL', () => {
+        const expected = {
+            type: GET_ORDER_FAIL,
+        };
+        expect(getOrderFail()).toEqual(expected);
     });
 });

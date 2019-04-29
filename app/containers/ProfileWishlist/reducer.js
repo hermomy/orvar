@@ -28,7 +28,6 @@ function profileWishlistReducer(state = initialState, action) {
                 .set('error', false);
         case GET_WISHLIST_FAIL:
             return state
-                .set('data', action.payload)
                 .set('loading', false)
                 .set('error', action.payload);
         case DELETE_WISHLIST:

@@ -27,7 +27,7 @@ function feedbackPageReducer(state = initialState, action) {
             return state
                 .set('error', action.data)
                 .set('loading', false)
-                .set('success', true);
+                .set('success', false);
         default:
             return state;
     }

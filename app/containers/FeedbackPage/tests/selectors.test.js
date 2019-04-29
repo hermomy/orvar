@@ -1,11 +1,11 @@
 import { fromJS } from 'immutable';
-import { selectFeedbackPageDomain } from '../selectors';
+import selectFeedbackPageDomain from '../selectors';
 import { initialState } from '../reducer';
 
 describe('selectFeedbackPageDomain', () => {
-    it('Expect selectFeedbackPageDomain to return state from reducer', () => {
+    it('Expect selector select feedback from state', () => {
         const selector = selectFeedbackPageDomain();
-        const mock = fromJS({ FeedbackPage: initialState });
+        const mock = fromJS({ feedbackPage: initialState });
         expect(selector(mock)).toEqual(initialState.toJS());
     });
 });

@@ -3,15 +3,43 @@
  */
 
 /* eslint-disable redux-saga/yield-effects */
-// import { take, call, put, select } from 'redux-saga/effects';
-// import { feedbackPageSaga } from '../saga';
-import feedbackPageSaga, { defaultWorker } from '../saga';
+import {
+    put,
+    takeLatest,
+    call,
+} from 'redux-saga/effects';
+import { apiRequest } from 'globalUtils';
+import {
+    postFeedback,
+    postFeedbackSuccess,
+    postFeedbackFail,
+} from '../actions';
+import {
+    POST_FEEDBACK,
+} from '../constants';
+import feedbackPageSaga, { postFeedbackWorker } from '../saga';
 
-// const generator = feedbackPageSaga();
+describe('herlisting Saga', () => {
+    const data = true;
 
-describe('feedbackPageSaga', () => {
-    it('Expect to have unit tests specified', () => {
+    it('Expect POST_FEEDBACK to trigger postFeedbackWorker', () => {
         const generator = feedbackPageSaga();
-        expect(generator.next(defaultWorker()).value).toEqual(true);
+        expect(generator.next().value).toEqual([
+            takeLatest(POST_FEEDBACK, postFeedbackWorker),
+        ]);
+    });
+
+    it('Expect success to get feedback', () => {
+        const responce = { ok: true };
+        const generator = postFeedbackWorker(postFeedback(data));
+        expect(generator.next().value).toEqual(call(apiRequest, '/feedback', 'post', data));
+        expect(generator.next(responce).value).toEqual(put(postFeedbackSuccess()));
+    });
+
+    it('Expect fail to get feedback', () => {
+        const responce = { ok: false };
+        const generator = postFeedbackWorker(postFeedback(data));
+        expect(generator.next().value).toEqual(call(apiRequest, '/feedback', 'post', null, data));
+        expect(generator.next(responce).value).toEqual(put(postFeedbackFail(data)));
     });
 });

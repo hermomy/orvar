@@ -12,9 +12,6 @@ import {
 } from './constants';
 
 export const initialState = fromJS({
-    data: null,
-    loading: false,
-    error: false,
 });
 
 function profilePageReducer(state = initialState, action) {
