@@ -30,15 +30,10 @@ import HerListing from 'containers/HerListing';
 import MallPage from 'containers/MallPage';
 import NotFoundPage from 'containers/NotFoundPage';
 import ProfileWholePage from 'containers/ProfileWholePage';
-import ProfileEditInform from 'containers/ProfileEditInform';
 // import Cart from 'containers/CartPage';
 import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
 import ProfilePage from 'containers/ProfilePage';
-import ProfileOrder from 'containers/ProfileOrder';
-import ProfileWishlist from 'containers/ProfileWishlist';
-import ProfileWallet from 'containers/ProfileWallet';
-import ProfileReview from 'containers/ProfileReview';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
 
