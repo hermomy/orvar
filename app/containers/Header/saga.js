@@ -1,6 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { LAYOUT_TOP_NAV, SEARCH_RESULT } from './constants';
-import { layoutTopNavSuccess, layoutTopNavFail } from './actions';
+import { layoutTopNavSuccess, layoutTopNavFail, searchResultSuccess, searchResultFail } from './actions';
 import { apiRequest } from '../../globalUtils';
 
 export function* getTopNav() {
@@ -18,12 +18,11 @@ export function* querySearchResult(action) {
         keyword: action.keyword,
     });
     const response = yield call(apiRequest, '/search/suggestion', 'post', body);
-    console.log(response);
-    // if (response && response.ok) {
-    //     yield put(layoutTopNavSuccess(response.data));
-    // } else {
-    //     yield put(layoutTopNavFail(response.data));
-    // }
+    if (response && response.ok) {
+        yield put(searchResultSuccess(response.data));
+    } else {
+        yield put(searchResultFail(response.data));
+    }
 }
 
 // Individual exports for testing

@@ -19,10 +19,10 @@ export function layoutTopNav() {
     };
 }
 
-export function layoutTopNavSuccess(response) {
+export function layoutTopNavSuccess(headerData) {
     return {
         type: LAYOUT_TOP_NAV_SUCCESS,
-        response,
+        headerData,
     };
 }
 
@@ -39,14 +39,16 @@ export function searchResult(keyword) {
     };
 }
 
-export function searchResultSuccess() {
+export function searchResultSuccess(searchResultData) {
     return {
         type: SEARCH_RESULT_SUCCESS,
+        searchResultData,
     };
 }
 
-export function searchResultFail() {
+export function searchResultFail(searchResultData) {
     return {
         type: SEARCH_RESULT_FAIL,
+        searchResultData,
     };
 }

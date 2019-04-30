@@ -19,6 +19,18 @@
     .quicklink {
         display: flex;
         align-items: center;
+        .resultBoxhide { display: none; }
+        .resultBoxshow {
+            position: absolute;
+            top: 41px;
+            background-color: white;
+            padding: 1rem;
+            left: 40px;
+            width: 82vw;
+            border: 1px solid #ccc;
+            box-shadow: 0px 2px 5px -1px #cccccc;
+            min-height: 5rem;
+        }
         .search.show {
             position: relative;
             .icon {

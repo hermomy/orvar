@@ -29,7 +29,9 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         this.state = {
             showCartPopout: false,
             hideSearchBar: true,
+            searchQuery: '',
         };
+        this.getSearchResult = this.getSearchResult.bind(this);
     }
 
     componentDidMount() {
@@ -37,30 +39,60 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     }
 
     getSearchResult = (e) => {
+        this.setState({ searchQuery: event.target.value });
         if (e.target.value.length > 2) {
-            this.props.dispatch(searchResult(e.target.value));
+            this.props.dispatch(searchResult(this.state.searchQuery));
         }
     }
 
     searchSection = () => (
-        <div className={`search ml-3 ${!this.state.hideSearchBar ? 'show' : ''}`}>
+        <div>
             {
                 !this.state.hideSearchBar ?
-                    <input type="text" onChange={(e) => this.getSearchResult(e)}></input>
+                    this.state.searchQuery.length < 3 ?
+                        null
+                    :
+                        <div style={{ position: 'relative' }}>
+                            <div className={this.state.hideSearchBar ? 'resultBoxhide' : 'resultBoxshow'}>
+                                {
+                                    dataChecking(this.props, 'header', 'suggestionData', 'loading') ?
+                                        <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="hermo loading" />
+                                    :
+                                        <div>
+                                            {
+                                                dataChecking(this.props, 'header', 'suggestionData', 'error') ?
+                                                    <div>
+                                                        { this.props.header.suggestionData.data.messages[0].text }
+                                                    </div>
+                                                :
+                                                    <div>data found</div>
+                                            }
+                                        </div>
+                                }
+                            </div>
+                        </div>
                 :
                     null
             }
-            <i
-                className={`fas icon ${!this.state.hideSearchBar ? 'fa-times' : 'fa-search'}`}
-                onClick={() => this.setState({
-                    hideSearchBar: !this.state.hideSearchBar,
-                })}
-                style={{
-                    color: 'grey',
-                    fontSize: '1.5rem',
-                    cursor: 'pointer',
-                }}
-            ></i>
+            <div className={`search ml-3 ${!this.state.hideSearchBar ? 'show' : ''}`}>
+                {
+                    !this.state.hideSearchBar ?
+                        <input type="text" value={this.state.searchQuery} onChange={this.getSearchResult}></input>
+                    :
+                        null
+                }
+                <i
+                    className={`fas icon ${!this.state.hideSearchBar ? 'fa-times' : 'fa-search'}`}
+                    onClick={() => this.setState({
+                        hideSearchBar: !this.state.hideSearchBar,
+                    })}
+                    style={{
+                        color: 'grey',
+                        fontSize: '1.5rem',
+                        cursor: 'pointer',
+                    }}
+                ></i>
+            </div>
         </div>
     )
 
@@ -111,8 +143,8 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     topCategory = () => (
         <div className={`top-nav ${!this.state.hideSearchBar ? 'show' : ''}`}>
             {
-                dataChecking(this.props.header, 'data') ?
-                    dataChecking(this.props.header, 'data').map((val) => (
+                dataChecking(this.props.header, 'header', 'data') ?
+                    dataChecking(this.props.header, 'header', 'data').map((val) => (
                         <div className="ml-3 category" key={val.code}>
                             {val.text}
                         </div>
