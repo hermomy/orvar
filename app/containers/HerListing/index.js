@@ -25,6 +25,7 @@ import saga from './saga';
 import './style.scss';
 import {
     getData,
+    postWishlist,
 } from './actions';
 
 const SORT_DEFAULT = 'sort=default';
@@ -89,20 +90,10 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
     }
 
     getDataByPathname = () => {
-        if (dataChecking(this.props, 'match', 'params', 'categoryQueries')) {
-            console.log(this.props.match.params.categoryQueries);
-            const categoryParams = this.props.match.params.categoryQueries.split('/');
-            if (categoryParams.length >= 2) {
-                alert('subcategory');
-            } else {
-                alert('category');
-            }
-            // sub or cate
-            //     const subcategoryId = this.props.match.params.subcategoryParam.split('-')[0];
-            //     this.props.dispatch(getData('subcategory', null, `${subcategoryId}`));
-            // } else if (dataChecking(this.props, 'match', 'params', 'categoryParam')) {
-            //     const categoryId = this.props.match.params.categoryParam.split('-')[0];
-            //     this.props.dispatch(getData('category', null, `${categoryId}`));
+        if (dataChecking(this.props, 'match', 'params', 'subCategoryQueries')) {
+            this.props.dispatch(getData(`/subcategory/${this.props.match.params.categoryQueries.split('-')[0]}`, 'mall'));
+        } else if (dataChecking(this.props, 'match', 'params', 'categoryQueries')) {
+            this.props.dispatch(getData(`/category/${this.props.match.params.categoryQueries.split('-')[0]}`, 'mall'));
         } else if (dataChecking(this.props, 'match', 'params', 'groupName')) {
             const groupName = dataChecking(this.props, 'match', 'params', 'groupName');
             let groupId = 1;
@@ -135,7 +126,6 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         } else {
             this.props.dispatch(getData('/mall', this.props.dataType || 'mall'));
         }
-
         return null;
     }
 
@@ -177,6 +167,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                 meta={data._meta}
                 link={data._links}
                 goToPage={this.state.goToPage}
+                isHerlisting={true}
             />
         );
     }
@@ -186,18 +177,39 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         if (!data) {
             return null;
         }
+        console.log(this.props);
         return this.props.herlisting.data.product.result.items.map((product) =>
         (
             <div
                 key={product.id}
-                className={`product-card-div ${this.state.listView ? 'list-view-component' : 'grid-view-component'}`}
+                className={'product-card-div'}
             >
                 <ProductCard
                     product={product}
-                    listViewMode={this.state.listView}
+                    review={product.review}
+                    url={product.url}
+                    price={dataChecking(product, 'price')}
+                    allowDelete={false}
+                    listViewMode={!this.state.listView}
+                    allowWishlistButton={true}
+                    addOrDeleteWishlist={() => this.props.dispatch(postWishlist(product.id))}
                 />
             </div>
         ));
+    }
+
+    renderSortFilter = () => {
+        if (!dataChecking(this.props, 'herlisting', 'data')) {
+            return null;
+        }
+        return (
+            <SortFilter
+                parentProps={this.props}
+                sortData={dataChecking(this.props.herlisting.data, 'sort')}
+                filterData={dataChecking(this.props.herlisting.data, 'filters')}
+                initialSortFilterParams={this.state.initialSortFilterParams}
+            />
+        );
     }
 
     render() {
@@ -215,23 +227,19 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                         :
                         <div>
                             <img className="banner" src="https://cdn5.hermo.my/hermo/imagelink/2019/april-2019-loreal-paris_01554085356.jpg" alt="" />
+
                             <div>
                                 <div className="view-button">
                                     <input type="button" onClick={() => { this.setState({ listView: !this.state.listView }); }} value="grid/list" />
                                 </div>
+
                                 {this.renderPaginator()}
                             </div>
+
                             <div className="sort-filter-container">
-                                {
-                                    dataChecking(herlisting, 'data') &&
-                                        <SortFilter
-                                            parentProps={this.props}
-                                            sortData={dataChecking(herlisting.data, 'sort')}
-                                            filterData={dataChecking(herlisting.data, 'filters')}
-                                            initialSortFilterParams={this.state.initialSortFilterParams}
-                                        />
-                                }
+                                {this.renderSortFilter()}
                             </div>
+
                             <div className="data-container">
                                 {
                                     dataChecking(herlisting, 'loading') ?
@@ -244,9 +252,11 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                                         </div>
                                 }
                             </div>
+
                             <div>
                                 <span className="next-page-bottom" onClick={() => this.goNextPage()}>Next Page</span>
                             </div>
+
                         </div>
                 }
             </div>

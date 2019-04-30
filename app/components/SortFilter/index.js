@@ -44,6 +44,43 @@ class SortFilter extends React.Component {
         }
     }
 
+    addCategoryInAPILink = (currentQueryString) => {
+        if (dataChecking(this.props.parentProps, 'match', 'params', 'subCategoryQueries')) {
+            this.props.parentProps.dispatch(getData('', 'mallList', '', `${currentQueryString}&subcategory_id=${this.props.parentProps.match.params.subCategoryQueries.split('-')[0]}`));
+        } else if (dataChecking(this.props.parentProps, 'match', 'params', 'categoryQueries')) {
+            this.props.parentProps.dispatch(getData('', 'mallList', '', `${currentQueryString}&category_id=${this.props.parentProps.match.params.categoryQueries.split('-')[0]}`));
+        } else if (dataChecking(this.props.parentProps, 'match', 'params', 'groupName')) {
+            const groupName = dataChecking(this.props.parentProps, 'match', 'params', 'groupName');
+            let groupId = 1;
+            switch (groupName) {
+                case 'skin-care':
+                    groupId = 1;
+                    break;
+                case 'make-up':
+                    groupId = 2;
+                    break;
+                case 'fragrance':
+                    groupId = 3;
+                    break;
+                case 'bath-and-body':
+                    groupId = 4;
+                    break;
+                case 'set-item':
+                    groupId = 5;
+                    break;
+                case 'hair':
+                    groupId = 6;
+                    break;
+                case 'beauty-and-wellness':
+                    groupId = 7;
+                    break;
+                default:
+                    break;
+            }
+            this.props.parentProps.dispatch(getData('', 'mallList', '', `${currentQueryString}&group_id=${groupId}`));
+        }
+    }
+
     updateSelectedSort = (event) => {
         const currentQueryString = this.state.currentQueryString.replace(this.state.selectedSorter, event.target.value).replace('?', '');
         this.props.parentProps.dispatch(getData('', 'mallList', '', currentQueryString));
@@ -54,6 +91,7 @@ class SortFilter extends React.Component {
         if (dataChecking(this.props.parentProps, 'history', 'push')) {
             this.props.parentProps.history.push(`${this.state.pagelessPath}?${currentQueryString}`);
         }
+        this.addCategoryInAPILink(currentQueryString);
     }
 
     updateSelectedFilter = (item) => {
@@ -68,7 +106,7 @@ class SortFilter extends React.Component {
         }
         let queryString = '';
         if (this.state.selectedSorter) {
-            queryString = `?sort=${this.state.selectedSorter}`;
+            queryString = `sort=${this.state.selectedSorter}`;
         }
         let query = '';
         Object.values(obj).forEach((param) => {
@@ -76,13 +114,13 @@ class SortFilter extends React.Component {
         });
         queryString += query;
         if (dataChecking(parentProps, 'history', 'push')) {
-            this.props.parentProps.history.push(`${this.state.pagelessPath}${queryString}`);
+            this.props.parentProps.history.push(`${this.state.pagelessPath}?${queryString}`);
         } else {
             console.warn('History for route not found.');
         }
-        parentProps.dispatch(getData('', 'mallList', '', queryString));
-        console.log(queryString);
+        this.props.parentProps.dispatch(getData('', 'mallList', '', queryString));
         this.setState({ selectedFilter: obj, currentQueryString: queryString });
+        this.addCategoryInAPILink(queryString);
     }
 
     toggleFilter = (item) => {

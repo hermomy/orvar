@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import { NavLink } from 'react-router-dom';
 // import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -28,15 +29,22 @@ const buttonSection = [
         child: [
             {
                 name: 'My Wallet',
+                key: '/profile/wallet',
             },
             {
-                name: 'My Vouchers',
+                name: 'My Review',
+                key: '/profile/review',
             },
             {
                 name: 'My Orders',
+                key: '/profile/order',
             },
             {
-                name: 'My Rewards',
+                // name: 'My Rewards',
+            },
+            {
+                name: 'My WishList',
+                key: '/profile/wishlist',
             },
         ],
     },
@@ -45,9 +53,11 @@ const buttonSection = [
         child: [
             {
                 name: 'Contact Us',
+                key: '/about/contactus',
             },
             {
                 name: 'FAQ',
+                key: '/about/faq',
             },
         ],
     },
@@ -56,9 +66,11 @@ const buttonSection = [
         child: [
             {
                 name: 'About',
+                key: '/about',
             },
             {
                 name: 'Privacy Policy',
+                key: '/about/privacypolicy',
             },
         ],
     },
@@ -67,9 +79,11 @@ const buttonSection = [
         child: [
             {
                 name: 'Give Us Feedback',
+                key: '/feedback',
             },
             {
                 name: 'Join Us',
+                key: '/about/joinus',
             },
             {
                 name: 'Language',
@@ -81,6 +95,7 @@ const buttonSection = [
         child: [
             {
                 name: 'Log Out',
+                key: '/logout',
             },
         ],
     },
@@ -100,6 +115,7 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
         }
     }
     render() {
+        console.log(this.props);
         return (
             <div>
                 <Helmet>
@@ -144,20 +160,36 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
                             <div className="profile-page-order-content">
                                 <div className="profile-page-order-icon-container">
                                     <div className="profile-page-order-icon">
-                                        <img src={require('images/toPay-icon.png')} alt="" />
-                                        <span>To Pay</span>
+                                        <NavLink
+                                            to={'/profile/order/to-paid'}
+                                        >
+                                            <img src={require('images/toPay-icon.png')} alt="" />
+                                            <span>To Pay</span>
+                                        </NavLink>
                                     </div>
                                     <div className="profile-page-order-icon">
-                                        <img src={require('images/toShip-icon.png')} alt="" />
-                                        <span>To Ship</span>
+                                        <NavLink
+                                            to={'/profile/order/to-ship'}
+                                        >
+                                            <img src={require('images/toShip-icon.png')} alt="" />
+                                            <span>To Ship</span>
+                                        </NavLink>
                                     </div>
                                     <div className="profile-page-order-icon">
-                                        <img src={require('images/toReview-icon.png')} alt="" />
-                                        <span>To Review</span>
+                                        <NavLink
+                                            to={'/profile/review'}
+                                        >
+                                            <img src={require('images/toReview-icon.png')} alt="" />
+                                            <span>To Review</span>
+                                        </NavLink>
                                     </div>
                                     <div className="profile-page-order-icon">
-                                        <img src={require('images/cancelled-icon.png')} alt="" />
-                                        <span>Cancelled</span>
+                                        <NavLink
+                                            to={'/profile/order/canceled'}
+                                        >
+                                            <img src={require('images/cancelled-icon.png')} alt="" />
+                                            <span>Cancelled</span>
+                                        </NavLink>
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +200,12 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
                                     <div className="profile-page-button">
                                         {
                                             section.child.map((c) => (
-                                                <span onClick={() => this.routeTo(c.name)} className="profile-page-button-text">{c.name}</span>
+                                                <NavLink
+                                                    to={`${c.key}`}
+                                                    style={{ marginTop: '5rem' }}
+                                                >
+                                                    <span onClick={() => this.routeTo(c.name)} className="profile-page-button-text">{c.name}</span>
+                                                </NavLink>
                                             ))
                                         }
                                     </div>

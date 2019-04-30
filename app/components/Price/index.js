@@ -7,10 +7,14 @@
 import React from 'react';
 // import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { dataChecking } from 'globalUtils';
 import './style.scss';
 
 class Price extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     render() {
+        if (!dataChecking(this.props.price, 'retail') && !dataChecking(this.props.price, 'selling')) {
+            return null;
+        }
         return (
             <div>
                 <span

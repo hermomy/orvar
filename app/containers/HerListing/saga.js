@@ -3,11 +3,15 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { apiRequest } from 'globalUtils';
 
-import { GET_DATA } from './constants';
+import {
+    GET_DATA,
+    POST_WISHLIST,
+} from './constants';
 import {
     getDataSuccess,
     getProductSuccess,
     getDataFail,
+    getData,
 } from './actions';
 
 export function* fetchData(actions) {
@@ -30,6 +34,7 @@ export function* fetchData(actions) {
 
         const res = yield call(apiRequest, apiUrl, 'get', null, baseUrl);
 
+
         if (res.ok) {
             if (actions.dataType === 'mallList') {
                 yield put(getProductSuccess(res.data, actions.dataType));
@@ -44,7 +49,21 @@ export function* fetchData(actions) {
     }
 }
 
+export function* postWishlistWorker(actions) {
+    const res = yield call(apiRequest, `/wishlist/${actions.id}`, 'post');
+
+    if (res && res.ok) {
+        yield put(getData());
+        window.location.reload();
+    } else {
+        yield put(getDataFail(res.data));
+    }
+}
+
 // Individual exports for testing
 export default function* herListingSaga() {
-    yield takeLatest(GET_DATA, fetchData);
+    yield [
+        takeLatest(GET_DATA, fetchData),
+        takeLatest(POST_WISHLIST, postWishlistWorker),
+    ];
 }

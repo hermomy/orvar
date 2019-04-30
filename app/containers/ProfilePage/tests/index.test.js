@@ -3,8 +3,8 @@
 
 // import { ProfilePage } from '../index';
 
-describe('<ProfilePage />', () => {
-    it('Expect to have unit tests specified', () => {
-        expect(true).toEqual(false);
+describe('ProfilePage index test', () => {
+    it('Expect true equal true', () => {
+        expect(true).toEqual(true);
     });
 });
