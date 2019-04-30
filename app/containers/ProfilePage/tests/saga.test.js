@@ -28,9 +28,9 @@ describe('profilePageSaga', () => {
 
     it('Expect GET_PROFILE to trigger getProfileWorker', () => {
         const generator = profilePageSaga();
-        expect(generator.next().value).toEqual([
+        expect(generator.next().value).toEqual(
             takeLatest(GET_PROFILE, getProfileWorker),
-        ]);
+        );
     });
 
     it('Expect getProfileSuccess to get profile', () => {
@@ -41,9 +41,9 @@ describe('profilePageSaga', () => {
     });
 
     it('Expect getProfileFail fail to get profile', () => {
-        const responce = { ok: true };
+        const responce = { ok: false };
         const generator = getProfileWorker(getProfile(api));
-        expect(generator.next().value).toEqual(call(apiRequest, '/profile', 'get', null, ''));
+        expect(generator.next().value).toEqual(call(apiRequest, '/profile', 'get', null));
         expect(generator.next(responce).value).toEqual(put(getProfileFail()));
     });
 });

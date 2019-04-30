@@ -38,29 +38,35 @@ describe('getUserInform action', () => {
 
 describe('getUserAddress action', () => {
     it('has a type of GET_USER_ADDRESS', () => {
+        const addressId = 123;
         const expected = {
             type: GET_USER_ADDRESS,
+            addressId,
         };
-        expect(getUserAddress()).toEqual(expected);
+        expect(getUserAddress(addressId)).toEqual(expected);
     });
 });
 
 describe('getDataSuccess action', () => {
     it('has a type of GET_DATA_SUCCESS', () => {
+        const res = true;
         const expected = {
             type: GET_DATA_SUCCESS,
+            payload: res,
         };
-        expect(getDataSuccess()).toEqual(expected);
+        expect(getDataSuccess(res)).toEqual(expected);
     });
 });
 
 
 describe('getDataFail action', () => {
     it('has a type of GET_DATA_FAIL', () => {
+        const error = new Error('ERROR');
         const expected = {
             type: GET_DATA_FAIL,
+            error,
         };
-        expect(getDataFail()).toEqual(expected);
+        expect(getDataFail(error)).toEqual(expected);
     });
 });
 

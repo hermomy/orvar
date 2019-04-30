@@ -16,11 +16,19 @@ import {
 
 
 describe('getData action', () => {
+    const path = true;
+    const dataType = true;
+    const api = true;
+    const queryParamString = true;
     it('has a type of GETDATA', () => {
         const expected = {
             type: GET_DATA,
+            path,
+            dataType,
+            api,
+            queryParamString,
         };
-        expect(getData()).toEqual(expected);
+        expect(getData(path, dataType, api, queryParamString)).toEqual(expected);
     });
 });
 
@@ -36,20 +44,24 @@ describe('getDataSuccess action', () => {
 });
 
 describe('getDataFail action', () => {
+    const error = false;
     it('has a type of GETDATAFAIL', () => {
         const expexted = {
             type: GET_DATA_FAIL,
+            error,
         };
-        expexted(getDataFail().toEqual(expexted));
+        expect(getDataFail(error)).toEqual(expexted);
     });
 });
 
 describe('getProductSuccess action', () => {
+    const data = true;
     it('has a type of GET_PRODUCT_SUCCESS', () => {
         const expected = {
             type: GET_PRODUCT_SUCCESS,
+            data,
         };
-        expected(getProductSuccess().toEqual(expected));
+        expect(getProductSuccess(data)).toEqual(expected);
     });
 });
 
@@ -58,7 +70,8 @@ describe('postWishlist action', () => {
     it('has a type of POST_WISHLIST', () => {
         const expected = {
             type: POST_WISHLIST,
+            id,
         };
-        expected(postWishlist(id).toEqual(expected));
+        expect(postWishlist(id)).toEqual(expected);
     });
 });

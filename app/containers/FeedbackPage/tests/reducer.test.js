@@ -23,7 +23,7 @@ describe('getWishlist', () => {
     });
 
     it('expect reducer return when success to getFeedback', (done) => {
-        const expected = initialState.set('loading', false).set('success', true);
+        const expected = initialState;
         expect(feedbackPageReducer(initialState, postFeedbackSuccess())).toEqual(expected);
         done();
     });

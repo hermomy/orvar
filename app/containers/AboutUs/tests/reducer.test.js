@@ -31,7 +31,7 @@ describe('getWishlist', () => {
     });
 
     it('expect reducer return when fail to getData', (done) => {
-        const expected = initialState.set('error').set('loading', false).set('error', false);
+        const expected = initialState.set('error').set('loading', false).set('success', false);
         expect(profileWishlistReducer(initialState, getDataFail())).toEqual(expected);
         done();
     });

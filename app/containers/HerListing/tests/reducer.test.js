@@ -39,13 +39,13 @@ describe('herListingReducer', () => {
     });
 
     it('expect reducer return when success to getProductSuccess', (done) => {
-        const expected = initialState.set('loading', true);
+        const expected = initialState.set('data', {}).set('getDataSuccess', true).set('loading', false).set('error', false);
         expect(herListingReducer(initialState, getProductSuccess('https://api.hermo.my/mall'))).toEqual(expected);
         done();
     });
 
     it('expect reducer return when try to postWishlist', (done) => {
-        const expected = initialState.set('data', successData).set('loading', false);
+        const expected = initialState.set('loading', true).set('success', false);
         expect(herListingReducer(initialState, postWishlist(successData))).toEqual(expected);
         done();
     });

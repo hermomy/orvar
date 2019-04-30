@@ -19,27 +19,34 @@ import {
 } from '../constants';
 import feedbackPageSaga, { postFeedbackWorker } from '../saga';
 
-describe('herlisting Saga', () => {
-    const data = true;
-
+describe('feedbackPage Saga', () => {
     it('Expect POST_FEEDBACK to trigger postFeedbackWorker', () => {
         const generator = feedbackPageSaga();
-        expect(generator.next().value).toEqual([
+        expect(generator.next().value).toEqual(
             takeLatest(POST_FEEDBACK, postFeedbackWorker),
-        ]);
+        );
     });
 
     it('Expect success to get feedback', () => {
-        const responce = { ok: true };
-        const generator = postFeedbackWorker(postFeedback(data));
-        expect(generator.next().value).toEqual(call(apiRequest, '/feedback', 'post', data));
-        expect(generator.next(responce).value).toEqual(put(postFeedbackSuccess()));
+        const response = {
+            comment: '123',
+            product_suggestion: '123',
+            rating: 0,
+        };
+
+        const generator = postFeedbackWorker(postFeedback(response.comment, response.product_suggestion, response.rating));
+        expect(generator.next().value).toEqual(call(apiRequest, '/feedback', 'post', response));
+        expect(generator.next(response).value).toEqual(put(postFeedbackSuccess()));
     });
 
     it('Expect fail to get feedback', () => {
-        const responce = { ok: false };
-        const generator = postFeedbackWorker(postFeedback(data));
-        expect(generator.next().value).toEqual(call(apiRequest, '/feedback', 'post', null, data));
-        expect(generator.next(responce).value).toEqual(put(postFeedbackFail(data)));
+        const temp = {
+            comment: false,
+            product_suggestion: false,
+            rating: 0,
+        };
+        const generator = postFeedbackWorker(postFeedback(false, false, 0));
+        expect(generator.next().value).toEqual(call(apiRequest, '/feedback', 'post', temp));
+        expect(generator.next(temp).value).toEqual(put(postFeedbackFail()));
     });
 });
