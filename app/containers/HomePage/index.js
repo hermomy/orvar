@@ -45,7 +45,7 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
                             Profile(WEBSITE)
                         </NavLink>
                         <NavLink to={'/profilesmallscreen'} className="page-select-button hershop-button" title="title">
-                            Profile(PHONE)
+                            Profile(smallscreen)
                         </NavLink>
                     </div>
                 </Section>

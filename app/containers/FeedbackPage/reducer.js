@@ -7,7 +7,7 @@
 import { fromJS } from 'immutable';
 import {
     POST_FEEDBACK,
-    POST__FEEDBACK_SUCCESS,
+    POST_FEEDBACK_SUCCESS,
     POST_FEEDBACK_FAIL,
 } from './constants';
 
@@ -19,7 +19,7 @@ function feedbackPageReducer(state = initialState, action) {
             return state
                 .set('loading', true)
                 .set('success', false);
-        case POST__FEEDBACK_SUCCESS:
+        case POST_FEEDBACK_SUCCESS:
             return state
                 .set('loading', false)
                 .set('success', true);

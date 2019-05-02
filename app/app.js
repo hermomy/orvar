@@ -19,6 +19,10 @@ import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 import theme from 'theme';
 
+// material ui
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import orange from '@material-ui/core/colors/orange';
+import green from '@material-ui/core/colors/green';
 // Import root app
 import App from 'containers/App';
 
@@ -46,7 +50,6 @@ import configureStore from './configureStore';
 import { translationMessages } from './i18n';
 import './global-styles';
 
-
 const topbarHeight = '40px';
 
 export const HershopTopbar = styled.div`
@@ -65,6 +68,34 @@ const history = createHistory();
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
+export const outerTheme = createMuiTheme({
+    overrides: {
+        // Name of the component ⚛️ / style sheet
+        MuiButton: {
+          // Name of the rule
+            text: {
+                // Some CSS
+                background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+                borderRadius: 3,
+                border: 0,
+                color: 'yellow',
+                height: 48,
+                padding: '0 30px',
+                boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+            },
+        },
+    },
+    palette: {
+        primary: {
+            main: orange[500],
+        },
+        secondary: {
+            main: green[500],
+        },
+    },
+    typography: { useNextVariants: true },
+});
+
 const render = (messages) => {
     ReactDOM.render(
         <Provider store={store}>
@@ -73,7 +104,9 @@ const render = (messages) => {
                     <ConnectedRouter history={history}>
                         <div>
                             <NotificationContainer />
-                            <App />
+                            <MuiThemeProvider theme={outerTheme}>
+                                <App />
+                            </MuiThemeProvider>
                         </div>
                     </ConnectedRouter>
                 </ThemeProvider>
