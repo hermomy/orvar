@@ -62,10 +62,14 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                             {
                                                 dataChecking(this.props, 'header', 'suggestionData', 'error') ?
                                                     <div>
-                                                        { this.props.header.suggestionData.data.messages[0].text }
+                                                        {this.props.header.suggestionData.data.messages[0].text} for <b>{this.state.searchQuery}</b>
                                                     </div>
                                                 :
-                                                    <div>data found</div>
+                                                    <div>
+                                                        {this.renderSearchResult('brand')}
+                                                        {this.renderSearchResult('autocomplete')}
+                                                        {this.renderSearchResult('mall')}
+                                                    </div>
                                             }
                                         </div>
                                 }
@@ -77,7 +81,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             <div className={`search ml-3 ${!this.state.hideSearchBar ? 'show' : ''}`}>
                 {
                     !this.state.hideSearchBar ?
-                        <input type="text" value={this.state.searchQuery} onChange={this.getSearchResult}></input>
+                        <input autoFocus={true} type="text" value={this.state.searchQuery} onChange={this.getSearchResult}></input>
                     :
                         null
                 }
@@ -154,6 +158,15 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             }
         </div>
     )
+
+    renderSearchResult = (type) => dataChecking(this.props.header, 'suggestionData', 'data').map((data) => {
+        if (data.type === type) {
+            return data.items.map((item, key) => (
+                <div key={key}>{item.text}</div>
+            ));
+        }
+        return null;
+    });
 
     renderCartPopout = () => (
         <div className="cart-popup-modal">
