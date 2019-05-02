@@ -36,6 +36,7 @@ import CheckoutPage from 'containers/CheckoutPage';
 import ProfilePage from 'containers/ProfilePage';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
+import MaterialUiTesting from 'containers/MaterialUiTesting';
 
 import Header from 'components/Header';
 import TabBar from 'components/TabBar';
@@ -71,6 +72,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                 <HershopContent id="hershop-content-container">
                     <Header />
                     <Switch>
+                        <Route exact={true} path="/testing" component={MaterialUiTesting} />
                         <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />
                         <Route exact={true} path="/logout" component={LogoutForm} />
                         <Route exact={true} path="/mall" render={() => <MallPage urlType="normalurl" />} />

@@ -21,8 +21,7 @@ import theme from 'theme';
 
 // material ui
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import orange from '@material-ui/core/colors/orange';
-import green from '@material-ui/core/colors/green';
+import blue from '@material-ui/core/colors/blue';
 // Import root app
 import App from 'containers/App';
 
@@ -69,31 +68,65 @@ const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
 export const outerTheme = createMuiTheme({
+    root: {
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+        border: 0,
+        borderRadius: 3,
+        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        color: 'white',
+        height: 48,
+        padding: '0 30px',
+    },
     overrides: {
-        // Name of the component ⚛️ / style sheet
         MuiButton: {
-          // Name of the rule
-            text: {
-                // Some CSS
+            root: { // Name of the rule
                 background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-                borderRadius: 3,
                 border: 0,
-                color: 'yellow',
+                borderRadius: 3,
+                boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+                color: 'white',
                 height: 48,
                 padding: '0 30px',
+            },
+        },
+        MuiAppBar: {
+            root: {
+                border: 0,
+                borderRadius: 3,
                 boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+                color: 'white',
+                height: 100,
+                padding: '0 30px',
+            },
+        },
+        div: {
+            root: {
+                width: 250,
             },
         },
     },
     palette: {
         primary: {
-            main: orange[500],
+            main: blue[500],
         },
         secondary: {
-            main: green[500],
+            main: '#ccc',
         },
     },
-    typography: { useNextVariants: true },
+    typography: {
+        fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(','),
+    },
 });
 
 const render = (messages) => {
