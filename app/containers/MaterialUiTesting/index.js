@@ -21,6 +21,16 @@ import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
 
+const internalstyle = {
+    background: 'linear-gradient(45deg, #bcd999 30%, #125538 90%)',
+    borderRadius: 3,
+    border: 0,
+    color: 'white',
+    height: 80,
+    padding: '0 30px',
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+};
+
 export class MaterialUiTesting extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     render() {
         console.log(this.props);
@@ -29,6 +39,16 @@ export class MaterialUiTesting extends React.PureComponent { // eslint-disable-l
                 <Button>1ST</Button>
                 <Button>2ND</Button>
                 <Button className={this.props.classes.btn}>3RD</Button>
+                <Button
+                    disabled={true}
+                    classes={{
+                        root: this.props.classes.dollarrule, // class name, e.g. `root-x`
+                        disabled: this.props.classes.disabled, // class name, e.g. `disabled-x`
+                    }}
+                >
+                    3RD
+                </Button>
+                <Button style={internalstyle}>4RD</Button>
             </div>
         );
     }
