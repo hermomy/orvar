@@ -23,6 +23,10 @@ const styles = {
         color: 'white',
         height: 80,
         padding: '0 30px',
+        // '&$disabled': {
+        //     background: 'linear-gradient(45deg, #94352 30%, #CCAA00 90%)',
+        //     height: 10,
+        // },
     },
     dollarrule: {
         '&$disabled': {
@@ -32,5 +36,6 @@ const styles = {
     },
     disabled: {},
 };
+
 
 export default styles;

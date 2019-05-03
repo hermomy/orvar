@@ -22,6 +22,7 @@ import theme from 'theme';
 // material ui
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
+import green from '@material-ui/core/colors/green';
 // Import root app
 import App from 'containers/App';
 
@@ -56,15 +57,6 @@ const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
 export const outerTheme = createMuiTheme({
-    root: {
-        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-        border: 0,
-        borderRadius: 3,
-        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-        color: 'white',
-        height: 48,
-        padding: '0 30px',
-    },
     overrides: {
         MuiButton: {
             root: { // Name of the rule
@@ -72,7 +64,7 @@ export const outerTheme = createMuiTheme({
                 border: 0,
                 borderRadius: 3,
                 boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-                color: 'white',
+                color: 'purple',
                 height: 48,
                 padding: '0 30px',
             },
@@ -89,7 +81,7 @@ export const outerTheme = createMuiTheme({
         },
         div: {
             root: {
-                width: 250,
+                color: 'green',
             },
         },
     },
@@ -99,6 +91,9 @@ export const outerTheme = createMuiTheme({
         },
         secondary: {
             main: '#ccc',
+        },
+        error: {
+            main: green[500],
         },
     },
     typography: {
