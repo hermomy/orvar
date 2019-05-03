@@ -11,43 +11,10 @@ import './style.scss';
 
 class CartPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
-    is_qty_adjustable = (item) => {
-        if (item.attribute.is_qty_adjustable) {
-            return (
-                <div className="text-xs-center" style={{ width: '100px' }}>
-                    <span
-                        className="px-quater"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => this.props.addQty('remove', item.qty, item.id)}
-                    >
-                        <i className="fa fa-caret-left hermo-pink"></i>
-                    </span>
-                    <span>
-                        {item.qty}
-                    </span>
-                    <span
-                        className="px-quater"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => this.props.addQty('add', item.qty, item.id)}
-                    >
-                        <i className="fa fa-caret-right hermo-pink"></i>
-                    </span>
-                </div>
-            );
-        }
-        return (
-            <div className="text-xs-center" style={{ width: '100px' }}>
-                <span>
-                    {item.qty}
-                </span>
-            </div>
-        );
-    }
-
     cartList = () => (
         <div>
             {
-                dataChecking(this.props.data, 'data', 'merchants').map((merchant) => (
+                dataChecking(this.props, 'data', 'merchants').map((merchant) => (
                     <div key={merchant.id}>
                         <div
                             className="p-half"
@@ -85,7 +52,7 @@ class CartPage extends React.PureComponent { // eslint-disable-line react/prefer
                                     </div>
                                     <div className="line-elips" style={{ width: '300px' }}>{item.product.name}</div>
                                     <div className="text-xs-center" style={{ width: '100px' }}>RM {item.price.selling}</div>
-                                    {this.is_qty_adjustable(item)}
+                                    {this.renderQuantityEditor(item)}
                                     <div className="text-xs-center" style={{ width: '100px' }}>RM {item.total.selling}</div>
                                     <div className="text-xs-center" style={{ width: '100px' }}>
                                         <span
@@ -106,16 +73,47 @@ class CartPage extends React.PureComponent { // eslint-disable-line react/prefer
         </div>
     )
 
+    renderQuantityEditor = (item) => {
+        if (item.attribute.is_qty_adjustable) {
+            return (
+                <div className="text-xs-center" style={{ width: '100px' }}>
+                    <span
+                        className="px-quater"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => this.props.changeQuantity('remove', item.qty, item.id)}
+                    >
+                        <i className="fa fa-caret-left hermo-pink"></i>
+                    </span>
+                    <span>
+                        {item.qty}
+                    </span>
+                    <span
+                        className="px-quater"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => this.props.changeQuantity('add', item.qty, item.id)}
+                    >
+                        <i className="fa fa-caret-right hermo-pink"></i>
+                    </span>
+                </div>
+            );
+        }
+        return (
+            <div className="text-xs-center" style={{ width: '100px' }}>
+                <span>
+                    {item.qty}
+                </span>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div>
                 {
-                    dataChecking(this.props.data, 'data', 'merchants') ?
-                    this.cartList()
-                    :
-                    <div>
-                        No Item Added
-                    </div>
+                   dataChecking(this.props, 'data', 'merchants') ?
+                   this.cartList()
+                   :
+                   <div>no item added..</div>
                 }
             </div>
         );

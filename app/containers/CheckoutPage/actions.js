@@ -22,17 +22,17 @@ export function getCheckout() {
     };
 }
 
-export function checkoutSuccess(response) {
+export function checkoutSuccess(checkoutData) {
     return {
         type: CHECKOUT_DATA_SUCCESS,
-        response,
+        checkoutData,
     };
 }
 
-export function checkoutFailed(response) {
+export function checkoutFailed(checkoutData) {
     return {
         type: CHECKOUT_DATA_FAILED,
-        response,
+        checkoutData,
     };
 }
 
@@ -44,16 +44,17 @@ export function updateQty(qty, id) {
     };
 }
 
-export function updateQtySuccess(response) {
+export function updateQtySuccess(qtyItem) {
     return {
         type: QTY_UPDATE_SUCCESS,
-        response,
+        qtyItem,
     };
 }
 
-export function updateQtyFail() {
+export function updateQtyFail(qtyItem) {
     return {
         type: QTY_UPDATE_FAIL,
+        qtyItem,
     };
 }
 
@@ -64,15 +65,16 @@ export function removeItemInCart(id) {
     };
 }
 
-export function removeItemInCartSuccess(response) {
+export function removeItemInCartSuccess(itemUpdate) {
     return {
         type: ITEM_DELETE_SUCCESS,
-        response,
+        itemUpdate,
     };
 }
 
-export function removeItemInCartFail() {
+export function removeItemInCartFail(itemUpdate) {
     return {
         type: ITEM_DELETE_FAIL,
+        itemUpdate,
     };
 }

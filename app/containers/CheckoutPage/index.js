@@ -27,12 +27,12 @@ export class CheckoutPage extends React.PureComponent { // eslint-disable-line r
         this.props.dispatch(getCheckout());
     }
 
-    addQty = (type, qty, id) => {
+    changeQuantity = (type, qty, id) => {
         if (qty <= 1 && type === 'remove') {
             return;
         }
         let quantity = qty;
-        quantity = type === 'add' ? quantity += 1 : quantity -= 1;
+        quantity += type === 'add' ? 1 : -1;
         this.props.dispatch(updateQty(quantity, id));
     }
 
@@ -50,18 +50,18 @@ export class CheckoutPage extends React.PureComponent { // eslint-disable-line r
                 {
                     this.props.header ?
                         <CartPage
-                            addQty={this.addQty}
+                            changeQuantity={this.changeQuantity}
                             deleteCart={this.deleteCart}
-                            data={dataChecking(this.props, 'checkoutpage')}
+                            data={dataChecking(this.props, 'checkoutpage', 'checkout', 'data')}
                         />
                     :
                         <div>
                             <CartPage
-                                addQty={this.addQty}
+                                changeQuantity={this.changeQuantity}
                                 deleteCart={this.deleteCart}
-                                data={dataChecking(this.props, 'checkoutpage')}
+                                data={dataChecking(this.props, 'checkoutpage', 'checkout', 'data')}
                             />
-                            lorem
+                            <div>will continue on checkout page when wireframe ready....</div>
                         </div>
                 }
             </div>

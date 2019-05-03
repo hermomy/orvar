@@ -15,7 +15,7 @@ import {
     removeItemInCartFail,
 } from './actions';
 
-export function* getCheckoutData() {
+export function* queryCheckoutData() {
     const response = yield call(apiRequest, '/cart', 'get');
     if (response && response.ok) {
         yield put(checkoutSuccess(response.data));
@@ -52,7 +52,7 @@ export function* deleteItemInCart(action) {
 }
 // Individual exports for testing
 export default function* checkoutPageSaga() {
-    yield takeLatest(GET_CHECKOUT_DATA, getCheckoutData);
+    yield takeLatest(GET_CHECKOUT_DATA, queryCheckoutData);
     yield takeLatest(QTY_UPDATE, updateQtyInCart);
     yield takeLatest(ITEM_DELETE, deleteItemInCart);
 }
