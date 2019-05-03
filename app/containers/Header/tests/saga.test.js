@@ -4,14 +4,14 @@
 
 /* eslint-disable redux-saga/yield-effects */
 // import { take, call, put, select } from 'redux-saga/effects';
-// import { aboutUsSaga } from '../saga';
-import aboutUsSaga, { defaultWorker } from '../saga';
+// import { headerSaga } from '../saga';
+import headerSaga, { defaultWorker } from '../saga';
 
-// const generator = aboutUsSaga();
+// const generator = headerSaga();
 
-describe('aboutUsSaga', () => {
+describe('headerSaga', () => {
     it('Expect to have unit tests specified', () => {
-        const generator = aboutUsSaga();
+        const generator = headerSaga();
         expect(generator.next(defaultWorker()).value).toEqual(true);
     });
 });

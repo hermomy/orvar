@@ -252,6 +252,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                                         </div>
                                 }
                             </div>
+
                             <div>
                                 <span className="next-page-bottom" onClick={() => this.goNextPage()}>Next Page</span>
                             </div>

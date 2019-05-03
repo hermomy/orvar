@@ -7,7 +7,7 @@ import { defineMessages } from 'react-intl';
 
 export default defineMessages({
     header: {
-        id: 'app.components.Header.header',
-        defaultMessage: 'This is the Header component !',
+        id: 'app.containers.Header.header',
+        defaultMessage: 'This is Header container !',
     },
 });

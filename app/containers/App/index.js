@@ -38,10 +38,9 @@ import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
 import MaterialUiTesting from 'containers/MaterialUiTesting';
 
-import Header from 'components/Header';
+import Header from 'containers/Header';
 import TabBar from 'components/TabBar';
 import globalScope from 'globalScope';
-import CartPage from 'containers/CartPage';
 import LoginForm from '../LoginForm/index';
 
 import {
@@ -186,7 +185,6 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                             path="/profile/:order/:profilePart(canceled|to-paid|to-ship)?"
                             component={ProfileWholePage}
                         />
-                        <Route exact={true} path="/cart" component={CartPage} />
                         <Route exact={true} path="/profilesmallscreen" component={ProfilePage} />
                         <PrivateRoute
                             exact={true}
