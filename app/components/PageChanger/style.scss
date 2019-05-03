@@ -1,0 +1,39 @@
+@import 'app/breakpoints';
+
+.pagination {
+    padding: 0.5rem 0.75rem;
+    text-decoration: none;
+    margin-top: 10px;
+
+    @include media-breakpoint-up(md) {
+        width: 100%;
+    }
+
+    .pagination-word {
+        text-decoration: none;
+        cursor: default;
+    }
+
+    .pagination-active-word {
+        text-decoration: none;
+        cursor: default;
+
+        &.activated {
+            color: white !important;
+            background-color: #660033 !important;
+        }
+    }
+
+    .disable-pagi-btn {
+        text-decoration: none;
+        cursor: default;
+    }
+}
+
+.paginator-button {
+    line-height: 1.5;
+    color: #0275d8;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 0.5rem 0.75rem;
+}

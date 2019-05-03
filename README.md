@@ -1,3 +1,11 @@
+# Clone
+
+```
+git clone --single-branch --branch windows https://github.com/Oskang09/orvar.git
+```
+
+# Readme
+
 Orvar
 ----------
 
@@ -25,4 +33,4 @@ Assummed TDD flow:
     - make sure each and every branch have their own test
     - run some sample use case to make sure it is working correctly
 
-
+======

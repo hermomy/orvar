@@ -10,6 +10,7 @@ import {
     GET_DATA_SUCCESS,
     GET_PRODUCT_SUCCESS,
     GET_DATA_FAIL,
+    POST_WISHLIST,
 } from './constants';
 
 export const initialState = fromJS({
@@ -49,6 +50,10 @@ function herListingReducer(state = initialState, action) {
                         type: 'error',
                     }],
                 );
+        case POST_WISHLIST:
+            return state
+                .set('loading', true)
+                .set('success', false);
         default:
             return state;
     }

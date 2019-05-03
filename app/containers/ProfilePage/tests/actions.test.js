@@ -1,18 +1,40 @@
 
 import {
-    defaultAction,
+    getProfile,
+    getProfileSuccess,
+    getProfileFail,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    GET_PROFILE,
+    GET_PROFILE_SUCCESS,
+    GET_PROFILE_FAIL,
 } from '../constants';
 
-describe('ProfilePage actions', () => {
-    describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
-            const expected = {
-                type: DEFAULT_ACTION,
-            };
-            expect(defaultAction()).toEqual(expected);
-        });
+describe('has a type of GET_PROFILE', () => {
+    it('expected to get data', () => {
+        const expected = {
+            type: GET_PROFILE,
+        };
+        expect(getProfile()).toEqual(expected);
+    });
+});
+
+describe('has a type of GET_PROFILE_SUCCESS', () => {
+    const payloadData = true;
+    it('expected to get data success', () => {
+        const expected = {
+            type: GET_PROFILE_SUCCESS,
+        };
+        expect(getProfileSuccess(payloadData)).toEqual(expected);
+    });
+});
+
+describe('has a type of GET_PROFILE_FAIL', () => {
+    const payloadData = true;
+    it('expected to get data fail', () => {
+        const expected = {
+            type: GET_PROFILE_FAIL,
+        };
+        expect(getProfileFail(payloadData)).toEqual(expected);
     });
 });
