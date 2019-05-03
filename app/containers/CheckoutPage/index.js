@@ -8,19 +8,38 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
+import CartPage from 'components/CartPage';
+
+import { dataChecking } from 'globalUtils';
 import makeSelectCheckoutPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import messages from './messages';
 import './style.scss';
+import { getCheckout, updateQty, removeItemInCart } from './actions';
 
 export class CheckoutPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+    componentDidMount() {
+        this.props.dispatch(getCheckout());
+    }
+
+    changeQuantity = (type, qty, id) => {
+        if (qty <= 1 && type === 'remove') {
+            return;
+        }
+        let quantity = qty;
+        quantity += type === 'add' ? 1 : -1;
+        this.props.dispatch(updateQty(quantity, id));
+    }
+
+    deleteCart = (id) => {
+        this.props.dispatch(removeItemInCart(id));
+    }
+
     render() {
         return (
             <div>
@@ -28,7 +47,23 @@ export class CheckoutPage extends React.PureComponent { // eslint-disable-line r
                     <title>CheckoutPage</title>
                     <meta name="description" content="Description of CheckoutPage" />
                 </Helmet>
-                <FormattedMessage {...messages.header} />
+                {
+                    this.props.header ?
+                        <CartPage
+                            changeQuantity={this.changeQuantity}
+                            deleteCart={this.deleteCart}
+                            data={dataChecking(this.props, 'checkoutpage', 'checkout', 'data')}
+                        />
+                    :
+                        <div>
+                            <CartPage
+                                changeQuantity={this.changeQuantity}
+                                deleteCart={this.deleteCart}
+                                data={dataChecking(this.props, 'checkoutpage', 'checkout', 'data')}
+                            />
+                            <div>will continue on checkout page when wireframe ready....</div>
+                        </div>
+                }
             </div>
         );
     }

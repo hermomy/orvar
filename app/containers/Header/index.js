@@ -14,7 +14,7 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
 import { NavLink } from 'react-router-dom';
-import CartPage from 'containers/CartPage';
+import CartPage from 'components/CartPage';
 import { dataChecking } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
 import { layoutTopNav, searchResult } from './actions';

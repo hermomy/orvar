@@ -1,0 +1,5 @@
+@import '../../custom-bootstrap-style';
+
+.line-elips {
+    @include line-elips(1rem, 1.2, 2);
+}
