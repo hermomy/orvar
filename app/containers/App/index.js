@@ -36,7 +36,7 @@ import ProfilePage from 'containers/ProfilePage';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
 
-import Header from 'components/Header';
+import Header from 'containers/Header';
 import TabBar from 'components/TabBar';
 import globalScope from 'globalScope';
 import LoginForm from '../LoginForm/index';
