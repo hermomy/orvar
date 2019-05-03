@@ -21,8 +21,8 @@ import theme from 'theme';
 
 // material ui
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
-import green from '@material-ui/core/colors/green';
+import orange from '@material-ui/core/colors/orange';
+import yellow from '@material-ui/core/colors/yellow';
 // Import root app
 import App from 'containers/App';
 
@@ -62,11 +62,12 @@ export const outerTheme = createMuiTheme({
             root: { // Name of the rule
                 background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
                 border: 0,
-                borderRadius: 3,
+                borderRadius: 5,
                 boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-                color: 'purple',
-                height: 48,
+                color: 'blue',
+                height: 50,
                 padding: '0 30px',
+                width: '200px',
             },
         },
         MuiAppBar: {
@@ -87,13 +88,13 @@ export const outerTheme = createMuiTheme({
     },
     palette: {
         primary: {
-            main: blue[500],
+            main: orange[500],
         },
         secondary: {
             main: '#ccc',
         },
         error: {
-            main: green[500],
+            main: yellow[500],
         },
     },
     typography: {
