@@ -16,6 +16,7 @@ import injectReducer from 'utils/injectReducer';
 import { NavLink } from 'react-router-dom';
 import CartPage from 'containers/CartPage';
 import { dataChecking } from 'globalUtils';
+import Highlighter from 'react-highlight-words';
 import { layoutTopNav, searchResult } from './actions';
 import makeSelectHeader from './selectors';
 import reducer from './reducer';
@@ -46,6 +47,11 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         }
     }
 
+    /**
+     * section section
+     * - result will trigger with minimum 2 characters
+     * - result display category as brand, autocomplete and product related
+     */
     searchSection = () => (
         <div>
             {
@@ -101,6 +107,9 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         </div>
     )
 
+    /**
+     * quicklink section which is right side of the header
+     */
     quicklinks = () => (
         <div className="quicklink">
             {this.searchSection()}
@@ -145,6 +154,9 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         </div>
     )
 
+    /**
+     * top nav section with data came from api /layout/top-nav
+     */
     topCategory = () => (
         <div className={`top-nav ${!this.state.hideSearchBar ? 'show' : ''}`}>
             {
@@ -160,10 +172,21 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         </div>
     )
 
+    /**
+     * result searching function that display items based on type of search
+     * - this function will receive type as params e.g: brand
+     */
     renderSearchResult = (type) => dataChecking(this.props.header, 'suggestionData', 'data').map((data) => {
         if (data.type === type) {
             return data.items.map((item, key) => (
-                <div key={key}>{item.text}</div>
+                <div key={key}>
+                    <Highlighter
+                        highlightClassName="search-keyword"
+                        searchWords={[this.state.searchQuery]}
+                        autoEscape={true}
+                        textToHighlight={item.text}
+                    />
+                </div>
             ));
         }
         return null;
@@ -180,6 +203,10 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         </div>
     )
 
+    /**
+     * - This is desktop header component
+     * - Component will consists of hermo logo, top nav and quicklinks
+     */
     render() {
         return (
             <div id="header">

@@ -19,6 +19,10 @@
     .quicklink {
         display: flex;
         align-items: center;
+        .search-keyword {
+            font-weight: bold;
+            background-color: transparent;
+        }
         .resultBoxhide { display: none; }
         .resultBoxshow {
             position: absolute;
