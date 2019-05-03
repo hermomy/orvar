@@ -12,7 +12,7 @@ function TabBar() {
     return (
         <div className="TabBar">
             <div style={{ textAlign: 'center' }}>
-                <NavLink to="/cart" className="button">cart</NavLink>
+                <NavLink to="/checkout" className="button">cart</NavLink>
             </div>
         </div>
     );
