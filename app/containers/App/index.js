@@ -30,7 +30,6 @@ import HerListing from 'containers/HerListing';
 import MallPage from 'containers/MallPage';
 import NotFoundPage from 'containers/NotFoundPage';
 import ProfileWholePage from 'containers/ProfileWholePage';
-// import Cart from 'containers/CartPage';
 import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
 import ProfilePage from 'containers/ProfilePage';
@@ -183,7 +182,6 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                             path="/profile/:order/:profilePart(canceled|to-paid|to-ship)?"
                             component={ProfileWholePage}
                         />
-                        <Route exact={true} path="/cart" component={CartPage} />
                         <Route exact={true} path="/profilesmallscreen" component={ProfilePage} />
                         <PrivateRoute
                             exact={true}
