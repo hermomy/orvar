@@ -74,24 +74,20 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         <Route exact={true} path="/testing" component={MaterialUiTesting} />
                         <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />
                         <Route exact={true} path="/logout" component={LogoutForm} />
-                        <Route exact={true} path="/mall" render={() => <MallPage urlType="normalurl" />} />
-                        <Route exact={true} path="/mall/page-:pageNum?" render={() => <MallPage urlType="normalurl" />} />
+                        <Route exact={true} path="/mall" render={() => <MallPage />} />
+                        <Route exact={true} path="/mall/page-:pageNum?" render={() => <MallPage />} />
                         <Route
                             exact={true}
                             path="/mall/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?/:subCategoryQueries?/page-:pageNum(\d+)"
                             render={() => (
-                                <MallPage
-                                    urlType="normalurl"
-                                />
+                                <MallPage />
                             )}
                         />
                         <Route
                             exact={true}
                             path="/mall/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries/:subCategoryQueries"
                             render={() => (
-                                <MallPage
-                                    urlType="normalurl"
-                                />
+                                <MallPage />
                             )}
                         />
 
@@ -99,18 +95,14 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                             exact={true}
                             path="/mall/groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?/page-:pageNum(\d+)"
                             render={() => (
-                                <MallPage
-                                    urlType="normalurl"
-                                />
+                                <MallPage />
                             )}
                         />
                         <Route
                             exact={true}
                             path="/mall/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?"
                             render={() => (
-                                <MallPage
-                                    urlType="normalurl"
-                                />
+                                <MallPage />
                             )}
                         />
 

@@ -112,7 +112,11 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
         let filterCount = 0;
         Object.values(urlAfterSpilitByAnd).forEach((searchKey) => {
             const keyAndIdInUrl = searchKey.split('=');
-            if (keyAndIdInUrl[0] === 'category_id' || keyAndIdInUrl[0] === 'subcategory_id' || keyAndIdInUrl[0] === 'group_id') {
+            if (keyAndIdInUrl[0] === 'category_id' ||
+                keyAndIdInUrl[0] === 'subcategory_id' ||
+                keyAndIdInUrl[0] === 'group_id' ||
+                keyAndIdInUrl[0] === 'brand_id' ||
+                keyAndIdInUrl[0] === 'country_code') {
                 filterCount++;
             }
             if (keyAndIdInUrl[0] === newKey && `${keyAndIdInUrl[1]}` === `${newId}`) {

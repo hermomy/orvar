@@ -13,6 +13,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import SignUpPage from '../SignUpPage';
 // import { dataChecking } from 'globalUtils';
 // import Fancy from '@tienping/my-react-dom';
 
@@ -29,7 +30,12 @@ const Section = styled.section`
 `;
 
 export default class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+    state = {
+        SignUpPage: false,
+    }
+
     render() {
+        console.log(this.props);
         return (
             <div className="container">
                 <Header>
@@ -47,6 +53,13 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
                         <NavLink to={'/profilesmallscreen'} className="page-select-button hershop-button" title="title">
                             Profile(smallscreen)
                         </NavLink>
+                        <NavLink to={'/profilesmallscreen'} className="page-select-button hershop-button" title="title">
+                            Profile(smallscreen)
+                        </NavLink>
+                        <input type="button" value="SignUpPage" className="page-select-button hershop-button" onClick={() => this.setState({ SignUpPage: true })} />
+                        {
+                            this.state.SignUpPage ? <SignUpPage /> : null
+                        }
                     </div>
                 </Section>
             </div>

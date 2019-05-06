@@ -13,7 +13,7 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import CartPage from 'components/CartPage';
 import { dataChecking } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
@@ -242,6 +242,7 @@ const withReducer = injectReducer({ key: 'header', reducer });
 const withSaga = injectSaga({ key: 'header', saga });
 
 export default compose(
+    withRouter,
     withReducer,
     withSaga,
     withConnect,
