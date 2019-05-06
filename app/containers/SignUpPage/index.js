@@ -9,15 +9,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { Typography } from '@material-ui/core';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import Dialog from '@material-ui/core/Dialog';
-// import DialogActions from '@material-ui/core/DialogActions';
-// import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-// import TextField from '@material-ui/core/TextField';
 
 import makeSelectSignUpPage from './selectors';
 import reducer from './reducer';
@@ -29,21 +22,9 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
         dialog: true,
     };
 
-    renderDialog= () => (
-        <Dialog
-            open={this.state.dialog}
-            onClose={() => this.setState({ dialog: !this.state.dialog })}
-            aria-labelledby="form-dialog-title"
-        >
-            <DialogTitle id="form-dialog-title">Sign Up</DialogTitle>
-            <Typography></Typography>
-        </Dialog>
-    )
-
     render() {
         return (
             <div>
-                {this.renderDialog()}
             </div>
         );
     }

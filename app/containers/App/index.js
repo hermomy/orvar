@@ -12,7 +12,6 @@
  */
 
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -36,7 +35,6 @@ import CheckoutPage from 'containers/CheckoutPage';
 import ProfilePage from 'containers/ProfilePage';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
-import MaterialUiTesting from 'containers/MaterialUiTesting';
 
 import Header from 'containers/Header';
 import TabBar from 'components/TabBar';
@@ -53,12 +51,6 @@ import {
     fetchConfig,
 } from './actions';
 
-const topbarHeight = '40px';
-
-const HershopContent = styled.div`
-    // margin-top: ${topbarHeight};
-`;
-
 export class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     componentDidMount() {
         this.props.dispatch(fetchConfig());
@@ -68,10 +60,9 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
         return (
             <section>
                 <Notify></Notify>
-                <HershopContent id="hershop-content-container">
+                <div id="hershop-content-container" style={{ marginTop: '40px' }}>
                     <Header />
                     <Switch>
-                        <Route exact={true} path="/testing" component={MaterialUiTesting} />
                         <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />
                         <Route exact={true} path="/logout" component={LogoutForm} />
                         <Route exact={true} path="/mall" render={() => <MallPage />} />
@@ -187,7 +178,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         <Route path="" component={NotFoundPage} />
                     </Switch>
                     <TabBar />
-                </HershopContent>
+                </div>
             </section>
         );
     }

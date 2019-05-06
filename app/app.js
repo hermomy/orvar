@@ -12,17 +12,10 @@ import { NotificationContainer } from 'react-notifications';
 
 // Import all the third party stuff
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
-import theme from 'theme';
-
-// material ui
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import orange from '@material-ui/core/colors/orange';
-import yellow from '@material-ui/core/colors/yellow';
 // Import root app
 import App from 'containers/App';
 
@@ -46,9 +39,9 @@ import '!file-loader?name=[name].[ext]!./manifest.json';
 import 'file-loader?name=[name].[ext]!./.htaccess';
 /* eslint-enable import/no-unresolved, import/extensions */
 
+import 'global-styles.scss';
 import configureStore from './configureStore';
 import { translationMessages } from './i18n';
-import './global-styles';
 
 // Create redux store with history
 const initialState = {};
@@ -56,77 +49,16 @@ const history = createHistory();
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
-export const outerTheme = createMuiTheme({
-    overrides: {
-        MuiButton: {
-            root: { // Name of the rule
-                background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-                border: 0,
-                borderRadius: 5,
-                boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-                color: 'blue',
-                height: 50,
-                padding: '0 30px',
-                width: '200px',
-            },
-        },
-        MuiAppBar: {
-            root: {
-                border: 0,
-                borderRadius: 3,
-                boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-                color: 'white',
-                height: 100,
-                padding: '0 30px',
-            },
-        },
-        div: {
-            root: {
-                color: 'green',
-            },
-        },
-    },
-    palette: {
-        primary: {
-            main: orange[500],
-        },
-        secondary: {
-            main: '#ccc',
-        },
-        error: {
-            main: yellow[500],
-        },
-    },
-    typography: {
-        fontFamily: [
-            '-apple-system',
-            'BlinkMacSystemFont',
-            '"Segoe UI"',
-            'Roboto',
-            '"Helvetica Neue"',
-            'Arial',
-            'sans-serif',
-            '"Apple Color Emoji"',
-            '"Segoe UI Emoji"',
-            '"Segoe UI Symbol"',
-        ].join(','),
-    },
-});
-
 const render = (messages) => {
     ReactDOM.render(
         <Provider store={store}>
             <LanguageProvider messages={messages}>
-                <ThemeProvider theme={theme}>
-                    <ConnectedRouter history={history}>
-                        <div>
-                            <NotificationContainer />
-                            <MuiThemeProvider theme={outerTheme}>
-                                <App />
-                            </MuiThemeProvider>
-                        </div>
-                    </ConnectedRouter>
-                </ThemeProvider>
+                <ConnectedRouter history={history}>
+                    <div>
+                        <NotificationContainer />
+                        <App />
+                    </div>
+                </ConnectedRouter>
             </LanguageProvider>
         </Provider>,
         MOUNT_NODE

@@ -198,9 +198,6 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
         return (
             <PageChanger
                 productData={productData}
-                urlType={this.props.urlType}
-                location={this.props.location}
-                history={this.props.history}
                 pagenum={dataChecking(this.props, 'match', 'params', 'pageNum') ? this.props.match.params.pageNum : 1}
                 changePage={(link, pageNum) => { this.changePageData(link, pageNum); this.changePageUI(link, pageNum); }}
             />

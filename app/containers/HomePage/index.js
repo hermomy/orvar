@@ -11,7 +11,6 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import SignUpPage from '../SignUpPage';
 // import { dataChecking } from 'globalUtils';
@@ -19,15 +18,6 @@ import SignUpPage from '../SignUpPage';
 
 import messages from './messages';
 import './style.scss';
-
-const Header = styled.h1`
-    text-align: center;
-`;
-
-const Section = styled.section`
-    text-align: center;
-    padding: 5vw 1vw;
-`;
 
 export default class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -38,11 +28,11 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
         console.log(this.props);
         return (
             <div className="container">
-                <Header>
+                <h1 style={{ textAlign: 'center' }}>
                     <FormattedMessage {...messages.header} />
-                </Header>
+                </h1>
                 {/* <div><Fancy /></div> */}
-                <Section>
+                <section style={{ textAlign: 'center', padding: '5vw 1vw' }}>
                     <div key="sadfsdf">
                         <NavLink to={'/mall'} className="page-select-button hershop-button" title="title">
                             Mall
@@ -61,7 +51,7 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
                             this.state.SignUpPage ? <SignUpPage /> : null
                         }
                     </div>
-                </Section>
+                </section>
             </div>
         );
     }

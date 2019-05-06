@@ -22,7 +22,6 @@ const addHeaderToAPI = (apiString) => {
         },
         timeout: 30000,
     });
-
     return api;
 };
 
