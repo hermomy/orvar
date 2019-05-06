@@ -353,7 +353,6 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
     }
 
     render() {
-        console.log(this.props);
         return (
             <div>
                 {this.renderForm()}

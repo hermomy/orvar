@@ -1,10 +1,11 @@
 #header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     box-shadow: 0px 2px 5px -1px #cccccc;
     padding: 2rem 3rem;
     align-items: center;
     height: 60px;
+    .logo { width: 200px; }
 
     .logo.show { display: none; }
     .top-nav {
