@@ -19,70 +19,62 @@ import PageChanger from 'components/PageChanger';
 import makeSelectProfileWishlist from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-// import { getWishlist, deleteWishlist } from './actions';
 import './style.scss';
 
 const loadJson = (path, type, body, baseUrl, headerParams) => apiRequest(path, type, body, baseUrl, headerParams);
 
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-    state = {
-        wishlist: null,
-    }
+    renderPagination = (data) => (
+        <PageChanger
+            productData={data.data}
+            pagenum={dataChecking(this.props, 'match', 'params', 'pageNum') ? this.props.match.params.pageNum : 1}
+            changePage={(link, pageNum) => { loadJson(`/wishlist?page=${pageNum}`, 'get'); }}
+        />
+    )
 
-    renderPagination = () => {
-        if (!dataChecking(this.props, 'profileWishlist', 'data')) {
-            return null;
-        }
-        return (
-            <PageChanger
-                productData={this.state.wishlist}
-                pagenum={dataChecking(this.props, 'match', 'params', 'pageNum') ? this.props.match.params.pageNum : 1}
-                changePage={(link, pageNum) => { loadJson(`/wishlist?page=${pageNum}`, 'get'); }}
-            />
-        );
-    }
-
-    renderProductCard = () => (
-        <Async promise={loadJson('/wishlist?page=1', 'get')}>
-            <Async.Loading>Loading...</Async.Loading>
-            <Async.Resolved>
-                {
-                    (data) => data.data.items.map((item, index) => (
-                        <div
-                            className="product-card-div"
-                            key={index}
-                        >
-                            <ProductCard
-                                product={item.product}
-                                review={false}
-                                // price={false}
-                                url={item.product.brand.url}
-                                listViewMode={true}
-                                allowDelete={true}
-                                allowWishlistButton={false}
-                                // deleteFromWishlist={() => { this.props.dispatch(deleteWishlist(item.id)); }}
-                            />
-                        </div>
-                    ))
-                }
-                {
-                    (data) => this.setState({ wishlist: data })
-                }
-            </Async.Resolved>
-            <Async.Rejected>
-                BBBB
-            </Async.Rejected>
-        </Async>
+    renderProductCard = (data) => (
+        data.data.items.map((item, index) => (
+            <div
+                className="product-card-div"
+                key={index}
+            >
+                <ProductCard
+                    product={item.product}
+                    review={false}
+                    price={false}
+                    url={item.product.brand.url}
+                    listViewMode={true}
+                    allowDelete={true}
+                    allowWishlistButton={false}
+                    deleteFromWishlist={
+                        () => {
+                            loadJson(`/wishlist/${item.id}`, 'delete');
+                        }
+                    }
+                />
+            </div>
+        ))
     );
 
+    // promise can all
     render() {
         return (
-            <div>
-                {this.renderPagination()}
-                <div className="grid-view">
-                    {this.renderProductCard()}
-                </div>
-            </div>
+            <Async promise={loadJson('/wishlist?page=1', 'get')}>
+                <Async.Loading>Loading... Product Card</Async.Loading>
+                <Async.Resolved>
+                    {(data) => (
+                        <div>
+                            {this.renderPagination(data)}
+                            <div className="grid-view">
+                                {this.renderProductCard(data)}
+                            </div>
+                        </div>
+                    )}
+                </Async.Resolved>
+                <Async.Rejected>
+                    BBBB
+                </Async.Rejected>
+            </Async>
         );
     }
 }

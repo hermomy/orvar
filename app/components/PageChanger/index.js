@@ -18,9 +18,9 @@ class PageChanger extends React.PureComponent { // eslint-disable-line react/pre
     }
 
     renderPageChanger = () => {
-        if (this.props.productData._meta.pageCount <= 1) {
-            return null;
-        }
+        // if (this.props.productData._meta.pageCount <= 1) {
+        //     return null;
+        // }
         const link = this.props.productData._links;
         const meta = this.props.productData._meta;
         return (
