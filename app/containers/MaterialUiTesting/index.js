@@ -61,7 +61,8 @@ export class MaterialUiTesting extends React.PureComponent { // eslint-disable-l
         clicked: false,
         checked: true,
         dialog: false,
-        snackbar: false,
+        snackbar: true,
+        second: new Date(Date.now()).getUTCSeconds(),
     };
 
     renderDialog = () => (
@@ -93,22 +94,22 @@ export class MaterialUiTesting extends React.PureComponent { // eslint-disable-l
         </Dialog>
     );
 
-    renderSnackbar = () => (
+    renderSnackbar = (second) => (
         <Snackbar
             anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
             }}
             open={this.state.snackbar}
-            autoHideDuration={6000}
-            onClose={() => this.setState({ snackbar: !this.state.snackbar })}
-            message={<span id="message-id">I am snackbar</span>}
+            autoHideDuration={2000}
+            onClose={() => this.setState({ second: new Date(Date.now()).getUTCSeconds(), snackbar: false })}
+            message={<span id="message-id">I am snackbar {second}</span>}
+            onClick={() => this.setState({ second: new Date(Date.now()).getUTCSeconds(), snackbar: false })}
             action={[
                 <IconButton
                     key="close"
                     aria-label="Close"
                     color="inherit"
-                    onClick={() => this.setState({ snackbar: !this.state.snackbar })}
                 >
                     <CloseIcon />
                 </IconButton>,
@@ -130,7 +131,7 @@ export class MaterialUiTesting extends React.PureComponent { // eslint-disable-l
                         <Typography >Follow palette primary</Typography>
                     </ListItem>
                     <ListItem>
-                        <Button><Typography variant="h4" color="error" onClick={() => this.setState({ snackbar: !this.state.snackbar })}>3RD</Typography></Button>
+                        <Button onClick={() => { this.setState({ snackbar: true }); console.log(this.state.snackbar); }}><Typography variant="h4" color="error">3RD</Typography></Button>
                         <Typography>Follow palette error color</Typography>
                     </ListItem>
                     <ListItem>
@@ -185,7 +186,7 @@ export class MaterialUiTesting extends React.PureComponent { // eslint-disable-l
                     </ListItem>
                 </List>
                 {this.renderDialog()}
-                {this.renderSnackbar()}
+                {this.renderSnackbar(this.state.second)}
                 <div>
                     <span>leee</span>
                 </div>
