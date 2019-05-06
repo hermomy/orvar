@@ -7,7 +7,7 @@ import { defineMessages } from 'react-intl';
 
 export default defineMessages({
     header: {
-        id: 'app.components.CartPage.header',
-        defaultMessage: 'This is the CartPage component !',
+        id: 'app.containers.CartPage.header',
+        defaultMessage: 'This is CartPage container !',
     },
 });

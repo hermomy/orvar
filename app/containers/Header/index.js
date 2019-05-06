@@ -14,7 +14,7 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
 import { NavLink } from 'react-router-dom';
-import CartPage from 'components/CartPage';
+import CartPage from 'containers/CartPage';
 import { dataChecking } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
 import { layoutTopNav, searchResult } from './actions';
@@ -160,14 +160,11 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     topCategory = () => (
         <div className={`top-nav ${!this.state.hideSearchBar ? 'show' : ''}`}>
             {
-                dataChecking(this.props.header, 'header', 'data') ?
-                    dataChecking(this.props.header, 'header', 'data').map((val) => (
-                        <div className="ml-3 category" key={val.code}>
-                            {val.text}
-                        </div>
-                    ))
-                    :
-                    null
+                dataChecking(this.props.header, 'header', 'data').map((val) => (
+                    <div className="ml-3 category" key={val.code}>
+                        {val.text}
+                    </div>
+                ))
             }
         </div>
     )
@@ -209,15 +206,18 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
      */
     render() {
         return (
-            <div id="header">
-                <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
-                    <NavLink to="/">
-                        <img src="https://cdn5.hermo.my/hermo/imagelink/2017/hermo-logo_01522372998.png" alt="Hermo Logo" width="100%"></img>
-                    </NavLink>
+            dataChecking(this.props.header, 'header', 'data') ?
+                <div id="header">
+                    <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
+                        <NavLink to="/">
+                            <img src="https://cdn5.hermo.my/hermo/imagelink/2017/hermo-logo_01522372998.png" alt="Hermo Logo" width="100%"></img>
+                        </NavLink>
+                    </div>
+                    {this.topCategory()}
+                    {this.quicklinks()}
                 </div>
-                {this.topCategory()}
-                {this.quicklinks()}
-            </div>
+            :
+                null
         );
     }
 }

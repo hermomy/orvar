@@ -271,7 +271,6 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     )
 
     render() {
-        console.log(this.props);
         return (
             <div>
                 <input type="button" onClick={() => { this.props.dispatch(getOrder('')); this.setState({ category: '' }); }} value="All Orders" />

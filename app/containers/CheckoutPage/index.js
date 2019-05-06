@@ -13,33 +13,14 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
-import CartPage from 'components/CartPage';
+import CartPage from 'containers/CartPage';
 
-import { dataChecking } from 'globalUtils';
 import makeSelectCheckoutPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
-import { getCheckout, updateQty, removeItemInCart } from './actions';
 
 export class CheckoutPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-    componentDidMount() {
-        this.props.dispatch(getCheckout());
-    }
-
-    changeQuantity = (type, qty, id) => {
-        if (qty <= 1 && type === 'remove') {
-            return;
-        }
-        let quantity = qty;
-        quantity += type === 'add' ? 1 : -1;
-        this.props.dispatch(updateQty(quantity, id));
-    }
-
-    deleteCart = (id) => {
-        this.props.dispatch(removeItemInCart(id));
-    }
-
     render() {
         return (
             <div>
@@ -47,23 +28,10 @@ export class CheckoutPage extends React.PureComponent { // eslint-disable-line r
                     <title>CheckoutPage</title>
                     <meta name="description" content="Description of CheckoutPage" />
                 </Helmet>
-                {
-                    this.props.header ?
-                        <CartPage
-                            changeQuantity={this.changeQuantity}
-                            deleteCart={this.deleteCart}
-                            data={dataChecking(this.props, 'checkoutpage', 'checkout', 'data')}
-                        />
-                    :
-                        <div>
-                            <CartPage
-                                changeQuantity={this.changeQuantity}
-                                deleteCart={this.deleteCart}
-                                data={dataChecking(this.props, 'checkoutpage', 'checkout', 'data')}
-                            />
-                            <div>will continue on checkout page when wireframe ready....</div>
-                        </div>
-                }
+                <div>
+                    <CartPage />
+                    <div>will continue on checkout page when wireframe ready....</div>
+                </div>
             </div>
         );
     }

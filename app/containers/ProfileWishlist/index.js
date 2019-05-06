@@ -66,7 +66,6 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
     }
 
     render() {
-        console.log(this.props);
         return (
             <div>
                 {this.renderPagination()}

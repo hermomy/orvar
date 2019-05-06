@@ -177,7 +177,6 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
         if (!data) {
             return null;
         }
-        console.log(this.props);
         return this.props.herlisting.data.product.result.items.map((product) =>
         (
             <div
@@ -214,7 +213,6 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
 
     render() {
         const { herlisting } = this.props;
-        console.log(this.props);
         return (
             <div className="container">
                 <Helmet>

@@ -23,7 +23,6 @@ class SortFilter extends React.Component {
     }
 
     componentWillMount() {
-        console.log(this.state);
         if (this.props.initialSortFilterParams) {
             this.setState(this.props.initialSortFilterParams);
         }

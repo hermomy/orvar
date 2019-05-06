@@ -93,7 +93,6 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
     }
 
     render() {
-        console.log(this.props);
         return (
             <div>
                 {this.renderSideBar()}

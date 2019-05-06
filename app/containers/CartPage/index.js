@@ -1,20 +1,56 @@
 /**
-*
-* CartPage
-*
-*/
+ *
+ * CartPage
+ *
+ */
 
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+import injectSaga from 'utils/injectSaga';
+import injectReducer from 'utils/injectReducer';
 import { dataChecking } from 'globalUtils';
 
+import { getCheckout, updateQty, removeItemInCart } from './actions';
+import makeSelectCartPage from './selectors';
+import reducer from './reducer';
+import saga from './saga';
 import './style.scss';
 
-class CartPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class CartPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: {},
+        };
+        this.props.dispatch(getCheckout());
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.cartPage.data !== this.props.cartPage.data) {
+            this.setState({ data: nextProps.cartPage.data });
+        }
+    }
+
+    changeQuantity = (type, qty, id) => {
+        if (qty <= 1 && type === 'remove') {
+            return;
+        }
+        let quantity = qty;
+        quantity += type === 'add' ? 1 : -1;
+        this.props.dispatch(updateQty(quantity, id));
+    }
+
+    deleteCart = (id) => {
+        this.props.dispatch(removeItemInCart(id));
+    }
 
     cartList = () => (
         <div>
             {
-                dataChecking(this.props, 'data', 'merchants').map((merchant) => (
+                dataChecking(this.state, 'data', 'merchants').map((merchant) => (
                     <div key={merchant.id}>
                         <div
                             className="p-half"
@@ -57,7 +93,7 @@ class CartPage extends React.PureComponent { // eslint-disable-line react/prefer
                                     <div className="text-xs-center" style={{ width: '100px' }}>
                                         <span
                                             className="px-quater"
-                                            onClick={() => this.props.deleteCart(item.id)}
+                                            onClick={() => this.deleteCart(item.id)}
                                             style={{ cursor: 'pointer' }}
                                         >
                                             <i className="far fa-times-circle"></i>
@@ -80,7 +116,7 @@ class CartPage extends React.PureComponent { // eslint-disable-line react/prefer
                     <span
                         className="px-quater"
                         style={{ cursor: 'pointer' }}
-                        onClick={() => this.props.changeQuantity('remove', item.qty, item.id)}
+                        onClick={() => this.changeQuantity('remove', item.qty, item.id)}
                     >
                         <i className="fa fa-caret-left hermo-pink"></i>
                     </span>
@@ -90,7 +126,7 @@ class CartPage extends React.PureComponent { // eslint-disable-line react/prefer
                     <span
                         className="px-quater"
                         style={{ cursor: 'pointer' }}
-                        onClick={() => this.props.changeQuantity('add', item.qty, item.id)}
+                        onClick={() => this.changeQuantity('add', item.qty, item.id)}
                     >
                         <i className="fa fa-caret-right hermo-pink"></i>
                     </span>
@@ -110,7 +146,7 @@ class CartPage extends React.PureComponent { // eslint-disable-line react/prefer
         return (
             <div>
                 {
-                   dataChecking(this.props, 'data', 'merchants') ?
+                   dataChecking(this.state, 'data', 'merchants') ?
                    this.cartList()
                    :
                    <div>no item added..</div>
@@ -121,7 +157,26 @@ class CartPage extends React.PureComponent { // eslint-disable-line react/prefer
 }
 
 CartPage.propTypes = {
-
+    dispatch: PropTypes.func.isRequired,
 };
 
-export default CartPage;
+const mapStateToProps = createStructuredSelector({
+    cartPage: makeSelectCartPage(),
+});
+
+function mapDispatchToProps(dispatch) {
+    return {
+        dispatch,
+    };
+}
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
+const withReducer = injectReducer({ key: 'cartPage', reducer });
+const withSaga = injectSaga({ key: 'cartPage', saga });
+
+export default compose(
+    withReducer,
+    withSaga,
+    withConnect,
+)(CartPage);
