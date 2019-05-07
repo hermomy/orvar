@@ -23,69 +23,71 @@ import './style.scss';
 
 const getApi = (path, type, body, baseUrl, headerParams) => apiRequest(path, type, body, baseUrl, headerParams);
 
-const getProductCard = async (path, type, body, baseUrl, headerParams) => {
-    const data = apiRequest(path, type, body, baseUrl, headerParams);
-    return data;
-};
-
-const MainUI = () => (
-    <Async promise={getApi('/wishlist?page=1', 'get')}>
-        <Async.Loading>Loading... Product Card</Async.Loading>
-        <Async.Resolved>
-            {(data) => (
-                <div>
-                    {renderPageChanger(data)}
-                    <div className="grid-view">
-                        {renderProductCard(data)}
-                    </div>
-                </div>
-            )}
-        </Async.Resolved>
-        <Async.Rejected>
-            BBBB
-        </Async.Rejected>
-    </Async>
-);
-
-const renderPageChanger = (data) => (
-    <PageChanger
-        productData={data.data}
-        pagenum={dataChecking(this.props, 'match', 'params', 'pageNum') ? this.props.match.params.pageNum : 1}
-        changePage={(link, pageNum) => {
-            getApi(`/wishlist?page=${pageNum}`, 'get')
-            .then((lalala) => renderProductCard(lalala));
-        }}
-    />
-);
-
-const renderProductCard = (data) => (
-    data.data.items.map((item, index) => (
-        <div
-            className="product-card-div"
-            key={index}
-        >
-            <ProductCard
-                product={item.product}
-                review={false}
-                price={false}
-                url={item.product.brand.url}
-                listViewMode={true}
-                allowDelete={true}
-                allowWishlistButton={false}
-                deleteFromWishlist={
-                    () => {
-                        renderProductCard(getProductCard(`/wishlist/${item.id}`, 'delete'));
-                    }
-                }
-            />
-        </div>
-    ))
-);
-
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+    componentWillMount() {
+        getApi('/wishlist?page=1', 'get').then((data) => this.setState({ wishlist: data }));
+    }
+
+    satate = {
+        wishlist: null,
+        page: 1,
+    }
+
+    renderPageChanger = () => (
+        <PageChanger
+            productData={this.state.wishlist.data}
+            pagenum={dataChecking(this.props, 'match', 'params', 'pageNum') ? this.props.match.params.pageNum : 1}
+            changePage={(link, pageNum) => {
+                getApi(`/wishlist?page=${pageNum}`, 'get')
+                .then((lalala) => this.setState({ wishlist: lalala, page: pageNum }));
+            }}
+        />
+    );
+
+    renderProductCard = () => (
+        this.state.wishlist.data.items.map((item, index) => (
+            <div
+                className="product-card-div"
+                key={index}
+            >
+                <ProductCard
+                    product={item.product}
+                    review={false}
+                    price={false}
+                    url={item.product.brand.url}
+                    listViewMode={true}
+                    allowDelete={true}
+                    allowWishlistButton={false}
+                    deleteFromWishlist={
+                        () => {
+                            getApi(`/wishlist/${item.id}`, 'delete')
+                            .then(() => getApi(`/wishlist?page=${this.state.pageNum}`, 'get'))
+                            .then((lalala) => this.setState({ wishlist: lalala }));
+                        }
+                    }
+                />
+            </div>
+        ))
+    );
+
     render() {
         return (
-            <MainUI />
+            <Async promise={getApi('/wishlist?page=1', 'get')}>
+                <Async.Loading>Loading... Product Card</Async.Loading>
+                <Async.Resolved>
+                    {() => (
+                        <div>
+                            {this.renderPageChanger()}
+                            <div className="grid-view">
+                                {this.renderProductCard()}
+                            </div>
+                        </div>
+                    )}
+                </Async.Resolved>
+                <Async.Rejected>
+                    BBBB
+                </Async.Rejected>
+            </Async>
         );
     }
 }
