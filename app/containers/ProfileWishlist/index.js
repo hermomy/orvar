@@ -5,11 +5,11 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { dataChecking, apiRequest } from 'globalUtils';
+import { apiRequest } from 'globalUtils';
 import Async from 'react-async';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -25,18 +25,19 @@ const getApi = (path, type, body, baseUrl, headerParams) => apiRequest(path, typ
 
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     componentWillMount() {
-        getApi('/wishlist?page=1', 'get').then((data) => this.setState({ wishlist: data }));
+        getApi('/wishlist?page=1', 'get').then((data) => this.setState({ wishlist: data, pageData: data }));
     }
 
     satate = {
         wishlist: null,
         page: 1,
+        pageData: null,
     }
 
     renderPageChanger = () => (
         <PageChanger
-            productData={this.state.wishlist.data}
-            pagenum={dataChecking(this.props, 'match', 'params', 'pageNum') ? this.props.match.params.pageNum : 1}
+            productData={this.state.pageData.data}
+            pagenum={1}
             changePage={(link, pageNum) => {
                 getApi(`/wishlist?page=${pageNum}`, 'get')
                 .then((lalala) => this.setState({ wishlist: lalala, page: pageNum }));
@@ -60,8 +61,7 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                     allowWishlistButton={false}
                     deleteFromWishlist={
                         () => {
-                            getApi(`/wishlist/${item.id}`, 'delete')
-                            .then(() => getApi(`/wishlist?page=${this.state.pageNum}`, 'get'))
+                            getApi(`/wishlist/${item.product.id}`, 'post')
                             .then((lalala) => this.setState({ wishlist: lalala }));
                         }
                     }
@@ -93,7 +93,7 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
 }
 
 ProfileWishlist.propTypes = {
-    // dispatch: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
