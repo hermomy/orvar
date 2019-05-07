@@ -21,60 +21,71 @@ import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
 
-const loadJson = (path, type, body, baseUrl, headerParams) => apiRequest(path, type, body, baseUrl, headerParams);
+const getApi = (path, type, body, baseUrl, headerParams) => apiRequest(path, type, body, baseUrl, headerParams);
+
+const getProductCard = async (path, type, body, baseUrl, headerParams) => {
+    const data = apiRequest(path, type, body, baseUrl, headerParams);
+    return data;
+};
+
+const MainUI = () => (
+    <Async promise={getApi('/wishlist?page=1', 'get')}>
+        <Async.Loading>Loading... Product Card</Async.Loading>
+        <Async.Resolved>
+            {(data) => (
+                <div>
+                    {renderPageChanger(data)}
+                    <div className="grid-view">
+                        {renderProductCard(data)}
+                    </div>
+                </div>
+            )}
+        </Async.Resolved>
+        <Async.Rejected>
+            BBBB
+        </Async.Rejected>
+    </Async>
+);
+
+const renderPageChanger = (data) => (
+    <PageChanger
+        productData={data.data}
+        pagenum={dataChecking(this.props, 'match', 'params', 'pageNum') ? this.props.match.params.pageNum : 1}
+        changePage={(link, pageNum) => {
+            getApi(`/wishlist?page=${pageNum}`, 'get')
+            .then((lalala) => renderProductCard(lalala));
+        }}
+    />
+);
+
+const renderProductCard = (data) => (
+    data.data.items.map((item, index) => (
+        <div
+            className="product-card-div"
+            key={index}
+        >
+            <ProductCard
+                product={item.product}
+                review={false}
+                price={false}
+                url={item.product.brand.url}
+                listViewMode={true}
+                allowDelete={true}
+                allowWishlistButton={false}
+                deleteFromWishlist={
+                    () => {
+                        renderProductCard(getProductCard(`/wishlist/${item.id}`, 'delete'));
+                    }
+                }
+            />
+        </div>
+    ))
+);
 
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-    renderPagination = (data) => (
-        <PageChanger
-            productData={data.data}
-            pagenum={dataChecking(this.props, 'match', 'params', 'pageNum') ? this.props.match.params.pageNum : 1}
-            changePage={(link, pageNum) => { loadJson(`/wishlist?page=${pageNum}`, 'get'); }}
-        />
-    )
-
-    renderProductCard = (data) => (
-        data.data.items.map((item, index) => (
-            <div
-                className="product-card-div"
-                key={index}
-            >
-                <ProductCard
-                    product={item.product}
-                    review={false}
-                    price={false}
-                    url={item.product.brand.url}
-                    listViewMode={true}
-                    allowDelete={true}
-                    allowWishlistButton={false}
-                    deleteFromWishlist={
-                        () => {
-                            loadJson(`/wishlist/${item.id}`, 'delete');
-                        }
-                    }
-                />
-            </div>
-        ))
-    );
-
-    // promise can all
     render() {
         return (
-            <Async promise={loadJson('/wishlist?page=1', 'get')}>
-                <Async.Loading>Loading... Product Card</Async.Loading>
-                <Async.Resolved>
-                    {(data) => (
-                        <div>
-                            {this.renderPagination(data)}
-                            <div className="grid-view">
-                                {this.renderProductCard(data)}
-                            </div>
-                        </div>
-                    )}
-                </Async.Resolved>
-                <Async.Rejected>
-                    BBBB
-                </Async.Rejected>
-            </Async>
+            <MainUI />
         );
     }
 }
