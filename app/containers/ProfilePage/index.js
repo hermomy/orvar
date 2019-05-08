@@ -115,7 +115,6 @@ export class ProfilePage extends React.PureComponent { // eslint-disable-line re
         }
     }
     render() {
-        console.log(this.props);
         return (
             <div>
                 <Helmet>

@@ -131,7 +131,6 @@ export class ProfileWallet extends React.PureComponent { // eslint-disable-line 
     }
 
     render() {
-        console.log(this.props);
         return (
             <div>
                 <div>

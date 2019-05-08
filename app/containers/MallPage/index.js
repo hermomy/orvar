@@ -292,7 +292,6 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
     }
 
     render() {
-        console.log(this.props);
         return (
             <div className="container">
                 <Async promise={getApiArray(this.state.API)}>

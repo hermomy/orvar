@@ -126,7 +126,6 @@ export class ProfileReview extends React.PureComponent { // eslint-disable-line 
     }
 
     render() {
-        console.log(this.props);
         return (
             <div>
                 <input type="button" onClick={() => { this.props.dispatch(getReview('/mall/reviewable?reviewed=0&per-page=5', 'reviewData')); this.setState({ category: '/mall/reviewable?reviewed=0&per-page=5' }); }} value="pending review" />

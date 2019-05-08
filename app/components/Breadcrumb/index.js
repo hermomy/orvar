@@ -17,8 +17,8 @@ function Breadcrumb(props) {
                 <StatefulLink path="?ucf=breadcrumb">Home </StatefulLink>
             </li>
             {
-                props.paths.map((path) => (
-                    <li className={path.text}>
+                props.paths.map((path, key) => (
+                    <li className={path.text} key={key}>
                         <span>&gt;&gt;</span>
                         <StatefulLink path={`${path.url}?ucf=breadcrumb`}>
                             {path.text}
