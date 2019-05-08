@@ -23,30 +23,35 @@ import './style.scss';
 
 const getApi = (path, type, body, baseUrl, headerParams) => apiRequest(path, type, body, baseUrl, headerParams);
 
+const ProductCardApi = async (postpath, posttype, firsttimechecking, getpath, gettype) => {
+    if (!firsttimechecking) {
+        await apiRequest(postpath, posttype);
+    }
+    const data = await getApi(getpath, gettype);
+    return data;
+};
+
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-    componentWillMount() {
-        getApi('/wishlist?page=1', 'get').then((data) => this.setState({ wishlist: data, pageData: data }));
-    }
-
-    satate = {
-        wishlist: null,
+    state = {
         page: 1,
-        pageData: null,
+        deleteId: {
+            id: -1,
+            firsttime: true,
+        },
     }
 
-    renderPageChanger = () => (
+    renderPageChanger = (data) => (
         <PageChanger
-            productData={this.state.pageData.data}
+            productData={data.data}
             pagenum={1}
             changePage={(link, pageNum) => {
-                getApi(`/wishlist?page=${pageNum}`, 'get')
-                .then((lalala) => this.setState({ wishlist: lalala, page: pageNum }));
+                this.setState({ page: pageNum });
             }}
         />
     );
 
-    renderProductCard = () => (
-        this.state.wishlist.data.items.map((item, index) => (
+    renderProductCard = (data) => (
+        data.data.items.map((item, index) => (
             <div
                 className="product-card-div"
                 key={index}
@@ -61,8 +66,7 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                     allowWishlistButton={false}
                     deleteFromWishlist={
                         () => {
-                            getApi(`/wishlist/${item.product.id}`, 'post')
-                            .then((lalala) => this.setState({ wishlist: lalala }));
+                            this.setState({ deleteId: { id: item.id, firsttime: false } });
                         }
                     }
                 />
@@ -72,22 +76,34 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
 
     render() {
         return (
-            <Async promise={getApi('/wishlist?page=1', 'get')}>
-                <Async.Loading>Loading... Product Card</Async.Loading>
-                <Async.Resolved>
-                    {() => (
-                        <div>
-                            {this.renderPageChanger()}
-                            <div className="grid-view">
-                                {this.renderProductCard()}
+            <div>
+                <Async promise={getApi(`/wishlist?page=${this.state.page}`, 'get')}>
+                    <Async.Loading>Loading... PageChanger</Async.Loading>
+                    <Async.Resolved>
+                        {(data) => (
+                            <div>
+                                {this.renderPageChanger(data)}
                             </div>
-                        </div>
-                    )}
-                </Async.Resolved>
-                <Async.Rejected>
-                    BBBB
-                </Async.Rejected>
-            </Async>
+                        )}
+                    </Async.Resolved>
+                    <Async.Rejected>
+                        Error PageChanger
+                    </Async.Rejected>
+                </Async>
+                <Async promise={ProductCardApi(`/wishlist/${this.state.deleteId.id}`, 'delete', this.state.deleteId.firsttime, `/wishlist?page=${this.state.page}`, 'get')}>
+                    <Async.Loading>Loading... ProductCard</Async.Loading>
+                    <Async.Resolved>
+                        {(data) => (
+                            <div className="grid-view">
+                                {this.renderProductCard(data)}
+                            </div>
+                        )}
+                    </Async.Resolved>
+                    <Async.Rejected>
+                        Error ProductCard
+                    </Async.Rejected>
+                </Async>
+            </div>
         );
     }
 }
