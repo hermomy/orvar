@@ -25,8 +25,7 @@ const ProductCardApi = async (API) => {
     if (!API.deleteProduct.firsttime) {
         await apiRequest(API.deleteProduct.URL, API.deleteProduct.Method);
     }
-    const data = await apiRequest(API.getProduct.URL, API.getProduct.Method);
-    return data;
+    return apiRequest(API.getProduct.URL, API.getProduct.Method);
 };
 
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -88,24 +87,22 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
 
     render() {
         return (
-            <div>
-                <Async promise={ProductCardApi(this.state.API)}>
-                    <Async.Loading>Loading... ProductCard</Async.Loading>
-                    <Async.Resolved>
-                        {(data) => (
-                            <div>
-                                {this.renderPageChanger(data)}
-                                <div className="grid-view">
-                                    {this.renderProductCard(data)}
-                                </div>
+            <Async promise={ProductCardApi(this.state.API)}>
+                <Async.Loading>Loading... ProductCard</Async.Loading>
+                <Async.Resolved>
+                    {(data) => (
+                        <div>
+                            {this.renderPageChanger(data)}
+                            <div className="grid-view">
+                                {this.renderProductCard(data)}
                             </div>
-                        )}
-                    </Async.Resolved>
-                    <Async.Rejected>
-                        Error ProductCard
-                    </Async.Rejected>
-                </Async>
-            </div>
+                        </div>
+                    )}
+                </Async.Resolved>
+                <Async.Rejected>
+                    { console.error }
+                </Async.Rejected>
+            </Async>
         );
     }
 }

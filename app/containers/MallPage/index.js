@@ -12,7 +12,8 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { dataChecking } from 'globalUtils';
+import { dataChecking, apiRequest } from 'globalUtils';
+import Async from 'react-async';
 import ProductCard from 'components/ProductCard';
 import PageChanger from 'components/PageChanger';
 import FilterSort from 'components/FilterSort';
@@ -23,12 +24,43 @@ import saga from './saga';
 import './style.scss';
 import { getMall, getProduct, postWishlist } from './actions';
 
+const getMallPostWishlistAPI = async (API) => {
+    console.log(API);
+    if (!API.postWishlist.firsttime) {
+        await apiRequest(API.postWishlist.URL, API.postWishlist.Method);
+    }
+    if (API.getMall.firsttime) {
+        return apiRequest(API.getMall.URL, API.getMall.Method);
+    }
+    return null;
+};
+
+const getProductAPI = (API) => apiRequest(API.getProduct.URL, API.getProduct.Method);
+
+const getApiArray = (API) => Promise.all([getMallPostWishlistAPI(API), getProductAPI(API)]);
+
 export class MallPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         selectedSort: null,
         categoryOfFrontUrl: '',
         listView: false,
         bukatutup: true,
+        API: {
+            getMall: {
+                URL: '',
+                Method: 'get',
+                firsttime: true,
+            },
+            getProduct: {
+                URL: '',
+                Method: 'get',
+            },
+            postWishlist: {
+                URL: '',
+                Method: 'post',
+                firsttime: true,
+            },
+        },
     }
 
     componentWillMount() {
@@ -76,9 +108,25 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
             dispatchlink += `&group_id=${groupId}`;
             this.setState({ categoryOfFrontUrl: `&group_id=${groupId}` });
         } else {
-            this.props.dispatch(getMall('/mall'));
+            Object.assign(
+                this.state.API.getMall, {
+                    URL: '/wtf12331231',
+                },
+            );
+            // this.setState({ ...this.state.API.getMall, [URL]: '/mall' });
+            // const tempAPI = { ...this.state.API };
+            // Object.assign(
+            //     tempAPI.getMall, {
+            //         URL: '/mall',
+            //     }
+            // );
+            // this.setState({
+            //     API: tempAPI,
+            // });
         }
-
+        // getProduct: {
+        //     URL: `/mall/list?${dispatchlink}`,
+        // },
         this.props.dispatch(getProduct(`/mall/list?${dispatchlink}`));
     }
 
@@ -190,11 +238,11 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
         }
     }
 
-    renderPageChanger = () => {
+    renderPageChanger = (data) => {
         if (!dataChecking(this.props, 'mallPage', 'data', 'productData')) {
             return null;
         }
-        const productData = this.props.mallPage.data.productData;
+        const productData = data.data.product.result;
         return (
             <PageChanger
                 productData={productData}
@@ -204,11 +252,11 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
         );
     }
 
-    renderProductCard = () => {
+    renderProductCard = (data) => {
         if (!dataChecking(this.props, 'mallPage', 'data', 'productData')) {
             return null;
         }
-        return this.props.mallPage.data.productData.items.map((item) => (
+        return data.data.product.result.items.map((item) => (
             <div
                 key={item.id}
                 className={'product-card-div'}
@@ -225,7 +273,6 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
                     addOrDeleteWishlist={() => this.props.dispatch(postWishlist(item.id, this.props.mallPage.data.productData._links.self.href))}
                 />
             </div>
-
         ));
     }
 
@@ -248,30 +295,39 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
         console.log(this.props);
         return (
             <div className="container">
-                {
-                    dataChecking(this.props, 'mallPage', 'loading') && !dataChecking(this.props, 'mallPage', 'data') ?
+                <Async promise={getApiArray(this.state.API)}>
+                    <Async.Loading>
                         <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
-                        :
-                        <div>
-                            <img className="banner" src="https://cdn5.hermo.my/hermo/imagelink/2019/april-2019-loreal-paris_01554085356.jpg" alt="" />
+                    </Async.Loading>
+                    <Async.Resolved>
+                        {
+                            (data) => (
+                                <div>
+                                    <img className="banner" src="https://cdn5.hermo.my/hermo/imagelink/2019/april-2019-loreal-paris_01554085356.jpg" alt="" />
 
-                            <div>
-                                <div className="view-button">
-                                    <input type="button" onClick={() => { this.setState({ listView: !this.state.listView }); }} value="grid/list" />
+                                    <div>
+                                        <div className="view-button">
+                                            <input type="button" onClick={() => { this.setState({ listView: !this.state.listView }); }} value="grid/list" />
+                                        </div>
+                                        {/* {this.renderPageChanger(data[1])} */}
+                                    </div>
+                                    <div className="sort-filter-container">
+                                        {/* {this.renderFilterSort(data[0])} */}
+                                    </div>
+                                    <div className={`${this.state.listView ? 'list-view' : 'grid-view'}`}>
+                                        {this.renderProductCard(data)}
+                                    </div>
+                                    <div>
+                                        <span className="next-page-bottom" onClick={() => { this.changePageData(this.props.mallPage.data.productData._links.self.href); this.changePageUI(this.props.mallPage.data.productData._links.self.href, (this.props.mallPage.data.productData._meta.currentPage + 1)); }}>Next Page</span>
+                                    </div>
                                 </div>
-                                {this.renderPageChanger()}
-                            </div>
-                            <div className="sort-filter-container">
-                                {this.renderFilterSort()}
-                            </div>
-                            <div className={`${this.state.listView ? 'list-view' : 'grid-view'}`}>
-                                {this.renderProductCard()}
-                            </div>
-                            <div>
-                                <span className="next-page-bottom" onClick={() => { this.changePageData(this.props.mallPage.data.productData._links.self.href); this.changePageUI(this.props.mallPage.data.productData._links.self.href, (this.props.mallPage.data.productData._meta.currentPage + 1)); }}>Next Page</span>
-                            </div>
-                        </div>
-                }
+                            )
+                        }
+                    </Async.Resolved>
+                    <Async.Rejected>
+                        { console.error }
+                    </Async.Rejected>
+                </Async>
             </div>
         );
     }
