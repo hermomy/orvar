@@ -21,22 +21,27 @@ import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
 
-const getApi = (path, type, body, baseUrl, headerParams) => apiRequest(path, type, body, baseUrl, headerParams);
-
-const ProductCardApi = async (postpath, posttype, firsttimechecking, getpath, gettype) => {
-    if (!firsttimechecking) {
-        await apiRequest(postpath, posttype);
+const ProductCardApi = async (API) => {
+    if (!API.deleteProduct.firsttime) {
+        await apiRequest(API.deleteProduct.URL, API.deleteProduct.Method);
     }
-    const data = await getApi(getpath, gettype);
+    const data = await apiRequest(API.getProduct.URL, API.getProduct.Method);
     return data;
 };
 
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         page: 1,
-        deleteId: {
-            id: -1,
-            firsttime: true,
+        API: {
+            getProduct: {
+                URL: '/wishlist?page=1',
+                Method: 'get',
+            },
+            deleteProduct: {
+                URL: '/wishlist/-1',
+                Method: 'delete',
+                firsttime: true,
+            },
         },
     }
 
@@ -45,7 +50,7 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
             productData={data.data}
             pagenum={1}
             changePage={(link, pageNum) => {
-                this.setState({ page: pageNum });
+                this.setState(Object.assign(this.state.API.getProduct, { URL: `/wishlist?page=${pageNum}` }));
             }}
         />
     );
@@ -66,7 +71,14 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                     allowWishlistButton={false}
                     deleteFromWishlist={
                         () => {
-                            this.setState({ deleteId: { id: item.id, firsttime: false } });
+                            this.setState(
+                                Object.assign(
+                                    this.state.API.deleteProduct, {
+                                        URL: `/wishlist/${item.id}`,
+                                        firsttime: false,
+                                    }
+                                )
+                            );
                         }
                     }
                 />
@@ -77,25 +89,15 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
     render() {
         return (
             <div>
-                <Async promise={getApi(`/wishlist?page=${this.state.page}`, 'get')}>
-                    <Async.Loading>Loading... PageChanger</Async.Loading>
+                <Async promise={ProductCardApi(this.state.API)}>
+                    <Async.Loading>Loading... ProductCard</Async.Loading>
                     <Async.Resolved>
                         {(data) => (
                             <div>
                                 {this.renderPageChanger(data)}
-                            </div>
-                        )}
-                    </Async.Resolved>
-                    <Async.Rejected>
-                        Error PageChanger
-                    </Async.Rejected>
-                </Async>
-                <Async promise={ProductCardApi(`/wishlist/${this.state.deleteId.id}`, 'delete', this.state.deleteId.firsttime, `/wishlist?page=${this.state.page}`, 'get')}>
-                    <Async.Loading>Loading... ProductCard</Async.Loading>
-                    <Async.Resolved>
-                        {(data) => (
-                            <div className="grid-view">
-                                {this.renderProductCard(data)}
+                                <div className="grid-view">
+                                    {this.renderProductCard(data)}
+                                </div>
                             </div>
                         )}
                     </Async.Resolved>
