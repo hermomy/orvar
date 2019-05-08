@@ -46,7 +46,9 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
                         <NavLink to={'/profilesmallscreen'} className="page-select-button hershop-button" title="title">
                             Profile(smallscreen)
                         </NavLink>
-                        <input type="button" value="SignUpPage" className="page-select-button hershop-button" onClick={() => this.setState({ SignUpPage: true })} />
+                        <NavLink to={'/onboarding'} className="page-select-button hershop-button" title="title">
+                            OnboardingPage
+                        </NavLink>
                         {
                             this.state.SignUpPage ? <SignUpPage /> : null
                         }

@@ -29,6 +29,7 @@ import HerListing from 'containers/HerListing';
 import MallPage from 'containers/MallPage';
 import NotFoundPage from 'containers/NotFoundPage';
 import ProfileWholePage from 'containers/ProfileWholePage';
+import OnboardingPage from 'containers/OnboardingPage';
 // import Cart from 'containers/CartPage';
 import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
@@ -64,6 +65,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                     <Header />
                     <Switch>
                         <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />
+                        <Route exact={true} path="/onboarding" component={globalScope.token ? OnboardingPage : LoginForm} />
                         <Route exact={true} path="/logout" component={LogoutForm} />
                         <Route exact={true} path="/mall" render={() => <MallPage />} />
                         <Route exact={true} path="/mall/page-:pageNum?" render={() => <MallPage />} />

@@ -63,6 +63,7 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
         },
     }
 
+
     componentWillMount() {
         let dispatchlink = this.props.location.search.replace('?', '');
         dispatchlink += `${dispatchlink === '' ? '' : '&'}page=${dataChecking(this.props, 'match', 'params', 'pageNum') ? this.props.match.params.pageNum : 1}`;
@@ -108,30 +109,13 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
             dispatchlink += `&group_id=${groupId}`;
             this.setState({ categoryOfFrontUrl: `&group_id=${groupId}` });
         } else {
-            Object.assign(
-                this.state.API.getMall, {
-                    URL: '/wtf12331231',
-                },
-            );
-            // this.setState({ ...this.state.API.getMall, [URL]: '/mall' });
-            // const tempAPI = { ...this.state.API };
-            // Object.assign(
-            //     tempAPI.getMall, {
-            //         URL: '/mall',
-            //     }
-            // );
-            // this.setState({
-            //     API: tempAPI,
-            // });
+            Object.assign(this.state.API.getMall, { URL: '/mall' });
         }
-        // getProduct: {
-        //     URL: `/mall/list?${dispatchlink}`,
-        // },
-        this.props.dispatch(getProduct(`/mall/list?${dispatchlink}`));
+        Object.assign(this.state.API.getProduct, { URL: `/mall/list?${dispatchlink}` });
     }
 
     changePageData = (link) => {
-        this.props.dispatch(getProduct(link));
+        Object.assign(this.state.API.getProduct, { URL: link });
     }
 
     changePageUI = (link, pageNum) => {
@@ -239,24 +223,18 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
     }
 
     renderPageChanger = (data) => {
-        if (!dataChecking(this.props, 'mallPage', 'data', 'productData')) {
-            return null;
-        }
-        const productData = data.data.product.result;
+        const productData = data[1].data;
         return (
             <PageChanger
                 productData={productData}
                 pagenum={dataChecking(this.props, 'match', 'params', 'pageNum') ? this.props.match.params.pageNum : 1}
-                changePage={(link, pageNum) => { this.changePageData(link, pageNum); this.changePageUI(link, pageNum); }}
+                changePage={(link, pageNum) => { console.log('wtf'); this.changePageData(link, pageNum); this.changePageUI(link, pageNum); }}
             />
         );
     }
 
-    renderProductCard = (data) => {
-        if (!dataChecking(this.props, 'mallPage', 'data', 'productData')) {
-            return null;
-        }
-        return data.data.product.result.items.map((item) => (
+    renderProductCard = (data) => (
+        data[1].data.items.map((item) => (
             <div
                 key={item.id}
                 className={'product-card-div'}
@@ -273,28 +251,23 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
                     addOrDeleteWishlist={() => this.props.dispatch(postWishlist(item.id, this.props.mallPage.data.productData._links.self.href))}
                 />
             </div>
-        ));
-    }
+        ))
+    )
 
-    renderFilterSort = () => {
-        if (!dataChecking(this.props, 'mallPage', 'data', 'originalMallData')) {
-            return null;
-        }
-        return (
-            <FilterSort
-                sorts={this.props.mallPage.data.originalMallData.sort.items}
-                changeSort={(oldSortId, newSortId) => { this.changeSortData(oldSortId, newSortId); this.changeSortUI(oldSortId, newSortId); }}
-                filters={this.props.mallPage.data.originalMallData.filters}
-                changeFilter={(newKey, newId) => { this.changeFilterData(newKey, newId); this.changeFilterUI(newKey, newId); }}
-                location={this.props.location}
-            />
-        );
-    }
+    renderFilterSort = (data) => (
+        <FilterSort
+            sorts={data[0].data.sort.items}
+            changeSort={(oldSortId, newSortId) => { this.changeSortData(oldSortId, newSortId); this.changeSortUI(oldSortId, newSortId); }}
+            filters={data[0].data.filters}
+            changeFilter={(newKey, newId) => { this.changeFilterData(newKey, newId); this.changeFilterUI(newKey, newId); }}
+            location={this.props.location}
+        />
+    )
 
     render() {
         return (
             <div className="container">
-                <Async promise={getApiArray(this.state.API)}>
+                <Async promiseFn={getApiArray(this.state.API)}>
                     <Async.Loading>
                         <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
                     </Async.Loading>
@@ -308,10 +281,10 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
                                         <div className="view-button">
                                             <input type="button" onClick={() => { this.setState({ listView: !this.state.listView }); }} value="grid/list" />
                                         </div>
-                                        {/* {this.renderPageChanger(data[1])} */}
+                                        {this.renderPageChanger(data)}
                                     </div>
                                     <div className="sort-filter-container">
-                                        {/* {this.renderFilterSort(data[0])} */}
+                                        {this.renderFilterSort(data)}
                                     </div>
                                     <div className={`${this.state.listView ? 'list-view' : 'grid-view'}`}>
                                         {this.renderProductCard(data)}
