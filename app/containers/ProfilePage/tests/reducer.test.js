@@ -1,6 +1,6 @@
 
-import { fromJS } from 'immutable';
-import profilePageReducer from '../reducer';
+// import { fromJS } from 'immutable';
+import profilePageReducer, { initialState } from '../reducer';
 import {
     getProfile,
     getProfileSuccess,
@@ -8,17 +8,8 @@ import {
  } from '../actions';
 
 describe('profilePageReducer', () => {
-    let initialState;
-    beforeEach(() => {
-        initialState = fromJS({
-            data: null,
-            loading: false,
-            error: false,
-        });
-    });
-
     it('expect reducer returns the initial state', (done) => {
-        expect(profilePageReducer(undefined, {})).toEqual(fromJS({}));
+        expect(profilePageReducer(initialState, {})).toEqual(initialState);
         done();
     });
 
