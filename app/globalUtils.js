@@ -69,6 +69,17 @@ export const dataChecking = (object, ...argsArr) => {
     return obj;
 };
 
+export const combineObject = (...argsArr) => {
+    const i = ['a', 'b', 'c', 'd'];
+    const WholeObject = {};
+    let count = 0;
+    // eslint-disable-next-line array-callback-return
+    argsArr.map((prop) => {
+        WholeObject[i[count++]] = prop;
+    });
+    return WholeObject;
+};
+
 /**
  * Parses the JSON returned by a network request
  *

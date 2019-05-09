@@ -5,14 +5,13 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { dataChecking, apiRequest } from 'globalUtils';
+import { dataChecking, apiRequest, combineObject } from 'globalUtils';
 import Async from 'react-async';
 import ProductCard from 'components/ProductCard';
 import PageChanger from 'components/PageChanger';
@@ -22,47 +21,34 @@ import makeSelectMallPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
-import { getMall, getProduct, postWishlist } from './actions';
 
-const getMallPostWishlistAPI = async (API) => {
-    console.log(API);
-    if (!API.postWishlist.firsttime) {
-        await apiRequest(API.postWishlist.URL, API.postWishlist.Method);
+
+const MallPageData = (API) => Promise.all([getMallData(API.a), gpProductCard(API.b, API.c)]);
+
+const getMallData = (API) => apiRequest(API.URL, 'get');
+
+const gpProductCard = async (APIa, APIb) => {
+    if (!APIb.firsttime) {
+        await apiRequest(APIb.URL, 'post');
     }
-    if (API.getMall.firsttime) {
-        return apiRequest(API.getMall.URL, API.getMall.Method);
-    }
-    return null;
+    return apiRequest(APIa.URL, 'get');
 };
-
-const getProductAPI = (API) => apiRequest(API.getProduct.URL, API.getProduct.Method);
-
-const getApiArray = (API) => Promise.all([getMallPostWishlistAPI(API), getProductAPI(API)]);
 
 export class MallPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
-        selectedSort: null,
         categoryOfFrontUrl: '',
         listView: false,
-        bukatutup: true,
-        API: {
-            getMall: {
-                URL: '',
-                Method: 'get',
-                firsttime: true,
-            },
-            getProduct: {
-                URL: '',
-                Method: 'get',
-            },
-            postWishlist: {
-                URL: '',
-                Method: 'post',
-                firsttime: true,
-            },
+        getMall: {
+            URL: '',
+        },
+        getProduct: {
+            URL: '',
+        },
+        postWishlist: {
+            URL: '',
+            firsttime: true,
         },
     }
-
 
     componentWillMount() {
         let dispatchlink = this.props.location.search.replace('?', '');
@@ -71,13 +57,18 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
         const params = this.props.match.params;
 
         if (dataChecking(params, 'subCategoryQueries')) {
-            this.props.dispatch(getMall(`/subcategory/${this.props.match.params.subCategoryQueries.split('-')[0]}`));
+            Object.assign(this.state.getMall, { URL: `/subcategory/${this.props.match.params.subCategoryQueries.split('-')[0]}` });
             dispatchlink += `&subcategory_id=${this.props.match.params.subCategoryQueries.split('-')[0]}`;
-            this.setState({ categoryOfFrontUrl: `&subcategory_id=${this.props.match.params.subCategoryQueries.split('-')[0]}` });
+            this.setState({
+                categoryOfFrontUrl: `&subcategory_id=${this.props.match.params.subCategoryQueries.split('-')[0]}`,
+                getMall: { URL: `/subcategory/${this.props.match.params.subCategoryQueries.split('-')[0]}` },
+            });
         } else if (dataChecking(params, 'categoryQueries')) {
-            this.props.dispatch(getMall(`/category/${this.props.match.params.categoryQueries.split('-')[0]}`));
             dispatchlink += `&category_id=${this.props.match.params.categoryQueries.split('-')[0]}`;
-            this.setState({ categoryOfFrontUrl: `&category_id=${this.props.match.params.categoryQueries.split('-')[0]}` });
+            this.setState({
+                categoryOfFrontUrl: `&category_id=${this.props.match.params.categoryQueries.split('-')[0]}`,
+                getMall: { URL: `/category/${this.props.match.params.categoryQueries.split('-')[0]}` },
+            });
         } else if (dataChecking(params, 'groupName')) {
             let groupId = '';
             switch (this.props.match.params.groupName) {
@@ -105,17 +96,19 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
                 default:
                     break;
             }
-            this.props.dispatch(getMall(`/group/${groupId}`));
             dispatchlink += `&group_id=${groupId}`;
-            this.setState({ categoryOfFrontUrl: `&group_id=${groupId}` });
+            this.setState({
+                categoryOfFrontUrl: `&group_id=${groupId}`,
+                getMall: { URL: `/group/${groupId}` },
+            });
         } else {
-            Object.assign(this.state.API.getMall, { URL: '/mall' });
+            this.setState({ getMall: { URL: '/mall' } });
         }
-        Object.assign(this.state.API.getProduct, { URL: `/mall/list?${dispatchlink}` });
+        Object.assign(this.state.getProduct, { URL: `/mall/list?${dispatchlink}` });
     }
 
     changePageData = (link) => {
-        Object.assign(this.state.API.getProduct, { URL: link });
+        this.setState({ getProduct: { URL: link } });
     }
 
     changePageUI = (link, pageNum) => {
@@ -138,7 +131,6 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
 
     changeFilterData = (newKey, newId) => {
         let urlBehindPart = this.props.location.search.replace('?', '');
-
         const urlAfterSpilitByAnd = urlBehindPart.split('&');
         let alreadyExist = false;
         let filterCount = 0;
@@ -162,9 +154,9 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
             urlBehindPart += `${this.props.location.search === '' ? '' : '&'}${newKey}=${newId}`;
         }
         if (filterCount === 1 && alreadyExist) {
-            this.props.dispatch(getProduct(`/mall/list?${urlBehindPart}${urlBehindPart === '' ? '' : '&'}${this.state.categoryOfFrontUrl}`));
+            this.setState({ getProduct: { URL: `/mall/list?${urlBehindPart}${urlBehindPart === '' ? '' : '&'}${this.state.categoryOfFrontUrl}` } });
         } else {
-            this.props.dispatch(getProduct(`/mall/list?${urlBehindPart}`));
+            this.setState({ getProduct: { URL: `/mall/list?${urlBehindPart}` } });
         }
     }
 
@@ -190,14 +182,12 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
 
     changeSortUI = (oldSortId, newSortId) => {
         let urlBehindPart = this.props.location.search.replace('?', '');
-        if (this.props.urlType === 'normalurl') {
-            if (urlBehindPart.indexOf('sort=') !== -1) {
-                urlBehindPart = urlBehindPart.replace(`sort=${oldSortId}`, `sort=${newSortId}`);
-            } else {
-                urlBehindPart += `${this.props.location.search === '' ? '' : '&'}sort=${newSortId}`;
-            }
-            this.props.history.push(`${this.props.location.pathname.replace(`/page-${this.props.match.params.pageNum}`, '/page-1')}?${urlBehindPart}`);
+        if (urlBehindPart.indexOf('sort=') !== -1) {
+            urlBehindPart = urlBehindPart.replace(`sort=${oldSortId}`, `sort=${newSortId}`);
+        } else {
+            urlBehindPart += `${this.props.location.search === '' ? '' : '&'}sort=${newSortId}`;
         }
+        this.props.history.push(`${this.props.location.pathname.replace(`/page-${this.props.match.params.pageNum}`, '/page-1')}?${urlBehindPart}`);
     }
 
     changeSortData = (oldSortId, newSortId) => {
@@ -216,25 +206,26 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
             }
         });
         if (filterCount === 0) {
-            this.props.dispatch(getProduct(`/mall/list?${urlBehindPart}${urlBehindPart === '' ? '' : '&'}${this.state.categoryOfFrontUrl}`));
+            this.setState({ getProduct: { URL: `/mall/list?${urlBehindPart}${this.state.categoryOfFrontUrl === '' ? '' : '&'}${this.state.categoryOfFrontUrl}` } });
         } else {
-            this.props.dispatch(getProduct(`/mall/list?${urlBehindPart}`));
+            this.setState({ getProduct: { URL: `/mall/list?${urlBehindPart}` } });
         }
     }
 
     renderPageChanger = (data) => {
-        const productData = data[1].data;
+        const productData = data.data;
         return (
             <PageChanger
                 productData={productData}
                 pagenum={dataChecking(this.props, 'match', 'params', 'pageNum') ? this.props.match.params.pageNum : 1}
-                changePage={(link, pageNum) => { console.log('wtf'); this.changePageData(link, pageNum); this.changePageUI(link, pageNum); }}
+                changePage={(link, pageNum) => { this.changePageData(link, pageNum); this.changePageUI(link, pageNum); }}
             />
         );
     }
 
-    renderProductCard = (data) => (
-        data[1].data.items.map((item) => (
+    renderProductCard = (data) => {
+        Object.assign(this.state.postWishlist, { firsttime: true });
+        return data.data.items.map((item) => (
             <div
                 key={item.id}
                 className={'product-card-div'}
@@ -246,19 +237,19 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
                     url={item.url}
                     price={dataChecking(item, 'price')}
                     allowDelete={false}
-                    listViewMode={!this.state.listView}
+                    listViewMode={!this.state.listView} // this.props.dispatch(postWishlist(item.id, this.props.mallPage.data.productData._links.self.href))}
                     allowWishlistButton={true}
-                    addOrDeleteWishlist={() => this.props.dispatch(postWishlist(item.id, this.props.mallPage.data.productData._links.self.href))}
+                    addOrDeleteWishlist={() => { this.setState({ postWishlist: { URL: `/wishlist/${item.id}`, firsttime: false } }); }}
                 />
             </div>
-        ))
-    )
+        ));
+    };
 
     renderFilterSort = (data) => (
         <FilterSort
-            sorts={data[0].data.sort.items}
+            sorts={data.data.sort.items}
             changeSort={(oldSortId, newSortId) => { this.changeSortData(oldSortId, newSortId); this.changeSortUI(oldSortId, newSortId); }}
-            filters={data[0].data.filters}
+            filters={data.data.filters}
             changeFilter={(newKey, newId) => { this.changeFilterData(newKey, newId); this.changeFilterUI(newKey, newId); }}
             location={this.props.location}
         />
@@ -267,7 +258,7 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
     render() {
         return (
             <div className="container">
-                <Async promiseFn={getApiArray(this.state.API)}>
+                <Async promise={MallPageData(combineObject(this.state.getMall, this.state.getProduct, this.state.postWishlist))}>
                     <Async.Loading>
                         <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
                     </Async.Loading>
@@ -276,18 +267,19 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
                             (data) => (
                                 <div>
                                     <img className="banner" src="https://cdn5.hermo.my/hermo/imagelink/2019/april-2019-loreal-paris_01554085356.jpg" alt="" />
-
                                     <div>
                                         <div className="view-button">
                                             <input type="button" onClick={() => { this.setState({ listView: !this.state.listView }); }} value="grid/list" />
                                         </div>
-                                        {this.renderPageChanger(data)}
                                     </div>
                                     <div className="sort-filter-container">
-                                        {this.renderFilterSort(data)}
+                                        {this.renderPageChanger(data[1])}
+                                        {this.renderFilterSort(data[0])}
                                     </div>
-                                    <div className={`${this.state.listView ? 'list-view' : 'grid-view'}`}>
-                                        {this.renderProductCard(data)}
+                                    <div>
+                                        <div className={`${this.state.listView ? 'list-view' : 'grid-view'}`}>
+                                            {this.renderProductCard(data[1])}
+                                        </div>
                                     </div>
                                     <div>
                                         <span className="next-page-bottom" onClick={() => { this.changePageData(this.props.mallPage.data.productData._links.self.href); this.changePageUI(this.props.mallPage.data.productData._links.self.href, (this.props.mallPage.data.productData._meta.currentPage + 1)); }}>Next Page</span>
@@ -306,7 +298,7 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
 }
 
 MallPage.propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    // dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

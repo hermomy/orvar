@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { apiRequest } from 'globalUtils';
+import { apiRequest, combineObject } from 'globalUtils';
 import Async from 'react-async';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -21,41 +21,40 @@ import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
 
-const ProductCardApi = async (API) => {
-    if (!API.deleteProduct.firsttime) {
-        await apiRequest(API.deleteProduct.URL, API.deleteProduct.Method);
+const wishlistData = async (API) => {
+    if (API.b.runpermit) {
+        await apiRequest(API.b.URL, 'delete');
     }
-    return apiRequest(API.getProduct.URL, API.getProduct.Method);
+    return apiRequest(API.a.URL, 'get');
 };
 
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         page: 1,
-        API: {
-            getProduct: {
-                URL: '/wishlist?page=1',
-                Method: 'get',
-            },
-            deleteProduct: {
-                URL: '/wishlist/-1',
-                Method: 'delete',
-                firsttime: true,
-            },
+        getProductURL: {
+            URL: '/wishlist?page=1',
+        },
+        deleteProduct: {
+            URL: '/wishlist/-1',
+            runpermit: false,
         },
     }
 
     renderPageChanger = (data) => (
-        <PageChanger
-            productData={data.data}
-            pagenum={1}
-            changePage={(link, pageNum) => {
-                this.setState(Object.assign(this.state.API.getProduct, { URL: `/wishlist?page=${pageNum}` }));
-            }}
-        />
+        <div>
+            <PageChanger
+                productData={data.data}
+                pagenum={1}
+                changePage={(link, pageNum) => {
+                    this.setState({ getProductURL: { URL: `/wishlist?page=${pageNum}` } });
+                }}
+            />
+        </div>
     );
 
-    renderProductCard = (data) => (
-        data.data.items.map((item, index) => (
+    renderProductCard = (data) => {
+        Object.assign(this.state.deleteProduct, { runpermit: false });
+        return data.data.items.map((item, index) => (
             <div
                 className="product-card-div"
                 key={index}
@@ -70,24 +69,17 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                     allowWishlistButton={false}
                     deleteFromWishlist={
                         () => {
-                            this.setState(
-                                Object.assign(
-                                    this.state.API.deleteProduct, {
-                                        URL: `/wishlist/${item.id}`,
-                                        firsttime: false,
-                                    }
-                                )
-                            );
+                            this.setState({ deleteProduct: { URL: `/wishlist/${item.id}`, runpermit: true } });
                         }
                     }
                 />
             </div>
-        ))
-    );
+        ));
+    };
 
     render() {
         return (
-            <Async promise={ProductCardApi(this.state.API)}>
+            <Async promise={wishlistData(combineObject(this.state.getProductURL, this.state.deleteProduct))}>
                 <Async.Loading>Loading... ProductCard</Async.Loading>
                 <Async.Resolved>
                     {(data) => (
