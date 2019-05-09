@@ -1,10 +1,10 @@
 import { fromJS } from 'immutable';
-import selectProductViewDomain from '../selectors';
+import makeSelectProductView from '../selectors';
 import { initialState } from '../reducer';
 
-describe('selectProductViewDomain', () => {
+describe('makeSelectProductView', () => {
     it('Expect selector select productView from state', () => {
-        const selector = selectProductViewDomain();
+        const selector = makeSelectProductView();
         const mock = fromJS({ productView: initialState });
         expect(selector(mock)).toEqual(initialState.toJS());
     });

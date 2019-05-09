@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    getVoucher,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    GET_VOUCHER,
 } from '../constants';
 
 describe('ProfileWallet actions', () => {
     describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+        it('has a type of GET_VOUCHER', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: GET_VOUCHER,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(getVoucher()).toEqual(expected);
         });
     });
 });

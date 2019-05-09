@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    postFeedback,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    POST_FEEDBACK,
 } from '../constants';
 
 describe('FeedbackPage actions', () => {
     describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+        it('has a type of POST_FEEDBACK', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: POST_FEEDBACK,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(postFeedback()).toEqual(expected);
         });
     });
 });

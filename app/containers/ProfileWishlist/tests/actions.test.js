@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    getWishlist,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    GET_WISHLIST,
 } from '../constants';
 
 describe('ProfileWishlist actions', () => {
     describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+        it('has a type of GET_WISHLIST', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: GET_WISHLIST,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(getWishlist()).toEqual(expected);
         });
     });
 });

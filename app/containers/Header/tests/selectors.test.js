@@ -1,11 +1,11 @@
 import { fromJS } from 'immutable';
-import { selectHeaderDomain } from '../selectors';
+import makeSelectHeader from '../selectors';
 import { initialState } from '../reducer';
 
-describe('selectHeaderDomain', () => {
-    it('Expect selectHeaderDomain to return state from reducer', () => {
-        const selector = selectHeaderDomain();
-        const mock = fromJS({ Header: initialState });
+describe('makeSelectHeader', () => {
+    it('Expect makeSelectHeader to return state from reducer', () => {
+        const selector = makeSelectHeader();
+        const mock = fromJS({ header: initialState });
         expect(selector(mock)).toEqual(initialState.toJS());
     });
 });

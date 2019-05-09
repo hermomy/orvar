@@ -134,7 +134,7 @@ export class ProductView extends React.PureComponent { // eslint-disable-line re
                     <HashTag className="hashtags-panel" tags={product.hashtags} />
                     <div className="action-panel">
                         <div className="wishlist-btn">
-                            <i className={`${true ? 'far' : 'fas'} fa-heart`} />
+                            <i className="far fa-heart" />
                         </div>
                         {
                             this.props.productview.adding ?

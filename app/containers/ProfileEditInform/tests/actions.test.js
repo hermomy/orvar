@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    getInformChoice,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    GET_INFORM_CHOICE,
 } from '../constants';
 
 describe('ProfileEditInform actions', () => {
     describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+        it('has a type of GET_INFORM_CHOICE', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: GET_INFORM_CHOICE,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(getInformChoice()).toEqual(expected);
         });
     });
 });
