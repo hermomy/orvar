@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    getCheckout,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    GET_CART_DATA,
 } from '../constants';
 
 describe('CartPage actions', () => {
     describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+        it('has a type of GET_CART_DATA', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: GET_CART_DATA,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(getCheckout()).toEqual(expected);
         });
     });
 });

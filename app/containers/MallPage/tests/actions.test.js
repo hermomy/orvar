@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    getMall,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    GET_MALL,
 } from '../constants';
 
 describe('MallPage actions', () => {
     describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+        it('has a type of GET_MALL', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: GET_MALL,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(getMall()).toEqual(expected);
         });
     });
 });

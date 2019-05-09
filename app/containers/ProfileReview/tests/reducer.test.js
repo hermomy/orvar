@@ -1,9 +1,9 @@
 
-import { fromJS } from 'immutable';
-import profileReviewReducer from '../reducer';
+// import { fromJS } from 'immutable';
+import profileReviewReducer, { initialState } from '../reducer';
 
 describe('profileReviewReducer', () => {
     it('returns the initial state', () => {
-        expect(profileReviewReducer(undefined, {})).toEqual(fromJS({}));
+        expect(profileReviewReducer(initialState, {})).toEqual(initialState);
     });
 });

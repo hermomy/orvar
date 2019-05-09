@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    getReview,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    GET_REVIEW,
 } from '../constants';
 
 describe('ProfileReview actions', () => {
     describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+        it('has a type of GET_REVIEW', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: GET_REVIEW,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(getReview()).toEqual(expected);
         });
     });
 });

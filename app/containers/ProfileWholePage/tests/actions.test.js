@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    mainGetProfile,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    MAIN_GET_PROFILE,
 } from '../constants';
 
 describe('ProfileWholePage actions', () => {
     describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+        it('has a type of MAIN_GET_PROFILE', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: MAIN_GET_PROFILE,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(mainGetProfile()).toEqual(expected);
         });
     });
 });

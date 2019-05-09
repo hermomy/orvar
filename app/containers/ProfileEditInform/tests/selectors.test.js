@@ -1,11 +1,11 @@
 import { fromJS } from 'immutable';
-import { selectProfileEditInformDomain } from '../selectors';
+import makeSelectProfileEditInform from '../selectors';
 import { initialState } from '../reducer';
 
-describe('selectProfileEditInformDomain', () => {
-    it('Expect selectProfileEditInformDomain to return state from reducer', () => {
-        const selector = selectProfileEditInformDomain();
-        const mock = fromJS({ ProfileEditInform: initialState });
+describe('makeSelectProfileEditInform', () => {
+    it('Expect makeSelectProfileEditInform to return state from reducer', () => {
+        const selector = makeSelectProfileEditInform();
+        const mock = fromJS({ profileEditInform: initialState });
         expect(selector(mock)).toEqual(initialState.toJS());
     });
 });

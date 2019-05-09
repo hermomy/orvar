@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    getCareer,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    GET_CAREER,
 } from '../constants';
 
 describe('AboutUs actions', () => {
     describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+        it('has a type of GET_CAREER', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: GET_CAREER,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(getCareer()).toEqual(expected);
         });
     });
 });

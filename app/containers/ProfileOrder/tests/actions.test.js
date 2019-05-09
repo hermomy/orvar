@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    getOrder,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    GET_ORDER,
 } from '../constants';
 
 describe('ProfileOrder actions', () => {
     describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+        it('has a type of GET_ORDER', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: GET_ORDER,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(getOrder()).toEqual(expected);
         });
     });
 });

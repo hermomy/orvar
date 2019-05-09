@@ -1,9 +1,9 @@
 
-import { fromJS } from 'immutable';
-import profileWishlistReducer from '../reducer';
+// import { fromJS } from 'immutable';
+import profileWishlistReducer, { initialState } from '../reducer';
 
 describe('profileWishlistReducer', () => {
     it('returns the initial state', () => {
-        expect(profileWishlistReducer(undefined, {})).toEqual(fromJS({}));
+        expect(profileWishlistReducer(initialState, {})).toEqual(initialState);
     });
 });

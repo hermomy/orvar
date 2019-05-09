@@ -1,11 +1,11 @@
 import { fromJS } from 'immutable';
-import { selectAboutUsDomain } from '../selectors';
+import makeSelectAboutUs from '../selectors';
 import { initialState } from '../reducer';
 
-describe('selectAboutUsDomain', () => {
-    it('Expect selectAboutUsDomain to return state from reducer', () => {
-        const selector = selectAboutUsDomain();
-        const mock = fromJS({ AboutUs: initialState });
+describe('makeSelectAboutUs', () => {
+    it('Expect makeSelectAboutUs to return state from reducer', () => {
+        const selector = makeSelectAboutUs();
+        const mock = fromJS({ aboutUs: initialState });
         expect(selector(mock)).toEqual(initialState.toJS());
     });
 });

@@ -1,9 +1,9 @@
 
-import { fromJS } from 'immutable';
-import profileWalletReducer from '../reducer';
+// import { fromJS } from 'immutable';
+import profileWalletReducer, { initialState } from '../reducer';
 
 describe('profileWalletReducer', () => {
     it('returns the initial state', () => {
-        expect(profileWalletReducer(undefined, {})).toEqual(fromJS({}));
+        expect(profileWalletReducer(initialState, {})).toEqual(initialState);
     });
 });

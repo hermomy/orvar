@@ -1,9 +1,9 @@
 
-import { fromJS } from 'immutable';
-import checkoutPageReducer from '../reducer';
+// import { fromJS } from 'immutable';
+import checkoutPageReducer, { initialState } from '../reducer';
 
 describe('checkoutPageReducer', () => {
     it('returns the initial state', () => {
-        expect(checkoutPageReducer(undefined, {})).toEqual(fromJS({}));
+        expect(checkoutPageReducer(initialState, {})).toEqual(initialState);
     });
 });
