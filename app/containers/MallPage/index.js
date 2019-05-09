@@ -22,16 +22,18 @@ import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
 
-
-const MallPageData = (API) => Promise.all([getMallData(API.a), gpProductCard(API.b, API.c)]);
-
-const getMallData = (API) => apiRequest(API.URL, 'get');
-
-const gpProductCard = async (APIa, APIb) => {
-    if (!APIb.firsttime) {
-        await apiRequest(APIb.URL, 'post');
+const getMallData = (API) => {
+    if (API.a.firsttime) {
+        return apiRequest(API.a.URL, 'get');
     }
-    return apiRequest(APIa.URL, 'get');
+    return null;
+};
+
+const gpProductCard = async (API) => {
+    if (!API.b.firsttime) {
+        await apiRequest(API.b.URL, 'post');
+    }
+    return apiRequest(API.a.URL, 'get');
 };
 
 export class MallPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -40,13 +42,14 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
         listView: false,
         getMall: {
             URL: '',
+            firsttime: true,
         },
         getProduct: {
             URL: '',
         },
         postWishlist: {
             URL: '',
-            firsttime: true,
+            runpermit: true,
         },
     }
 
@@ -61,13 +64,13 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
             dispatchlink += `&subcategory_id=${this.props.match.params.subCategoryQueries.split('-')[0]}`;
             this.setState({
                 categoryOfFrontUrl: `&subcategory_id=${this.props.match.params.subCategoryQueries.split('-')[0]}`,
-                getMall: { URL: `/subcategory/${this.props.match.params.subCategoryQueries.split('-')[0]}` },
+                getMall: { URL: `/subcategory/${this.props.match.params.subCategoryQueries.split('-')[0]}`, firsttime: true },
             });
         } else if (dataChecking(params, 'categoryQueries')) {
             dispatchlink += `&category_id=${this.props.match.params.categoryQueries.split('-')[0]}`;
             this.setState({
                 categoryOfFrontUrl: `&category_id=${this.props.match.params.categoryQueries.split('-')[0]}`,
-                getMall: { URL: `/category/${this.props.match.params.categoryQueries.split('-')[0]}` },
+                getMall: { URL: `/category/${this.props.match.params.categoryQueries.split('-')[0]}`, firsttime: true },
             });
         } else if (dataChecking(params, 'groupName')) {
             let groupId = '';
@@ -99,10 +102,10 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
             dispatchlink += `&group_id=${groupId}`;
             this.setState({
                 categoryOfFrontUrl: `&group_id=${groupId}`,
-                getMall: { URL: `/group/${groupId}` },
+                getMall: { URL: `/group/${groupId}`, firsttime: true },
             });
         } else {
-            this.setState({ getMall: { URL: '/mall' } });
+            this.setState({ getMall: { URL: '/mall', firsttime: true } });
         }
         Object.assign(this.state.getProduct, { URL: `/mall/list?${dispatchlink}` });
     }
@@ -224,7 +227,8 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
     }
 
     renderProductCard = (data) => {
-        Object.assign(this.state.postWishlist, { firsttime: true });
+        Object.assign(this.state.postWishlist, { runpermit: true });
+        Object.assign(this.state.getMall, { firsttime: false });
         return data.data.items.map((item) => (
             <div
                 key={item.id}
@@ -239,7 +243,7 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
                     allowDelete={false}
                     listViewMode={!this.state.listView} // this.props.dispatch(postWishlist(item.id, this.props.mallPage.data.productData._links.self.href))}
                     allowWishlistButton={true}
-                    addOrDeleteWishlist={() => { this.setState({ postWishlist: { URL: `/wishlist/${item.id}`, firsttime: false } }); }}
+                    addOrDeleteWishlist={() => { this.setState({ postWishlist: { URL: `/wishlist/${item.id}`, runpermit: false } }); }}
                 />
             </div>
         ));
@@ -258,7 +262,7 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
     render() {
         return (
             <div className="container">
-                <Async promise={MallPageData(combineObject(this.state.getMall, this.state.getProduct, this.state.postWishlist))}>
+                <Async promise={getMallData(combineObject(this.state.getMall))}>
                     <Async.Loading>
                         <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
                     </Async.Loading>
@@ -273,14 +277,28 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
                                         </div>
                                     </div>
                                     <div className="sort-filter-container">
-                                        {this.renderPageChanger(data[1])}
-                                        {this.renderFilterSort(data[0])}
+                                        {this.renderFilterSort(data)}
                                     </div>
-                                    <div>
-                                        <div className={`${this.state.listView ? 'list-view' : 'grid-view'}`}>
-                                            {this.renderProductCard(data[1])}
-                                        </div>
-                                    </div>
+                                    <Async promise={gpProductCard(combineObject(this.state.getProduct, this.state.postWishlist))}>
+                                        <Async.Loading>
+                                            <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
+                                        </Async.Loading>
+                                        <Async.Resolved>
+                                            {
+                                                (productdata) => (
+                                                    <div>
+                                                        {this.renderPageChanger(productdata)}
+                                                        <div className={`${this.state.listView ? 'list-view' : 'grid-view'}`}>
+                                                            {this.renderProductCard(productdata)}
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        </Async.Resolved>
+                                        <Async.Rejected>
+                                            { console.error }
+                                        </Async.Rejected>
+                                    </Async>
                                     <div>
                                         <span className="next-page-bottom" onClick={() => { this.changePageData(this.props.mallPage.data.productData._links.self.href); this.changePageUI(this.props.mallPage.data.productData._links.self.href, (this.props.mallPage.data.productData._meta.currentPage + 1)); }}>Next Page</span>
                                     </div>
