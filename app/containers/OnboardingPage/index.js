@@ -35,7 +35,7 @@ const postchoice = async (userSelect) => {
     if (userSelect.gender) {
         temp.gender = userSelect.gender;
     }
-    if (userSelect.year || userSelect.month || userSelect.day) {
+    if (userSelect.year !== 'YYYY' && userSelect.month !== 'MM' && userSelect.day !== 'DD') {
         temp.birthday = `${userSelect.year ? userSelect.year : temp.birthday.split('-')[0]}-${userSelect.month ? userSelect.month : temp.birthday.split('-')[1]}-${userSelect.day ? userSelect.day : temp.birthday.split('-')[2]}`;
         temp.birthdayDisplay = `${temp.birthday}T16:00:00.000Z`;
     }
@@ -62,13 +62,15 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
         selectquestion3: false,
         selectquestion4: false,
         selectquestion5: false,
+
+        bar: 20,
     }
 
     userSelect = {
         gender: 'Female',
-        year: new Date(Date.now()).getUTCFullYear(),
-        month: '01',
-        day: '01',
+        year: 'YYYY',
+        month: 'MM',
+        day: 'DD',
         skintone: 'please select ONE option',
         skintype: 'please select ONE option',
         skincondition: [],
@@ -80,6 +82,23 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
 
     changeFirstTimeStatus = () => {
         this.firsttime = false;
+    }
+
+    renderBarPercent = () => {
+        let percent = 20;
+        if (this.userSelect.year !== 'YYYY' && this.userSelect.month !== 'MM' && this.userSelect.day !== 'DD') {
+            percent += 20;
+        }
+        if (this.userSelect.skintone !== 'please select ONE option') {
+            percent += 20;
+        }
+        if (this.userSelect.skintype !== 'please select ONE option') {
+            percent += 20;
+        }
+        if (this.userSelect.skinconditionforshow.length === 0) {
+            percent += 20;
+        }
+        this.setState({ bar: percent });
     }
 
     renderPage = () => {
@@ -124,7 +143,14 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                         {
                                             [...Array(31)].map((e, i) =>
                                                 (
-                                                    <option key={i + 1} value={`${i + 1 < 10 ? `0${i + 1}` : i + 1}`} onClick={() => this.setState({ day: `${i + 1 < 10 ? `0${i + 1}` : i + 1}` })}>
+                                                    <option
+                                                        key={i + 1}
+                                                        value={`${i + 1 < 10 ? `0${i + 1}` : i + 1}`}
+                                                        onClick={() => {
+                                                            this.userSelect.day = `${i + 1 < 10 ? `0${i + 1}` : i + 1}`;
+                                                            this.renderBarPercent();
+                                                        }}
+                                                    >
                                                         {i + 1}
                                                     </option>)
                                                 )
@@ -135,7 +161,14 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                         {
                                             [...Array(12)].map((e, i) =>
                                                 (
-                                                    <option key={i + 1} value={`${i + 1 < 10 ? `0${i + 1}` : i + 1}`} onClick={() => this.setState({ month: `${i + 1 < 10 ? `0${i + 1}` : i + 1}` })}>
+                                                    <option
+                                                        key={i + 1}
+                                                        value={`${i + 1 < 10 ? `0${i + 1}` : i + 1}`}
+                                                        onClick={() => {
+                                                            this.userSelect.month = `${i + 1 < 10 ? `0${i + 1}` : i + 1}`;
+                                                            this.renderBarPercent();
+                                                        }}
+                                                    >
                                                         {monthList[i + 1]}
                                                     </option>
                                                 )
@@ -147,7 +180,14 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                         {
                                             [...Array(thisyear - 1918)].map((e, i) =>
                                                 (
-                                                    <option key={thisyear - i} value={thisyear - i} onClick={() => this.setState({ year: thisyear - i })}>
+                                                    <option
+                                                        key={thisyear - i}
+                                                        value={thisyear - i}
+                                                        onClick={() => {
+                                                            this.userSelect.year = thisyear - i;
+                                                            this.renderBarPercent();
+                                                        }}
+                                                    >
                                                         { thisyear - i }
                                                     </option>
                                                 )
@@ -174,7 +214,19 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                     {
                                         choice.data.skin_tone.items.map((option, index) => (
                                             <div>
-                                                <input type="radio" key={index} name="skin_tone" value={option} onClick={() => { this.setState({ selectquestion3: false }); this.userSelect.skintone = option.name; }} />{option.name}
+                                                <input
+                                                    type="radio"
+                                                    key={index}
+                                                    name="skin_tone"
+                                                    value={option}
+                                                    checked={this.userSelect.skintone === option.name}
+                                                    onClick={() => {
+                                                        this.setState({ selectquestion3: false });
+                                                        this.userSelect.skintone = option.name;
+                                                        this.renderBarPercent();
+                                                    }}
+                                                />
+                                                {option.name}
                                             </div>
                                         ))
                                     }
@@ -206,6 +258,7 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                                     onClick={() => {
                                                         this.setState({ selectquestion4: false });
                                                         this.userSelect.skintype = option.name;
+                                                        this.renderBarPercent();
                                                     }}
                                                 />
                                                 {option.name}
@@ -255,6 +308,7 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                                         } else {
                                                             this.userSelect.skinconditionforshow.push(option.name);
                                                         }
+                                                        this.renderBarPercent();
                                                     }}
                                                 />{option.name}
                                             </div>
@@ -276,31 +330,34 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
 
     render() {
         return (
-            <div>
+            <div width="500px">
                 <div>
                     <span>
                         Welcome! Let&#39;s build your beauty profile.<br />
                         You may edit it back under Profile &#62; Setting &#62; Personal Info.
                     </span>
-
-                    <Async promise={getchoice(this.firsttime)}>
-                        <Async.Loading>
-                            <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
-                        </Async.Loading>
-                        <Async.Resolved>
-                            {
-                                () => (
-                                    <div>
-                                        {this.renderPage()}
-                                    </div>
-                                )
-                            }
-                        </Async.Resolved>
-                        <Async.Rejected>
-                            { console.error }
-                        </Async.Rejected>
-                    </Async>
+                    <div style={{ border: '1px solid #ccc' }}>
+                        <div style={{ color: '#000', backgroundColor: '#9e9e9e', height: '24px', width: `${this.state.bar}%` }}>wtf</div>
+                    </div>
                 </div>
+
+                <Async promise={getchoice(this.firsttime)} firsttime={() => this.changeFirstTimeStatus()}>
+                    <Async.Loading>
+                        <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
+                    </Async.Loading>
+                    <Async.Resolved>
+                        {
+                            () => (
+                                <div>
+                                    {this.renderPage()}
+                                </div>
+                            )
+                        }
+                    </Async.Resolved>
+                    <Async.Rejected>
+                        { console.error }
+                    </Async.Rejected>
+                </Async>
             </div>
         );
     }
