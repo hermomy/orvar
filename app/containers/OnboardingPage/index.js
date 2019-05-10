@@ -255,6 +255,7 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                                     key={index}
                                                     name="skin_type"
                                                     value={option}
+                                                    checked={this.userSelect.skin_type === option.name}
                                                     onClick={() => {
                                                         this.setState({ selectquestion4: false });
                                                         this.userSelect.skintype = option.name;
