@@ -350,6 +350,7 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
                 saveDataToContainer={(userChoice) => this.saveUserConcernToState(userChoice)}
                 needSelectedOptionName={false}
                 saveDataNameToContainer={(userChoice) => { this.userSelect.skinconditionforshow = userChoice; }}
+                noTickDesign={false}
             />
         );
     }

@@ -94,36 +94,36 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
     }
 
     saveData = () => {
-        // if (!Number.isInteger(document.getElementById('phone_number').value) || this.signUpDetail.phonenumber.length <= 6 || this.signUpDetail.phonenumber.length >= 8) {
-        //     document.getElementById('phone_number_error').innerHTML = `${document.getElementById('phone_prefix').value} ${document.getElementById('phone_number').value} is not a valid phone number`;
-        //     return null;
-        // }
-        // document.getElementById('phone_number_error').innerHTML = '';
+        if (Number.isInteger(document.getElementById('phone_number').value) || document.getElementById('phone_number').value.length <= 6 || document.getElementById('phone_number').value.length >= 8) {
+            document.getElementById('phone_number_error').innerHTML = `${document.getElementById('phone_prefix').value} ${document.getElementById('phone_number').value} is not a valid phone number`;
+            return null;
+        }
+        document.getElementById('phone_number_error').innerHTML = '';
 
-        // // OTP
+        // OTP
 
-        // if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(document.getElementById('email').value)) {
-        //     document.getElementById('email_error').innerHTML = 'Please enter a valid email address.';
-        //     return null;
-        // }
-        // document.getElementById('email_error').innerHTML = '';
+        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(document.getElementById('email').value)) {
+            document.getElementById('email_error').innerHTML = 'Please enter a valid email address.';
+            return null;
+        }
+        document.getElementById('email_error').innerHTML = '';
 
-        // if (document.getElementById('password').length <= 7) {
-        //     document.getElementById('password_error').innerHTML = 'Password should contain at least 8 characters.';
-        //     return null;
-        // }
-        // document.getElementById('password_error').innerHTML = '';
+        if (document.getElementById('password').value.length <= 7) {
+            document.getElementById('password_error').innerHTML = 'Password should contain at least 8 characters.';
+            return null;
+        }
+        document.getElementById('password_error').innerHTML = '';
 
-        // if (document.getElementById('password').value !== document.getElementById('confirm_password').value) {
-        //     document.getElementById('confirm_password_error').innerHTML = 'Password not match';
-        //     return null;
-        // }
-        // document.getElementById('confirm_password_error').innerHTML = '';
+        if (document.getElementById('password').value !== document.getElementById('confirm_password').value) {
+            document.getElementById('confirm_password_error').innerHTML = 'Password not match';
+            return null;
+        }
+        document.getElementById('confirm_password_error').innerHTML = '';
 
-        // this.signUpDetail.phoneprefix = document.getElementById('phone_prefix').value;
-        // this.signUpDetail.phonenumber = document.getElementById('phone_number').value;
-        // this.signUpDetail.email = document.getElementById('email').value;
-        // this.signUpDetail.password = document.getElementById('password').value;
+        this.signUpDetail.phoneprefix = document.getElementById('phone_prefix').value;
+        this.signUpDetail.phonenumber = document.getElementById('phone_number').value;
+        this.signUpDetail.email = document.getElementById('email').value;
+        this.signUpDetail.password = document.getElementById('password').value;
 
         this.setState({ toUserDetailPage: true });
         return null;
@@ -218,7 +218,7 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                 </div>
                             :
                                 <div>
-                                    <select value={this.userDetail.day} onChange={(e) => { this.userDetail.day = e.target.value; this.renderBarPercent(); }}>
+                                    <select defaultValue={this.userDetail.day} onChange={(e) => { this.userDetail.day = e.target.value; this.renderBarPercent(); }}>
                                         <option value="Day" disabled={true}>Day</option>
                                         {
                                             [...Array(31)].map((e, i) =>
@@ -232,7 +232,7 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                                 )
                                         }
                                     </select>
-                                    <select value={this.userDetail.month} onChange={(e) => { this.userDetail.month = e.target.value; this.renderBarPercent(); }}>
+                                    <select defaultValue={this.userDetail.month} onChange={(e) => { this.userDetail.month = e.target.value; this.renderBarPercent(); }}>
                                         <option value="Month" disabled={true}>Month</option>
                                         {
                                             [...Array(12)].map((e, i) =>
@@ -247,7 +247,7 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                             )
                                         }
                                     </select>
-                                    <select value={this.userDetail.year} onChange={(e) => { this.userDetail.year = e.target.value; this.renderBarPercent(); }}>
+                                    <select defaultValue={this.userDetail.year} onChange={(e) => { this.userDetail.year = e.target.value; this.renderBarPercent(); }}>
                                         <option value="Year" disabled={true}>Year</option>
                                         {
                                             [...Array(thisyear - 1918)].map((e, i) =>
@@ -292,7 +292,17 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                     {
                                         choice.data.skin_tone.items.map((option, index) => (
                                             <div>
-                                                <input
+                                                <div
+                                                    key={index}
+                                                    onClick={() => {
+                                                        this.setState({ selectquestion3: false });
+                                                        this.userDetail.skintone = option;
+                                                        this.renderBarPercent();
+                                                    }}
+                                                >
+                                                    {option.name}
+                                                </div>
+                                                {/* <input
                                                     type="radio"
                                                     key={index}
                                                     name="skin_tone"
@@ -303,8 +313,7 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                                         this.userDetail.skintone = option;
                                                         this.renderBarPercent();
                                                     }}
-                                                />
-                                                {option.name}
+                                                /> */}
                                             </div>
                                         ))
                                     }
@@ -338,7 +347,17 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                     {
                                         choice.data.skin_type.items.map((option, index) => (
                                             <div>
-                                                <input
+                                                <div
+                                                    key={index}
+                                                    onClick={() => {
+                                                        this.setState({ selectquestion4: false });
+                                                        this.userDetail.skintype = option;
+                                                        this.renderBarPercent();
+                                                    }}
+                                                >
+                                                    {option.name}
+                                                </div>
+                                                {/* <input
                                                     type="radio"
                                                     key={index}
                                                     name="skin_type"
@@ -350,7 +369,7 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                                         this.renderBarPercent();
                                                     }}
                                                 />
-                                                {option.name}
+                                                {option.name} */}
                                             </div>
                                         ))
                                     }
@@ -393,9 +412,10 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                         <Checkbox
                                             choice={choice.data.skin_problem.items}
                                             userselect={[]}
-                                            saveDataToContainer={(userChoice) => { this.userDetail.skincondition = userChoice; }}
+                                            saveDataToContainer={(userChoice) => { this.userDetail.skincondition = userChoice; this.renderBarPercent(); }}
                                             needSelectedOptionName={true}
-                                            saveDataNameToContainer={(userChoice) => { this.userDetail.skinconditionforshow = userChoice; }}
+                                            saveDataNameToContainer={(userChoice) => { this.userDetail.skinconditionforshow = userChoice; this.renderBarPercent(); }}
+                                            noTickDesign={true}
                                         />
                                     </div>
                                 </div>
