@@ -15,6 +15,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import Checkbox from 'components/Checkbox';
 
 import makeSelectOnboardingPage from './selectors';
 import reducer from './reducer';
@@ -29,31 +30,28 @@ const getchoice = async (firsttime) => {
     return null;
 };
 
-const postchoice = async (userSelect) => {
+const postchoice = async (userDetail) => {
     const userProfile = await apiRequest('/profile', 'get');
     const temp = userProfile.data;
-    if (userSelect.gender) {
-        temp.gender = userSelect.gender;
+    if (userDetail.gender) {
+        temp.gender = userDetail.gender;
     }
-    if (userSelect.year !== 'YYYY' && userSelect.month !== 'MM' && userSelect.day !== 'DD') {
-        temp.birthday = `${userSelect.year ? userSelect.year : temp.birthday.split('-')[0]}-${userSelect.month ? userSelect.month : temp.birthday.split('-')[1]}-${userSelect.day ? userSelect.day : temp.birthday.split('-')[2]}`;
+    if (userDetail.year !== 'YYYY' && userDetail.month !== 'MM' && userDetail.day !== 'DD') {
+        temp.birthday = `${userDetail.year ? userDetail.year : temp.birthday.split('-')[0]}-${userDetail.month ? userDetail.month : temp.birthday.split('-')[1]}-${userDetail.day ? userDetail.day : temp.birthday.split('-')[2]}`;
         temp.birthdayDisplay = `${temp.birthday}T16:00:00.000Z`;
     }
-    if (userSelect.skintone !== 'please select ONE option') {
-        temp.skin.tone = userSelect.skintone;
+    if (userDetail.skintone !== 'please select ONE option') {
+        temp.skin.tone = userDetail.skintone;
     }
-    if (userSelect.skintype !== 'please select ONE option') {
-        temp.skin.type = userSelect.skintype;
+    if (userDetail.skintype !== 'please select ONE option') {
+        temp.skin.type = userDetail.skintype;
     }
-    if (userSelect.skincondition.length) {
-        temp.skin.concerns = userSelect.skincondition;
-    }
+    temp.skin.concerns = userDetail.skincondition;
 
     return apiRequest('/profile', 'put', temp);
 };
 
 let choice = {};
-
 
 export class OnboardingPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -63,10 +61,12 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
         selectquestion4: false,
         selectquestion5: false,
 
+        toUserDetailPage: false,
+
         bar: 20,
     }
 
-    userSelect = {
+    userDetail = {
         gender: 'Female',
         year: 'YYYY',
         month: 'MM',
@@ -78,67 +78,147 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
         defaultcondition: 'you may select MORE THAN ONE options',
     }
 
+    signUpDetail = {
+        phoneprefix: '010',
+        phonenumber: '',
+        OTP: '',
+        email: '',
+        password: '',
+        confirmpassword: '',
+    }
+
     firsttime = true;
 
     changeFirstTimeStatus = () => {
         this.firsttime = false;
     }
 
+    saveData = () => {
+        // if (!Number.isInteger(document.getElementById('phone_number').value) || this.signUpDetail.phonenumber.length <= 6 || this.signUpDetail.phonenumber.length >= 8) {
+        //     document.getElementById('phone_number_error').innerHTML = `${document.getElementById('phone_prefix').value} ${document.getElementById('phone_number').value} is not a valid phone number`;
+        //     return null;
+        // }
+        // document.getElementById('phone_number_error').innerHTML = '';
+
+        // // OTP
+
+        // if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(document.getElementById('email').value)) {
+        //     document.getElementById('email_error').innerHTML = 'Please enter a valid email address.';
+        //     return null;
+        // }
+        // document.getElementById('email_error').innerHTML = '';
+
+        // if (document.getElementById('password').length <= 7) {
+        //     document.getElementById('password_error').innerHTML = 'Password should contain at least 8 characters.';
+        //     return null;
+        // }
+        // document.getElementById('password_error').innerHTML = '';
+
+        // if (document.getElementById('password').value !== document.getElementById('confirm_password').value) {
+        //     document.getElementById('confirm_password_error').innerHTML = 'Password not match';
+        //     return null;
+        // }
+        // document.getElementById('confirm_password_error').innerHTML = '';
+
+        // this.signUpDetail.phoneprefix = document.getElementById('phone_prefix').value;
+        // this.signUpDetail.phonenumber = document.getElementById('phone_number').value;
+        // this.signUpDetail.email = document.getElementById('email').value;
+        // this.signUpDetail.password = document.getElementById('password').value;
+
+        this.setState({ toUserDetailPage: true });
+        return null;
+    }
+
     renderBarPercent = () => {
         let percent = 20;
-        if (this.userSelect.year !== 'YYYY' && this.userSelect.month !== 'MM' && this.userSelect.day !== 'DD') {
+        if (this.userDetail.year !== 'YYYY' && this.userDetail.month !== 'MM' && this.userDetail.day !== 'DD') {
             percent += 20;
         }
-        if (this.userSelect.skintone !== 'please select ONE option') {
+        if (this.userDetail.skintone !== 'please select ONE option') {
             percent += 20;
         }
-        if (this.userSelect.skintype !== 'please select ONE option') {
+        if (this.userDetail.skintype !== 'please select ONE option') {
             percent += 20;
         }
-        if (this.userSelect.skinconditionforshow.length === 0) {
+        if (this.userDetail.skinconditionforshow.length !== 0) {
             percent += 20;
         }
         this.setState({ bar: percent });
     }
 
-    renderPage = () => {
+    renderDetailPageForm = () => {
         const monthList = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const thisyear = new Date(Date.now()).getUTCFullYear();
         return (
             <div>
-                <div>
+                <div className="detail-page-form-question-container">
                     <div>
-                        <span>Gender</span>
+                        <span className="detail-page-form-question-title">Gender</span>
                     </div>
                     <div>
                         {
                             !this.state.selectquestion1
                             ?
-                                <div onClick={() => this.setState({ selectquestion1: !this.state.selectquestion1 })}>
-                                    {this.userSelect.gender}
+                                <div
+                                    onClick={() =>
+                                        this.setState({
+                                            selectquestion1: !this.state.selectquestion1,
+                                            selectquestion2: false,
+                                            selectquestion3: false,
+                                            selectquestion4: false,
+                                            selectquestion5: false,
+                                        })
+                                    }
+                                >
+                                    {this.userDetail.gender}
                                 </div>
                             :
-                                <div onChange={(e) => { this.setState({ selectquestion1: false }); this.userSelect.gender = e.target.value; }}>
-                                    <input type="radio" name="gender" value="Female" />Female<br />
-                                    <input type="radio" name="gender" value="Male" />Male
+                                <div>
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        value="Female"
+                                        defaultChecked={this.userDetail.gender === 'Female'}
+                                        onChange={(e) => { this.setState({ selectquestion1: false }); this.userDetail.gender = e.target.value; }}
+                                    />
+                                        Female
+                                    <br />
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        value="Male"
+                                        defaultChecked={this.userDetail.gender === 'Male'}
+                                        onChange={(e) => { this.setState({ selectquestion1: false }); this.userDetail.gender = e.target.value; }}
+                                    />
+                                    Male
                                 </div>
                         }
                     </div>
                 </div>
-                <div>
+                <div className="detail-page-form-question-container">
                     <div>
-                        <span>Date of Birth</span>
+                        <span className="detail-page-form-question-title">Date of Birth</span>
                     </div>
                     <div>
                         {
                             !this.state.selectquestion2
                             ?
-                                <div onClick={() => this.setState({ selectquestion2: !this.state.selectquestion2 })}>
-                                    {`${this.userSelect.day} / ${this.userSelect.month} / ${this.userSelect.year}`}
+                                <div
+                                    onClick={() =>
+                                        this.setState({
+                                            selectquestion1: false,
+                                            selectquestion2: !this.state.selectquestion2,
+                                            selectquestion3: false,
+                                            selectquestion4: false,
+                                            selectquestion5: false,
+                                        })
+                                    }
+                                >
+                                    {`${this.userDetail.day} / ${this.userDetail.month} / ${this.userDetail.year}`}
                                 </div>
                             :
                                 <div>
-                                    <select value={'01'} onChange={(e) => { this.userSelect.day = e.target.value; }}>
+                                    <select value={this.userDetail.day} onChange={(e) => { this.userDetail.day = e.target.value; this.renderBarPercent(); }}>
                                         <option value="Day" disabled={true}>Day</option>
                                         {
                                             [...Array(31)].map((e, i) =>
@@ -146,17 +226,13 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                                     <option
                                                         key={i + 1}
                                                         value={`${i + 1 < 10 ? `0${i + 1}` : i + 1}`}
-                                                        onClick={() => {
-                                                            this.userSelect.day = `${i + 1 < 10 ? `0${i + 1}` : i + 1}`;
-                                                            this.renderBarPercent();
-                                                        }}
                                                     >
                                                         {i + 1}
                                                     </option>)
                                                 )
                                         }
                                     </select>
-                                    <select value={'01'} onChange={(e) => { this.userSelect.month = e.target.value; }}>
+                                    <select value={this.userDetail.month} onChange={(e) => { this.userDetail.month = e.target.value; this.renderBarPercent(); }}>
                                         <option value="Month" disabled={true}>Month</option>
                                         {
                                             [...Array(12)].map((e, i) =>
@@ -164,10 +240,6 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                                     <option
                                                         key={i + 1}
                                                         value={`${i + 1 < 10 ? `0${i + 1}` : i + 1}`}
-                                                        onClick={() => {
-                                                            this.userSelect.month = `${i + 1 < 10 ? `0${i + 1}` : i + 1}`;
-                                                            this.renderBarPercent();
-                                                        }}
                                                     >
                                                         {monthList[i + 1]}
                                                     </option>
@@ -175,7 +247,7 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                             )
                                         }
                                     </select>
-                                    <select value={thisyear} onChange={(e) => { this.userSelect.year = e.target.value; }}>
+                                    <select value={this.userDetail.year} onChange={(e) => { this.userDetail.year = e.target.value; this.renderBarPercent(); }}>
                                         <option value="Year" disabled={true}>Year</option>
                                         {
                                             [...Array(thisyear - 1918)].map((e, i) =>
@@ -183,10 +255,6 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                                     <option
                                                         key={thisyear - i}
                                                         value={thisyear - i}
-                                                        onClick={() => {
-                                                            this.userSelect.year = thisyear - i;
-                                                            this.renderBarPercent();
-                                                        }}
                                                     >
                                                         { thisyear - i }
                                                     </option>
@@ -198,16 +266,26 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                         }
                     </div>
                 </div>
-                <div>
+                <div className="detail-page-form-question-container">
                     <div>
-                        <span>Skin Tone</span>
+                        <span className="detail-page-form-question-title">Skin Tone</span>
                     </div>
                     <div>
                         {
                             !this.state.selectquestion3
                             ?
-                                <div onClick={() => this.setState({ selectquestion3: !this.state.selectquestion3 })}>
-                                    {this.userSelect.skintone}
+                                <div
+                                    onClick={() =>
+                                        this.setState({
+                                            selectquestion1: false,
+                                            selectquestion2: false,
+                                            selectquestion3: !this.state.selectquestion3,
+                                            selectquestion4: false,
+                                            selectquestion5: false,
+                                        })
+                                    }
+                                >
+                                    {this.userDetail.skintone.name ? this.userDetail.skintone.name : this.userDetail.skintone}
                                 </div>
                             :
                                 <div>
@@ -219,10 +297,10 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                                     key={index}
                                                     name="skin_tone"
                                                     value={option}
-                                                    checked={this.userSelect.skintone === option.name}
+                                                    checked={this.userDetail.skintone.name === option.name}
                                                     onClick={() => {
                                                         this.setState({ selectquestion3: false });
-                                                        this.userSelect.skintone = option.name;
+                                                        this.userDetail.skintone = option;
                                                         this.renderBarPercent();
                                                     }}
                                                 />
@@ -234,16 +312,26 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                         }
                     </div>
                 </div>
-                <div>
+                <div className="detail-page-form-question-container">
                     <div>
-                        <span>Skin Type</span>
+                        <span className="detail-page-form-question-title">Skin Type</span>
                     </div>
                     <div>
                         {
                             !this.state.selectquestion4
                             ?
-                                <div onClick={() => this.setState({ selectquestion4: !this.state.selectquestion4 })}>
-                                    {this.userSelect.skintype}
+                                <div
+                                    onClick={() =>
+                                        this.setState({
+                                            selectquestion1: false,
+                                            selectquestion2: false,
+                                            selectquestion3: false,
+                                            selectquestion4: !this.state.selectquestion4,
+                                            selectquestion5: false,
+                                        })
+                                    }
+                                >
+                                    {this.userDetail.skintype.name ? this.userDetail.skintype.name : this.userDetail.skintype}
                                 </div>
                             :
                                 <div>
@@ -255,10 +343,10 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                                     key={index}
                                                     name="skin_type"
                                                     value={option}
-                                                    checked={this.userSelect.skin_type === option.name}
+                                                    checked={this.userDetail.skintype.name === option.name}
                                                     onClick={() => {
                                                         this.setState({ selectquestion4: false });
-                                                        this.userSelect.skintype = option.name;
+                                                        this.userDetail.skintype = option;
                                                         this.renderBarPercent();
                                                     }}
                                                 />
@@ -270,51 +358,46 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                         }
                     </div>
                 </div>
-                <div>
+                <div className="detail-page-form-question-container">
                     <div>
-                        <span>Skin Condition</span>
+                        <span className="detail-page-form-question-title">Skin Condition</span>
                     </div>
                     <div>
                         {
                             !this.state.selectquestion5
                             ?
-                                <div onClick={() => this.setState({ selectquestion5: !this.state.selectquestion5 })}>
+                                <div
+                                    onClick={() =>
+                                        this.setState({
+                                            selectquestion1: false,
+                                            selectquestion2: false,
+                                            selectquestion3: false,
+                                            selectquestion4: false,
+                                            selectquestion5: !this.state.selectquestion5,
+                                        })
+                                    }
+                                >
                                     {
-                                        this.userSelect.skinconditionforshow.length
+                                        this.userDetail.skinconditionforshow.length
                                         ?
                                             <div>
-                                                {
-                                                    this.userSelect.skinconditionforshow.map((skincondition, index) => (
-                                                        <span key={index}>{skincondition}</span>
-                                                    ))
-                                                }
+                                                {this.userDetail.skinconditionforshow}
                                             </div>
                                         :
-                                            <span>{this.userSelect.defaultcondition}</span>
+                                            <span>{this.userDetail.defaultcondition}</span>
                                     }
                                 </div>
                             :
                                 <div>
-                                    {
-                                        choice.data.skin_problem.items.map((option, index) => (
-                                            <div>
-                                                <input
-                                                    type="checkbox"
-                                                    key={index}
-                                                    name="skin_condition"
-                                                    value={option}
-                                                    onClick={() => {
-                                                        if (this.userSelect.skinconditionforshow.includes(option.name) > 0) {
-                                                            this.userSelect.skinconditionforshow.splice(this.userSelect.skinconditionforshow.indexOf(option.name), 1);
-                                                        } else {
-                                                            this.userSelect.skinconditionforshow.push(option.name);
-                                                        }
-                                                        this.renderBarPercent();
-                                                    }}
-                                                />{option.name}
-                                            </div>
-                                        ))
-                                    }
+                                    <div>
+                                        <Checkbox
+                                            choice={choice.data.skin_problem.items}
+                                            userselect={[]}
+                                            saveDataToContainer={(userChoice) => { this.userDetail.skincondition = userChoice; }}
+                                            needSelectedOptionName={true}
+                                            saveDataNameToContainer={(userChoice) => { this.userDetail.skinconditionforshow = userChoice; }}
+                                        />
+                                    </div>
                                 </div>
                         }
                     </div>
@@ -323,42 +406,128 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                 <input
                     type="button"
                     value="done"
-                    onClick={() => postchoice(this.userSelect)}
+                    onClick={() => postchoice(this.userDetail)}
                 />
             </div>
         );
     }
 
+    renderDetailPage = () => (
+        <div style={{ width: '500px', margin: 'auto' }}>
+            <div>
+                <span>
+                    Welcome! Let&#39;s build your beauty profile.<br />
+                    You may edit it back under Profile &#62; Setting &#62; Personal Info.
+                </span>
+                <div style={{ border: '1px solid #ccc' }}>
+                    <div style={{ color: '#000', backgroundColor: '#9e9e9e', height: '24px', width: `${this.state.bar}%` }}>{this.state.bar}%</div>
+                </div>
+            </div>
+
+            <Async promise={getchoice(this.firsttime)}>
+                <Async.Loading>
+                    <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
+                </Async.Loading>
+                <Async.Resolved>
+                    {
+                        () => (
+                            <div>
+                                {this.changeFirstTimeStatus()}
+                                {this.renderDetailPageForm()}
+                            </div>
+                        )
+                    }
+                </Async.Resolved>
+                <Async.Rejected>
+                    { console.error }
+                </Async.Rejected>
+            </Async>
+        </div>
+    )
+
+    renderSignUp = () => (
+        <div className="signup-page-form-container">
+            <div className="signup-page-form-question-container">
+                <select value={this.signUpDetail.phoneprefix} id="phone_prefix">
+                    <option disabled={true}>Malaysia</option>
+                    {
+                        [...Array(10)].map((e, i) =>
+                        (
+                            <option key={i} value={`+60${10 + i}`}>
+                                {`0${10 + i}`}
+                            </option>)
+                        )
+                    }
+                    <option disabled={true}>Singapore</option>
+                    <option value={'+65'}>+65</option>
+                    <option disabled={true}>Brunei</option>
+                    <option value={'+673'}>+673</option>
+                </select>
+                <input type="text" id="phone_number" />
+                <input type="button" value="Send OTP" /><br />
+            </div>
+            <span id="phone_number_error"></span>
+
+            <div className="signup-page-form-question-container">
+                <i className="fa fa-comments signup-page-form-question-icon" aria-hidden="true"></i>
+                <input type="text" id="OTP" /><br />
+            </div>
+            <span id="OTP_error"></span>
+
+            <div className="signup-page-form-question-container">
+                <i className="fa fa-envelope signup-page-form-question-icon" aria-hidden="true"></i>
+                <input type="text" id="email" /><br />
+            </div>
+            <span id="email_error"></span>
+
+            <div className="signup-page-form-question-container">
+                <i className="fa fa-lock signup-page-form-question-icon" aria-hidden="true"></i>
+                <input type="password" id="password" />
+                <input
+                    type="checkbox"
+                    onClick={() => {
+                        if (document.getElementById('password').type === 'text') {
+                            document.getElementById('password').type = 'password';
+                        } else {
+                            document.getElementById('password').type = 'text';
+                        }
+                    }}
+                />
+                <br />
+            </div>
+            <span id="password_error"></span>
+
+            <div className="signup-page-form-question-container">
+                <i className="fa fa-lock signup-page-form-question-icon" aria-hidden="true"></i>
+                <input type="password" id="confirm_password" />
+                {/* <i
+                    className={`signup-page-form-question-icon ${document.getElementById('confirm_password').type === 'text' ? 'fa fa-eye' : 'fa fa-eye-slash'}`}
+                    aria-hidden="true"
+                ></i> */}
+                <input
+                    type="checkbox"
+                    onClick={() => {
+                        if (document.getElementById('confirm_password').type === 'text') {
+                            document.getElementById('confirm_password').type = 'password';
+                        } else {
+                            document.getElementById('confirm_password').type = 'text';
+                        }
+                    }}
+                />
+            </div>
+            <span id="confirm_password_error"></span>
+
+            <input type="button" value="Facebook" onClick={() => this.saveData()} />
+        </div>
+    )
+
     render() {
         return (
-            <div width="500px">
+            <div>
                 <div>
-                    <span>
-                        Welcome! Let&#39;s build your beauty profile.<br />
-                        You may edit it back under Profile &#62; Setting &#62; Personal Info.
-                    </span>
-                    <div style={{ border: '1px solid #ccc' }}>
-                        <div style={{ color: '#000', backgroundColor: '#9e9e9e', height: '24px', width: `${this.state.bar}%` }}>wtf</div>
-                    </div>
+                    {this.state.toUserDetailPage ? null : this.renderSignUp()}
+                    {this.state.toUserDetailPage ? this.renderDetailPage() : null}
                 </div>
-
-                <Async promise={getchoice(this.firsttime)} firsttime={() => this.changeFirstTimeStatus()}>
-                    <Async.Loading>
-                        <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
-                    </Async.Loading>
-                    <Async.Resolved>
-                        {
-                            () => (
-                                <div>
-                                    {this.renderPage()}
-                                </div>
-                            )
-                        }
-                    </Async.Resolved>
-                    <Async.Rejected>
-                        { console.error }
-                    </Async.Rejected>
-                </Async>
             </div>
         );
     }

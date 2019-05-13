@@ -31,6 +31,14 @@ class Checkbox extends React.PureComponent { // eslint-disable-line react/prefer
             tempUserChoice[item.id] = item;
         }
         this.props.saveDataToContainer(tempUserChoice);
+        if (this.props.needSelectedOptionName) {
+            let temp = '';
+            Object.values(tempUserChoice).forEach((choice) => {
+                temp += `${choice.name},`;
+            });
+            temp = temp.substring(0, temp.length - 1);
+            this.props.saveDataNameToContainer(temp);
+        }
         this.setState({ newSelection: tempUserChoice });
     }
 
