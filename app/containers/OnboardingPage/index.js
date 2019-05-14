@@ -74,7 +74,7 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
         skintone: 'please select ONE option',
         skintype: 'please select ONE option',
         skincondition: [],
-        skinconditionforshow: [],
+        skinconditionforshow: '',
         defaultcondition: 'you may select MORE THAN ONE options',
     }
 
@@ -94,36 +94,36 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
     }
 
     saveData = () => {
-        if (Number.isInteger(document.getElementById('phone_number').value) || document.getElementById('phone_number').value.length <= 6 || document.getElementById('phone_number').value.length >= 8) {
-            document.getElementById('phone_number_error').innerHTML = `${document.getElementById('phone_prefix').value} ${document.getElementById('phone_number').value} is not a valid phone number`;
-            return null;
-        }
-        document.getElementById('phone_number_error').innerHTML = '';
+        // if (Number.isInteger(document.getElementById('phone_number').value) || document.getElementById('phone_number').value.length <= 6 || document.getElementById('phone_number').value.length >= 8) {
+        //     document.getElementById('phone_number_error').innerHTML = `${document.getElementById('phone_prefix').value} ${document.getElementById('phone_number').value} is not a valid phone number`;
+        //     return null;
+        // }
+        // document.getElementById('phone_number_error').innerHTML = '';
 
-        // OTP
+        // // OTP
 
-        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(document.getElementById('email').value)) {
-            document.getElementById('email_error').innerHTML = 'Please enter a valid email address.';
-            return null;
-        }
-        document.getElementById('email_error').innerHTML = '';
+        // if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(document.getElementById('email').value)) {
+        //     document.getElementById('email_error').innerHTML = 'Please enter a valid email address.';
+        //     return null;
+        // }
+        // document.getElementById('email_error').innerHTML = '';
 
-        if (document.getElementById('password').value.length <= 7) {
-            document.getElementById('password_error').innerHTML = 'Password should contain at least 8 characters.';
-            return null;
-        }
-        document.getElementById('password_error').innerHTML = '';
+        // if (document.getElementById('password').value.length <= 7) {
+        //     document.getElementById('password_error').innerHTML = 'Password should contain at least 8 characters.';
+        //     return null;
+        // }
+        // document.getElementById('password_error').innerHTML = '';
 
-        if (document.getElementById('password').value !== document.getElementById('confirm_password').value) {
-            document.getElementById('confirm_password_error').innerHTML = 'Password not match';
-            return null;
-        }
-        document.getElementById('confirm_password_error').innerHTML = '';
+        // if (document.getElementById('password').value !== document.getElementById('confirm_password').value) {
+        //     document.getElementById('confirm_password_error').innerHTML = 'Password not match';
+        //     return null;
+        // }
+        // document.getElementById('confirm_password_error').innerHTML = '';
 
-        this.signUpDetail.phoneprefix = document.getElementById('phone_prefix').value;
-        this.signUpDetail.phonenumber = document.getElementById('phone_number').value;
-        this.signUpDetail.email = document.getElementById('email').value;
-        this.signUpDetail.password = document.getElementById('password').value;
+        // this.signUpDetail.phoneprefix = document.getElementById('phone_prefix').value;
+        // this.signUpDetail.phonenumber = document.getElementById('phone_number').value;
+        // this.signUpDetail.email = document.getElementById('email').value;
+        // this.signUpDetail.password = document.getElementById('password').value;
 
         this.setState({ toUserDetailPage: true });
         return null;
@@ -140,7 +140,7 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
         if (this.userDetail.skintype !== 'please select ONE option') {
             percent += 20;
         }
-        if (this.userDetail.skinconditionforshow.length !== 0) {
+        if (this.userDetail.skincondition.length !== 0) {
             percent += 20;
         }
         this.setState({ bar: percent });
@@ -397,7 +397,7 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                     }
                                 >
                                     {
-                                        this.userDetail.skinconditionforshow.length
+                                        this.userDetail.skinconditionforshow !== ''
                                         ?
                                             <div>
                                                 {this.userDetail.skinconditionforshow}
@@ -412,9 +412,9 @@ export class OnboardingPage extends React.PureComponent { // eslint-disable-line
                                         <Checkbox
                                             choice={choice.data.skin_problem.items}
                                             userselect={[]}
-                                            saveDataToContainer={(userChoice) => { this.userDetail.skincondition = userChoice; this.renderBarPercent(); }}
+                                            saveDataToContainer={(userChoice) => { this.userDetail.skincondition = userChoice; console.log(userChoice); }}
                                             needSelectedOptionName={true}
-                                            saveDataNameToContainer={(userChoice) => { this.userDetail.skinconditionforshow = userChoice; this.renderBarPercent(); }}
+                                            saveDataNameToContainer={(dataNameChoice) => { this.userDetail.skinconditionforshow = dataNameChoice; this.renderBarPercent(); }}
                                             noTickDesign={true}
                                         />
                                     </div>
