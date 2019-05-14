@@ -272,6 +272,8 @@
         "testRegex": "tests/.*\\.test\\.js$"
     },
     "dependencies": {
+        "@material-ui/core": "^3.9.3",
+        "@material-ui/icons": "^3.0.2",
         "@tienping/my-react-dom": "0.0.1",
         "@tienping/my-react-kit": "0.0.1",
         "@tienping/my-react-toolkit": "0.0.1",

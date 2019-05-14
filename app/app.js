@@ -16,6 +16,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 // Import root app
 import App from 'containers/App';
 
@@ -40,6 +41,7 @@ import 'file-loader?name=[name].[ext]!./.htaccess';
 /* eslint-enable import/no-unresolved, import/extensions */
 
 import 'global-styles.scss';
+import purple from '@material-ui/core/colors/purple';
 import configureStore from './configureStore';
 import { translationMessages } from './i18n';
 
@@ -49,15 +51,49 @@ const history = createHistory();
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
+const theme = createMuiTheme({
+    palette: {
+        primary: purple,
+        secondary: {
+            main: '#f44336',
+        },
+    },
+    overrides: {
+        MuiAvatar: {
+            root: {
+                height: '60px',
+                width: '60px',
+                display: 'inline-flex',
+            },
+            img: {
+                height: '65px',
+                width: '65px',
+            },
+        },
+        MuiCard: {
+            root: {
+                width: '328px',
+            },
+        },
+    },
+    typography: {
+        h1: {
+
+        },
+    },
+});
+
 const render = (messages) => {
     ReactDOM.render(
         <Provider store={store}>
             <LanguageProvider messages={messages}>
                 <ConnectedRouter history={history}>
-                    <div>
-                        <NotificationContainer />
-                        <App />
-                    </div>
+                    <MuiThemeProvider theme={theme}>
+                        <div>
+                            <NotificationContainer />
+                            <App />
+                        </div>
+                    </MuiThemeProvider>
                 </ConnectedRouter>
             </LanguageProvider>
         </Provider>,
