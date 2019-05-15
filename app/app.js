@@ -41,7 +41,6 @@ import 'file-loader?name=[name].[ext]!./.htaccess';
 /* eslint-enable import/no-unresolved, import/extensions */
 
 import 'global-styles.scss';
-import purple from '@material-ui/core/colors/purple';
 import configureStore from './configureStore';
 import { translationMessages } from './i18n';
 
@@ -53,16 +52,16 @@ const MOUNT_NODE = document.getElementById('app');
 
 const theme = createMuiTheme({
     palette: {
-        primary: purple,
+        primary: {
+            main: '#660033',
+        },
         secondary: {
-            main: '#f44336',
+            main: '#ff146A',
         },
     },
     overrides: {
         MuiAvatar: {
             root: {
-                height: '60px',
-                width: '60px',
                 display: 'inline-flex',
             },
             img: {
@@ -75,11 +74,27 @@ const theme = createMuiTheme({
                 width: '328px',
             },
         },
+        MuiTypography: {
+            subtitle2: {
+                color: '#660033',
+                display: 'inline',
+            },
+            subtitle1: {
+                color: '#660033',
+                display: 'inline',
+            },
+        },
+        MuiButton: {
+            root: {
+                color: '#ff146A',
+            },
+            outlined: {
+                border: '1px solid #ff146A',
+            },
+        },
     },
     typography: {
-        h1: {
-
-        },
+        fontFamily: 'Poppins',
     },
 });
 
