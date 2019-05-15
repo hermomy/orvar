@@ -22,6 +22,11 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import AccountBalanceWallet from '@material-ui/icons/AccountBalanceWallet';
+import LocalShipping from '@material-ui/icons/LocalShipping';
+import LocationOn from '@material-ui/icons/LocationOn';
+import Settings from '@material-ui/icons/Settings';
+import AttachMoney from '@material-ui/icons/AttachMoney';
 import { withStyles } from '@material-ui/core/styles';
 
 import injectSaga from 'utils/injectSaga';
@@ -42,7 +47,11 @@ const getProfile = () => apiRequest('/layout/user', 'get');
 
 const getWallet = () => apiRequest('/voucher?usable=true&per-page=1', 'get');
 
-const getData = () => Promise.all([getProfile(), getWallet()]);
+const getOrder = () => apiRequest('/order?per-page=1', 'get');
+
+const getAddress = () => apiRequest('/address?per-page=1', 'get');
+
+const getData = () => Promise.all([getProfile(), getWallet(), getOrder(), getAddress()]);
 
 export class ProfileWholePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -106,82 +115,166 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
             //         {this.state.subpage === 'logout' ? <div><LogoutForm /></div> : null}
             //     </div>
             // </div>
-            <div>
-                <Grid container={true} spacing={40}>
-                    <Card>
-                        <CardContent>
-                            <Grid container={true} spacing={24}>
-                                <Grid item={true} xs={5} className={this.props.classes.profileContentContainer}>
-                                    <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} />
-                                </Grid>
-                                <Grid container={true} spacing={24} item={true} xs={7}>
-                                    <Grid item={true} xs={12}>
-                                        <Typography variant="subtitle1">Hello</Typography>
+            <div align="center">
+                <Card className={this.props.classes.bigCard}>
+                    <Grid container={true} spacing={40}>
+                        <Grid item={true} xs={3}>
+                            <CardContent>
+                                <Grid container={true} spacing={24}>
+                                    <Grid item={true} xs={5} className={this.props.classes.profileContentContainer}>
+                                        <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} />
                                     </Grid>
-                                    <Grid item={true} xs={12}>
-                                        <Typography variant="h6" color="primary">{data.data.profile.name}</Typography>
+                                    <Grid container={true} spacing={24} item={true} xs={7}>
+                                        <Grid item={true} xs={12}>
+                                            <Typography variant="subtitle1">Hello</Typography>
+                                        </Grid>
+                                        <Grid item={true} xs={12}>
+                                            <Typography variant="h6" color="primary">{data.data.profile.name}</Typography>
+                                        </Grid>
+                                        <Grid item={true} xs={12}>
+                                            <Button variant="outlined">EDIT PROFILE</Button>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item={true} xs={12}>
-                                        <Button variant="outlined">EDIT PROFILE</Button>
+                                </Grid>
+                            </CardContent>
+                        </Grid>
+                        <Grid item={true} xs={3}>
+                            <CardContent className={this.props.classes.profileContentContainer}>
+                                <Typography variant="subtitle1" className="mt-2">
+                                    {data.data.profile.name}<br />
+                                    {data.data.profile.email}<br />
+                                    {data.data.profile.sms_phone.prefix}-{data.data.profile.sms_phone.number}<br />
+                                    {data.data.profile.gender}<br />
+                                </Typography>
+                            </CardContent>
+                        </Grid>
+                        <Grid item={true} xs={3}>
+                            <CardContent className={this.props.classes.profileContentContainer}>
+                                <Typography variant="subtitle2" className="mt-2">
+                                    Skin Tone: {data.data.profile.skin.tone.name}<br />
+                                    Skin Type: {data.data.profile.skin.type.name}<br />
+                                    Skin Concern:{concernString}<br />
+                                </Typography>
+                            </CardContent>
+                        </Grid>
+                        <Grid item={true} xs={3}>
+                            <CardContent>
+                                <Grid container={true} spacing={24}>
+                                    <Grid item={true} xs={7} className={this.props.classes.profileContentContainer}>
+                                        <div align="center" className="mt-3">
+                                            <Typography variant="subtitle1" color="secondary">Attendence</Typography><br />
+                                            <Typography variant="h6" color="secondary">{data.data.attendance.current}  /  10</Typography>
+                                        </div>
+                                    </Grid>
+                                    <Grid item={true} xs={5}>
+                                        <Typography>I am PICTURE</Typography>
                                     </Grid>
                                 </Grid>
-                            </Grid>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent className={this.props.classes.profileContentContainer}>
-                            <Typography variant="subtitle1" className="mt-2">
-                                {data.data.profile.name}<br />
-                                {data.data.profile.email}<br />
-                                {data.data.profile.sms_phone.prefix}-{data.data.profile.sms_phone.number}<br />
-                                {data.data.profile.gender}<br />
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent className={this.props.classes.profileContentContainer}>
-                            <Typography variant="subtitle2" className="mt-2">
-                                Skin Tone: {data.data.profile.skin.tone.name}<br />
-                                Skin Type: {data.data.profile.skin.type.name}<br />
-                                Skin Concern:{concernString}<br />
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent>
-                            <Grid container={true} spacing={24}>
-                                <Grid item={true} xs={7} className={this.props.classes.profileContentContainer}>
-                                    <div align="center" className="mt-3">
-                                        <Typography variant="subtitle1" color="secondary">Attendence</Typography><br />
-                                        <Typography variant="h6" color="secondary">{data.data.attendance.current}  /  10</Typography>
-                                    </div>
-                                </Grid>
-                                <Grid item={true} xs={5}>
-                                    <Typography>I am PICTURE</Typography>
-                                </Grid>
-                            </Grid>
-                        </CardContent>
-                    </Card>
-                </Grid>
+                            </CardContent>
+                        </Grid>
+                    </Grid>
+                </Card>
             </div>
         );
     }
 
     renderWallet = () => (
-        <Card>
+        <Card style={{ flexDirection: 'column' }}>
             <CardHeader
-                avatar={<Avatar aria-label="Recipe">R</Avatar>}
-                // action={<IconButton></IconButton>}
-                title="My Wallet"
+                avatar={
+                    <Avatar aria-label="AccountBalanceWallet">
+                        <AccountBalanceWallet />
+                    </Avatar>
+                }
+                title={<Typography variant="h6">My Wallet</Typography>}
             />
             <CardContent>
-                <Card style={{ width: '88px' }}>
-                    <CardHeader
-                        avatar={<Avatar aria-label="Recipe">R</Avatar>}
-                        // action={<IconButton></IconButton>}
-                    />
+                <Card className={this.props.classes.smallCard}>
+                    <CardContent className={this.props.classes.smallCardContent}>
+                        <Avatar aria-label="AccountBalanceWallet">
+                            <AttachMoney />
+                        </Avatar>
+                    </CardContent>
+                    {/* <Avatar aria-label="AccountBalanceWallet">
+                        <AttachMoney />
+                    </Avatar> */}
+                </Card>
+                <Card className={this.props.classes.smallCard}>
+                    <CardContent className={this.props.classes.smallCardContent}>
+                        <Avatar aria-label="AccountBalanceWallet">
+                            <AttachMoney />
+                        </Avatar>
+                    </CardContent>
+                </Card>
+                <Card className={this.props.classes.smallCard}>
+                    <CardContent className={this.props.classes.smallCardContent}>
+                        <Avatar aria-label="AccountBalanceWallet">
+                            <AttachMoney />
+                        </Avatar>
+                    </CardContent>
                 </Card>
             </CardContent>
+        </Card>
+    )
+
+    renderOrder = (data) => (
+        <Card style={{ flexDirection: 'column' }}>
+            <CardHeader
+                avatar={
+                    <Avatar aria-label="LocalShipping">
+                        <LocalShipping />
+                    </Avatar>
+                }
+                title={<Typography variant="h6" align="left">My Order</Typography>}
+            />
+            <CardContent className="mt-1">
+                <div style={{ display: 'flex' }}>
+                    <div style={{ flex: '4' }}>
+                        <Typography>ORDER NUMBER</Typography>
+                        <Typography>{data.data.items.length ? data.data.items[0].number : null}</Typography>
+                    </div>
+                    <div style={{ flex: '3' }}>
+                        <Typography>AMOUNT</Typography>
+                        <Typography>{data.data.items.length ? data.data.items[0].subtotal : 'No Order'}</Typography>
+                    </div>
+                    <div style={{ flex: '3' }}>
+                        <Typography>STATUS</Typography>
+                        <Typography>{data.data.items.length ? data.data.items[0].status : null}</Typography>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+    )
+
+    renderAddress = (data) => (
+        <Card style={{ flexDirection: 'column' }}>
+            <CardHeader
+                avatar={
+                    <Avatar aria-label="LocationOn">
+                        <LocationOn />
+                    </Avatar>
+                }
+                title={<Typography variant="h6" align="left">My Address</Typography>}
+            />
+            <CardContent className={`${this.props.classes.profileContentContainer} mt-half`} style={{ display: 'inline' }}>
+                <Typography>Default Address :</Typography>
+                <Typography>{data.data.items[0].full_address}</Typography>
+            </CardContent>
+        </Card>
+    )
+
+    renderSetting = () => (
+        <Card style={{ flexDirection: 'column' }}>
+            <CardHeader
+                avatar={
+                    <Avatar aria-label="Settings">
+                        <Settings />
+                    </Avatar>
+                }
+                title={<Typography variant="h6">My Setting</Typography>}
+            />
+            <CardContent></CardContent>
+
         </Card>
     )
 
@@ -195,7 +288,13 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                             <div>
                                 {console.log(this.props)}
                                 {this.renderProfileCard(data[0])}
-                                {this.renderWallet(data[1])}
+                                <br />
+                                <div align="center">
+                                    {this.renderWallet(data[1])}
+                                    {this.renderOrder(data[2])}
+                                    {this.renderAddress(data[3])}
+                                    {this.renderSetting(data[1])}
+                                </div>
                             </div>
                         )}
                     </Async.Resolved>

@@ -72,6 +72,13 @@ const theme = createMuiTheme({
         MuiCard: {
             root: {
                 width: '328px',
+                height: '192px',
+            },
+        },
+        MuiCardHeader: {
+            root: {
+                width: '328px',
+                height: '50px',
             },
         },
         MuiTypography: {
@@ -90,6 +97,13 @@ const theme = createMuiTheme({
             },
             outlined: {
                 border: '1px solid #ff146A',
+            },
+        },
+        MuiPaper: {
+            root: {
+                display: 'inline-flex',
+                marginLeft: '8px',
+                marginRight: '8px',
             },
         },
     },
