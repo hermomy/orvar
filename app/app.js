@@ -71,14 +71,8 @@ const theme = createMuiTheme({
         },
         MuiCard: {
             root: {
-                width: '328px',
+                width: '296px',
                 height: '192px',
-            },
-        },
-        MuiCardHeader: {
-            root: {
-                width: '328px',
-                height: '50px',
             },
         },
         MuiTypography: {

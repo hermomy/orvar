@@ -1,4 +1,7 @@
 const styles = {
+    pageContainer: {
+        width: '90%',
+    },
     userImage: {
         height: '60px',
         width: '60px',
@@ -9,19 +12,30 @@ const styles = {
         justifyContent: 'center',
         textAlign: 'justify',
     },
+    longCard: {
+        width: '90%',
+    },
     bigCard: {
-        width: '1360px',
+        marginTop: '1.5rem',
+        width: '44.5%',
+        height: '400px',
+        flexDirection: 'column',
+    },
+    mediumCard: {
+        width: '21.5%',
+        flexDirection: 'column',
     },
     smallCard: {
-        width: '82px',
-        height: '95px',
+        width: '75px',
+        height: '110px',
         justifyContent: 'center',
     },
-    smallCardHeader: {
-        width: '82px',
-    },
-    smallCardContent: {
-        padding: '0px',
+    cartCard: {
+        marginBottom: '15px',
+        height: '65px',
+        width: '550px',
+        backgroundColor: '#F3EFEE',
+        verticalAlign: 'center',
     },
 };
 
