@@ -1,6 +1,7 @@
 const styles = {
     pageContainer: {
-        width: '90%',
+        width: '95%',
+        justifyContent: 'center',
     },
     userImage: {
         height: '60px',
@@ -12,17 +13,19 @@ const styles = {
         textAlign: 'justify',
     },
     longCard: {
-        width: '90%',
+        width: '98.7%',
     },
     bigCard: {
-        marginTop: '1.5rem',
-        width: '44.5%',
+        marginTop: '2rem',
+        width: '97.8%',
         height: '400px',
         flexDirection: 'column',
+        justify: 'center',
     },
     mediumCard: {
-        width: '21.5%',
+        width: '95%',
         flexDirection: 'column',
+        marginTop: '2rem',
     },
     cardAvatar: {
         alignItems: 'unset',
