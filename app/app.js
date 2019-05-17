@@ -58,6 +58,9 @@ const theme = createMuiTheme({
         secondary: {
             main: '#ff146A',
         },
+        disabled: {
+            main: '#fafafa',
+        },
     },
     overrides: {
         MuiAvatar: {
@@ -83,6 +86,9 @@ const theme = createMuiTheme({
             subtitle1: {
                 color: '#660033',
                 display: 'inline',
+            },
+            h6: {
+                color: 'rgba(0,0,0,0.26)',
             },
         },
         MuiButton: {

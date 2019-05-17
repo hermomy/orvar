@@ -9,7 +9,6 @@ const styles = {
     },
     profileContentContainer: {
         display: 'flex',
-        justifyContent: 'center',
         textAlign: 'justify',
     },
     longCard: {
@@ -25,18 +24,21 @@ const styles = {
         width: '21.5%',
         flexDirection: 'column',
     },
+    cardAvatar: {
+        alignItems: 'unset',
+    },
     smallCard: {
         width: '75px',
         height: '110px',
         justifyContent: 'center',
     },
     cartCard: {
-        marginBottom: '15px',
+        marginBottom: '10px',
         height: '65px',
-        width: '550px',
+        width: '95%',
         backgroundColor: '#F3EFEE',
-        verticalAlign: 'center',
     },
 };
+
 
 export default styles;
