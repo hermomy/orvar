@@ -39,7 +39,7 @@ const styles = {
         marginBottom: '10px',
         height: '65px',
         width: '95%',
-        backgroundColor: '#F3EFEE',
+        // backgroundColor: '#F3EFEE',
     },
 };
 

@@ -23,6 +23,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
+import Collapse from '@material-ui/core/Collapse';
 import AccountBalanceWallet from '@material-ui/icons/AccountBalanceWallet';
 import LocalShippingTwoTone from '@material-ui/icons/LocalShippingTwoTone';
 import LocationOn from '@material-ui/icons/LocationOn';
@@ -60,11 +61,13 @@ const getWishList = () => apiRequest('/wishlist?per-page=6', 'get');
 
 const getCart = () => apiRequest('/cart?per-page=4', 'get');
 
-const getData = () => Promise.all([getProfile(), getOrder(), getAddress(), getWishList(), getCart()]);
+const getData = (callAPI) => callAPI ? Promise.all([getProfile(), getOrder(), getAddress(), getWishList(), getCart()]) : null;
 
 export class ProfileWholePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
-        subpage: null,
+        // subpage: null,
+        checked: 1,
+        callAPI: true,
     }
 
     componentWillMount() {
@@ -117,6 +120,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
     }
 
     renderProfileCard = (data) => {
+        this.setState({ callAPI: false });
         let concernString = '';
         // eslint-disable-next-line array-callback-return
         let count = 0;
@@ -208,24 +212,75 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                 }
                 title={<Typography variant="h6" align="left">My Wallet</Typography>}
             />
-            <Grid container={true} spacing={0} justify="center">
+            <Grid container={true} spacing={0} justify="center" alignItems="center">
                 {
                     this.props.width === 'md' || this.props.width === 'sm' ?
                         <Grid item={true}>
-                            <Button onClick={() => { }}><Avatar><ArrowLeft /></Avatar></Button>
+                            <Button
+                                onClick={() => { this.setState({ checked: this.state.checked - 1 }); }}
+                                disabled={this.state.checked === 1}
+                            >
+                                <Avatar>
+                                    <ArrowLeft />
+                                </Avatar>
+                            </Button>
                         </Grid>
                     :
                     null
                 }
                 <Grid item={true}>
-                    <CardContent style={{ padding: '0px' }}>
-                        {this.getWalletData(data)}
-                    </CardContent>
+                    {
+                        this.props.width === 'md' || this.props.width === 'sm' ?
+                            <CardContent style={{ padding: '0px' }}>
+                                <Collapse in={this.state.checked === 1}>
+                                    <Card className={this.props.classes.smallCard}>
+                                        <CardContent>
+                                            <Avatar aria-label="AttachMoney">
+                                                <AttachMoney />
+                                            </Avatar>
+                                            <Typography variant="h6" align="left">Balance</Typography>
+                                            <Typography>{data.data.profile.balance.usable}</Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Collapse>
+                                <Collapse in={this.state.checked === 2}>
+                                    <Card className={this.props.classes.smallCard}>
+                                        <CardContent>
+                                            <Avatar aria-label="CreditCard">
+                                                <CreditCard />
+                                            </Avatar>
+                                            <Typography variant="h6" align="left">Credit</Typography>
+                                            <Typography>{data.data.profile.credit.usable}</Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Collapse>
+                                <Collapse in={this.state.checked === 3}>
+                                    <Card className={this.props.classes.smallCard}>
+                                        <CardContent>
+                                            <Avatar aria-label="AccountBalanceWallet">
+                                                <AccountBalanceWallet />
+                                            </Avatar>
+                                            <Typography variant="h6" align="left">Voucher</Typography>
+                                            <Typography>{data.data.profile.voucher.usable}</Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Collapse>
+                            </CardContent>
+                        :
+                        this.getWalletData(data)
+                    }
                 </Grid>
                 {
                     this.props.width === 'md' || this.props.width === 'sm' ?
                         <Grid item={true}>
-                            <Button onClick={() => { }}><Avatar><ArrowRight /></Avatar></Button>
+                            <Button
+                                onClick={() => { this.setState({ checked: this.state.checked + 1 }); }}
+                                disabled={this.state.checked === 3}
+                            >
+                                <Avatar>
+                                    <ArrowRight />
+                                </Avatar>
+                            </Button>
                         </Grid>
                     :
                     null
@@ -329,27 +384,27 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                                 />
                                 <CardContent style={{ width: '80%' }}>
                                     <Grid container={true} spacing={0} alignItems="center">
-                                        <Grid item={true} xs={9} md={10} lg={9}>
-                                            <div style={{ display: 'inline', verticalAlign: 'middle' }}>
-                                                <Typography align="left">{item.product.brand.name}</Typography>
-                                                <Typography align="left" >
-                                                    {
-                                                        this.props.width === 'lg' ?
-                                                        item.product.display_name
-                                                        :
-                                                        item.product.plain_name
-                                                    }
-                                                </Typography>
-                                            </div>
-                                        </Grid>
-                                        <Hidden mdDown={true}>
+                                        {/* <Grid item={true} xs={9} md={10} lg={9}> */}
+                                        <div style={{ display: 'inline', verticalAlign: 'middle' }}>
+                                            <Typography align="left">{item.product.brand.name}</Typography>
+                                            <Typography align="left" >
+                                                {
+                                                    this.props.width === 'lg' ?
+                                                    item.product.display_name
+                                                    :
+                                                    item.product.plain_name
+                                                }
+                                            </Typography>
+                                        </div>
+                                        {/* </Grid> */}
+                                        {/* <Hidden mdDown={true}>
                                             <Grid item={true} xs={1}>
                                                 <Typography style={{ display: 'inline' }}>{item.qty}</Typography>
                                             </Grid>
                                         </Hidden>
                                         <Grid item={true} xs={2}>
                                             <Typography style={{ display: 'inline' }}>RM{item.total.retail}</Typography>
-                                        </Grid>
+                                        </Grid> */}
                                     </Grid>
                                 </CardContent>
                             </Card>
@@ -363,7 +418,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
     render() {
         return (
             <div align="center">
-                <Async promise={getData()}>
+                <Async promise={getData(this.state.callAPI)}>
                     <Async.Loading>Loading... Page</Async.Loading>
                     <Async.Resolved>
                         {(data) => (
