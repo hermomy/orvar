@@ -1,6 +1,6 @@
 const styles = {
     pageContainer: {
-        width: '95%',
+        width: '85%',
         justifyContent: 'center',
     },
     userImage: {
@@ -40,6 +40,10 @@ const styles = {
         height: '65px',
         width: '95%',
         // backgroundColor: '#F3EFEE',
+    },
+    smallScreenLongCard: {
+        width: '100%',
+        height: '182px',
     },
 };
 
