@@ -17,7 +17,6 @@ const styles = {
     },
     bigCard: {
         marginTop: '2rem',
-        width: '97.8%',
         height: '400px',
         flexDirection: 'column',
         justify: 'center',
@@ -32,6 +31,7 @@ const styles = {
     },
     smallCard: {
         width: '75px',
+        // width: '95px',
         height: '110px',
         justifyContent: 'center',
     },

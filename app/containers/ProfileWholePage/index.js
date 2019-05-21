@@ -22,6 +22,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Hidden from '@material-ui/core/Hidden';
 import AccountBalanceWallet from '@material-ui/icons/AccountBalanceWallet';
 import LocalShippingTwoTone from '@material-ui/icons/LocalShippingTwoTone';
 import LocationOn from '@material-ui/icons/LocationOn';
@@ -73,6 +74,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         if (dataChecking(this.props, 'match', 'params', 'profilePart')) {
             this.setState({ subpage: this.props.match.params.profilePart });
         }
+        console.log(this.props.width);
     }
 
     getWalletData = (data) => (
@@ -127,46 +129,8 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                 count++;
             }
         });
-        // const user = this.props.profileWholePage.data.mainProfileData;
         return (
-            // <div className="ProfileWholePage-container">
-            //     <div className="ProfileWholePage-sidebar">
-            //         {/* <img src={user.avatar} alt="" /> */}
-            //         <span>{user.name}</span><br />
-            //         <span>{user.membership.name}</span><br />
-            //         <span>Usable Credits {user.credit.usable}</span><br />
-            //         <span>Usable Balance {user.balance.usable}</span><br />
-
-            //         <span onClick={() => this.clickSidebarButtonAction('me')}><FormattedMessage {...messages.Profile} /></span><br />
-            //         <span onClick={() => this.clickSidebarButtonAction('order')}><FormattedMessage {...messages.Order} /></span><br />
-            //         <span onClick={() => this.clickSidebarButtonAction('wallet')}><FormattedMessage {...messages.Wallet} /></span><br />
-            //         <span onClick={() => this.clickSidebarButtonAction('review')}><FormattedMessage {...messages.Review} /></span><br />
-            //         <span onClick={() => this.clickSidebarButtonAction('wishlist')}><FormattedMessage {...messages.Wishlist} /> ({user.wishlist.total} )</span><br />
-            //         <span onClick={() => this.clickSidebarButtonAction('setting')}><FormattedMessage {...messages.Setting} /></span><br />
-            //         <span onClick={() => this.clickSidebarButtonAction('logout')}><FormattedMessage {...messages.Logout} /></span><br />
-            //     </div>
-            //     <div className="ProfileWholePage-content">
-            //         {this.state.subpage === 'me' ? <div><ProfileEditInform /></div> : null}
-            //         {
-            //             this.state.subpage === 'order' ||
-            //             this.state.subpage === 'canceled' ||
-            //             this.state.subpage === 'to-paid' ||
-            //             this.state.subpage === 'to-ship'
-            //                 ?
-            //                     <div>
-            //                         <ProfileOrder />
-            //                     </div>
-            //                 :
-            //                 null
-            //         }
-            //         {this.state.subpage === 'wallet' ? <div><ProfileWallet /></div> : null}
-            //         {this.state.subpage === 'review' ? <div><ProfileReview /></div> : null}
-            //         {this.state.subpage === 'wishlist' ? <div><ProfileWishlist /></div> : null}
-            //         {/* {this.state.subpage === 'ProfileSetting' ? <ProfileSetting /> : null} */}
-            //         {this.state.subpage === 'logout' ? <div><LogoutForm /></div> : null}
-            //     </div>
-            // </div>
-            <div align="center">
+            <div style={{ alignItems: 'center' }}>
                 <Card className={this.props.classes.longCard}>
                     <Grid container={true} spacing={8} alignItems="center">
                         <Grid item={true} lg={3} md={4} sm={6}>
@@ -191,10 +155,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                                 </Grid>
                             </CardContent>
                         </Grid>
-                        {
-                            this.props.width === 'sm' ?
-                            null
-                            :
+                        <Hidden only="sm">
                             <Grid item={true} lg={3} md={4}>
                                 <CardContent className={this.props.classes.profileContentContainer} style={{ justifyContent: this.props.width === 'md' ? 'center' : 'left' }}>
                                     <Typography variant="subtitle1">
@@ -205,11 +166,8 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                                     </Typography>
                                 </CardContent>
                             </Grid>
-                        }
-                        {
-                            this.props.width === 'sm' || this.props.width === 'md' ?
-                            null
-                            :
+                        </Hidden>
+                        <Hidden mdDown={true}>
                             <Grid item={true} lg={3}>
                                 <CardContent className={this.props.classes.profileContentContainer}>
                                     <Typography variant="subtitle2">
@@ -219,7 +177,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                                     </Typography>
                                 </CardContent>
                             </Grid>
-                        }
+                        </Hidden>
                         <Grid item={true} lg={3} md={4} sm={6}>
                             <CardContent>
                                 <Grid container={true} spacing={8}>
@@ -242,7 +200,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
     }
 
     // remember data insert below
-    renderWallet = () => (
+    renderWallet = (data) => (
         <Card className={this.props.classes.mediumCard}>
             <CardHeader
                 avatar={
@@ -257,11 +215,11 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                             <Button onClick={() => { }}><Avatar><ArrowLeft /></Avatar></Button>
                         </Grid>
                     :
-                        null
+                    null
                 }
                 <Grid item={true}>
                     <CardContent style={{ padding: '0px' }}>
-
+                        {this.getWalletData(data)}
                     </CardContent>
                 </Grid>
                 {
@@ -331,7 +289,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
     )
 
     renderWishList = (data) => (
-        <Card className={`${this.props.classes.bigCard}`}>
+        <Card className={`${this.props.classes.bigCard}`} style={{ width: `${this.props.width === 'xs' || this.props.width === 'sm' ? '95%' : '97.5%'}` }}>
             <CardHeader
                 avatar={
                     <FavoriteBorder color="disabled" />
@@ -341,8 +299,8 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
             <CardContent>
                 <Grid container={true} justify="center">
                     {
-                        data.data.items.slice(0, this.props.width === 'md' || this.props.width === '' ? 4 : 6).map((item, index) => (
-                            <Grid lg={4} item={true} key={index}>
+                        data.data.items.slice(0, this.props.width === 'xs' ? 4 : 6).map((item, index) => (
+                            <Grid xs={6} sm={4} item={true} key={index}>
                                 <img src={item.product.image.medium} alt={item.product.name} />
                             </Grid>
                         ))
@@ -353,7 +311,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
     )
 
     renderCart = (data) => (
-        <Card className={`${this.props.classes.bigCard} mb-3`}>
+        <Card className={`${this.props.classes.bigCard} mb-3`} style={{ width: `${this.props.width === 'xs' || this.props.width === 'sm' ? '95%' : '97.5%'}` }}>
             <CardHeader
                 avatar={
                     <AddShoppingCart color="disabled" />
@@ -370,12 +328,29 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                                     title={<img src={item.product.image.small} width="55px" style={{ marginLeft: '10px' }} alt={item.product.name} />}
                                 />
                                 <CardContent style={{ width: '80%' }}>
-                                    <div style={{ float: 'left', width: '60%' }}>
-                                        <Typography>{item.product.brand.name}</Typography>
-                                        <Typography>{item.product.display_name}</Typography>
-                                    </div>
-                                    <Typography>{item.qty}</Typography>
-                                    <Typography style={{ float: 'right' }}>RM{item.total.retail}</Typography>
+                                    <Grid container={true} spacing={0} alignItems="center">
+                                        <Grid item={true} xs={9} md={10} lg={9}>
+                                            <div style={{ display: 'inline', verticalAlign: 'middle' }}>
+                                                <Typography align="left">{item.product.brand.name}</Typography>
+                                                <Typography align="left" >
+                                                    {
+                                                        this.props.width === 'lg' ?
+                                                        item.product.display_name
+                                                        :
+                                                        item.product.plain_name
+                                                    }
+                                                </Typography>
+                                            </div>
+                                        </Grid>
+                                        <Hidden mdDown={true}>
+                                            <Grid item={true} xs={1}>
+                                                <Typography style={{ display: 'inline' }}>{item.qty}</Typography>
+                                            </Grid>
+                                        </Hidden>
+                                        <Grid item={true} xs={2}>
+                                            <Typography style={{ display: 'inline' }}>RM{item.total.retail}</Typography>
+                                        </Grid>
+                                    </Grid>
                                 </CardContent>
                             </Card>
                         ))
@@ -395,30 +370,30 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                             <div>
                                 <div style={{ width: '80%' }} className="mt-1">
                                     <Typography style={{ float: 'left' }} >Profile</Typography>
-                                    <Typography inline="true">Welcome to your HERMO profile Dashboard</Typography>
+                                    <Typography inline={true}>Welcome to your HERMO profile Dashboard</Typography>
                                     <Typography style={{ float: 'right' }} >Continue Shopping</Typography>
                                 </div>
-                                <div className={this.props.classes.pageContainer}>
+                                <div className={this.props.classes.pageContainer} justify="center">
                                     {this.renderProfileCard(data[0])}
-                                    <Grid container={true} spacing={20} style={{ paddingTop: '0px' }}>
-                                        <Grid item={true} md={3} xs={6}>
+                                    <Grid container={true} style={{ paddingTop: '0px' }}>
+                                        <Grid item={true} xs={12} sm={6} md={3}>
                                             {this.renderWallet(data[0])}
                                         </Grid>
-                                        <Grid item={true} md={3} xs={6}>
+                                        <Grid item={true} xs={12} sm={6} md={3}>
                                             {this.renderOrder(data[1])}
                                         </Grid>
-                                        <Grid item={true} md={3} xs={6}>
+                                        <Grid item={true} xs={12} sm={6} md={3}>
                                             {this.renderAddress(data[2])}
                                         </Grid>
-                                        <Grid item={true} md={3} xs={6}>
+                                        <Grid item={true} xs={12} sm={6} md={3}>
                                             {this.renderSetting()}
                                         </Grid>
                                     </Grid>
-                                    <Grid container={true} spacing={20} style={{ paddingTop: '0px' }} justify="center">
-                                        <Grid item={true} md={6} xs={11}>
+                                    <Grid container={true} style={{ paddingTop: '0px' }} justify="center">
+                                        <Grid item={true} md={6} xs={12}>
                                             {this.renderWishList(data[3])}
                                         </Grid>
-                                        <Grid item={true} md={6} xs={11}>
+                                        <Grid item={true} md={6} xs={12}>
                                             {this.renderCart(data[4])}
                                         </Grid>
                                     </Grid>
