@@ -7,18 +7,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 // import styled from 'styled-components';
 
 import NavDropdown from './NavDropdown';
-
-const StyleNavi = styled.span`
-    cursor: pointer;
-
-    &:hover {
-        color: ${(props) => props.theme.tertiary_color};
-    }
-`;
 
 function NavItem(props) {
     if (props.data.type === 'internal_url') {
@@ -29,7 +20,7 @@ function NavItem(props) {
                 title={props.data.title}
                 onClick={props.clickHandler ? props.clickHandler : () => {}}
             >
-                <StyleNavi className={props.data.iconClass ? props.data.iconClass : ''}></StyleNavi>
+                <span className={props.data.iconClass ? props.data.iconClass : ''}></span>
                 <span>{ props.vertical ? props.data.verticalText : props.data.text}</span>
             </NavLink>
         );
@@ -41,7 +32,7 @@ function NavItem(props) {
                 title={props.data.title}
                 onClick={props.clickHandler ? props.clickHandler : () => {}}
             >
-                <StyleNavi className={props.data.iconClass ? props.data.iconClass : ''}>{props.data.text}</StyleNavi>
+                <span className={props.data.iconClass ? props.data.iconClass : ''}>{props.data.text}</span>
                 <span>{ props.vertical ? props.data.verticalText : props.data.text}</span>
             </a>
         );
@@ -49,7 +40,7 @@ function NavItem(props) {
         return (
             <NavDropdown item={props.data} data={props.data} title={props.data.title} vertical={props.vertical} itemClassName={props.itemClassName} clickHandler={props.clickHandler}>
                 <span className={`text-hover-hermo-pink ${props.itemClassName}`}>
-                    <StyleNavi className={(props.data.iconClass ? props.data.iconClass : 'dropdown__name ')} title={props.data.title}></StyleNavi>
+                    <span className={(props.data.iconClass ? props.data.iconClass : 'dropdown__name ')} title={props.data.title}></span>
                     <span>{ props.vertical ? props.data.verticalText : props.data.text}</span>
                 </span>
             </NavDropdown>
@@ -69,7 +60,7 @@ function NavItem(props) {
                 className={`nav-link text-capitalize text-hover-hermo-pink ${props.itemClassName}`}
                 title={props.data.title}
             >
-                <StyleNavi className={props.data.iconClass ? props.data.iconClass : ''}></StyleNavi>
+                <span className={props.data.iconClass ? props.data.iconClass : ''}></span>
                 <span>{ props.vertical ? props.data.verticalText : props.data.text}</span>
             </a>
         );
@@ -79,7 +70,7 @@ function NavItem(props) {
 
     return (
         <span className={`nav-link text-capitalize text-hover-hermo-pink ${props.itemClassName}`} title={props.data.title}>
-            <StyleNavi className={props.data.iconClass ? props.data.iconClass : ''}></StyleNavi>
+            <span className={props.data.iconClass ? props.data.iconClass : ''}></span>
             <span>{ props.vertical ? props.data.verticalText : props.data.text}</span>
         </span>
     );

@@ -6,21 +6,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
 import globalScope from 'globalScope';
 import NavItem from './NavItem/index';
 
 import './style.scss';
-
-const NavContainer = styled.div`
-    position: absolute;
-    top: 0;
-    right: 16px;
-`;
-const UnstyleList = styled.li`
-    list-style: none
-`;
 
 function Navigator(props) {
     const menu = props.items.map((item) => {
@@ -29,9 +19,9 @@ function Navigator(props) {
         }
 
         return (
-            <UnstyleList className="nav-item px-2" key={item.code}>
+            <li className="nav-item px-2" key={item.code} style={{ listStyle: 'none' }}>
                 <NavItem clickHandler={props.clickHandler} vertical={props.vertical} itemClassName={props.itemClassName} data={item}></NavItem>
-            </UnstyleList>
+            </li>
         );
     });
 
@@ -48,13 +38,13 @@ function Navigator(props) {
     }
 
     return (
-        <NavContainer className={props.className}>
+        <div className={props.className} style={{ position: 'absolute', top: 0, right: '16px' }}>
             <nav className="orvar-navbar">
                 <div className="orvar-navbar-nav">
                     {props.items.length && menu}
                 </div>
             </nav>
-        </NavContainer>
+        </div>
     );
 }
 

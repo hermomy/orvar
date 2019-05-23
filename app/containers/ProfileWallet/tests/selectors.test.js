@@ -1,10 +1,10 @@
 import { fromJS } from 'immutable';
-import selectProfileWalletDomain from '../selectors';
+import makeSelectProfileWallet from '../selectors';
 import { initialState } from '../reducer';
 
-describe('selectProfileWalletDomain', () => {
-    it('Expect selector select profileWallet from state', () => {
-        const selector = selectProfileWalletDomain();
+describe('makeSelectProfileWallet', () => {
+    it('Expect makeSelectProfileWallet to return state from reducer', () => {
+        const selector = makeSelectProfileWallet();
         const mock = fromJS({ profileWallet: initialState });
         expect(selector(mock)).toEqual(initialState.toJS());
     });

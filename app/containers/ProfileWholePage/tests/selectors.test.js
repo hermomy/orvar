@@ -1,10 +1,10 @@
 import { fromJS } from 'immutable';
-import selectProfileWholePageDomain from '../selectors';
+import makeSelectProfileWholePage from '../selectors';
 import { initialState } from '../reducer';
 
-describe('selectProfileWholePageDomain', () => {
-    it('Expect selector select profileWholePage from state', () => {
-        const selector = selectProfileWholePageDomain();
+describe('makeSelectProfileWholePage', () => {
+    it('Expect makeSelectProfileWholePage to return state from reducer', () => {
+        const selector = makeSelectProfileWholePage();
         const mock = fromJS({ profileWholePage: initialState });
         expect(selector(mock)).toEqual(initialState.toJS());
     });

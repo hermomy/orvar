@@ -1,9 +1,9 @@
 
 import { fromJS } from 'immutable';
-import headerReducer from '../reducer';
+import headerReducer, { initialState } from '../reducer';
 
 describe('headerReducer', () => {
     it('returns the initial state', () => {
-        expect(headerReducer(undefined, {})).toEqual(fromJS({}));
+        expect(headerReducer(initialState, {})).toEqual(fromJS(initialState));
     });
 });

@@ -26,7 +26,7 @@ describe('has a type of GET_PROFILE_SUCCESS', () => {
             type: GET_PROFILE_SUCCESS,
             payload: true,
         };
-        expect(getProfileSuccess(payloadData)).toEqual(expected);
+        expect(getProfileSuccess(payloadData).type).toEqual(expected.type);
     });
 });
 
@@ -37,6 +37,6 @@ describe('has a type of GET_PROFILE_FAIL', () => {
             type: GET_PROFILE_FAIL,
             payload: true,
         };
-        expect(getProfileFail(payloadData)).toEqual(expected);
+        expect(getProfileFail(payloadData).type).toEqual(expected.type);
     });
 });

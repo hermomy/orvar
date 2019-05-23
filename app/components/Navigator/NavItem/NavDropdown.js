@@ -6,7 +6,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 import { dataChecking } from 'globalUtils';
@@ -14,14 +13,6 @@ import { dataChecking } from 'globalUtils';
 import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
 import './NavDropdown.scss';
 import NavItem from './../NavItem/index';
-
-const DropdownContainer = styled(DropdownContent)`
-    position: absolute;
-    background: ${(props) => props.theme.secondary_bg};
-    width: 500px;
-    height: 300px;
-    right: 16px;
-`;
 
 function NavLi(params) {
     return (
@@ -90,9 +81,9 @@ function NavDropdown(props) {
             <DropdownTrigger>
                 {props.children}
             </DropdownTrigger>
-            <DropdownContainer>
+            <DropdownContent>
                 {sections}
-            </DropdownContainer>
+            </DropdownContent>
         </Dropdown>
     );
 }

@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    layoutTopNav,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    LAYOUT_TOP_NAV,
 } from '../constants';
 
 describe('Header actions', () => {
     describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+        it('has a type of LAYOUT_TOP_NAV', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: LAYOUT_TOP_NAV,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(layoutTopNav()).toEqual(expected);
         });
     });
 });
