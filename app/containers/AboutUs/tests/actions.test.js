@@ -1,7 +1,7 @@
-
 import {
     getCareer,
 } from '../actions';
+
 import {
     GET_CAREER,
 } from '../constants';

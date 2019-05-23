@@ -3,26 +3,32 @@ import {
     getData,
     getDataSuccess,
     getDataFail,
-    getPage,
-    getPageSuccess,
-    getPageFail,
+    getProductSuccess,
+    postWishlist,
 } from '../actions';
 import {
     GET_DATA,
     GET_DATA_SUCCESS,
+    GET_PRODUCT_SUCCESS,
     GET_DATA_FAIL,
-    GET_PAGE,
-    GET_PAGE_SUCCESS,
-    GET_PAGE_FAIL,
+    POST_WISHLIST,
 } from '../constants';
 
 
 describe('getData action', () => {
+    const path = true;
+    const dataType = true;
+    const api = true;
+    const queryParamString = true;
     it('has a type of GETDATA', () => {
         const expected = {
             type: GET_DATA,
+            path,
+            dataType,
+            api,
+            queryParamString,
         };
-        expect(getData()).toEqual(expected);
+        expect(getData(path, dataType, api, queryParamString)).toEqual(expected);
     });
 });
 
@@ -31,44 +37,41 @@ describe('getDataSuccess action', () => {
     it('has a type of GETDATASUCCESS', () => {
         const expected = {
             type: GET_DATA_SUCCESS,
+            data: true,
         };
         expect(getDataSuccess(apiData)).toEqual(expected);
     });
 });
 
 describe('getDataFail action', () => {
+    const error = false;
     it('has a type of GETDATAFAIL', () => {
         const expexted = {
             type: GET_DATA_FAIL,
+            error,
         };
-        expexted(getDataFail().toEqual(expexted));
+        expect(getDataFail(error)).toEqual(expexted);
     });
 });
 
-describe('getPage action', () => {
-    it('has a type of GETPAGE', () => {
+describe('getProductSuccess action', () => {
+    const data = true;
+    it('has a type of GET_PRODUCT_SUCCESS', () => {
         const expected = {
-            type: GET_PAGE,
+            type: GET_PRODUCT_SUCCESS,
+            data,
         };
-        expected(getPage().toEqual(expected));
+        expect(getProductSuccess(data)).toEqual(expected);
     });
 });
 
-describe('getPageSuccess action', () => {
-    const apiData = true;
-    it('has a type of GETPAGESUCCESS', () => {
+describe('postWishlist action', () => {
+    const id = true;
+    it('has a type of POST_WISHLIST', () => {
         const expected = {
-            type: GET_PAGE_SUCCESS,
+            type: POST_WISHLIST,
+            id,
         };
-        expected(getPageSuccess(apiData).toEqual(expected));
-    });
-});
-
-describe('getPageFail action', () => {
-    it('has a type of getPageFail', () => {
-        const expected = {
-            type: GET_PAGE_FAIL,
-        };
-        expected(getPageFail().toEqual(expected));
+        expect(postWishlist(id)).toEqual(expected);
     });
 });

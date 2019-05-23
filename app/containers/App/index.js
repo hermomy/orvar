@@ -12,7 +12,6 @@
  */
 
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -30,6 +29,8 @@ import HerListing from 'containers/HerListing';
 import MallPage from 'containers/MallPage';
 import NotFoundPage from 'containers/NotFoundPage';
 import ProfileWholePage from 'containers/ProfileWholePage';
+import OnboardingPage from 'containers/OnboardingPage';
+// import Cart from 'containers/CartPage';
 import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
 import ProfilePage from 'containers/ProfilePage';
@@ -51,12 +52,6 @@ import {
     fetchConfig,
 } from './actions';
 
-const topbarHeight = '40px';
-
-const HershopContent = styled.div`
-    // margin-top: ${topbarHeight};
-`;
-
 export class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     componentDidMount() {
         this.props.dispatch(fetchConfig());
@@ -66,29 +61,26 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
         return (
             <section>
                 <Notify></Notify>
-                <HershopContent id="hershop-content-container">
+                <div id="hershop-content-container" style={{ marginTop: '40px' }}>
                     <Header />
                     <Switch>
                         <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />
+                        <Route exact={true} path="/onboarding" component={globalScope.token ? OnboardingPage : LoginForm} />
                         <Route exact={true} path="/logout" component={LogoutForm} />
-                        <Route exact={true} path="/mall" render={() => <MallPage urlType="normalurl" />} />
-                        <Route exact={true} path="/mall/page-:pageNum?" render={() => <MallPage urlType="normalurl" />} />
+                        <Route exact={true} path="/mall" render={() => <MallPage />} />
+                        <Route exact={true} path="/mall/page-:pageNum?" render={() => <MallPage />} />
                         <Route
                             exact={true}
                             path="/mall/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?/:subCategoryQueries?/page-:pageNum(\d+)"
                             render={() => (
-                                <MallPage
-                                    urlType="normalurl"
-                                />
+                                <MallPage />
                             )}
                         />
                         <Route
                             exact={true}
                             path="/mall/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries/:subCategoryQueries"
                             render={() => (
-                                <MallPage
-                                    urlType="normalurl"
-                                />
+                                <MallPage />
                             )}
                         />
 
@@ -96,18 +88,14 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                             exact={true}
                             path="/mall/groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?/page-:pageNum(\d+)"
                             render={() => (
-                                <MallPage
-                                    urlType="normalurl"
-                                />
+                                <MallPage />
                             )}
                         />
                         <Route
                             exact={true}
                             path="/mall/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?"
                             render={() => (
-                                <MallPage
-                                    urlType="normalurl"
-                                />
+                                <MallPage />
                             )}
                         />
 
@@ -192,7 +180,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         <Route path="" component={NotFoundPage} />
                     </Switch>
                     <TabBar />
-                </HershopContent>
+                </div>
             </section>
         );
     }

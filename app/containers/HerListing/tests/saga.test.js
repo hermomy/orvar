@@ -15,18 +15,26 @@ import {
     getDataSuccess,
     getDataFail,
 } from '../actions';
-import herListingSaga, { fetchData } from '../saga';
+import herListingSaga, { fetchData, postWishlistWorker } from '../saga';
 import {
     GET_DATA,
+    POST_WISHLIST,
 } from '../constants';
 
 describe('herlisting Saga', () => {
     const api = 'https://fake.url';
-
     it('Expect GET_DATA to trigger fetchData', () => {
         const generator = herListingSaga();
         expect(generator.next().value).toEqual([
             takeLatest(GET_DATA, fetchData),
+        ]);
+    });
+
+    it('ExpectGET_DATA and POST_WISHLIST to trigger fetchData and postWishlistWorker', () => {
+        const generator = herListingSaga();
+        expect(generator.next().value).toEqual([
+            takeLatest(GET_DATA, fetchData),
+            takeLatest(POST_WISHLIST, postWishlistWorker),
         ]);
     });
 

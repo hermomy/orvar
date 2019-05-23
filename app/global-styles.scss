@@ -68,3 +68,61 @@ ol, ul { margin: 0; padding-left: 2rem; }
 .text-right { text-align: right }
 
 .posi-relative { position: relative; }
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+body { font-family: "Poppins", sans-serif; }
+
+#app {
+    background-color: #fafafa;
+    min-height: 100%;
+    min-width: 100%;
+}
+
+p,
+label {
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    line-height: 1.5em;
+}
+
+.text-white {
+    color: white;
+}
+
+.text-hover-hermo-pink:hover,
+.text-hover-hermo-pink:focus {
+    color: #FF0066;
+}
+
+.text-main-color {
+    color: white;
+}
+
+.bg-main-color {
+    background-color: black;
+}
+
+.text-secondary-color {
+    color: #660033;
+}
+
+.bg-secondary-color {
+    background-color: #FDFDFD;
+}
+
+.text-tertiary-color {
+    color: #FF0068;
+}
+
+.bg-tertiary-color {
+    background-color: gold;
+}
+
+.bg-white {
+    background-color: white;
+}

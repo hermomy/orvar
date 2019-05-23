@@ -34,8 +34,13 @@ class FilterSort extends React.PureComponent { // eslint-disable-line react/pref
     }
 
     toggleFilter = (item) => {
+        let key;
         if (item.items) {
-            const key = `${item.key}_${item.id}`;
+            if (item.key && item.id) {
+                key = `${item.key}_${item.id}`;
+            } else {
+                key = `${item.text}`;
+            }
             const obj = { ...this.state.selectedToggle };
             obj[key] = !obj[key];
             this.setState({ selectedToggle: obj });
@@ -74,7 +79,7 @@ class FilterSort extends React.PureComponent { // eslint-disable-line react/pref
                     </div>
                     <div className="filter-children-div ml-1">
                         {
-                            dataChecking(this.state.selectedToggle, `${filter.key}_${filter.id}`) ?
+                            dataChecking(this.state.selectedToggle, `${filter.key}_${filter.id}`) || dataChecking(this.state.selectedToggle, `${filter.text}`) ?
                                 this.renderFilter(filter.items)
                                 : null
                         }

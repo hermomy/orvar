@@ -19,9 +19,8 @@ export function* WishlistDataWorker(action) {
 
 export function* DeleteWishlistWorker(action) {
     const res = yield call(apiRequest, `/wishlist/${action.productId}`, 'delete');
-    console.log(res);
     if (res && res.ok) {
-        yield put(getWishlist(action));
+        yield put(getWishlist(action.pageNumber));
     } else {
         yield put(getWishlistFail(res.data));
     }

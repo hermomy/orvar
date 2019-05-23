@@ -15,12 +15,13 @@ class PageChanger extends React.PureComponent { // eslint-disable-line react/pre
 
     changePage = (link, pageNum) => {
         this.props.changePage(link, pageNum);
+        this.setState({ activatedPage: pageNum });
     }
 
     renderPageChanger = () => {
-        if (this.props.productData._meta.pageCount <= 1) {
-            return null;
-        }
+        // if (this.props.productData._meta.pageCount <= 1) {
+        //     return null;
+        // }
         const link = this.props.productData._links;
         const meta = this.props.productData._meta;
         return (
@@ -74,7 +75,7 @@ class PageChanger extends React.PureComponent { // eslint-disable-line react/pre
                         null
                 }
                 {
-                    meta.pageCount - meta.currentPage < 3 ?
+                    meta.pageCount - meta.currentPage < 3 && meta.currentPage !== 1 ?
                         null
                         :
                         <span className="paginator-button pagination-word">...</span>

@@ -1,7 +1,7 @@
-
 import {
     getInformChoice,
 } from '../actions';
+
 import {
     GET_INFORM_CHOICE,
 } from '../constants';

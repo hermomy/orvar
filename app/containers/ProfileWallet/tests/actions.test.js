@@ -1,7 +1,7 @@
-
 import {
     getVoucher,
 } from '../actions';
+
 import {
     GET_VOUCHER,
 } from '../constants';

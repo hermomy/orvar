@@ -1,7 +1,7 @@
-
 import {
     mainGetProfile,
 } from '../actions';
+
 import {
     MAIN_GET_PROFILE,
 } from '../constants';

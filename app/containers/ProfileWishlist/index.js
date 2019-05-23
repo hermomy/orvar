@@ -9,44 +9,52 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { dataChecking } from 'globalUtils';
+import { apiRequest, combineObject } from 'globalUtils';
+import Async from 'react-async';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import ProductCard from 'components/ProductCard';
-import Pagination from 'components/Pagination';
+import PageChanger from 'components/PageChanger';
 
 import makeSelectProfileWishlist from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { getWishlist, deleteWishlist } from './actions';
 import './style.scss';
 
+const wishlistData = async (API) => {
+    if (API.b.runpermit) {
+        await apiRequest(API.b.URL, 'delete');
+    }
+    return apiRequest(API.a.URL, 'get');
+};
+
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-    componentWillMount() {
-        this.props.dispatch(getWishlist());
+    state = {
+        page: 1,
+        getProductURL: {
+            URL: '/wishlist?page=1',
+        },
+        deleteProduct: {
+            URL: '/wishlist/-1',
+            runpermit: false,
+        },
     }
 
-    renderPagination = () => {
-        if (!dataChecking(this.props, 'profileWishlist', 'data')) {
-            return null;
-        }
-        return (
-            <Pagination
-                parentProps={this.props}
-                meta={this.props.profileWishlist.data._meta}
-                link={this.props.profileWishlist.data._links}
-                goToPage={1}
-                isHerlisting={false}
-                callBack={(targetpage) => { this.props.dispatch(getWishlist(targetpage)); }}
+    renderPageChanger = (data) => (
+        <div>
+            <PageChanger
+                productData={data.data}
+                pagenum={1}
+                changePage={(link, pageNum) => {
+                    this.setState({ getProductURL: { URL: `/wishlist?page=${pageNum}` } });
+                }}
             />
-        );
-    }
+        </div>
+    );
 
-    renderProductCard = () => {
-        if (!dataChecking(this.props, 'profileWishlist', 'data', 'items')) {
-            return null;
-        }
-        return this.props.profileWishlist.data.items.map((item, index) => (
+    renderProductCard = (data) => {
+        Object.assign(this.state.deleteProduct, { runpermit: false });
+        return data.data.items.map((item, index) => (
             <div
                 className="product-card-div"
                 key={index}
@@ -54,25 +62,39 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                 <ProductCard
                     product={item.product}
                     review={false}
-                    // price={false}
+                    price={false}
                     url={item.product.brand.url}
                     listViewMode={true}
                     allowDelete={true}
                     allowWishlistButton={false}
-                    deleteFromWishlist={() => { this.props.dispatch(deleteWishlist(item.id)); }}
+                    deleteFromWishlist={
+                        () => {
+                            this.setState({ deleteProduct: { URL: `/wishlist/${item.id}`, runpermit: true } });
+                        }
+                    }
                 />
             </div>
         ));
-    }
+    };
 
     render() {
         return (
-            <div>
-                {this.renderPagination()}
-                <div className="grid-view">
-                    {this.renderProductCard()}
-                </div>
-            </div>
+            <Async promise={wishlistData(combineObject(this.state.getProductURL, this.state.deleteProduct))}>
+                <Async.Loading>Loading... ProductCard</Async.Loading>
+                <Async.Resolved>
+                    {(data) => (
+                        <div>
+                            {this.renderPageChanger(data)}
+                            <div className="grid-view">
+                                {this.renderProductCard(data)}
+                            </div>
+                        </div>
+                    )}
+                </Async.Resolved>
+                <Async.Rejected>
+                    { console.error }
+                </Async.Rejected>
+            </Async>
         );
     }
 }

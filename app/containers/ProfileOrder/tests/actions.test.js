@@ -1,7 +1,7 @@
-
 import {
     getOrder,
 } from '../actions';
+
 import {
     GET_ORDER,
 } from '../constants';

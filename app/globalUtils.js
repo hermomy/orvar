@@ -22,7 +22,6 @@ const addHeaderToAPI = (apiString) => {
         },
         timeout: 30000,
     });
-
     return api;
 };
 
@@ -68,6 +67,17 @@ export const dataChecking = (object, ...argsArr) => {
         obj = obj[args[i]];
     }
     return obj;
+};
+
+export const combineObject = (...argsArr) => {
+    const i = ['a', 'b', 'c', 'd'];
+    const WholeObject = {};
+    let count = 0;
+    // eslint-disable-next-line array-callback-return
+    argsArr.map((prop) => {
+        WholeObject[i[count++]] = prop;
+    });
+    return WholeObject;
 };
 
 /**

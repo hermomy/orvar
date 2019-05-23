@@ -35,7 +35,7 @@ function profileEditInformReducer(state = initialState, action) {
             return state
                 .set('data', Object.assign({ ...state.get('data') }, action.payload))
                 .set('loading', false)
-                .set('success', false);
+                .set('success', true);
         case GET_DATA_FAIL:
             return state
                 .set('loading', false)

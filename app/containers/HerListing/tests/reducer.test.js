@@ -1,11 +1,11 @@
 
 import { fromJS } from 'immutable';
-import { getData,
-        getDataSuccess,
-        getDataFail,
-        getPage,
-        getPageSuccess,
-        getPageFail,
+import {
+    getData,
+    getDataSuccess,
+    getProductSuccess,
+    getDataFail,
+    postWishlist,
 } from '../actions';
 import herListingReducer from '../reducer';
 
@@ -38,21 +38,15 @@ describe('herListingReducer', () => {
         done();
     });
 
-    it('expect reducer return when try to getpage', (done) => {
-        const expected = initialState.set('loading', true);
-        expect(herListingReducer(initialState, getPage('https://api.hermo.my/mall'))).toEqual(expected);
+    it('expect reducer return when success to getProductSuccess', (done) => {
+        const expected = initialState.set('data', {}).set('getDataSuccess', true).set('loading', false).set('error', false);
+        expect(herListingReducer(initialState, getProductSuccess('https://api.hermo.my/mall'))).toEqual(expected);
         done();
     });
 
-    it('expect reducer return when success to getpage', (done) => {
-        const expected = initialState.set('data', successData).set('loading', false);
-        expect(herListingReducer(initialState, getPageSuccess(successData))).toEqual(expected);
-        done();
-    });
-
-    it('xpect reducer return when fail to getpage', (done) => {
-        const expected = initialState.set('loading', false);
-        expect(herListingReducer(initialState, getPageFail())).toEqual(expected);
+    it('expect reducer return when try to postWishlist', (done) => {
+        const expected = initialState.set('loading', true).set('success', false);
+        expect(herListingReducer(initialState, postWishlist(successData))).toEqual(expected);
         done();
     });
 });

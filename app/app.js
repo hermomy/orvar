@@ -12,13 +12,11 @@ import { NotificationContainer } from 'react-notifications';
 
 // Import all the third party stuff
 import React from 'react';
-import styled, { ThemeProvider } from 'styled-components';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
-import theme from 'theme';
-
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 // Import root app
 import App from 'containers/App';
 
@@ -42,22 +40,9 @@ import '!file-loader?name=[name].[ext]!./manifest.json';
 import 'file-loader?name=[name].[ext]!./.htaccess';
 /* eslint-enable import/no-unresolved, import/extensions */
 
+import 'global-styles.scss';
 import configureStore from './configureStore';
 import { translationMessages } from './i18n';
-import './global-styles';
-
-
-const topbarHeight = '40px';
-
-export const HershopTopbar = styled.div`
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 2000;
-    position: sticky;
-    height: ${topbarHeight};
-    background-color: ${(props) => props.theme.main_bg};
-`;
 
 // Create redux store with history
 const initialState = {};
@@ -65,18 +50,80 @@ const history = createHistory();
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: '#660033',
+        },
+        secondary: {
+            main: '#ff146A',
+        },
+        disabled: {
+            main: '#fafafa',
+        },
+    },
+    overrides: {
+        MuiAvatar: {
+            root: {
+                display: 'inline-flex',
+            },
+            img: {
+                height: '65px',
+                width: '65px',
+            },
+        },
+        MuiCard: {
+            root: {
+                width: '296px',
+                height: '192px',
+            },
+        },
+        MuiTypography: {
+            subtitle2: {
+                color: '#660033',
+                display: 'inline',
+            },
+            subtitle1: {
+                color: '#660033',
+                display: 'inline',
+            },
+            h6: {
+                color: 'rgba(0,0,0,0.26)',
+            },
+        },
+        MuiButton: {
+            root: {
+                color: '#ff146A',
+            },
+            outlined: {
+                border: '1px solid #ff146A',
+            },
+        },
+        MuiPaper: {
+            root: {
+                display: 'inline-flex',
+                marginLeft: '8px',
+                marginRight: '8px',
+            },
+        },
+    },
+    typography: {
+        fontFamily: 'Poppins',
+    },
+});
+
 const render = (messages) => {
     ReactDOM.render(
         <Provider store={store}>
             <LanguageProvider messages={messages}>
-                <ThemeProvider theme={theme}>
-                    <ConnectedRouter history={history}>
+                <ConnectedRouter history={history}>
+                    <MuiThemeProvider theme={theme}>
                         <div>
                             <NotificationContainer />
                             <App />
                         </div>
-                    </ConnectedRouter>
-                </ThemeProvider>
+                    </MuiThemeProvider>
+                </ConnectedRouter>
             </LanguageProvider>
         </Provider>,
         MOUNT_NODE

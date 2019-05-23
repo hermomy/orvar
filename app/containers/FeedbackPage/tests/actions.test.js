@@ -1,7 +1,7 @@
-
 import {
     postFeedback,
 } from '../actions';
+
 import {
     POST_FEEDBACK,
 } from '../constants';
