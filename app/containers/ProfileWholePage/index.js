@@ -23,7 +23,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
-import Collapse from '@material-ui/core/Collapse';
+import CircularProgress from '@material-ui/core/CircularProgress';
+// import Collapse from '@material-ui/core/Collapse';
 import AccountBalanceWallet from '@material-ui/icons/AccountBalanceWallet';
 import LocalShippingTwoTone from '@material-ui/icons/LocalShippingTwoTone';
 import LocationOn from '@material-ui/icons/LocationOn';
@@ -32,8 +33,8 @@ import AttachMoney from '@material-ui/icons/AttachMoney';
 import CreditCard from '@material-ui/icons/CreditCard';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import AddShoppingCart from '@material-ui/icons/AddShoppingCart';
-import ArrowLeft from '@material-ui/icons/ArrowLeft';
-import ArrowRight from '@material-ui/icons/ArrowRight';
+// import ArrowLeft from '@material-ui/icons/ArrowLeft';
+// import ArrowRight from '@material-ui/icons/ArrowRight';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 
@@ -251,7 +252,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                 title={<Typography variant="h6" align="left">My Wallet</Typography>}
             />
             <Grid container={true} spacing={0} justify="center" alignItems="center">
-                {
+                {/* {
                     this.props.width === 'md' || this.props.width === 'sm' ?
                         <Grid item={true}>
                             <Button
@@ -266,50 +267,50 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                         </Grid>
                     :
                     null
-                }
+                } */}
                 <Grid item={true}>
                     {
-                        !this.props.width ?
-                            <CardContent style={{ padding: '0px' }}>
-                                <Collapse in={this.state.checked === 1}>
-                                    <Card className={this.props.classes.smallCard}>
-                                        <CardContent>
-                                            <Avatar aria-label="AttachMoney">
-                                                <AttachMoney />
-                                            </Avatar>
-                                            <Typography variant="h6" align="left">Balance</Typography>
-                                            <Typography>{data.data.profile.balance.usable}</Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Collapse>
-                                <Collapse in={this.state.checked === 2}>
-                                    <Card className={this.props.classes.smallCard}>
-                                        <CardContent>
-                                            <Avatar aria-label="CreditCard">
-                                                <CreditCard />
-                                            </Avatar>
-                                            <Typography variant="h6" align="left">Credit</Typography>
-                                            <Typography>{data.data.profile.credit.usable}</Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Collapse>
-                                <Collapse in={this.state.checked === 3}>
-                                    <Card className={this.props.classes.smallCard}>
-                                        <CardContent>
-                                            <Avatar aria-label="AccountBalanceWallet">
-                                                <AccountBalanceWallet />
-                                            </Avatar>
-                                            <Typography variant="h6" align="left">Voucher</Typography>
-                                            <Typography>{data.data.profile.voucher.usable}</Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Collapse>
-                            </CardContent>
-                        :
+                        // !this.props.width ?
+                        //     <CardContent style={{ padding: '0px' }}>
+                        //         <Collapse in={this.state.checked === 1}>
+                        //             <Card className={this.props.classes.smallCard}>
+                        //                 <CardContent>
+                        //                     <Avatar aria-label="AttachMoney">
+                        //                         <AttachMoney />
+                        //                     </Avatar>
+                        //                     <Typography variant="h6" align="left">Balance</Typography>
+                        //                     <Typography>{data.data.profile.balance.usable}</Typography>
+                        //                 </CardContent>
+                        //             </Card>
+                        //         </Collapse>
+                        //         <Collapse in={this.state.checked === 2}>
+                        //             <Card className={this.props.classes.smallCard}>
+                        //                 <CardContent>
+                        //                     <Avatar aria-label="CreditCard">
+                        //                         <CreditCard />
+                        //                     </Avatar>
+                        //                     <Typography variant="h6" align="left">Credit</Typography>
+                        //                     <Typography>{data.data.profile.credit.usable}</Typography>
+                        //                 </CardContent>
+                        //             </Card>
+                        //         </Collapse>
+                        //         <Collapse in={this.state.checked === 3}>
+                        //             <Card className={this.props.classes.smallCard}>
+                        //                 <CardContent>
+                        //                     <Avatar aria-label="AccountBalanceWallet">
+                        //                         <AccountBalanceWallet />
+                        //                     </Avatar>
+                        //                     <Typography variant="h6" align="left">Voucher</Typography>
+                        //                     <Typography>{data.data.profile.voucher.usable}</Typography>
+                        //                 </CardContent>
+                        //             </Card>
+                        //         </Collapse>
+                        //     </CardContent>
+                        // :
                         this.getWalletData(data)
                     }
                 </Grid>
-                {
+                {/* {
                     this.props.width === 'md' || this.props.width === 'sm' ?
                         <Grid item={true}>
                             <Button
@@ -324,7 +325,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                         </Grid>
                     :
                     null
-                }
+                } */}
             </Grid>
         </Card>
     )
@@ -462,23 +463,23 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
 
     render() {
         return (
-            <div align="center" className="container">
+            <div align="center" className="container" style={{ backgroundColor: '#fff' }}>
                 <Async promise={getData(this.state.callAPI)}>
-                    <Async.Loading>Loading... Page</Async.Loading>
+                    <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                     <Async.Resolved>
                         {(data) => (
                             <div>
-                                <div className="mt-1">
-                                    <Hidden smDown={true}>
-                                        <Typography style={{ float: 'left' }} >Profile</Typography>
-                                        <Typography inline={true}>Welcome to your HERMO profile Dashboard</Typography>
-                                    </Hidden>
-                                    <Hidden xsDown={true}>
-                                        <Typography style={{ float: 'right' }} >Continue Shopping</Typography>
-                                    </Hidden>
-                                </div>
                                 {this.renderSmallScreenProfileCard(data[0])}
-                                <div className={this.props.width === 'xs' ? '' : this.props.classes.pageContainer} justify="center">
+                                <div className={`${this.props.width === 'xs' ? '' : this.props.classes.pageContainer}`} style={{ padding: `${this.props.width === 'md' || this.props.width === 'sm' || this.props.width === 'xs' ? '16px' : '24px'}` }} justify="center">
+                                    <div className="pt-1">
+                                        <Hidden only="xs">
+                                            <Typography style={{ float: 'left' }} >Profile</Typography>
+                                            <Typography inline={true}>Welcome to your HERMO profile Dashboard</Typography>
+                                        </Hidden>
+                                        <Hidden xsDown={true}>
+                                            <Typography style={{ float: 'right' }} >Continue Shopping</Typography>
+                                        </Hidden>
+                                    </div>
                                     {this.renderProfileCard(data[0])}
                                     <Grid container={true} style={{ paddingTop: '0px' }}>
                                         <Grid item={true} xs={12} md={6} lg={3}>

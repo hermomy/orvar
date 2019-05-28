@@ -61,7 +61,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
         return (
             <section>
                 <Notify></Notify>
-                <div id="hershop-content-container" style={{ marginTop: '40px' }}>
+                <div id="hershop-content-container">
                     <Header />
                     <Switch>
                         <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />

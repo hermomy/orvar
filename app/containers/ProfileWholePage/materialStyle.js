@@ -1,6 +1,6 @@
 const styles = {
     pageContainer: {
-        width: '100%',
+        // width: '100%',
         justifyContent: 'center',
     },
     userImage: {
@@ -13,7 +13,7 @@ const styles = {
         textAlign: 'justify',
     },
     longCard: {
-        width: '99%',
+        width: '98.7%',
     },
     bigCard: {
         marginTop: '2rem',
@@ -30,7 +30,7 @@ const styles = {
         alignItems: 'unset',
     },
     smallCard: {
-        width: '68px',
+        width: '70px',
         // width: '95px',
         height: '110px',
         justifyContent: 'center',
@@ -47,6 +47,9 @@ const styles = {
     },
     walletButton: {
         minWidth: '0',
+    },
+    progress: {
+        margin: '0 auto',
     },
 };
 
