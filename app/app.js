@@ -89,6 +89,7 @@ const theme = createMuiTheme({
             },
             h6: {
                 color: 'rgba(0,0,0,0.26)',
+                display: 'inline',
             },
         },
         MuiButton: {

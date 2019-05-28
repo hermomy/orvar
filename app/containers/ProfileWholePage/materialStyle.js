@@ -21,6 +21,10 @@ const styles = {
         flexDirection: 'column',
         justify: 'center',
     },
+    bigShortCard: {
+        height: '250px',
+        // boxShadow: 'none',
+    },
     mediumCard: {
         width: '95%',
         flexDirection: 'column',

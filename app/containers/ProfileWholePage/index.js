@@ -24,6 +24,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Divider from '@material-ui/core/Divider';
 // import Collapse from '@material-ui/core/Collapse';
 import AccountBalanceWallet from '@material-ui/icons/AccountBalanceWallet';
 import LocalShippingTwoTone from '@material-ui/icons/LocalShippingTwoTone';
@@ -33,7 +34,12 @@ import AttachMoney from '@material-ui/icons/AttachMoney';
 import CreditCard from '@material-ui/icons/CreditCard';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import AddShoppingCart from '@material-ui/icons/AddShoppingCart';
-// import ArrowLeft from '@material-ui/icons/ArrowLeft';
+import Create from '@material-ui/icons/Create';
+import CardGiftcard from '@material-ui/icons/CardGiftcard';
+import AccountBox from '@material-ui/icons/AccountBox';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import PersonPinCircle from '@material-ui/icons/PersonPinCircle';
+// import ArrowLeft from '@material-ui/icons/ArrowLeft';from '@material-ui/icons/CardGiftcard';
 // import ArrowRight from '@material-ui/icons/ArrowRight';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
@@ -114,7 +120,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         this.props.history.push(`/profile/${tempsubpage}`);
     }
 
-    renderProfileCard = (data) => {
+    renderOldProfileCard = (data) => {
         this.setState({ callAPI: false });
         let concernString = '';
         // eslint-disable-next-line array-callback-return
@@ -208,6 +214,42 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
             </Hidden>
         );
     }
+
+    renderProfileCard = (data) => (
+        <Card className={this.props.classes.bigShortCard} style={{ width: `${this.props.width === 'xs' || this.props.width === 'sm' ? '95%' : '97.5%'}` }}>
+            <Grid container={true} spacing={0} alignItems="true">
+                <Grid item={true} xs={4}>
+                    <CardContent style={{ textAlign: 'left' }}>
+                        <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} />
+                        <br /><br />
+                        <Typography variant="h6" color="primary">{data.data.profile.name}</Typography><br />
+                        <Typography variant="h6" color="primary">Edit Profile</Typography>
+                        <Create /><br />
+                        <CardGiftcard />
+                        <Typography variant="h6" color="primary"> {data.data.profile.membership.name}</Typography>
+                    </CardContent>
+                </Grid>
+                <Grid item={true} xs={8}>
+                    <CardContent>
+                        <AccountBox />
+                        <Typography variant="h6" color="primary">{data.data.profile.membership.name} Skin Details </Typography>
+                        <ChevronRight />
+                        <br /><br /><br />
+                        <Divider />
+                        <Grid container={true} spacing={0}>
+                            <Grid item={true} xs={2}>
+                                <PersonPinCircle />
+                            </Grid>
+                            <Grid item={true} xs={10}>
+                                <Typography variant="h6" color="primary">Update Your attendance here today !</Typography>
+                                <Typography variant="h6" color="primary">{data.data.attendance.current}/10 Yes! I&#183;m Here</Typography>
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                </Grid>
+            </Grid>
+        </Card>
+    )
 
     renderSmallScreenProfileCard = (data) => (
         <Hidden smUp={true}>
@@ -480,7 +522,15 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                                             <Typography style={{ float: 'right' }} >Continue Shopping</Typography>
                                         </Hidden>
                                     </div>
-                                    {this.renderProfileCard(data[0])}
+                                    {/* {this.renderOldProfileCard(data[0])} */}
+                                    <Grid container={true} justify="center">
+                                        <Grid item={true} lg={6} xs={12}>
+                                            {this.renderProfileCard(data[0])}
+                                        </Grid>
+                                        <Grid item={true} lg={6} xs={12}>
+                                            {this.renderCart(data[4])}
+                                        </Grid>
+                                    </Grid>
                                     <Grid container={true} style={{ paddingTop: '0px' }}>
                                         <Grid item={true} xs={12} md={6} lg={3}>
                                             {this.renderWallet(data[0])}
