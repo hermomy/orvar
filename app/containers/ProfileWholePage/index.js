@@ -269,7 +269,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                 }
                 <Grid item={true}>
                     {
-                        this.props.width === 'md' || this.props.width === 'sm' ?
+                        !this.props.width ?
                             <CardContent style={{ padding: '0px' }}>
                                 <Collapse in={this.state.checked === 1}>
                                     <Card className={this.props.classes.smallCard}>
@@ -462,13 +462,13 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
 
     render() {
         return (
-            <div align="center">
+            <div align="center" className="container">
                 <Async promise={getData(this.state.callAPI)}>
                     <Async.Loading>Loading... Page</Async.Loading>
                     <Async.Resolved>
                         {(data) => (
                             <div>
-                                <div style={{ width: '80%' }} className="mt-1">
+                                <div className="mt-1">
                                     <Hidden smDown={true}>
                                         <Typography style={{ float: 'left' }} >Profile</Typography>
                                         <Typography inline={true}>Welcome to your HERMO profile Dashboard</Typography>

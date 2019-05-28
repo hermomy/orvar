@@ -1,6 +1,6 @@
 const styles = {
     pageContainer: {
-        width: '85%',
+        width: '100%',
         justifyContent: 'center',
     },
     userImage: {
@@ -13,7 +13,7 @@ const styles = {
         textAlign: 'justify',
     },
     longCard: {
-        width: '98.7%',
+        width: '99%',
     },
     bigCard: {
         marginTop: '2rem',
