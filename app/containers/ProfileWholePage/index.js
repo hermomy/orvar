@@ -84,28 +84,22 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         <div>
             <Card className={this.props.classes.smallCard}>
                 <CardContent>
-                    <Avatar aria-label="AttachMoney">
-                        <AttachMoney />
-                    </Avatar>
-                    <Typography variant="h6" align="left">Balance</Typography>
+                    <AttachMoney />
+                    <Typography align="left">Balance</Typography>
                     <Typography>{data.data.profile.balance.usable}</Typography>
                 </CardContent>
             </Card>
             <Card className={this.props.classes.smallCard}>
                 <CardContent>
-                    <Avatar aria-label="CreditCard">
-                        <CreditCard />
-                    </Avatar>
-                    <Typography variant="h6" align="left">Credit</Typography>
+                    <CreditCard />
+                    <Typography align="left">Credit</Typography>
                     <Typography>{data.data.profile.credit.usable}</Typography>
                 </CardContent>
             </Card>
             <Card className={this.props.classes.smallCard}>
                 <CardContent>
-                    <Avatar aria-label="AccountBalanceWallet">
-                        <AccountBalanceWallet />
-                    </Avatar>
-                    <Typography variant="h6" align="left">Voucher</Typography>
+                    <AccountBalanceWallet />
+                    <Typography align="left">Voucher</Typography>
                     <Typography>{data.data.profile.voucher.usable}</Typography>
                 </CardContent>
             </Card>
@@ -137,9 +131,15 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
             <Hidden xsDown={true}>
                 <div style={{ alignItems: 'center', position: 'relative' }}>
                     <Card className={this.props.classes.longCard}>
-                        <div style={{ borderLeft: '1.5px solid #F3EFEE', height: '150px', position: 'absolute', left: '25%', top: '25px' }}></div>
-                        <div style={{ borderLeft: '1.5px solid #F3EFEE', height: '150px', position: 'absolute', left: '50%', top: '25px' }}></div>
-                        <div style={{ borderLeft: '1.5px solid #F3EFEE', height: '150px', position: 'absolute', left: '75%', top: '25px' }}></div>
+                        {/* <Hidden only="xl">
+                            <div style={{ borderLeft: '1.5px solid #F3EFEE', height: '150px', position: 'absolute', left: '25%', top: '25px' }}></div>
+                            <div style={{ borderLeft: '1.5px solid #F3EFEE', height: '150px', position: 'absolute', left: '50%', top: '25px' }}></div>
+                            <div style={{ borderLeft: '1.5px solid #F3EFEE', height: '150px', position: 'absolute', left: '75%', top: '25px' }}></div>
+                        </Hidden>
+                        <Hidden only="md">
+                            <div style={{ borderLeft: '1.5px solid #F3EFEE', height: '150px', position: 'absolute', left: '33%', top: '25px' }}></div>
+                            <div style={{ borderLeft: '1.5px solid #F3EFEE', height: '150px', position: 'absolute', left: '66%', top: '25px' }}></div>
+                        </Hidden> */}
                         <Grid container={true} spacing={8} alignItems="center">
                             <Grid item={true} lg={3} md={4} sm={6}>
                                 <CardContent>
@@ -257,10 +257,11 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                             <Button
                                 onClick={() => { this.setState({ checked: this.state.checked - 1 }); }}
                                 disabled={this.state.checked === 1}
+                                classes={{
+                                    root: this.props.classes.walletButton,
+                                }}
                             >
-                                <Avatar>
-                                    <ArrowLeft />
-                                </Avatar>
+                                <ArrowLeft />
                             </Button>
                         </Grid>
                     :
@@ -314,10 +315,11 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                             <Button
                                 onClick={() => { this.setState({ checked: this.state.checked + 1 }); }}
                                 disabled={this.state.checked === 3}
+                                classes={{
+                                    root: this.props.classes.walletButton,
+                                }}
                             >
-                                <Avatar>
-                                    <ArrowRight />
-                                </Avatar>
+                                <ArrowRight />
                             </Button>
                         </Grid>
                     :
@@ -395,7 +397,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                 title={<Typography variant="h6" align="left">My Wishlist</Typography>}
             />
             <CardContent>
-                <Grid container={true} justify="center">
+                <Grid container={true} justify="center" spacing={0}>
                     {
                         data.data.items.slice(0, this.props.width === 'xs' ? 4 : 6).map((item, index) => (
                             <Grid xs={6} sm={4} item={true} key={index}>
@@ -479,24 +481,24 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                                 <div className={this.props.width === 'xs' ? '' : this.props.classes.pageContainer} justify="center">
                                     {this.renderProfileCard(data[0])}
                                     <Grid container={true} style={{ paddingTop: '0px' }}>
-                                        <Grid item={true} xs={12} sm={6} md={3}>
+                                        <Grid item={true} xs={12} md={6} lg={3}>
                                             {this.renderWallet(data[0])}
                                         </Grid>
-                                        <Grid item={true} xs={12} sm={6} md={3}>
+                                        <Grid item={true} xs={12} md={6} lg={3}>
                                             {this.renderOrder(data[1])}
                                         </Grid>
-                                        <Grid item={true} xs={12} sm={6} md={3}>
+                                        <Grid item={true} xs={12} md={6} lg={3}>
                                             {this.renderAddress(data[2])}
                                         </Grid>
-                                        <Grid item={true} xs={12} sm={6} md={3}>
+                                        <Grid item={true} xs={12} md={6} lg={3}>
                                             {this.renderSetting()}
                                         </Grid>
                                     </Grid>
                                     <Grid container={true} style={{ paddingTop: '0px' }} justify="center">
-                                        <Grid item={true} md={6} xs={12}>
+                                        <Grid item={true} lg={6} xs={12}>
                                             {this.renderWishList(data[3])}
                                         </Grid>
-                                        <Grid item={true} md={6} xs={12}>
+                                        <Grid item={true} lg={6} xs={12}>
                                             {this.renderCart(data[4])}
                                         </Grid>
                                     </Grid>

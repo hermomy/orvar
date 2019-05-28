@@ -30,7 +30,7 @@ const styles = {
         alignItems: 'unset',
     },
     smallCard: {
-        width: '75px',
+        width: '68px',
         // width: '95px',
         height: '110px',
         justifyContent: 'center',
@@ -44,6 +44,9 @@ const styles = {
     smallScreenLongCard: {
         width: '100%',
         height: '182px',
+    },
+    walletButton: {
+        minWidth: '0',
     },
 };
 
