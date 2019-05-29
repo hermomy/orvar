@@ -72,10 +72,23 @@ const theme = createMuiTheme({
                 width: '65px',
             },
         },
+        MuiBadge: {
+            badge: {
+                height: '10px',
+                minWidth: '10px',
+                right: '5px',
+                top: '2px',
+            },
+        },
         MuiCard: {
             root: {
                 width: '296px',
                 height: '192px',
+            },
+        },
+        MuiCardHeader: {
+            content: {
+                flex: 'none',
             },
         },
         MuiTypography: {

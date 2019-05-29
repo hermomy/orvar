@@ -39,6 +39,11 @@ import CardGiftcard from '@material-ui/icons/CardGiftcard';
 import AccountBox from '@material-ui/icons/AccountBox';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import PersonPinCircle from '@material-ui/icons/PersonPinCircle';
+import MailOutline from '@material-ui/icons/MailOutline';
+import ChatBubbleOutline from '@material-ui/icons/ChatBubbleOutline';
+import Assignment from '@material-ui/icons/Assignment';
+import Zoom from '@material-ui/core/Zoom';
+import Badge from '@material-ui/core/Badge';
 // import ArrowLeft from '@material-ui/icons/ArrowLeft';from '@material-ui/icons/CardGiftcard';
 // import ArrowRight from '@material-ui/icons/ArrowRight';
 import { withStyles } from '@material-ui/core/styles';
@@ -48,7 +53,7 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import { dataChecking, apiRequest } from 'globalUtils';
 
-import { Grid, CardHeader } from '@material-ui/core';
+import { Grid, CardHeader, Paper } from '@material-ui/core';
 import makeSelectProfileWholePage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -75,6 +80,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         // subpage: null,
         checked: 1,
         callAPI: true,
+        skindetail: false,
     }
 
     componentWillMount() {
@@ -217,32 +223,49 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
 
     renderProfileCard = (data) => (
         <Card className={this.props.classes.bigShortCard} style={{ width: `${this.props.width === 'xs' || this.props.width === 'sm' ? '95%' : '97.5%'}` }}>
-            <Grid container={true} spacing={0} alignItems="true">
-                <Grid item={true} xs={4}>
-                    <CardContent style={{ textAlign: 'left' }}>
+            <Grid container={true} spacing={0}>
+                <Grid item={true} xs={5}>
+                    <CardContent style={{ textAlign: 'left', paddingTop: '0px' }}>
                         <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} />
-                        <br /><br />
+                        <div style={{ marginTop: '10px' }} />
                         <Typography variant="h6" color="primary">{data.data.profile.name}</Typography><br />
                         <Typography variant="h6" color="primary">Edit Profile</Typography>
-                        <Create /><br />
-                        <CardGiftcard />
+                        <Create />
+                        <div style={{ marginTop: '10px' }} />
+                        <CardGiftcard style={{ marginRight: '10px' }} />
                         <Typography variant="h6" color="primary"> {data.data.profile.membership.name}</Typography>
                     </CardContent>
                 </Grid>
-                <Grid item={true} xs={8}>
-                    <CardContent>
-                        <AccountBox />
-                        <Typography variant="h6" color="primary">{data.data.profile.membership.name} Skin Details </Typography>
-                        <ChevronRight />
-                        <br /><br /><br />
+                <Grid item={true} xs={7}>
+                    <CardContent style={{ textAlign: 'left' }}>
+                        <div style={{ marginTop: '10px', position: 'relative' }} onClick={() => this.setState({ skindetail: true })}>
+                            <AccountBox style={{ marginRight: '10px' }} />
+                            <Typography variant="h6" color="primary">{data.data.profile.name} Skin Details </Typography>
+                            <ChevronRight />
+                            {
+                                this.state.skindetail ?
+                                    <Zoom>
+                                        <Paper className={this.props.skinDetailContainer} style={{ position: 'absolute' }}>
+                                            <AccountBox onClick={() => this.setState({ skindetail: false })} />
+                                            13214rurbew
+                                        </Paper>
+                                    </Zoom>
+                                :
+                                null
+                            }
+                        </div>
+                        <div style={{ marginTop: '30px' }} />
                         <Divider />
+                        <div style={{ marginTop: '30px' }} />
                         <Grid container={true} spacing={0}>
-                            <Grid item={true} xs={2}>
-                                <PersonPinCircle />
+                            <Grid item={true} xs={1}>
+                                <Badge color="secondary">
+                                    <PersonPinCircle style={{ marginLeft: '4px' }} />
+                                </Badge>
                             </Grid>
-                            <Grid item={true} xs={10}>
-                                <Typography variant="h6" color="primary">Update Your attendance here today !</Typography>
-                                <Typography variant="h6" color="primary">{data.data.attendance.current}/10 Yes! I&#183;m Here</Typography>
+                            <Grid item={true} xs={11} style={{ textAlign: 'left' }}>
+                                <Typography style={{ marginLeft: '17px' }} align="left" variant="body1" color="primary">Update Your attendance here today !</Typography><br />
+                                <Typography style={{ marginLeft: '17px' }} variant="h6" color="primary">{data.data.attendance.current}/10 Yes!I&#183;m Here</Typography>
                             </Grid>
                         </Grid>
                     </CardContent>
@@ -372,34 +395,44 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         </Card>
     )
 
-    renderOrder = (data) => (
-        <Card className={this.props.classes.mediumCard}>
-            <CardHeader
-                avatar={
-                    <LocalShippingTwoTone color="disabled" />
-                }
-                title={<Typography variant="h6" align="left">My Order</Typography>}
-            />
+    renderOrder = () => (
+        <Card className={this.props.width === 'xs' ? this.props.classes.bigShortCardSticky : this.props.classes.bigShortCard} style={{ width: `${this.props.width === 'xs' || this.props.width === 'sm' ? '95%' : '97.5%'}` }}>
+            <div style={{ position: 'relative' }}>
+                <CardHeader
+                    avatar={
+                        <Assignment color="disabled" />
+                    }
+                    title={<Typography variant="h6">My Order</Typography>}
+                />
+                <Typography style={{ position: 'absolute', right: '20px', top: '20px' }}>View All</Typography>
+            </div>
             <CardContent style={{ paddingTop: '0px' }}>
-                <div style={{ position: 'relative' }}>
-                    <div style={{ borderLeft: '1.5px solid #F3EFEE', height: '45px', position: 'absolute', left: '50%', top: '-2px' }}></div>
-                    <Grid container={true} spacing={0}>
-                        <Grid item={true} xs={6}>
-                            <Typography noWrap={true}>ORDER NUMBER</Typography>
-                            <Typography noWrap={true} className="mt-half">{data.data.items.length ? data.data.items[0].number : null}</Typography>
-                        </Grid>
-                        <Grid item={true} xs={6}>
-                            <Typography noWrap={true}>AMOUNT</Typography>
-                            <Typography noWrap={true} className="mt-half">{data.data.items.length ? data.data.items[0].subtotal : 'No Order'}</Typography>
-                        </Grid>
+                <Grid container={true} style={{ paddingTop: '0px', marginTop: '2    0px' }}>
+                    <Grid item={true} xs={3}>
+                        <div>
+                            <CreditCard />
+                            <Typography>Unpaid</Typography>
+                        </div>
                     </Grid>
-                </div>
-                <div align="left" style={{ marginTop: '10px' }}>
-                    <Typography inline={true}>ORDER STATUS: </Typography>
-                    <div style={{ borderRadius: '15px', display: 'inline', backgroundColor: 'green', padding: '0 10px' }}>
-                        <Typography inline={true} style={{ color: '#FAFAFA' }}>{data.data.items.length ? data.data.items[0].status : null}</Typography>
-                    </div>
-                </div>
+                    <Grid item={true} xs={3}>
+                        <div>
+                            <MailOutline />
+                            <Typography>To Ship</Typography>
+                        </div>
+                    </Grid>
+                    <Grid item={true} xs={3}>
+                        <div>
+                            <LocalShippingTwoTone />
+                            <Typography>Posted</Typography>
+                        </div>
+                    </Grid>
+                    <Grid item={true} xs={3}>
+                        <div>
+                            <ChatBubbleOutline />
+                            <Typography>Review</Typography>
+                        </div>
+                    </Grid>
+                </Grid>
             </CardContent>
         </Card>
     )
@@ -423,11 +456,26 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         <Card className={this.props.classes.mediumCard}>
             <CardHeader
                 avatar={
-                    <Settings color="disabled" />
+                    <LocationOn color="disabled" />
                 }
                 title={<Typography variant="h6" align="left">My Setting</Typography>}
             />
             <CardContent></CardContent>
+        </Card>
+    )
+    renderCustomerCare = () => (
+        <Card className={this.props.classes.mediumCard}>
+            <CardHeader
+                avatar={
+                    <Settings color="disabled" />
+                }
+                title={<Typography variant="h6" align="left">Customer Care</Typography>}
+            />
+            <CardContent className={this.props.classes.profileContentContainer} style={{ display: 'inline', paddingTop: '0px' }}>
+                <Typography gutterBottom={true}>Need help? You may contact our helpdesk at</Typography>
+                <Typography gutterBottom={true}>admin@hermo.my</Typography>
+                <Typography>07-5623567</Typography>
+            </CardContent>
         </Card>
     )
 
@@ -503,6 +551,21 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         </Card>
         )
 
+    renderRecommend = () => (
+        <Card className={this.props.classes.longCard}>
+            <CardHeader
+                avatar={
+                    <AccountBox color="disabled" />
+                }
+                title={<Typography variant="h6" align="left">Because you have Dry Skin</Typography>}
+            />
+            <CardContent>
+                <Grid container={true} spacing={0} direction="row">
+                </Grid>
+            </CardContent>
+        </Card>
+    )
+
     render() {
         return (
             <div align="center" className="container" style={{ backgroundColor: '#fff' }}>
@@ -523,26 +586,31 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                                         </Hidden>
                                     </div>
                                     {/* {this.renderOldProfileCard(data[0])} */}
-                                    <Grid container={true} justify="center">
-                                        <Grid item={true} lg={6} xs={12}>
-                                            {this.renderProfileCard(data[0])}
+                                    <Hidden smUp={true}>
+                                        {this.renderOrder()}
+                                    </Hidden>
+                                    <Hidden only="xs">
+                                        <Grid container={true} justify="center">
+                                            <Grid item={true} lg={6} sm={12}>
+                                                {this.renderProfileCard(data[0])}
+                                            </Grid>
+                                            <Grid item={true} lg={6} xs={12}>
+                                                {this.renderOrder()}
+                                            </Grid>
                                         </Grid>
-                                        <Grid item={true} lg={6} xs={12}>
-                                            {this.renderCart(data[4])}
-                                        </Grid>
-                                    </Grid>
+                                    </Hidden>
                                     <Grid container={true} style={{ paddingTop: '0px' }}>
                                         <Grid item={true} xs={12} md={6} lg={3}>
                                             {this.renderWallet(data[0])}
-                                        </Grid>
-                                        <Grid item={true} xs={12} md={6} lg={3}>
-                                            {this.renderOrder(data[1])}
                                         </Grid>
                                         <Grid item={true} xs={12} md={6} lg={3}>
                                             {this.renderAddress(data[2])}
                                         </Grid>
                                         <Grid item={true} xs={12} md={6} lg={3}>
                                             {this.renderSetting()}
+                                        </Grid>
+                                        <Grid item={true} xs={12} md={6} lg={3}>
+                                            {this.renderCustomerCare()}
                                         </Grid>
                                     </Grid>
                                     <Grid container={true} style={{ paddingTop: '0px' }} justify="center">
@@ -553,6 +621,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                                             {this.renderCart(data[4])}
                                         </Grid>
                                     </Grid>
+                                    {this.renderRecommend()}
                                 </div>
                             </div>
                         )}
