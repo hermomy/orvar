@@ -49,6 +49,7 @@ import ArrowLeft from '@material-ui/icons/ArrowLeft';
 import ArrowRight from '@material-ui/icons/ArrowRight';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
+import MobileStepper from '@material-ui/core/MobileStepper';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -85,10 +86,12 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         callAPI: true,
         skindetail: false,
         recommend: 0,
+        width: this.props.width,
     }
 
     componentWillMount() {
         withWidth();
+        console.log(this.state.width);
         this.props.dispatch(mainGetProfile());
         if (dataChecking(this.props, 'match', 'params', 'profilePart')) {
             this.setState({ subpage: this.props.match.params.profilePart });
@@ -572,48 +575,113 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         </Card>
         )
 
-    renderRecommend = (data) => (
-        <Card className={this.props.classes.longCard}>
-            <CardHeader
-                avatar={
-                    <AccountBox color="disabled" />
-                }
-                title={<Typography variant="h6" align="left">Because you have Dry Skin</Typography>}
-            />
-            <CardContent style={{ position: 'relative' }} className={this.props.classes.profileContentContainer}>
-                <Button
-                    onClick={() => { this.setState({ checked: this.state.recommend - 1 }); }}
-                    disabled={this.state.recommend === 0}
-                    classes={{
-                        root: this.props.classes.walletButton,
-                    }}
-                    style={{ position: 'absolute', top: '25%', left: '0' }}
-                >
-                    <ArrowLeft />
-                </Button>
-                <div style={{ overflow: 'auto', whiteSpace: 'nowrap' }}>
+    renderRecommend = (data) => {
+        if (this.state.width !== this.props.width) {
+            this.state.width = this.props.width;
+            this.state.recommend = 0;
+        }
+        return (
+            <Card className={this.props.classes.longCard}>
+                <CardHeader
+                    avatar={
+                        <AccountBox color="disabled" />
+                    }
+                    title={<Typography variant="h6" align="left">Because you have Dry Skin</Typography>}
+                />
+                <CardContent style={{ position: 'relative' }} className={this.props.classes.profileContentContainer}>
+                    {/* <Button
+                        onClick={() => { this.setState({ checked: this.state.recommend - 1 }); }}
+                        disabled={this.state.recommend === 0}
+                        classes={{
+                            root: this.props.classes.walletButton,
+                        }}
+                        style={{ position: 'absolute', top: '25%', left: '0' }}
+                    >
+                        <ArrowLeft />
+                    </Button> */}
+                    <div style={{ display: 'inline-block', textAlign: 'center', width: '200px' }}>
+                        <img src={data.data.data.product.items[this.state.recommend].image.small} width="60%" alt="" /><br />
+                        <Typography style={{ wordBreak: 'keep-all' }}>{data.data.data.product.items[this.state.recommend].name}</Typography><br />
+                    </div>
+                    <div style={{ display: 'inline-block', textAlign: 'center', width: '200px' }}>
+                        <img src={data.data.data.product.items[this.state.recommend + 1].image.small} width="60%" alt="" /><br />
+                        <Typography style={{ wordBreak: 'keep-all' }}>{data.data.data.product.items[this.state.recommend].name}</Typography><br />
+                    </div>
+                    <div style={{ display: 'inline-block', textAlign: 'center', width: '200px' }}>
+                        <img src={data.data.data.product.items[this.state.recommend + 2].image.small} width="60%" alt="" /><br />
+                        <Typography style={{ wordBreak: 'keep-all' }}>{data.data.data.product.items[this.state.recommend].name}</Typography><br />
+                    </div>
+                    <Hidden only="xs">
+                        <div style={{ display: 'inline-block', textAlign: 'center', width: '200px' }}>
+                            <img src={data.data.data.product.items[this.state.recommend + 3].image.small} width="60%" alt="" /><br />
+                            <Typography style={{ wordBreak: 'keep-all' }}>{data.data.data.product.items[this.state.recommend].name}</Typography><br />
+                        </div>
+                    </Hidden>
                     {
+                        this.props.width === 'lg' ?
+                            <div style={{ display: 'inline-block', textAlign: 'center', width: '200px' }}>
+                                <img src={data.data.data.product.items[this.state.recommend + 4].image.small} width="60%" alt="" /><br />
+                                <Typography style={{ wordBreak: 'keep-all' }}>{data.data.data.product.items[this.state.recommend].name}</Typography><br />
+                            </div>
+                        :
+                            null
+
+                    }
+                    <MobileStepper
+                        steps={12}
+                        position="static"
+                        variant="progress"
+                        activeStep={0}
+                        style={{ backgroundColor: 'white' }}
+                        nextButton={
+                            <Button
+                                onClick={() => { this.setState({ recommend: this.state.recommend - 1 }); }}
+                                disabled={this.state.recommend === 0}
+                                classes={{
+                                    root: this.props.classes.walletButton,
+                                }}
+                                style={{ position: 'absolute', top: '25%', left: '0' }}
+                            >
+                                <ArrowLeft />
+                            </Button>
+                        }
+                        backButton={
+                            <Button
+                                onClick={() => { this.setState({ recommend: this.state.recommend + 1 }); console.log(this.state.recommend); }}
+                                disabled={`${this.state.recommend}` === `${this.props.width === 'lg' ? 7 : this.props.width === 'xs' ? 9 : 8}`}
+                                classes={{
+                                    root: this.props.classes.walletButton,
+                                }}
+                                style={{ position: 'absolute', top: '25%', right: '0' }}
+                            >
+                                <ArrowRight />
+                            </Button>
+                        }
+                    />
+                    {/* {
+                        <div style={{ overflow: 'auto', whiteSpace: 'nowrap' }}>
                         data.data.data.product.items.map((item, index) => (
                             <div id={index} style={{ display: 'inline-block', textAlign: 'center', width: '200px' }}>
                                 <img src={item.image.small} width="60%" alt="" /><br />
                                 <Typography style={{ wordBreak: 'keep-all' }}>{item.name}</Typography><br />
                             </div>
                         ))
-                    }
-                </div>
-                <Button
-                    onClick={() => { this.setState({ checked: this.state.recommend + 1 }); }}
-                    disabled={this.state.recommend === 6}
-                    classes={{
-                        root: this.props.classes.walletButton,
-                    }}
-                    style={{ position: 'absolute', top: '25%', right: '0' }}
-                >
-                    <ArrowRight />
-                </Button>
-            </CardContent>
-        </Card>
-    )
+                        </div>
+                    } */}
+                    {/* <Button
+                        onClick={() => { this.setState({ checked: this.state.recommend + 1 }); }}
+                        disabled={this.state.recommend === 6}
+                        classes={{
+                            root: this.props.classes.walletButton,
+                        }}
+                        style={{ position: 'absolute', top: '25%', right: '0' }}
+                    >
+                        <ArrowRight />
+                    </Button> */}
+                </CardContent>
+            </Card>
+        );
+    }
 
     render() {
         return (
