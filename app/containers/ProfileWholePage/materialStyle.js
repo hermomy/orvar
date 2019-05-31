@@ -1,4 +1,7 @@
 const styles = {
+    cardHeader: {
+        color: 'rgba(0,0,0,0.26)',
+    },
     pageContainer: {
         // width: '100%',
         justifyContent: 'center',
@@ -64,6 +67,8 @@ const styles = {
     smallScreenLongCard: {
         width: '100%',
         height: '182px',
+        margin: '0px',
+        borderRadius: '0px',
     },
     walletButton: {
         minWidth: '0',

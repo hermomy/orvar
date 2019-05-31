@@ -92,17 +92,47 @@ const theme = createMuiTheme({
             },
         },
         MuiTypography: {
-            subtitle2: {
-                color: '#660033',
-                display: 'inline',
+            h1: {
+                fontSize: '96',
             },
-            subtitle1: {
-                color: '#660033',
-                display: 'inline',
+            h2: {
+                fontSize: '60',
+            },
+            h3: {
+                fontSize: '48',
+            },
+            h4: {
+                fontSize: '34',
+            },
+            h5: {
+                fontSize: '24',
             },
             h6: {
-                color: 'rgba(0,0,0,0.26)',
-                display: 'inline',
+                fontSize: '20',
+            },
+            subtitle1: {
+                fontSize: '16',
+            },
+            subtitle2: {
+                fontSize: '14',
+            },
+            body1: {
+                fontSize: '16',
+            },
+            body2: {
+                fontSize: '14',
+            },
+            button: {
+                fontSize: '14',
+                fontVariant: 'small-caps',
+                fontWeight: '500',
+            },
+            caption: {
+                fontSize: '14',
+            },
+            overline: {
+                fontSize: '12',
+                fontVariant: 'small-caps',
             },
         },
         MuiButton: {
