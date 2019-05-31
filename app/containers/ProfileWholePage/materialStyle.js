@@ -15,6 +15,7 @@ const styles = {
     longCard: {
         width: '98.7%',
         flexDirection: 'column',
+        height: '300px',
     },
     bigCard: {
         marginTop: '2rem',
@@ -26,6 +27,12 @@ const styles = {
         height: '250px',
         flexDirection: 'column',
         marginTop: '1rem',
+        // boxShadow: 'none',
+    },
+    skinDetailPopUp: {
+        flexDirection: 'column',
+        marginTop: '1rem',
+        marginLeft: '0px',
         // boxShadow: 'none',
     },
     bigShortCardSticky: {
@@ -63,10 +70,6 @@ const styles = {
     },
     progress: {
         margin: '0 auto',
-    },
-    skinDetailContainer: {
-        width: '200px',
-        height: '100ps',
     },
 };
 

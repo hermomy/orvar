@@ -42,10 +42,11 @@ import PersonPinCircle from '@material-ui/icons/PersonPinCircle';
 import MailOutline from '@material-ui/icons/MailOutline';
 import ChatBubbleOutline from '@material-ui/icons/ChatBubbleOutline';
 import Assignment from '@material-ui/icons/Assignment';
-import Zoom from '@material-ui/core/Zoom';
+import Clear from '@material-ui/icons/Clear';
+import Fade from '@material-ui/core/Fade';
 import Badge from '@material-ui/core/Badge';
-// import ArrowLeft from '@material-ui/icons/ArrowLeft';from '@material-ui/icons/CardGiftcard';
-// import ArrowRight from '@material-ui/icons/ArrowRight';
+import ArrowLeft from '@material-ui/icons/ArrowLeft';
+import ArrowRight from '@material-ui/icons/ArrowRight';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 
@@ -53,7 +54,7 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import { dataChecking, apiRequest } from 'globalUtils';
 
-import { Grid, CardHeader, Paper } from '@material-ui/core';
+import { Grid, CardHeader, IconButton } from '@material-ui/core';
 import makeSelectProfileWholePage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -73,7 +74,9 @@ const getWishList = () => apiRequest('/wishlist?per-page=6', 'get');
 
 const getCart = () => apiRequest('/cart?per-page=4', 'get');
 
-const getData = (callAPI) => callAPI ? Promise.all([getProfile(), getOrder(), getAddress(), getWishList(), getCart()]) : null;
+const getPersonalization = () => apiRequest(null, 'get', null, 'https://reco.hermo.my/v2/personalization');
+
+const getData = (callAPI) => callAPI ? Promise.all([getProfile(), getOrder(), getAddress(), getWishList(), getCart(), getPersonalization()]) : null;
 
 export class ProfileWholePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -81,11 +84,11 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         checked: 1,
         callAPI: true,
         skindetail: false,
+        recommend: 0,
     }
 
     componentWillMount() {
         withWidth();
-        console.log(window.outerWidth);
         this.props.dispatch(mainGetProfile());
         if (dataChecking(this.props, 'match', 'params', 'profilePart')) {
             this.setState({ subpage: this.props.match.params.profilePart });
@@ -221,58 +224,75 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         );
     }
 
-    renderProfileCard = (data) => (
-        <Card className={this.props.classes.bigShortCard} style={{ width: `${this.props.width === 'xs' || this.props.width === 'sm' ? '95%' : '97.5%'}` }}>
-            <Grid container={true} spacing={0}>
-                <Grid item={true} xs={5}>
-                    <CardContent style={{ textAlign: 'left', paddingTop: '0px' }}>
-                        <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} />
-                        <div style={{ marginTop: '10px' }} />
-                        <Typography variant="h6" color="primary">{data.data.profile.name}</Typography><br />
-                        <Typography variant="h6" color="primary">Edit Profile</Typography>
-                        <Create />
-                        <div style={{ marginTop: '10px' }} />
-                        <CardGiftcard style={{ marginRight: '10px' }} />
-                        <Typography variant="h6" color="primary"> {data.data.profile.membership.name}</Typography>
-                    </CardContent>
-                </Grid>
-                <Grid item={true} xs={7}>
-                    <CardContent style={{ textAlign: 'left' }}>
-                        <div style={{ marginTop: '10px', position: 'relative' }} onClick={() => this.setState({ skindetail: true })}>
-                            <AccountBox style={{ marginRight: '10px' }} />
-                            <Typography variant="h6" color="primary">{data.data.profile.name} Skin Details </Typography>
-                            <ChevronRight />
-                            {
-                                this.state.skindetail ?
-                                    <Zoom>
-                                        <Paper className={this.props.skinDetailContainer} style={{ position: 'absolute' }}>
-                                            <AccountBox onClick={() => this.setState({ skindetail: false })} />
-                                            13214rurbew
-                                        </Paper>
-                                    </Zoom>
-                                :
-                                null
-                            }
-                        </div>
-                        <div style={{ marginTop: '30px' }} />
-                        <Divider />
-                        <div style={{ marginTop: '30px' }} />
-                        <Grid container={true} spacing={0}>
-                            <Grid item={true} xs={1}>
-                                <Badge color="secondary">
-                                    <PersonPinCircle style={{ marginLeft: '4px' }} />
-                                </Badge>
+    renderProfileCard = (data) => {
+        this.setState({ callAPI: false });
+        let concernString = '';
+        data.data.profile.skin.concerns.forEach((concern) => {
+            concernString += `${concernString !== '' ? ',' : ''}${concern.name} `;
+        });
+        return (
+            <Card className={this.props.classes.bigShortCard} style={{ width: `${this.props.width === 'xs' || this.props.width === 'sm' ? '95%' : '97.5%'}`, position: 'relative' }}>
+                <Grid container={true} spacing={0}>
+                    <Grid item={true} xs={5}>
+                        <CardContent style={{ textAlign: 'left', paddingTop: '0px' }}>
+                            <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} />
+                            <div style={{ marginTop: '10px' }} />
+                            <Typography variant="h6" color="primary">{data.data.profile.name}</Typography><br />
+                            <Typography variant="h6" color="primary">Edit Profile</Typography>
+                            <Create />
+                            <div style={{ marginTop: '10px' }} />
+                            <CardGiftcard style={{ marginRight: '10px' }} />
+                            <Typography variant="h6" color="primary"> {data.data.profile.membership.name}</Typography>
+                        </CardContent>
+                    </Grid>
+                    <Grid item={true} xs={7}>
+                        <CardContent style={{ textAlign: 'left' }}>
+                            <div style={{ marginTop: '10px', cursor: 'default' }} onClick={() => this.setState({ skindetail: true })}>
+                                <AccountBox style={{ marginRight: '10px' }} />
+                                <Typography variant="h6" color="primary">{data.data.profile.name} Skin Details </Typography>
+                                <ChevronRight />
+                            </div>
+                            <div style={{ marginTop: '30px' }} />
+                            <Divider />
+                            <div style={{ marginTop: '30px' }} />
+                            <Grid container={true} spacing={0}>
+                                <Grid item={true} xs={1}>
+                                    <Badge color="secondary">
+                                        <PersonPinCircle style={{ marginLeft: '4px' }} />
+                                    </Badge>
+                                </Grid>
+                                <Grid item={true} xs={11} style={{ textAlign: 'left' }}>
+                                    <Typography style={{ marginLeft: '17px' }} align="left" variant="body1" color="primary">Update Your attendance here today !</Typography><br />
+                                    <Typography style={{ marginLeft: '17px' }} variant="h6" color="primary">{data.data.attendance.current}/10 Yes!I&#183;m Here</Typography>
+                                </Grid>
                             </Grid>
-                            <Grid item={true} xs={11} style={{ textAlign: 'left' }}>
-                                <Typography style={{ marginLeft: '17px' }} align="left" variant="body1" color="primary">Update Your attendance here today !</Typography><br />
-                                <Typography style={{ marginLeft: '17px' }} variant="h6" color="primary">{data.data.attendance.current}/10 Yes!I&#183;m Here</Typography>
-                            </Grid>
-                        </Grid>
-                    </CardContent>
+                        </CardContent>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Card>
-    )
+                <div style={{ position: 'absolute', zIndex: '10', top: `${this.state.skindetail ? '0' : '50px'}` }}>
+                    <Fade in={this.state.skindetail === true}>
+                        <Card className={this.props.skinDetailPopUp} style={{ position: 'relative', width: '100%', height: '250px', marginLeft: '0px' }}>
+                            <CardContent style={{ textAlign: 'justify' }}>
+                                <Typography>Skin Details</Typography>
+                                <IconButton style={{ position: 'absolute', top: '1px', right: '5px' }} onClick={() => this.setState({ skindetail: false })}>
+                                    <Clear />
+                                </IconButton>
+                                <Grid container={true} spacing={0}>
+                                    <Grid item={true} xs={6}>
+                                        <Typography style={{ display: 'inline' }}>Skin Colour:</Typography><Typography style={{ display: 'inline' }}>{data.data.profile.skin.tone.name}</Typography>
+                                    </Grid>
+                                    <Grid item={true} xs={6}>
+                                        <Typography style={{ display: 'inline' }}>Skin Type:</Typography><Typography style={{ display: 'inline' }}>{data.data.profile.skin.type.name}</Typography>
+                                    </Grid>
+                                </Grid>
+                                <Typography style={{ display: 'inline' }}>Skin Concern:</Typography><Typography style={{ display: 'inline' }}>{concernString}</Typography>
+                            </CardContent>
+                        </Card>
+                    </Fade>
+                </div>
+            </Card>
+        );
+    }
 
     renderSmallScreenProfileCard = (data) => (
         <Hidden smUp={true}>
@@ -463,6 +483,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
             <CardContent></CardContent>
         </Card>
     )
+
     renderCustomerCare = () => (
         <Card className={this.props.classes.mediumCard}>
             <CardHeader
@@ -551,7 +572,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         </Card>
         )
 
-    renderRecommend = () => (
+    renderRecommend = (data) => (
         <Card className={this.props.classes.longCard}>
             <CardHeader
                 avatar={
@@ -559,9 +580,37 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                 }
                 title={<Typography variant="h6" align="left">Because you have Dry Skin</Typography>}
             />
-            <CardContent>
-                <Grid container={true} spacing={0} direction="row">
-                </Grid>
+            <CardContent style={{ position: 'relative' }} className={this.props.classes.profileContentContainer}>
+                <Button
+                    onClick={() => { this.setState({ checked: this.state.recommend - 1 }); }}
+                    disabled={this.state.recommend === 0}
+                    classes={{
+                        root: this.props.classes.walletButton,
+                    }}
+                    style={{ position: 'absolute', top: '25%', left: '0' }}
+                >
+                    <ArrowLeft />
+                </Button>
+                <div style={{ overflow: 'auto', whiteSpace: 'nowrap' }}>
+                    {
+                        data.data.data.product.items.map((item, index) => (
+                            <div id={index} style={{ display: 'inline-block', textAlign: 'center', width: '200px' }}>
+                                <img src={item.image.small} width="60%" alt="" /><br />
+                                <Typography style={{ wordBreak: 'keep-all' }}>{item.name}</Typography><br />
+                            </div>
+                        ))
+                    }
+                </div>
+                <Button
+                    onClick={() => { this.setState({ checked: this.state.recommend + 1 }); }}
+                    disabled={this.state.recommend === 6}
+                    classes={{
+                        root: this.props.classes.walletButton,
+                    }}
+                    style={{ position: 'absolute', top: '25%', right: '0' }}
+                >
+                    <ArrowRight />
+                </Button>
             </CardContent>
         </Card>
     )
@@ -619,9 +668,10 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                                         </Grid>
                                         <Grid item={true} lg={6} xs={12}>
                                             {this.renderCart(data[4])}
+                                            {console.log(data[5])}
                                         </Grid>
                                     </Grid>
-                                    {this.renderRecommend()}
+                                    {this.renderRecommend(data[5])}
                                 </div>
                             </div>
                         )}
