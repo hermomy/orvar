@@ -67,10 +67,6 @@ const theme = createMuiTheme({
             root: {
                 display: 'inline-flex',
             },
-            img: {
-                height: '65px',
-                width: '65px',
-            },
         },
         MuiBadge: {
             badge: {
@@ -93,45 +89,45 @@ const theme = createMuiTheme({
         },
         MuiTypography: {
             h1: {
-                fontSize: '96',
+                fontSize: '96px',
             },
             h2: {
-                fontSize: '60',
+                fontSize: '60px',
             },
             h3: {
-                fontSize: '48',
+                fontSize: '48px',
             },
             h4: {
-                fontSize: '34',
+                fontSize: '34px',
             },
             h5: {
-                fontSize: '24',
+                fontSize: '24px',
             },
             h6: {
-                fontSize: '20',
+                fontSize: '20px',
             },
             subtitle1: {
-                fontSize: '16',
+                fontSize: '16px',
             },
             subtitle2: {
-                fontSize: '14',
+                fontSize: '10px',
             },
             body1: {
-                fontSize: '16',
+                fontSize: '14px',
             },
             body2: {
-                fontSize: '14',
+                fontSize: '12px',
             },
             button: {
-                fontSize: '14',
+                fontSize: '14px',
                 fontVariant: 'small-caps',
                 fontWeight: '500',
             },
             caption: {
-                fontSize: '14',
+                fontSize: '14px',
             },
             overline: {
-                fontSize: '12',
+                fontSize: '12px',
                 fontVariant: 'small-caps',
             },
         },

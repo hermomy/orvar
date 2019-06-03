@@ -9,7 +9,7 @@ const styles = {
     userImage: {
         height: '60px',
         width: '60px',
-        marginTop: '20px',
+        marginBottom: '20px',
     },
     profileContentContainer: {
         display: 'flex',
@@ -18,7 +18,7 @@ const styles = {
     longCard: {
         width: '98.7%',
         flexDirection: 'column',
-        height: '300px',
+        height: '330px',
     },
     bigCard: {
         marginTop: '2rem',
@@ -26,11 +26,19 @@ const styles = {
         flexDirection: 'column',
         justify: 'center',
     },
-    bigShortCard: {
+    bigShortCardProfile: {
         height: '250px',
         flexDirection: 'column',
         marginTop: '1rem',
-        // boxShadow: 'none',
+        boxShadow: 'none',
+    },
+    bigShortCardOrder: {
+        height: '250px',
+        flexDirection: 'column',
+        marginTop: '1rem',
+    },
+    OrderCardContent: {
+        height: '100%',
     },
     skinDetailPopUp: {
         flexDirection: 'column',
@@ -43,6 +51,7 @@ const styles = {
         flexDirection: 'column',
         position: 'sticky',
         top: '10px',
+        zIndex: '10',
     },
     mediumCard: {
         width: '95%',
@@ -54,19 +63,19 @@ const styles = {
     },
     smallCard: {
         width: '70px',
-        // width: '95px',
         height: '110px',
         justifyContent: 'center',
+        boxShadow: 'none',
     },
     cartCard: {
         marginBottom: '10px',
         height: '65px',
         width: '95%',
-        // backgroundColor: '#F3EFEE',
+        boxShadow: 'none',
     },
     smallScreenLongCard: {
         width: '100%',
-        height: '182px',
+        height: '180px',
         margin: '0px',
         borderRadius: '0px',
     },
@@ -75,6 +84,33 @@ const styles = {
     },
     progress: {
         margin: '0 auto',
+    },
+    cardTtitle: {
+        paddingBottom: '5px',
+        color: 'rgba(0, 0, 0, 0.26)',
+    },
+    mobileStepper: {
+        backgroundColor: 'white',
+        margin: '0',
+        padding: '0',
+    },
+    recommendProduct: {
+        display: 'inline-block',
+        textAlign: 'center',
+        width: '215px',
+    },
+    walletCardNum: {
+        marginTop: '13px',
+    },
+    mediumCardProfile: {
+        width: '95%',
+        flexDirection: 'column',
+        marginTop: '3rem',
+        boxShadow: 'none',
+    },
+    skinDetail: {
+        display: 'inline',
+        color: 'rgba(0, 0, 0, 0.26)',
     },
 };
 
