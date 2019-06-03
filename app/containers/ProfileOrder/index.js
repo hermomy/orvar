@@ -9,26 +9,39 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { dataChecking } from 'globalUtils';
+import { dataChecking, apiRequest } from 'globalUtils';
 import { NavLink, withRouter } from 'react-router-dom';
 import Pagination from 'components/Pagination';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import Async from 'react-async';
+import { withStyles } from '@material-ui/core/styles';
+import withWidth from '@material-ui/core/withWidth';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import makeSelectProfileOrder from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
+import styles from './materialStyle';
 import {
     getOrder,
-    getOrderDetail,
+    // getOrderDetail,
 } from './actions';
+
+const getList = (callListAPI, category, pageNum) => callListAPI ? apiRequest(`/order${category}?page=${pageNum}`, 'get') : null;
+
+const getDetail = (callDetailAPI, link) => callDetailAPI ? apiRequest(`${link}`, 'get') : null;
 
 export class ProfileOrder extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
+        callListAPI: true,
+        callDetailAPI: true,
+        detailURL: '',
         popupOrder: false,
         category: '',
+        pageNum: 1,
     }
 
     componentWillMount() {
@@ -43,15 +56,15 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         }
     }
 
-    renderOrderlist = () => {
-        if (!dataChecking(this.props, 'profileOrder', 'data', 'orderListData', 'items')) {
+    renderOrderlist = (data) => {
+        if (!dataChecking(data, 'data', 'items')) {
             return null;
         }
-        return this.props.profileOrder.data.orderListData.items.map((Order) =>
+        return data.data.items.map((Order) =>
         (
             <tr key={Order.id}>
                 <td>
-                    <div onClick={() => { this.setState({ popupOrder: !this.state.popupOrder }); this.props.dispatch(getOrderDetail(Order._links.self.href)); }}>
+                    <div onClick={() => { this.setState({ popupOrder: !this.state.popupOrder }); this.setState({ detailURL: `${Order._links.self.href}` }); }}>
                         {Order.number}
                     </div>
                 </td>
@@ -63,20 +76,20 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         ));
     }
 
-    renderPagination = () => {
-        if (!dataChecking(this.props, 'profileOrder', 'data', 'orderListData', 'items')) {
+    renderPagination = (data) => {
+        if (!dataChecking(data, 'data', 'items')) {
             return null;
-        } else if (this.props.profileOrder.data.orderListData._meta.pageCount <= 1) {
+        } else if (data.data._meta.pageCount <= 1) {
             return null;
         }
         return (
             <Pagination
-                parentProps={this.props}
-                meta={this.props.profileOrder.data.orderListData._meta}
-                link={this.props.profileOrder.data.orderListData._links}
+                parentProps={data}
+                meta={data.data._meta}
+                link={data.data._links}
                 goToPage={1}
                 isHerlisting={false}
-                callBack={(targetpage) => { this.props.dispatch(getOrder('', targetpage)); }}
+                callBack={(targetpage) => { this.setState({ pageNum: targetpage }); }}
             />
         );
     }
@@ -275,13 +288,40 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
             <div>
                 <input type="button" onClick={() => { this.props.dispatch(getOrder('')); this.setState({ category: '' }); }} value="All Orders" />
                 <input type="button" onClick={() => { this.props.dispatch(getOrder('/reviewable')); this.setState({ category: '/reviewable' }); }} value="Reviewable Orders" />
-                {this.renderPagination()}
-                <table border="1">
-                    <tbody>
-                        {this.renderOrderlist()}
-                    </tbody>
-                </table>
-                {this.renderOrderDetail()}
+                <Async promise={getList(this.state.callListAPI, this.state.category, this.state.pageNum)}>
+                    <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
+                    <Async.Resolved>
+                        {(data) => (
+                            <div>
+                                {console.log(data)}
+                                {this.renderPagination(data)}
+                                <table border="1">
+                                    <tbody>
+                                        {this.renderOrderlist(data)}
+                                    </tbody>
+                                </table>
+                                <Async promise={getDetail(this.state.callDetailAPI, this.state.detailURL)}>
+                                    <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
+                                    <Async.Resolved>
+                                        {() => (
+                                            <div>
+                                                {this.renderOrderDetail()}
+                                            </div>
+                                            )
+                                        }
+                                    </Async.Resolved>
+                                    <Async.Rejected>
+                                        { console.error }
+                                    </Async.Rejected>
+                                </Async>
+                            </div>
+                            )
+                        }
+                    </Async.Resolved>
+                    <Async.Rejected>
+                        { console.error }
+                    </Async.Rejected>
+                </Async>
             </div>
         );
     }
@@ -307,6 +347,8 @@ const withReducer = injectReducer({ key: 'profileOrder', reducer });
 const withSaga = injectSaga({ key: 'profileOrder', saga });
 
 export default compose(
+    withWidth(),
+    withStyles(styles),
     withRouter,
     withReducer,
     withSaga,
