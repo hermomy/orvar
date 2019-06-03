@@ -3,7 +3,6 @@ const styles = {
         color: 'rgba(0,0,0,0.26)',
     },
     pageContainer: {
-        // width: '100%',
         justifyContent: 'center',
     },
     userImage: {
@@ -16,12 +15,12 @@ const styles = {
         textAlign: 'justify',
     },
     longCard: {
-        width: '98.7%',
         flexDirection: 'column',
-        height: '330px',
+        height: '300px',
+        marginTop: '-25px',
     },
     bigCard: {
-        marginTop: '2rem',
+        marginTop: '1rem',
         height: '400px',
         flexDirection: 'column',
         justify: 'center',
@@ -50,13 +49,14 @@ const styles = {
         height: '150px',
         flexDirection: 'column',
         position: 'sticky',
-        top: '10px',
+        margin: '0',
+        top: '0',
+        border: '5px solid white',
         zIndex: '10',
     },
     mediumCard: {
         width: '95%',
         flexDirection: 'column',
-        marginTop: '2rem',
     },
     cardAvatar: {
         alignItems: 'unset',
@@ -105,7 +105,7 @@ const styles = {
     mediumCardProfile: {
         width: '95%',
         flexDirection: 'column',
-        marginTop: '3rem',
+        marginTop: '1rem',
         boxShadow: 'none',
     },
     skinDetail: {

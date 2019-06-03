@@ -94,7 +94,6 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         if (dataChecking(this.props, 'match', 'params', 'profilePart')) {
             this.setState({ subpage: this.props.match.params.profilePart });
         }
-        console.log(this.props.width);
     }
 
     showedWallet = 1;
@@ -318,8 +317,8 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                 }
                 title={<Typography variant="h6" align="left" className={this.props.classes.cardTtitle}>My Wishlist</Typography>}
             />
-            <CardContent>
-                <Grid container={true} justify="center" spacing={0}>
+            <CardContent style={{ textAlign: 'left', marginRight: '37px' }}>
+                <Grid container={true} spacing={0}>
                     {
                         data.data.items.slice(0, this.props.width === 'xs' ? 4 : 6).map((item, index) => (
                             <Grid xs={6} sm={4} item={true} key={index}>
@@ -375,7 +374,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
             this.state.recommend = 0;
         }
         return (
-            <Card className={this.props.classes.longCard}>
+            <Card className={this.props.classes.longCard} style={{ width: `${this.props.width === 'xs' ? '94.5%' : '98.7%'}` }}>
                 <CardHeader
                     avatar={
                         <AccountBox color="disabled" />
@@ -424,9 +423,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                             <Button
                                 onClick={() => { this.setState({ recommend: this.state.recommend - 1 }); }}
                                 disabled={this.state.recommend === 0}
-                                classes={{
-                                    root: this.props.classes.walletButton,
-                                }}
+                                classes={{ root: this.props.classes.walletButton }}
                                 style={{ position: 'absolute', top: '25%', left: '0' }}
                             >
                                 <ArrowLeft />
@@ -436,9 +433,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                             <Button
                                 onClick={() => { this.setState({ recommend: this.state.recommend + 1 }); console.log(this.state.recommend); }}
                                 disabled={`${this.state.recommend}` === `${this.props.width === 'xl' || this.props.width === 'lg' || this.props.width === 'md' ? 7 : this.props.width === 'xs' ? 9 : 8}`}
-                                classes={{
-                                    root: this.props.classes.walletButton,
-                                }}
+                                classes={{ root: this.props.classes.walletButton }}
                                 style={{ position: 'absolute', top: '25%', right: '0' }}
                             >
                                 <ArrowRight />
@@ -460,13 +455,15 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                             <div>
                                 {this.renderSmallScreenProfileCard(data[0])}
                                 <div className={`${this.props.width === 'xs' ? '' : this.props.classes.pageContainer}`} style={{ padding: `${this.props.width === 'lg' || this.props.width === 'xl' ? '24px' : '16px'}` }} justify="center">
-                                    <Hidden only="xs">
-                                        <Typography style={{ float: 'left' }} className="pt-1">Profile</Typography>
-                                        <Typography inline={true}>Welcome to your HERMO profile Dashboard</Typography>
-                                    </Hidden>
-                                    <Hidden xsDown={true}>
-                                        <Typography style={{ float: 'right' }} >Continue Shopping</Typography>
-                                    </Hidden>
+                                    <div className="mb-half">
+                                        <Hidden only="xs">
+                                            <Typography style={{ float: 'left' }}>Profile</Typography>
+                                            <Typography inline={true}>Welcome to your HERMO profile Dashboard</Typography>
+                                        </Hidden>
+                                        <Hidden xsDown={true}>
+                                            <Typography style={{ float: 'right' }} >Continue Shopping</Typography>
+                                        </Hidden>
+                                    </div>
                                     <Hidden smUp={true}>
                                         {this.renderOrder()}
                                     </Hidden>
@@ -500,10 +497,14 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                                         </Grid>
                                         <Grid item={true} md={6} xs={12}>
                                             {this.renderCart(data[4])}
-                                            {console.log(data[5])}
                                         </Grid>
                                     </Grid>
-                                    {this.renderRecommend(data[5], data[0])}
+                                    {
+                                        data[0].data.profile.skin.type.name ?
+                                            this.renderRecommend(data[5], data[0])
+                                        :
+                                            null
+                                    }
                                 </div>
                             </div>
                         )}
