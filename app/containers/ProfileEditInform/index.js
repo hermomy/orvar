@@ -419,7 +419,7 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
             ['PHOTO', 'Add a photo to personalise your account', <Avatar src={user.avatar} alt="user" className={this.props.classes.userImage} />],
             ['NAME', user.username, null],
             ['LEVEL', user.membership.name, null],
-            ['GENDER', user.gender, <Create />],
+            ['GENDER', user.gender, <Create onClick={() => this.setState({ })} />],
             ['EMAIL ADDRESS', user.email, null],
             ['BIRTH DATE', user.birthday, <Create />],
         ];
