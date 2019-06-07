@@ -41,7 +41,7 @@ const styles = {
     },
     skinDetailPopUp: {
         flexDirection: 'column',
-        marginTop: '1rem',
+        marginTop: '16px',
         marginLeft: '0px',
         // boxShadow: 'none',
     },
@@ -57,6 +57,7 @@ const styles = {
     mediumCard: {
         width: '95%',
         flexDirection: 'column',
+        marginTop: '14px',
     },
     cardAvatar: {
         alignItems: 'unset',
@@ -87,7 +88,7 @@ const styles = {
     },
     cardTtitle: {
         paddingBottom: '5px',
-        color: 'rgba(0, 0, 0, 0.26)',
+        fontWeight: '100',
     },
     mobileStepper: {
         backgroundColor: 'white',
@@ -97,7 +98,7 @@ const styles = {
     recommendProduct: {
         display: 'inline-block',
         textAlign: 'center',
-        width: '215px',
+        width: '260px',
     },
     walletCardNum: {
         marginTop: '13px',
@@ -110,7 +111,7 @@ const styles = {
     },
     skinDetail: {
         display: 'inline',
-        color: 'rgba(0, 0, 0, 0.26)',
+        color: '#808080',
     },
 };
 

@@ -14,6 +14,20 @@ import injectReducer from 'utils/injectReducer';
 import Checkbox from 'components/Checkbox';
 import { dataChecking } from 'globalUtils';
 
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+// import CardHeader from '@material-ui/core/CardHeader';
+import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
+import { withStyles } from '@material-ui/core/styles';
+import withWidth from '@material-ui/core/withWidth';
+
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+
 import makeSelectProfileEditInform from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -25,6 +39,7 @@ import {
     putData,
     postAddress,
 } from './actions';
+import styles from './materialStyle';
 
 export class ProfileEditInform extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -355,13 +370,86 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
         );
     }
 
+    renderTopBar = () => (
+        <div>
+            <AppBar position="static" className={this.props.classes.Appbar}>
+                <Toolbar>
+                    <IconButton>
+                        <ChevronLeft />
+                    </IconButton>
+                    <div>
+                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '' })}>
+                            Profile Info
+                        </Typography>
+                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/to-paid' })}>
+                            Skin Details
+                        </Typography>
+                    </div>
+                    {/* why can't float :( */}
+                    <IconButton style={{ position: 'absolute', right: '8px' }}>
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
+        </div>
+    )
+
     render() {
+        const user = this.props.profileEditInform.data.UserInformData;
+        // const choice = this.props.profileEditInform.data.InformChoiceData;
         return (
             <div>
-                {this.renderForm()}
-                {this.renderShippingInform()}
-                {this.state.editaddress ? this.renderEditShippingForm() : null}
-                {this.state.createAddress ? this.createShippingInform() : null}
+                {console.log(user)}
+                <div className="container">
+                    {this.renderTopBar()}
+                    <div align="center" className="mt-3">
+                        <Typography>Profile</Typography>
+                        <Typography>Basic info, like your name and your skin details</Typography>
+                    </div>
+                    <Card className={this.props.classes.profileInfoCard}>
+                        <CardContent className={this.props.classes.profileInfoCard}>
+                            <Grid container={true}>
+                                <Grid item={true} xs={3}>
+                                    <Typography>PHOTO</Typography>
+                                </Grid>
+                                <Grid item={true} xs={9}>
+                                    <Typography>Add a photo to personalise your account</Typography>
+                                </Grid>
+                            </Grid>
+                            <Divider className={this.props.classes.Divider} />
+                            <Grid container={true}>
+                                <Grid item={true} xs={3}>
+                                    <Typography>NAME</Typography>
+                                </Grid>
+                                <Grid item={true} xs={9}>
+                                    <Typography>{user.username}</Typography>
+                                </Grid>
+                            </Grid>
+                            <Divider className={this.props.classes.Divider} />
+                            <Grid container={true}>
+                                <Grid item={true} xs={3}>
+                                    <Typography>LEVEL</Typography>
+                                </Grid>
+                                <Grid item={true} xs={9}>
+                                    <Typography>{user.membership.name}</Typography>
+                                </Grid>
+                            </Grid>
+                            <Divider className={this.props.classes.Divider} />
+                            <Grid container={true}>
+                                <Grid item={true} xs={3}>
+                                    <Typography>GENDER</Typography>
+                                </Grid>
+                                <Grid item={true} xs={9}>
+                                    <Typography>{user.gender}</Typography>
+                                </Grid>
+                            </Grid>
+                            <Divider className={this.props.classes.Divider} />
+                        </CardContent>
+                    </Card>
+                    {this.renderForm()}
+                    {this.renderShippingInform()}
+                    {this.state.editaddress ? this.renderEditShippingForm() : null}
+                    {this.state.createAddress ? this.createShippingInform() : null}
+                </div>
             </div>
         );
     }
@@ -387,6 +475,8 @@ const withReducer = injectReducer({ key: 'profileEditInform', reducer });
 const withSaga = injectSaga({ key: 'profileEditInform', saga });
 
 export default compose(
+    withWidth(),
+    withStyles(styles),
     withReducer,
     withSaga,
     withConnect,

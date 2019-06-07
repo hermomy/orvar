@@ -35,6 +35,7 @@ import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
 import ProfilePage from 'containers/ProfilePage';
 import ProfileOrder from 'containers/ProfileOrder';
+import ProfileEditInform from 'containers/ProfileEditInform';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
 
@@ -170,6 +171,11 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                             exact={true}
                             path="/profile/order"
                             component={ProfileOrder}
+                        />
+                        <Route
+                            exact={true}
+                            path="/profile/detail"
+                            component={ProfileEditInform}
                         />
                         <Route exact={true} path="/profilesmallscreen" component={ProfilePage} />
                         <PrivateRoute

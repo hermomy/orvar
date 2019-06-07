@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -19,16 +18,29 @@ import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+// import CardHeader from '@material-ui/core/CardHeader';
+// import Button from '@material-ui/core/Button';
+// import Hidden from '@material-ui/core/Hidden';
+import Divider from '@material-ui/core/Divider';
+
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import Tune from '@material-ui/icons/Tune';
+import ErrorOutline from '@material-ui/icons/ErrorOutline';
+import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 
 import makeSelectProfileOrder from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
 import styles from './materialStyle';
-import {
-    getOrder,
-    // getOrderDetail,
-} from './actions';
+
 
 const getList = (callListAPI, category, pageNum) => callListAPI ? apiRequest(`/order${category}?page=${pageNum}`, 'get') : null;
 
@@ -37,24 +49,57 @@ const getDetail = (callDetailAPI, link) => callDetailAPI ? apiRequest(`${link}`,
 export class ProfileOrder extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         callListAPI: true,
+        category: '',
+        pageNum: 1,
         callDetailAPI: true,
         detailURL: '',
         popupOrder: false,
-        category: '',
-        pageNum: 1,
     }
 
     componentWillMount() {
-        if (dataChecking(this.props, 'match', 'params', 'profilePart')) {
-            if (this.props.match.params.profilePart === 'canceled' ||
-                this.props.match.params.profilePart === 'to-paid' ||
-                this.props.match.params.profilePart === 'to-ship') {
-                this.props.dispatch(getOrder(`/${this.props.match.params.profilePart}`));
-            }
-        } else {
-            this.props.dispatch(getOrder(''));
-        }
+        // if (dataChecking(this.props, 'match', 'params', 'profilePart')) {
+        //     if (this.props.match.params.profilePart === 'canceled' ||
+        //         this.props.match.params.profilePart === 'to-paid' ||
+        //         this.props.match.params.profilePart === 'to-ship') {
+        //         this.props.dispatch(getOrder(`/${this.props.match.params.profilePart}`));
+        //     }
+        // } else {
+        //     this.props.dispatch(getOrder(''));
+        // }
     }
+
+    renderTopBar = () => (
+        <div>
+            <AppBar position="static" className={this.props.classes.Appbar}>
+                <Toolbar>
+                    <IconButton>
+                        <ChevronLeft />
+                    </IconButton>
+                    <div>
+                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '' })}>
+                            All Order
+                        </Typography>
+                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/to-paid' })}>
+                            Unpaid
+                        </Typography>
+                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/to-ship' })}>
+                            To Ship
+                        </Typography>
+                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/to-receive' })}>
+                            Posted
+                        </Typography>
+                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/reviewable' })}>
+                            Review
+                        </Typography>
+                    </div>
+                    {/* why can't float :( */}
+                    <IconButton style={{ position: 'absolute', right: '8px' }}>
+                        <Tune />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
+        </div>
+    )
 
     renderOrderlist = (data) => {
         if (!dataChecking(data, 'data', 'items')) {
@@ -62,17 +107,48 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         }
         return data.data.items.map((Order) =>
         (
-            <tr key={Order.id}>
-                <td>
-                    <div onClick={() => { this.setState({ popupOrder: !this.state.popupOrder }); this.setState({ detailURL: `${Order._links.self.href}` }); }}>
-                        {Order.number}
-                    </div>
-                </td>
-                <td>{Order.created_at}</td>
-                <td>{Order.courier}</td>
-                <td>{Order.currency.symbol}{Order.subtotal}</td>
-                <td>{Order.status}</td>
-            </tr>
+            // <tr key={Order.id}>
+            //     <td>
+            //         <div onClick={() => { this.setState({ popupOrder: !this.state.popupOrder }); this.setState({ detailURL: `${Order._links.self.href}` }); }}>
+            //             {Order.number}
+            //         </div>
+            //     </td>
+            //     <td>{Order.created_at}</td>
+            //     <td>{Order.courier}</td>
+            //     <td>{Order.currency.symbol}{Order.subtotal}</td>
+            //     <td>{Order.status}</td>
+            // </tr>
+            <Card classes={{ root: this.props.classes.Card }}>
+                <CardContent classes={{ root: this.props.classes.Card }}>
+                    <Grid container={true} spacing={0}>
+                        <Grid item={true} xs={6}>
+                            <Typography>Order Number</Typography>
+                            <Typography>{Order.number}</Typography>
+                        </Grid>
+                        <Grid item={true} xs={3}>
+                            <Typography>Status</Typography>
+                            <Typography>{Order.status}</Typography>
+                        </Grid>
+                        <Grid item={true} xs={2}>
+                            <ErrorOutline style={{ transform: 'rotate(180deg)' }} />
+                            <Typography inline={true}>{Order.created_at}</Typography>
+                        </Grid>
+                        <Grid item={true} xs={1}>
+                            <KeyboardArrowDown style={{ float: 'right' }} />
+                        </Grid>
+                    </Grid>
+                    <Divider style={{ margin: '10px 0' }} />
+                    <Grid container={true} spacing={0}>
+                        <Grid item={true} xs={10}>
+                            <Typography>View Order Details</Typography>
+                        </Grid>
+                        <Grid item={true} xs={2}>
+                            <Typography>Total</Typography>
+                            <Typography>{Order.currency.symbol}{Order.subtotal}</Typography>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
         ));
     }
 
@@ -94,11 +170,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         );
     }
 
-    renderOrderDetail = () => {
-        if (!this.state.popupOrder && !dataChecking(this.props, 'profileOrder', 'data', 'orderListDetail')) {
-            return null;
-        }
-        const orderlistdetail = dataChecking(this.props, 'profileOrder', 'data', 'orderListDetail');
+    renderOrderDetail = (data) => {
+        const orderlistdetail = dataChecking(data, 'data');
         return (
             <div>
                 <div>
@@ -286,49 +359,57 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     render() {
         return (
             <div>
-                <input type="button" onClick={() => { this.props.dispatch(getOrder('')); this.setState({ category: '' }); }} value="All Orders" />
-                <input type="button" onClick={() => { this.props.dispatch(getOrder('/reviewable')); this.setState({ category: '/reviewable' }); }} value="Reviewable Orders" />
-                <Async promise={getList(this.state.callListAPI, this.state.category, this.state.pageNum)}>
-                    <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
-                    <Async.Resolved>
-                        {(data) => (
-                            <div>
-                                {console.log(data)}
-                                {this.renderPagination(data)}
-                                <table border="1">
-                                    <tbody>
-                                        {this.renderOrderlist(data)}
-                                    </tbody>
-                                </table>
-                                <Async promise={getDetail(this.state.callDetailAPI, this.state.detailURL)}>
-                                    <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
-                                    <Async.Resolved>
-                                        {() => (
-                                            <div>
-                                                {this.renderOrderDetail()}
-                                            </div>
-                                            )
-                                        }
-                                    </Async.Resolved>
-                                    <Async.Rejected>
-                                        { console.error }
-                                    </Async.Rejected>
-                                </Async>
-                            </div>
-                            )
-                        }
-                    </Async.Resolved>
-                    <Async.Rejected>
-                        { console.error }
-                    </Async.Rejected>
-                </Async>
+                {this.renderTopBar()}
+                <div className="container">
+                    {/* <input type="button" onClick={() => { this.setState({ category: '' }); }} value="All Orders" />
+                    <input type="button" onClick={() => { this.setState({ category: '/' }); }} value="Reviewable Orders" /> */}
+                    <Async promise={getList(this.state.callListAPI, this.state.category, this.state.pageNum)}>
+                        <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
+                        <Async.Resolved>
+                            {(datalist) => (
+                                <div>
+                                    {console.log(datalist)}
+                                    {this.renderPagination(datalist)}
+                                    {/* <table border="1">
+                                        <tbody> */}
+                                    {this.renderOrderlist(datalist)}
+                                    {/* </tbody>
+                                    </table> */}
+                                    {
+                                        this.state.popupOrder ?
+                                            <Async promise={getDetail(this.state.callDetailAPI, this.state.detailURL)}>
+                                                <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
+                                                <Async.Resolved>
+                                                    {(datadetail) => (
+                                                        <div>
+                                                            {this.renderOrderDetail(datadetail)}
+                                                        </div>
+                                                        )
+                                                    }
+                                                </Async.Resolved>
+                                                <Async.Rejected>
+                                                    { console.error }
+                                                </Async.Rejected>
+                                            </Async>
+                                        :
+                                            null
+                                    }
+                                </div>
+                                )
+                            }
+                        </Async.Resolved>
+                        <Async.Rejected>
+                            { console.error }
+                        </Async.Rejected>
+                    </Async>
+                </div>
             </div>
         );
     }
 }
 
 ProfileOrder.propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    // dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
