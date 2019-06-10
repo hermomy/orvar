@@ -8,7 +8,7 @@ const styles = {
     userImage: {
         height: '60px',
         width: '60px',
-        marginBottom: '20px',
+        margin: '15px',
     },
     profileContentContainer: {
         display: 'flex',
@@ -55,9 +55,13 @@ const styles = {
         zIndex: '10',
     },
     mediumCard: {
-        width: '95%',
         flexDirection: 'column',
         marginTop: '14px',
+    },
+    mediumCardContent: {
+        display: 'flex',
+        textAlign: 'justify',
+        padding: '10px 50px',
     },
     cardAvatar: {
         alignItems: 'unset',
@@ -84,7 +88,9 @@ const styles = {
         minWidth: '0',
     },
     progress: {
-        margin: '0 auto',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
     },
     cardTtitle: {
         paddingBottom: '5px',

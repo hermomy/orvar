@@ -22,13 +22,17 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-// import Dialog from '@material-ui/core/Dialog';
-// import DialogActions from '@material-ui/core/DialogActions';
-// import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
-// import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
+
 import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
@@ -419,9 +423,9 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
             ['PHOTO', 'Add a photo to personalise your account', <Avatar src={user.avatar} alt="user" className={this.props.classes.userImage} />],
             ['NAME', user.username, null],
             ['LEVEL', user.membership.name, null],
-            ['GENDER', user.gender, <Create onClick={() => this.setState({ })} />],
+            ['GENDER', user.gender, <Create onClick={() => this.setState({ popup: 'gender' })} />],
             ['EMAIL ADDRESS', user.email, null],
-            ['BIRTH DATE', user.birthday, <Create />],
+            ['BIRTH DATE', user.birthday, <Create onClick={() => this.setState({ popup: 'birthday' })} />],
         ];
         return (
             <Card className={this.props.classes.profileInfoCard}>
@@ -454,9 +458,9 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
             concernString += `${concernString !== '' ? ',' : ''} ${concern.name}`;
         });
         const infos = [
-            ['SKIN COLOR', user.skin.tone.name, <Create />],
-            ['SKIN TYPE', user.skin.type.name, <Create />],
-            ['SKIN CONCERN', concernString, <Create />],
+            ['SKIN COLOR', user.skin.tone.name, <Create onClick={() => this.setState({ popup: 'skincolor' })} />],
+            ['SKIN TYPE', user.skin.type.name, <Create onClick={() => this.setState({ popup: 'skintype' })} />],
+            ['SKIN CONCERN', concernString, <Create onClick={() => this.setState({ popup: 'skinconcern' })} />],
         ];
         return (
             <Card className={this.props.classes.skindetailcard}>
@@ -508,31 +512,44 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
         </div>
     )
 
-    renderPopUp = () => (
-        <div></div>
-        // <Dialog
-        //     open={}
-        //     onClose={handleClose}
-        //     aria-labelledby="alert-dialog-title"
-        //     aria-describedby="alert-dialog-description"
-        // >
-        //     <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
-        //     <DialogContent>
-        //     <DialogContentText id="alert-dialog-description">
-        //         Let Google help apps determine location. This means sending anonymous location data to
-        //         Google, even when no apps are running.
-        //     </DialogContentText>
-        //     </DialogContent>
-        //     <DialogActions>
-        //     <Button onClick={handleClose} color="primary">
-        //         Disagree
-        //     </Button>
-        //     <Button onClick={handleClose} color="primary" autoFocus>
-        //         Agree
-        //     </Button>
-        //     </DialogActions>
-        // </Dialog>
-    )
+    renderPopUp = () => {
+        if (!dataChecking(this.props, 'profileEditInform', 'data', 'UserInformData')) {
+            return null;
+        }
+        const user = this.props.profileEditInform.data.UserInformData;
+        return (
+            <Dialog
+                open={this.state.popup !== ''}
+            >
+                <DialogTitle id="alert-dialog-title">abc</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Let Google help apps determine location. This means sending anonymous location data to
+                        Google, even when no apps are running.
+                    </DialogContentText>
+                    <Select
+                        value={this.state.gender ? this.state.gender : user.gender}
+                        // inputProps={{
+                        //     name: 'age',
+                        //     id: 'age-simple',
+                        // }}
+                    >
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => { this.setState({ popup: '' }); }} color="primary">
+                        Disagree
+                    </Button>
+                    <Button onClick={() => { this.setState({ popup: '' }); }} color="primary" autoFocus={true}>
+                        Agree
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        );
+    }
 
     renderPage2 = () => (
         <div></div>
@@ -543,7 +560,7 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
         return (
             <div>
                 {/* {console.log(user)} */}
-                <div className="container">
+                <div className="container" style={{ paddingTop: '0px' }}>
                     {this.renderTopBar()}
                     {
                         this.state.page1 ?
