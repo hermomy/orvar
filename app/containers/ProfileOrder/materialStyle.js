@@ -12,7 +12,8 @@ const styles = {
     },
     Card: {
         width: '100%',
-        height: '130px',
+        minHeight: '130px',
+        height: 'auto',
         marginBottom: '10px',
     },
 };

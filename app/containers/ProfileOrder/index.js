@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { dataChecking, apiRequest } from 'globalUtils';
-import { NavLink, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Pagination from 'components/Pagination';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -34,6 +34,9 @@ import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import Tune from '@material-ui/icons/Tune';
 import ErrorOutline from '@material-ui/icons/ErrorOutline';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
+import ControlPoint from '@material-ui/icons/ControlPoint';
+import RemoveCircleOutlined from '@material-ui/icons/RemoveCircleOutlined';
 
 import makeSelectProfileOrder from './selectors';
 import reducer from './reducer';
@@ -44,28 +47,57 @@ import styles from './materialStyle';
 
 const getList = (callListAPI, category, pageNum) => callListAPI ? apiRequest(`/order${category}?page=${pageNum}`, 'get') : null;
 
-const getDetail = (callDetailAPI, link) => callDetailAPI ? apiRequest(`${link}`, 'get') : null;
+const getDetail = (link, ordernumber) => checkredundant(ordernumber) ? apiRequest(`${link}`, 'get') : null;
+
+const checkredundant = (ordernumber) => {
+    const obj = { ...detailId };
+    if (!obj[ordernumber]) {
+        obj[ordernumber] = ordernumber;
+        detailId = obj;
+        return true;
+    }
+    delete obj[ordernumber];
+    detailId = obj;
+    return false;
+};
+
+let detailId = '';
 
 export class ProfileOrder extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
-        callListAPI: true,
         category: '',
         pageNum: 1,
-        callDetailAPI: true,
+        callListAPI: true,
         detailURL: '',
-        popupOrder: false,
+        orders: null,
+        merchants: null,
     }
 
-    componentWillMount() {
-        // if (dataChecking(this.props, 'match', 'params', 'profilePart')) {
-        //     if (this.props.match.params.profilePart === 'canceled' ||
-        //         this.props.match.params.profilePart === 'to-paid' ||
-        //         this.props.match.params.profilePart === 'to-ship') {
-        //         this.props.dispatch(getOrder(`/${this.props.match.params.profilePart}`));
-        //     }
-        // } else {
-        //     this.props.dispatch(getOrder(''));
-        // }
+    checkOpen = (array, targetorder, condition) => {
+        let obj = '';
+        if (array === 1) {
+            obj = { ...this.state.orders };
+        } else if (array === 2) {
+            obj = { ...this.state.merchants };
+        }
+        if (condition === 'toggle') {
+            if (obj[targetorder]) {
+                delete obj[targetorder];
+            } else {
+                obj[targetorder] = targetorder;
+            }
+            if (array === 1) {
+                this.setState({ orders: obj });
+            } else if (array === 2) {
+                this.setState({ merchants: obj });
+            }
+        } else {
+            if (obj[targetorder]) {
+                return true;
+            }
+            return false;
+        }
+        return null;
     }
 
     renderTopBar = () => (
@@ -92,7 +124,6 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                             Review
                         </Typography>
                     </div>
-                    {/* why can't float :( */}
                     <IconButton style={{ position: 'absolute', right: '8px' }}>
                         <Tune />
                     </IconButton>
@@ -105,20 +136,10 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         if (!dataChecking(data, 'data', 'items')) {
             return null;
         }
+        this.setState({ callListAPI: false });
         return data.data.items.map((Order) =>
         (
-            // <tr key={Order.id}>
-            //     <td>
-            //         <div onClick={() => { this.setState({ popupOrder: !this.state.popupOrder }); this.setState({ detailURL: `${Order._links.self.href}` }); }}>
-            //             {Order.number}
-            //         </div>
-            //     </td>
-            //     <td>{Order.created_at}</td>
-            //     <td>{Order.courier}</td>
-            //     <td>{Order.currency.symbol}{Order.subtotal}</td>
-            //     <td>{Order.status}</td>
-            // </tr>
-            <Card classes={{ root: this.props.classes.Card }}>
+            <Card classes={{ root: this.props.classes.Card }} key={Order.number}>
                 <CardContent classes={{ root: this.props.classes.Card }}>
                     <Grid container={true} spacing={0}>
                         <Grid item={true} xs={6}>
@@ -134,10 +155,21 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                             <Typography inline={true}>{Order.created_at}</Typography>
                         </Grid>
                         <Grid item={true} xs={1}>
-                            <KeyboardArrowDown style={{ float: 'right' }} />
+                            {
+                                !this.checkOpen(1, Order.number, 'check') ?
+                                    <KeyboardArrowDown style={{ float: 'right' }} onClick={() => this.checkOpen(1, Order.number, 'toggle')} />
+                                :
+                                    <KeyboardArrowUp style={{ float: 'right' }} onClick={() => this.checkOpen(1, Order.number, 'toggle')} />
+                            }
                         </Grid>
                     </Grid>
                     <Divider style={{ margin: '10px 0' }} />
+                    {
+                        this.checkOpen(1, Order.number, 'check') ?
+                            this.renderMerchantList(Order._links.self.href, Order.number)
+                        :
+                            null
+                    }
                     <Grid container={true} spacing={0}>
                         <Grid item={true} xs={10}>
                             <Typography>View Order Details</Typography>
@@ -151,6 +183,56 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
             </Card>
         ));
     }
+
+    renderMerchantList = (link, ordernumber) => (
+        <Async promise={getDetail(link, ordernumber)}>
+            <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
+            <Async.Resolved>
+                {(data) => (
+                    <div>
+                        {
+                            data.data.merchants.map((merchant) => (
+                                <div key={merchant.name}>
+                                    <Grid container={true} spacing={0}>
+                                        <Grid item={true} xs={11}>
+                                            <div>
+                                                <Typography>Merchant</Typography>
+                                                <Typography>{merchant.name}</Typography>
+                                            </div>
+                                        </Grid>
+                                        <Grid item={true} xs={1}>
+                                            {
+                                                !this.checkOpen(2, ordernumber, 'check') ?
+                                                    <ControlPoint style={{ float: 'right' }} onClick={() => this.checkOpen(2, ordernumber, 'toggle')} />
+                                                :
+                                                    <RemoveCircleOutlined style={{ float: 'right' }} onClick={() => this.checkOpen(2, ordernumber, 'toggle')} />
+                                            }
+                                        </Grid>
+                                    </Grid>
+                                    {
+                                        this.checkOpen(2, ordernumber, 'check') ?
+                                            this.renderOrderDetail(data)
+                                        :
+                                            null
+                                    }
+                                    <Divider />
+                                </div>
+                            ))
+                        }
+                    </div>
+                    )
+                }
+            </Async.Resolved>
+            <Async.Rejected>
+                { console.error }
+            </Async.Rejected>
+        </Async>
+    )
+
+    renderOrderDetail = () => (
+        <div>
+        </div>
+    )
 
     renderPagination = (data) => {
         if (!dataChecking(data, 'data', 'items')) {
@@ -170,105 +252,105 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         );
     }
 
-    renderOrderDetail = (data) => {
-        const orderlistdetail = dataChecking(data, 'data');
-        return (
-            <div>
-                <div>
-                    <br />
-                    <table border="1">
-                        <tbody>
-                            <tr>
-                                <th>Sold and Shipped By</th>
-                                <th>Tracking No</th>
-                                <th>Courier</th>
-                                <th>Order Status</th>
-                            </tr>
-                            {
-                                dataChecking(orderlistdetail, 'merchants') ?
-                                orderlistdetail.merchants.map((merchant) => (
-                                    <tr key={merchant.id}>
-                                        <td>{merchant.name}</td>
-                                        <td>{merchant.tracking_number ? `${merchant.tracking_number}` : '-'}</td>
-                                        <td>{merchant.summary.shipping.name}</td>
-                                        <td>{merchant.summary.shipping.status}</td>
-                                    </tr>
-                                ))
-                                :
-                                null
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div>
-                    {
-                        dataChecking(orderlistdetail, 'merchants') ?
-                        orderlistdetail.merchants.map((merchant) => (
-                            <div key={merchant.id} >
-                                <table border="1">
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <span>Sold and Shipped By</span><br />
-                                                <span>{merchant.name}</span>
-                                            </td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>
-                                                <span>{merchant.logo.brief}<br /></span><br />
-                                                <span>{merchant.shipping.estimate_arrival}</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>CART ITEM</td>
-                                            <td>UNIT PRICE</td>
-                                            <td>QTY</td>
-                                            <td>TOTAL</td>
-                                        </tr>
-                                        {
-                                            dataChecking(merchant, 'items') ?
-                                            merchant.items.map((item) => (
-                                                <tr key={item.id}>
-                                                    <NavLink to={`${item._applink ? `/mall/${item._applink.id}` : '/mall'}`} ><td><img src={item.product.image.small} alt="" /></td></NavLink>
-                                                    <td>{item.product.name}</td>
-                                                    <td>{orderlistdetail.currency.symbol}{item.price.selling}</td>
-                                                    <td>{item.qty}</td>
-                                                    <td>{orderlistdetail.currency.symbol}{item.subtotal}</td>
-                                                </tr>
-                                            ))
-                                            :
-                                            null
-                                        }
-                                    </tbody>
-                                </table>
-                                {
-                                    dataChecking(orderlistdetail, 'summary', 'subtotal') ?
-                                    orderlistdetail.summary.subtotal.map((subtotal) => (
-                                        <div key={subtotal.id} style={{ backgroundColor: 'pink' }}>
-                                            <span>Subtotal</span><br />
-                                            <span>{orderlistdetail.currency.symbol}{subtotal.subtotal}</span><br />
-                                            <span>Shipping Fee</span><br />
-                                            <span>{orderlistdetail.currency.symbol}{subtotal.shipping}</span><br />
-                                            <span>Total</span><br />
-                                            <span>{orderlistdetail.currency.symbol}{subtotal.total}</span><br />
-                                        </div>
-                                    ))
-                                    :
-                                    null
-                                }
-                            </div>
-                        ))
-                        :
-                        null
-                    }
-                </div>
-                {this.renderPaymentInformation(orderlistdetail)}
-                {this.renderShippingInformation(orderlistdetail)}
-            </div>
-        );
-    }
+    // renderOrderDetail = (data) => {
+    //     const orderlistdetail = dataChecking(data, 'data');
+    //     return (
+    //         <div>
+    //             <div>
+    //                 <br />
+    //                 <table border="1">
+    //                     <tbody>
+    //                         <tr>
+    //                             <th>Sold and Shipped By</th>
+    //                             <th>Tracking No</th>
+    //                             <th>Courier</th>
+    //                             <th>Order Status</th>
+    //                         </tr>
+    //                         {
+    //                             dataChecking(orderlistdetail, 'merchants') ?
+    //                             orderlistdetail.merchants.map((merchant) => (
+    //                                 <tr key={merchant.id}>
+    //                                     <td>{merchant.name}</td>
+    //                                     <td>{merchant.tracking_number ? `${merchant.tracking_number}` : '-'}</td>
+    //                                     <td>{merchant.summary.shipping.name}</td>
+    //                                     <td>{merchant.summary.shipping.status}</td>
+    //                                 </tr>
+    //                             ))
+    //                             :
+    //                             null
+    //                         }
+    //                     </tbody>
+    //                 </table>
+    //             </div>
+    //             <div>
+    //                 {
+    //                     dataChecking(orderlistdetail, 'merchants') ?
+    //                     orderlistdetail.merchants.map((merchant) => (
+    //                         <div key={merchant.id} >
+    //                             <table border="1">
+    //                                 <tbody>
+    //                                     <tr>
+    //                                         <td>
+    //                                             <span>Sold and Shipped By</span><br />
+    //                                             <span>{merchant.name}</span>
+    //                                         </td>
+    //                                         <td></td>
+    //                                         <td></td>
+    //                                         <td></td>
+    //                                         <td>
+    //                                             <span>{merchant.logo.brief}<br /></span><br />
+    //                                             <span>{merchant.shipping.estimate_arrival}</span>
+    //                                         </td>
+    //                                     </tr>
+    //                                     <tr>
+    //                                         <td></td>
+    //                                         <td>CART ITEM</td>
+    //                                         <td>UNIT PRICE</td>
+    //                                         <td>QTY</td>
+    //                                         <td>TOTAL</td>
+    //                                     </tr>
+    //                                     {
+    //                                         dataChecking(merchant, 'items') ?
+    //                                         merchant.items.map((item) => (
+    //                                             <tr key={item.id}>
+    //                                                 <NavLink to={`${item._applink ? `/mall/${item._applink.id}` : '/mall'}`} ><td><img src={item.product.image.small} alt="" /></td></NavLink>
+    //                                                 <td>{item.product.name}</td>
+    //                                                 <td>{orderlistdetail.currency.symbol}{item.price.selling}</td>
+    //                                                 <td>{item.qty}</td>
+    //                                                 <td>{orderlistdetail.currency.symbol}{item.subtotal}</td>
+    //                                             </tr>
+    //                                         ))
+    //                                         :
+    //                                         null
+    //                                     }
+    //                                 </tbody>
+    //                             </table>
+    //                             {
+    //                                 dataChecking(orderlistdetail, 'summary', 'subtotal') ?
+    //                                 orderlistdetail.summary.subtotal.map((subtotal) => (
+    //                                     <div key={subtotal.id} style={{ backgroundColor: 'pink' }}>
+    //                                         <span>Subtotal</span><br />
+    //                                         <span>{orderlistdetail.currency.symbol}{subtotal.subtotal}</span><br />
+    //                                         <span>Shipping Fee</span><br />
+    //                                         <span>{orderlistdetail.currency.symbol}{subtotal.shipping}</span><br />
+    //                                         <span>Total</span><br />
+    //                                         <span>{orderlistdetail.currency.symbol}{subtotal.total}</span><br />
+    //                                     </div>
+    //                                 ))
+    //                                 :
+    //                                 null
+    //                             }
+    //                         </div>
+    //                     ))
+    //                     :
+    //                     null
+    //                 }
+    //             </div>
+    //             {this.renderPaymentInformation(orderlistdetail)}
+    //             {this.renderShippingInformation(orderlistdetail)}
+    //         </div>
+    //     );
+    // }
 
     // shipping fee need?
     renderPaymentInformation = (orderlistdetail) => (
@@ -368,32 +450,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                         <Async.Resolved>
                             {(datalist) => (
                                 <div>
-                                    {console.log(datalist)}
-                                    {this.renderPagination(datalist)}
-                                    {/* <table border="1">
-                                        <tbody> */}
                                     {this.renderOrderlist(datalist)}
-                                    {/* </tbody>
-                                    </table> */}
-                                    {
-                                        this.state.popupOrder ?
-                                            <Async promise={getDetail(this.state.callDetailAPI, this.state.detailURL)}>
-                                                <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
-                                                <Async.Resolved>
-                                                    {(datadetail) => (
-                                                        <div>
-                                                            {this.renderOrderDetail(datadetail)}
-                                                        </div>
-                                                        )
-                                                    }
-                                                </Async.Resolved>
-                                                <Async.Rejected>
-                                                    { console.error }
-                                                </Async.Rejected>
-                                            </Async>
-                                        :
-                                            null
-                                    }
                                 </div>
                                 )
                             }
