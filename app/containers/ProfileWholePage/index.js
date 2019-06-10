@@ -47,8 +47,6 @@ import LocalActivity from '@material-ui/icons/LocalActivity';
 import Clear from '@material-ui/icons/Clear';
 import Fade from '@material-ui/core/Fade';
 import Badge from '@material-ui/core/Badge';
-import ArrowLeft from '@material-ui/icons/ArrowLeft';
-import ArrowRight from '@material-ui/icons/ArrowRight';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import { withStyles } from '@material-ui/core/styles';
