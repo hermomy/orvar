@@ -16,7 +16,7 @@ const styles = {
     },
     longCard: {
         flexDirection: 'column',
-        height: '300px',
+        height: '320px',
         marginTop: '-25px',
     },
     bigCard: {

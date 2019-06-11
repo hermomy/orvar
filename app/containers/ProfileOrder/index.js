@@ -47,21 +47,15 @@ import styles from './materialStyle';
 
 const getList = (callListAPI, category, pageNum) => callListAPI ? apiRequest(`/order${category}?page=${pageNum}`, 'get') : null;
 
-const getDetail = (link, ordernumber) => checkredundant(ordernumber) ? apiRequest(`${link}`, 'get') : null;
+const getDetail = (link, newOrders, orders) => checkredundant(newOrders, orders) ? apiRequest(`${link}`, 'get') : null;
 
-const checkredundant = (ordernumber) => {
-    const obj = { ...detailId };
-    if (!obj[ordernumber]) {
-        obj[ordernumber] = ordernumber;
-        detailId = obj;
+const checkredundant = (newOrders, orders) => {
+    // console.log(`${orders[Object.keys(orders).length-1]}`);
+    if (orders[newOrders] === newOrders) {
         return true;
     }
-    delete obj[ordernumber];
-    detailId = obj;
     return false;
 };
-
-let detailId = '';
 
 export class ProfileOrder extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -70,6 +64,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         callListAPI: true,
         detailURL: '',
         orders: null,
+        newOrder: '',
         merchants: null,
     }
 
@@ -81,15 +76,15 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
             obj = { ...this.state.merchants };
         }
         if (condition === 'toggle') {
-            if (obj[targetorder]) {
-                delete obj[targetorder];
-            } else {
+            if (!obj[targetorder]) {
                 obj[targetorder] = targetorder;
+            } else {
+                delete obj[targetorder];
             }
             if (array === 1) {
-                this.setState({ orders: obj });
+                this.setState({ orders: obj, newOrder: targetorder });
             } else if (array === 2) {
-                this.setState({ merchants: obj });
+                this.setState({ merchants: obj, newOrder: targetorder });
             }
         } else {
             if (obj[targetorder]) {
@@ -185,7 +180,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     }
 
     renderMerchantList = (link, ordernumber) => (
-        <Async promise={getDetail(link, ordernumber)}>
+        <Async promise={getDetail(link, ordernumber, this.state.orders)}>
             <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
             <Async.Resolved>
                 {(data) => (
@@ -193,6 +188,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                         {
                             data.data.merchants.map((merchant) => (
                                 <div key={merchant.name}>
+                                    {console.log(this.state.newOrder)}
                                     <Grid container={true} spacing={0}>
                                         <Grid item={true} xs={11}>
                                             <div>
