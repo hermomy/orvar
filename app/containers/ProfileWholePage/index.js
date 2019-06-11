@@ -95,6 +95,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         if (dataChecking(this.props, 'match', 'params', 'profilePart')) {
             this.setState({ subpage: this.props.match.params.profilePart });
         }
+        console.log(this.props.width);
     }
 
     showedWallet = 1;
