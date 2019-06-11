@@ -28,12 +28,14 @@ import LogoutForm from 'containers/LogoutForm';
 import HerListing from 'containers/HerListing';
 import MallPage from 'containers/MallPage';
 import NotFoundPage from 'containers/NotFoundPage';
-import ProfileWholePage from 'containers/ProfileWholePage';
 import OnboardingPage from 'containers/OnboardingPage';
+import ProfileWholePage from 'containers/ProfileWholePage';
 // import Cart from 'containers/CartPage';
 import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
 import ProfilePage from 'containers/ProfilePage';
+import ProfileOrder from 'containers/ProfileOrder';
+import ProfileEditInform from 'containers/ProfileEditInform';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
 
@@ -61,7 +63,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
         return (
             <section>
                 <Notify></Notify>
-                <div id="hershop-content-container" style={{ marginTop: '40px' }}>
+                <div id="hershop-content-container">
                     <Header />
                     <Switch>
                         <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />
@@ -164,11 +166,16 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route exact={true} path="/feedback" component={FeedbackPage} />
                         <Route exact={true} path="/" component={HomePage} />
-                        <Route exact={true} path="/profile/:profilePart(me|wallet|order|review|wishlist|setting|logout)?" component={ProfileWholePage} />
+                        <Route exact={true} path="/profile/:profilePart(me|wallet|review|wishlist|setting|logout)?" component={ProfileWholePage} />
                         <Route
                             exact={true}
-                            path="/profile/:order/:profilePart(canceled|to-paid|to-ship)?"
-                            component={ProfileWholePage}
+                            path="/profile/order"
+                            component={ProfileOrder}
+                        />
+                        <Route
+                            exact={true}
+                            path="/profile/detail"
+                            component={ProfileEditInform}
                         />
                         <Route exact={true} path="/profilesmallscreen" component={ProfilePage} />
                         <PrivateRoute
