@@ -19,10 +19,11 @@ export function getOrder(category, numOfPage) {
     };
 }
 
-export function getOrderDetail(OrderDetailAPI) {
+export function getOrderDetail(OrderDetailAPI, orderId) {
     return {
         type: GET_ORDER_DETAIL,
         OrderDetailAPI,
+        orderId,
     };
 }
 

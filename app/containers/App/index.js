@@ -53,6 +53,7 @@ import saga from './saga';
 import {
     fetchConfig,
 } from './actions';
+import { ProfileWallet } from '../ProfileWallet';
 
 export class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     componentDidMount() {
@@ -166,7 +167,12 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route exact={true} path="/feedback" component={FeedbackPage} />
                         <Route exact={true} path="/" component={HomePage} />
-                        <Route exact={true} path="/profile/:profilePart(me|wallet|review|wishlist|setting|logout)?" component={ProfileWholePage} />
+                        <Route exact={true} path="/profile/:profilePart(me|review|wishlist|setting|logout)?" component={ProfileWholePage} />
+                        <Route
+                            exact={true}
+                            path="/profile/wallet"
+                            component={ProfileWallet}
+                        />
                         <Route
                             exact={true}
                             path="/profile/order"

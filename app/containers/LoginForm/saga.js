@@ -18,6 +18,7 @@ export function* doLogin(action) {
             globalScope.token = response.data.token;
             const isAdminResponse = yield call(apiRequest, '/view/preview/145', 'post');
             globalScope.isAdmin = !!(isAdminResponse && isAdminResponse.data && isAdminResponse.data.id);
+            globalScope.axios.setHeader('hertoken', globalScope.token);
             if (globalScope.isAdmin) {
                 globalScope.token = response.data.token;
                 setCookie(process.env.TOKEN_KEY, globalScope.token);
@@ -26,6 +27,7 @@ export function* doLogin(action) {
             } else {
                 setCookie(process.env.TOKEN_KEY, globalScope.token);
                 yield put(loginSuccess(response.data.token));
+                globalScope.axios.setHeader('hertoken', null);
             }
         } else {
             yield put(loginFailed(response.data));
