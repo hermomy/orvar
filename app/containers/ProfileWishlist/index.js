@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { apiRequest, combineObject } from 'globalUtils';
-import Async from 'react-async';
+import Async from 'assets/react-async';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import ProductCard from 'components/ProductCard';

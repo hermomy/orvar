@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import Async from 'react-async';
+import Async from 'assets/react-async';
 import { NavLink } from 'react-router-dom';
 
 import Avatar from '@material-ui/core/Avatar';
