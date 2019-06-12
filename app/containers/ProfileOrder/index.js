@@ -24,11 +24,14 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
+// import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 // import CardHeader from '@material-ui/core/CardHeader';
 // import Button from '@material-ui/core/Button';
 // import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button';
+import MobileStepper from '@material-ui/core/MobileStepper';
 
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import Tune from '@material-ui/icons/Tune';
@@ -37,6 +40,8 @@ import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import ControlPoint from '@material-ui/icons/ControlPoint';
 import RemoveCircleOutlined from '@material-ui/icons/RemoveCircleOutlined';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
 import makeSelectProfileOrder from './selectors';
 import reducer from './reducer';
@@ -44,14 +49,13 @@ import saga from './saga';
 import './style.scss';
 import styles from './materialStyle';
 
-
 const getList = (callListAPI, category, pageNum) => callListAPI ? apiRequest(`/order${category}?page=${pageNum}`, 'get') : null;
 
-const getDetail = (link, newOrders, orders) => checkredundant(newOrders, orders) ? apiRequest(`${link}`, 'get') : null;
+const getDetail = (link, order, orders, newOrders) => checkredundant(order, orders, newOrders) ? apiRequest(`${link}`, 'get') : null;
 
-const checkredundant = (newOrders, orders) => {
-    // console.log(`${orders[Object.keys(orders).length-1]}`);
-    if (orders[newOrders] === newOrders) {
+const checkredundant = (order, orders, newOrders) => {
+    const obj = { ...orders };
+    if (obj[newOrders] === order) {
         return true;
     }
     return false;
@@ -60,12 +64,13 @@ const checkredundant = (newOrders, orders) => {
 export class ProfileOrder extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         category: '',
-        pageNum: 1,
+        pageNum: 3,
         callListAPI: true,
         detailURL: '',
         orders: null,
         newOrder: '',
         merchants: null,
+        recommend: 0,
     }
 
     checkOpen = (array, targetorder, condition) => {
@@ -137,15 +142,11 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
             <Card classes={{ root: this.props.classes.Card }} key={Order.number}>
                 <CardContent classes={{ root: this.props.classes.Card }}>
                     <Grid container={true} spacing={0}>
-                        <Grid item={true} xs={6}>
+                        <Grid item={true} xs={8}>
                             <Typography>Order Number</Typography>
                             <Typography>{Order.number}</Typography>
                         </Grid>
                         <Grid item={true} xs={3}>
-                            <Typography>Status</Typography>
-                            <Typography>{Order.status}</Typography>
-                        </Grid>
-                        <Grid item={true} xs={2}>
                             <ErrorOutline style={{ transform: 'rotate(180deg)' }} />
                             <Typography inline={true}>{Order.created_at}</Typography>
                         </Grid>
@@ -161,7 +162,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                     <Divider style={{ margin: '10px 0' }} />
                     {
                         this.checkOpen(1, Order.number, 'check') ?
-                            this.renderMerchantList(Order._links.self.href, Order.number)
+                            this.renderMerchantList(Order._links.self.href, Order.number, Order.currency.symbol)
                         :
                             null
                     }
@@ -179,8 +180,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         ));
     }
 
-    renderMerchantList = (link, ordernumber) => (
-        <Async promise={getDetail(link, ordernumber, this.state.orders)}>
+    renderMerchantList = (link, ordernumber, currency) => (
+        <Async promise={getDetail(link, ordernumber, this.state.orders, this.state.newOrder)}>
             <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
             <Async.Resolved>
                 {(data) => (
@@ -188,13 +189,16 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                         {
                             data.data.merchants.map((merchant) => (
                                 <div key={merchant.name}>
-                                    {console.log(this.state.newOrder)}
                                     <Grid container={true} spacing={0}>
-                                        <Grid item={true} xs={11}>
+                                        <Grid item={true} xs={7}>
                                             <div>
                                                 <Typography>Merchant</Typography>
                                                 <Typography>{merchant.name}</Typography>
                                             </div>
+                                        </Grid>
+                                        <Grid item={true} xs={4}>
+                                            <Typography>Status</Typography>
+                                            <Typography>{merchant.summary.shipping.status}</Typography>
                                         </Grid>
                                         <Grid item={true} xs={1}>
                                             {
@@ -207,7 +211,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                                     </Grid>
                                     {
                                         this.checkOpen(2, ordernumber, 'check') ?
-                                            this.renderOrderDetail(data)
+                                            this.renderOrderDetail(merchant, currency)
                                         :
                                             null
                                     }
@@ -225,8 +229,71 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         </Async>
     )
 
-    renderOrderDetail = () => (
-        <div>
+    renderOrderDetail = (merchant, currency) => (
+        <div style={{ position: 'relative', marginTop: '10px' }}>
+            {console.log(merchant)}
+            <div>
+                {
+                    merchant.items.length >= 1 ?
+                        <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
+                            <img src={merchant.items[this.state.recommend].product.image.small} width="60%" alt="" /><br />
+                            <Typography inline={true}>{merchant.items[this.state.recommend].name}</Typography><br />
+                            <Typography inline={true}>{merchant.items[this.state.recommend].qty} x {currency} {merchant.items[this.state.recommend].price.retail}</Typography>
+                        </div>
+                    :
+                        null
+                }
+                {
+                    merchant.items.length >= 2 ?
+                        <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
+                            <img src={merchant.items[this.state.recommend + 1].product.image.small} width="60%" alt="" /><br />
+                            <Typography inline={true}>{merchant.items[this.state.recommend + 1].name}</Typography><br />
+                            <Typography inline={true}>{merchant.items[this.state.recommend + 1].qty} x {currency} {merchant.items[this.state.recommend + 1].price.retail}</Typography>
+                        </div>
+                    :
+                        null
+                }
+                {
+                    merchant.items.length >= 3 ?
+                        <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
+                            <img src={merchant.items[this.state.recommend + 2].product.image.small} width="60%" alt="" /><br />
+                            <Typography inline={true}>{merchant.items[this.state.recommend + 2].name}</Typography><br />
+                            <Typography inline={true}>{merchant.items[this.state.recommend + 2].qty} x {currency} {merchant.items[this.state.recommend + 2].price.retail}</Typography>
+                        </div>
+                    :
+                        null
+                }
+                <MobileStepper
+                    steps={merchant.items.length - 1}
+                    position="static"
+                    variant="progress"
+                    activeStep={0}
+                    className={this.props.classes.mobileStepper}
+                    nextButton={
+                        <Button
+                            onClick={() => { this.setState({ recommend: this.state.recommend - 1 }); }}
+                            disabled={this.state.recommend === 0}
+                            classes={{ root: this.props.classes.walletButton }}
+                            style={{ position: 'absolute', top: '25%', left: '0' }}
+                        >
+                            <KeyboardArrowLeft />
+                        </Button>
+                    }
+                    backButton={
+                        <Button
+                            onClick={() => { this.setState({ recommend: this.state.recommend + 1 }); }}
+                            disabled={`${this.state.recommend - 3}` === `${merchant.items.length}`}
+                            classes={{ root: this.props.classes.walletButton }}
+                            style={{ position: 'absolute', top: '25%', right: '35%' }}
+                        >
+                            <KeyboardArrowRight />
+                        </Button>
+                    }
+                />
+            </div>
+            <div style={{ position: 'absolute', width: '35%', height: '100%', right: '0', top: '0', borderLeft: '1px gray solid' }}>
+                <Typography inline={true}>guhfdsuijsoersiujo</Typography><br />
+            </div>
         </div>
     )
 

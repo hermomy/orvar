@@ -336,11 +336,14 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
             <CardContent style={{ textAlign: 'left', marginRight: '37px' }}>
                 <Grid container={true} spacing={0}>
                     {
-                        data.data.items.slice(0, this.props.width === 'xs' ? 4 : 6).map((item, index) => (
-                            <Grid xs={6} sm={4} item={true} key={index}>
-                                <img src={item.product.image.medium} alt={item.product.name} />
-                            </Grid>
+                        data.data.items ?
+                            data.data.items.slice(0, this.props.width === 'xs' ? 4 : 6).map((item, index) => (
+                                <Grid xs={6} sm={4} item={true} key={index}>
+                                    <img src={item.product.image.medium} alt={item.product.name} />
+                                </Grid>
                         ))
+                        :
+                            null
                     }
                 </Grid>
             </CardContent>
@@ -357,28 +360,31 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
             />
             <CardContent style={{ marginTop: '0px' }}>
                 {
-                    data.data.merchants.map((merchant) => (
-                        merchant.items.slice(0, 4).map((item, index) => (
-                            <Card className={this.props.classes.cartCard} key={index}>
-                                <CardHeader
-                                    title={<img src={item.product.image.small} width="55px" style={{ marginLeft: '10px' }} alt={item.product.name} />}
-                                />
-                                <CardContent style={{ paddingBottom: '0px', margin: 'auto 0', padding: '0px' }}>
-                                    <div style={{ display: 'inline' }}>
-                                        <Typography align="left" variant="body2">{item.product.brand.name}</Typography>
-                                        <Typography align="left" variant="body2">
-                                            {
-                                                this.props.width === 'lg' ?
-                                                item.product.display_name
-                                                :
-                                                item.product.plain_name
-                                            }
-                                        </Typography>
-                                    </div>
-                                </CardContent>
-                            </Card>
+                    data.data.merchants ?
+                        data.data.merchants.map((merchant) => (
+                            merchant.items.slice(0, 4).map((item, index) => (
+                                <Card className={this.props.classes.cartCard} key={index}>
+                                    <CardHeader
+                                        title={<img src={item.product.image.small} width="55px" style={{ marginLeft: '10px' }} alt={item.product.name} />}
+                                    />
+                                    <CardContent style={{ paddingBottom: '0px', margin: 'auto 0', padding: '0px' }}>
+                                        <div style={{ display: 'inline' }}>
+                                            <Typography align="left" variant="body2">{item.product.brand.name}</Typography>
+                                            <Typography align="left" variant="body2">
+                                                {
+                                                    this.props.width === 'lg' ?
+                                                    item.product.display_name
+                                                    :
+                                                    item.product.plain_name
+                                                }
+                                            </Typography>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))
                         ))
-                    ))
+                    :
+                        null
                 }
             </CardContent>
         </Card>

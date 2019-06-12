@@ -16,6 +16,14 @@ const styles = {
         height: 'auto',
         marginBottom: '10px',
     },
+    walletButton: {
+        minWidth: '0',
+    },
+    mobileStepper: {
+        backgroundColor: 'white',
+        margin: '0',
+        padding: '0',
+    },
 };
 
 export default styles;
