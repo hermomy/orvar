@@ -2,9 +2,6 @@ const styles = {
     cardHeader: {
         color: 'rgba(0,0,0,0.26)',
     },
-    pageContainer: {
-        justifyContent: 'center',
-    },
     userImage: {
         height: '60px',
         width: '60px',

@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { dataChecking, apiRequest } from 'globalUtils';
-import { withRouter } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import Pagination from 'components/Pagination';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -70,7 +70,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         orders: null,
         newOrder: '',
         merchants: null,
-        recommend: 0,
+        listitem: null,
     }
 
     checkOpen = (array, targetorder, condition) => {
@@ -100,13 +100,25 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         return null;
     }
 
+    logiclistitem = (addminus, ordernumber, merchantname) => {
+        const obj = { ...this.state.listitem };
+        if (!obj[`${merchantname}_${ordernumber}`]) {
+            obj[`${merchantname}_${ordernumber}`] = 0;
+        } else {
+            obj[`${merchantname}_${ordernumber}`] += addminus;
+        }
+        this.setState({ listitem: obj });
+    }
+
     renderTopBar = () => (
         <div>
             <AppBar position="static" className={this.props.classes.Appbar}>
                 <Toolbar>
-                    <IconButton>
-                        <ChevronLeft />
-                    </IconButton>
+                    <NavLink to="/profile/me">
+                        <IconButton>
+                            <ChevronLeft />
+                        </IconButton>
+                    </NavLink>
                     <div>
                         <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '' })}>
                             All Order
@@ -189,6 +201,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                         {
                             data.data.merchants.map((merchant) => (
                                 <div key={merchant.name}>
+                                    {/* {this.logiclistitem(0, ordernumber, merchant.name)} */}
                                     <Grid container={true} spacing={0}>
                                         <Grid item={true} xs={7}>
                                             <div>
@@ -211,7 +224,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                                     </Grid>
                                     {
                                         this.checkOpen(2, ordernumber, 'check') ?
-                                            this.renderOrderDetail(merchant, currency)
+                                            this.renderOrderDetail(merchant, currency, ordernumber)
                                         :
                                             null
                                     }
@@ -229,26 +242,54 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         </Async>
     )
 
-    renderOrderDetail = (merchant, currency) => (
+    renderOrderDetail = (merchant, currency, ordernumber) => (
         <div style={{ position: 'relative', marginTop: '10px' }}>
-            {console.log(merchant)}
+            {console.log(this.state.listitem)}
             <div>
+                {/* {console.log(this.state.listitem[`${merchant.name}_${ordernumber}`])}
+                {console.log(this.state.listitem[`${merchant.name}_${ordernumber}`] ? this.state.listitem[`${merchant.name}_${ordernumber}`] : 0)} */}
                 {
                     merchant.items.length >= 1 ?
                         <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
-                            <img src={merchant.items[this.state.recommend].product.image.small} width="60%" alt="" /><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend].name}</Typography><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend].qty} x {currency} {merchant.items[this.state.recommend].price.retail}</Typography>
+                            <img
+                                src={
+                                    merchant.items[
+                                        this.state.listitem[`${merchant.name}_${ordernumber}`] || 0
+                                    ].product.image.small
+                                }
+                                width="60%"
+                                alt=""
+                            /><br />
+                            <Typography inline={true}>
+                                {
+                                    merchant.items[
+                                        this.state.listitem[`${merchant.name}_${ordernumber}`] || 0
+                                    ].name
+                                }
+                            </Typography><br />
+                            <Typography inline={true}>
+                                {
+                                    merchant.items[
+                                        this.state.listitem[`${merchant.name}_${ordernumber}`] || 0
+                                    ].qty
+                                }
+                                 x {currency}
+                                {
+                                    merchant.items[
+                                        this.state.listitem[`${merchant.name}_${ordernumber}`] || 0
+                                    ].price.retail
+                                }
+                            </Typography>
                         </div>
                     :
                         null
                 }
-                {
+                {/* {
                     merchant.items.length >= 2 ?
                         <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
-                            <img src={merchant.items[this.state.recommend + 1].product.image.small} width="60%" alt="" /><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend + 1].name}</Typography><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend + 1].qty} x {currency} {merchant.items[this.state.recommend + 1].price.retail}</Typography>
+                            <img src={merchant.items[this.state.listitem[`${merchant.name}_${ordernumber}`] ? this.state.listitem[`${merchant.name}_${ordernumber}`] : 0 + 1].product.image.small} width="60%" alt="" /><br />
+                            <Typography inline={true}>{merchant.items[this.state.listitem[`${merchant.name}_${ordernumber}`] ? this.state.listitem[`${merchant.name}_${ordernumber}`] : 0 + 1].name}</Typography><br />
+                            <Typography inline={true}>{merchant.items[this.state.listitem[`${merchant.name}_${ordernumber}`] ? this.state.listitem[`${merchant.name}_${ordernumber}`] : 0 + 1].qty} x {currency} {merchant.items[this.state.listitem[`${merchant.name}_${ordernumber}`] ? this.state.listitem[`${merchant.name}_${ordernumber}`] : 0 + 1].price.retail}</Typography>
                         </div>
                     :
                         null
@@ -256,13 +297,13 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                 {
                     merchant.items.length >= 3 ?
                         <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
-                            <img src={merchant.items[this.state.recommend + 2].product.image.small} width="60%" alt="" /><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend + 2].name}</Typography><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend + 2].qty} x {currency} {merchant.items[this.state.recommend + 2].price.retail}</Typography>
+                            <img src={merchant.items[this.state.listitem[`${merchant.name}_${ordernumber}`] + 2].product.image.small} width="60%" alt="" /><br />
+                            <Typography inline={true}>{merchant.items[this.state.listitem[`${merchant.name}_${ordernumber}`] ? this.state.listitem[`${merchant.name}_${ordernumber}`] : 0 + 2].name}</Typography><br />
+                            <Typography inline={true}>{merchant.items[this.state.listitem[`${merchant.name}_${ordernumber}`] ? this.state.listitem[`${merchant.name}_${ordernumber}`] : 0 + 2].qty} x {currency} {merchant.items[this.state.listitem[`${merchant.name}_${ordernumber}`] ? this.state.listitem[`${merchant.name}_${ordernumber}`] : 0 + 2].price.retail}</Typography>
                         </div>
                     :
                         null
-                }
+                } */}
                 <MobileStepper
                     steps={merchant.items.length - 1}
                     position="static"
@@ -271,8 +312,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                     className={this.props.classes.mobileStepper}
                     nextButton={
                         <Button
-                            onClick={() => { this.setState({ recommend: this.state.recommend - 1 }); }}
-                            disabled={this.state.recommend === 0}
+                            onClick={() => { this.logiclistitem(-1, ordernumber, merchant.name); }}
+                            disabled={this.state.listitem === 0}
                             classes={{ root: this.props.classes.walletButton }}
                             style={{ position: 'absolute', top: '25%', left: '0' }}
                         >
@@ -281,8 +322,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                     }
                     backButton={
                         <Button
-                            onClick={() => { this.setState({ recommend: this.state.recommend + 1 }); }}
-                            disabled={`${this.state.recommend - 3}` === `${merchant.items.length}`}
+                            onClick={() => { this.logiclistitem(1, ordernumber, merchant.name); }}
+                            disabled={`${merchant.items.length - 3}` <= `${this.state.listitem}`}
                             classes={{ root: this.props.classes.walletButton }}
                             style={{ position: 'absolute', top: '25%', right: '35%' }}
                         >
