@@ -12,7 +12,7 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import { dataChecking, apiRequest, combineObject } from 'globalUtils';
-import Async from 'react-async';
+import Async from 'assets/react-async';
 import ProductCard from 'components/ProductCard';
 import PageChanger from 'components/PageChanger';
 import FilterSort from 'components/FilterSort';

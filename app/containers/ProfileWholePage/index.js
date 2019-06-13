@@ -16,7 +16,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import Async from 'react-async';
+import Async from 'assets/react-async';
 import { NavLink } from 'react-router-dom';
 import {
     withWidth,

@@ -13,7 +13,7 @@ import { withRouter, NavLink } from 'react-router-dom';
 import Pagination from 'components/Pagination';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import Async from 'react-async';
+import Async from 'assets/react-async';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 
