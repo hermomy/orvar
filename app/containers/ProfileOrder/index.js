@@ -50,7 +50,7 @@ import styles from './materialStyle';
 
 const getList = (callListAPI, category, pageNum) => callListAPI ? apiRequest(`/order${category}?page=${pageNum}`, 'get') : null;
 
-const getDetail = (link, order, orders, newOrders) => true ? apiRequest(`${link}`, 'get') : null;
+const getDetail = (link) => true ? apiRequest(`${link}`, 'get') : null;
 // checkredundant(order, orders, newOrders)
 
 export class ProfileOrder extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
