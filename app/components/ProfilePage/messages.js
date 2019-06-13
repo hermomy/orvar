@@ -7,7 +7,7 @@ import { defineMessages } from 'react-intl';
 
 export default defineMessages({
     header: {
-        id: 'app.containers.ProfilePage.header',
-        defaultMessage: 'This is ProfilePage container !',
+        id: 'app.components.ProfilePage.header',
+        defaultMessage: 'This is the ProfilePage component !',
     },
 });

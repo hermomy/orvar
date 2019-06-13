@@ -6,9 +6,6 @@ const styles = {
         justifyContent: 'center',
     },
     userImage: {
-        height: '60px',
-        width: '60px',
-        margin: '15px',
     },
     profileContentContainer: {
         display: 'flex',
@@ -17,7 +14,6 @@ const styles = {
     longCard: {
         flexDirection: 'column',
         height: '320px',
-        marginTop: '-25px',
     },
     bigCard: {
         marginTop: '1rem',
@@ -28,36 +24,34 @@ const styles = {
     bigShortCardProfile: {
         height: '250px',
         flexDirection: 'column',
-        marginTop: '1rem',
         boxShadow: 'none',
     },
     bigShortCardOrder: {
         height: '250px',
         flexDirection: 'column',
-        marginTop: '1rem',
     },
     OrderCardContent: {
         height: '100%',
     },
     skinDetailPopUp: {
         flexDirection: 'column',
-        marginTop: '16px',
-        marginLeft: '0px',
         // boxShadow: 'none',
     },
     bigShortCardSticky: {
         height: '150px',
         flexDirection: 'column',
         position: 'sticky',
-        margin: '0',
         top: '0',
         border: '5px solid white',
         zIndex: '10',
     },
+    mediumCard: {
+        height: '100%',
+        flexDirection: 'column',
+    },
     mediumCardContent: {
-        // display: 'flex',
-        // textAlign: 'justify',
-        // padding: '10px 50px',
+        display: 'flex',
+        textAlign: 'justify',
     },
     cardAvatar: {
         alignItems: 'unset',
@@ -71,14 +65,11 @@ const styles = {
     cartCard: {
         marginBottom: '10px',
         height: '65px',
-        width: '95%',
         boxShadow: 'none',
     },
     smallScreenLongCard: {
-        width: '100%',
         height: '180px',
-        margin: '0px',
-        borderRadius: '0px',
+        // borderRadius: '0px',
     },
     walletButton: {
         minWidth: '0',
@@ -86,29 +77,21 @@ const styles = {
     progress: {
         position: 'absolute',
         top: '50%',
-        left: '50%',
     },
     cardTtitle: {
-        paddingBottom: '5px',
-        fontWeight: '100',
+        // fontWeight: '100',
     },
     mobileStepper: {
         backgroundColor: 'white',
-        margin: '0',
-        padding: '0',
     },
     recommendProduct: {
         display: 'inline-block',
         textAlign: 'center',
-        width: '260px',
     },
     walletCardNum: {
-        marginTop: '13px',
     },
     mediumCardProfile: {
-        width: '95%',
         flexDirection: 'column',
-        marginTop: '1rem',
         boxShadow: 'none',
     },
     skinDetail: {

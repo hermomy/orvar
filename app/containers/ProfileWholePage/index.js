@@ -4,7 +4,6 @@
  * ProfileWholePage
  *
  */
-// import ProfilePage from 'containers/ProfilePage';
 // import ProfileOrder from 'containers/ProfileOrder';
 // import ProfileWishlist from 'containers/ProfileWishlist';
 // import ProfileWallet from 'containers/ProfileWallet';
@@ -301,7 +300,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                 }
                 title={<Typography variant="h6" align="left" className={this.props.classes.cardTtitle}>My Setting</Typography>}
             />
-            <CardContent style={{ textAlign: 'left', paddingTop: '0px', height: '100%', padding: '10px 50px' }}>
+            <CardContent style={{ textAlign: 'left' }}>
                 <Typography variant="body2">Edit your password here</Typography>
                 <Typography variant="subtitle1" style={{ fontWeight: '100', verticalAlign: 'middle' }} inline={true}>Go to Setting </Typography>
                 <Typography variant="h6" style={{ color: '#808080', fontWeight: '100', verticalAlign: 'middle' }} inline={true}> > </Typography>

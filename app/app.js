@@ -17,6 +17,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
 // Import root app
 import App from 'containers/App';
 
@@ -76,24 +77,24 @@ const theme = createMuiTheme({
                 top: '2px',
             },
         },
-        MuiCard: {
-            root: {
-                width: '296px',
-                height: '192px',
-            },
-        },
+        // MuiCard: {
+        //     root: {
+        //         width: '95%',
+        //         height: '192px',
+        //     },
+        // },
         MuiCardHeader: {
-            content: {
-                flex: 'none',
-            },
-            root: {
-                padding: '14px',
-            },
+            // content: {
+            //     flex: 'none',
+            // },
+            // root: {
+            //     padding: '14px',
+            // },
         },
         MuiCardContent: {
-            root: {
-                padding: '10px',
-            },
+            // root: {
+            //     padding: '10px',
+            // },
         },
         MuiDivider: {
             root: {
@@ -165,13 +166,13 @@ const theme = createMuiTheme({
                 border: '1px solid #ff146A',
             },
         },
-        MuiPaper: {
-            root: {
-                display: 'inline-flex',
-                marginLeft: '8px',
-                marginRight: '8px',
-            },
-        },
+        // MuiPaper: {
+        //     root: {
+        //         display: 'inline-flex',
+        //         marginLeft: '8px',
+        //         marginRight: '8px',
+        //     },
+        // },
     },
     typography: {
         fontFamily: 'Poppins',
