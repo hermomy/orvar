@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { dataChecking, apiRequest } from 'globalUtils';
-import { withRouter } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import Pagination from 'components/Pagination';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -70,7 +70,32 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         orders: null,
         newOrder: '',
         merchants: null,
-        recommend: 0,
+        listitem: { '1': 'for skip checking' },
+    }
+
+    componentWillMount() {
+        this.topbarcontent = [
+            {
+                category: '',
+                name: '',
+            },
+            {
+                category: '/to-paid',
+                name: 'Unpaid',
+            },
+            {
+                category: '/to-ship',
+                name: 'To Ship',
+            },
+            {
+                category: '/to-receive',
+                name: 'Posted',
+            },
+            {
+                category: '/reviewable',
+                name: 'Review',
+            },
+        ];
     }
 
     checkOpen = (array, targetorder, condition) => {
@@ -100,29 +125,33 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         return null;
     }
 
+    logiclistitem = (addminus, ordernumber, merchantname) => {
+        const obj = { ...this.state.listitem };
+        if (!obj[`${merchantname}_${ordernumber}`]) {
+            obj[`${merchantname}_${ordernumber}`] = 1;
+        } else {
+            obj[`${merchantname}_${ordernumber}`] += addminus;
+        }
+        this.setState({ listitem: obj });
+    }
+
     renderTopBar = () => (
         <div>
             <AppBar position="static" className={this.props.classes.Appbar}>
                 <Toolbar>
-                    <IconButton>
-                        <ChevronLeft />
-                    </IconButton>
+                    <NavLink to="/profile/me">
+                        <IconButton>
+                            <ChevronLeft />
+                        </IconButton>
+                    </NavLink>
                     <div>
-                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '' })}>
-                            All Order
-                        </Typography>
-                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/to-paid' })}>
-                            Unpaid
-                        </Typography>
-                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/to-ship' })}>
-                            To Ship
-                        </Typography>
-                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/to-receive' })}>
-                            Posted
-                        </Typography>
-                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/reviewable' })}>
-                            Review
-                        </Typography>
+                        {
+                            this.topbarcontent.map((content) => (
+                                <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: content.category })}>
+                                    {content.name}
+                                </Typography>
+                            ))
+                        }
                     </div>
                     <IconButton style={{ position: 'absolute', right: '8px' }}>
                         <Tune />
@@ -211,7 +240,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                                     </Grid>
                                     {
                                         this.checkOpen(2, ordernumber, 'check') ?
-                                            this.renderOrderDetail(merchant, currency)
+                                            this.renderOrderDetail(merchant, currency, ordernumber)
                                         :
                                             null
                                     }
@@ -229,40 +258,29 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         </Async>
     )
 
-    renderOrderDetail = (merchant, currency) => (
+    renderItem = (merchant, merchantname, ordernumber, currency, number) => (
+        <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
+            <img
+                src={merchant.items[this.state.listitem[`${merchantname}_${ordernumber}`] + number || number].product.image.small}
+                width="60%"
+                alt=""
+            /><br />
+            <Typography inline={true}>
+                {merchant.items[this.state.listitem[`${merchantname}_${ordernumber}`] + number || number].name}
+            </Typography><br />
+            <Typography inline={true}>
+                {merchant.items[this.state.listitem[`${merchantname}_${ordernumber}`] + number || number].qty} x {currency}
+                {merchant.items[this.state.listitem[`${merchantname}_${ordernumber}`] + number || number].price.retail}
+            </Typography>
+        </div>
+    )
+
+    renderOrderDetail = (merchant, currency, ordernumber) => (
         <div style={{ position: 'relative', marginTop: '10px' }}>
-            {console.log(merchant)}
             <div>
-                {
-                    merchant.items.length >= 1 ?
-                        <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
-                            <img src={merchant.items[this.state.recommend].product.image.small} width="60%" alt="" /><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend].name}</Typography><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend].qty} x {currency} {merchant.items[this.state.recommend].price.retail}</Typography>
-                        </div>
-                    :
-                        null
-                }
-                {
-                    merchant.items.length >= 2 ?
-                        <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
-                            <img src={merchant.items[this.state.recommend + 1].product.image.small} width="60%" alt="" /><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend + 1].name}</Typography><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend + 1].qty} x {currency} {merchant.items[this.state.recommend + 1].price.retail}</Typography>
-                        </div>
-                    :
-                        null
-                }
-                {
-                    merchant.items.length >= 3 ?
-                        <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
-                            <img src={merchant.items[this.state.recommend + 2].product.image.small} width="60%" alt="" /><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend + 2].name}</Typography><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend + 2].qty} x {currency} {merchant.items[this.state.recommend + 2].price.retail}</Typography>
-                        </div>
-                    :
-                        null
-                }
+                {merchant.items.length >= 1 ? this.renderItem(merchant, merchant.name, ordernumber, currency, 0) : null}
+                {merchant.items.length >= 2 ? this.renderItem(merchant, merchant.name, ordernumber, currency, 1) : null}
+                {merchant.items.length >= 3 ? this.renderItem(merchant, merchant.name, ordernumber, currency, 2) : null}
                 <MobileStepper
                     steps={merchant.items.length - 1}
                     position="static"
@@ -271,8 +289,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                     className={this.props.classes.mobileStepper}
                     nextButton={
                         <Button
-                            onClick={() => { this.setState({ recommend: this.state.recommend - 1 }); }}
-                            disabled={this.state.recommend === 0}
+                            onClick={() => { this.logiclistitem(-1, ordernumber, merchant.name); }}
+                            disabled={this.state.listitem[`${merchant.name}_${ordernumber}`] === 0 || !this.state.listitem[`${merchant.name}_${ordernumber}`]}
                             classes={{ root: this.props.classes.walletButton }}
                             style={{ position: 'absolute', top: '25%', left: '0' }}
                         >
@@ -281,8 +299,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                     }
                     backButton={
                         <Button
-                            onClick={() => { this.setState({ recommend: this.state.recommend + 1 }); }}
-                            disabled={`${this.state.recommend - 3}` === `${merchant.items.length}`}
+                            onClick={() => { this.logiclistitem(1, ordernumber, merchant.name); }}
+                            disabled={`${merchant.items.length - 3}` <= `${this.state.listitem[`${merchant.name}_${ordernumber}`] || 0}`}
                             classes={{ root: this.props.classes.walletButton }}
                             style={{ position: 'absolute', top: '25%', right: '35%' }}
                         >
@@ -506,8 +524,6 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
             <div>
                 {this.renderTopBar()}
                 <div className="container">
-                    {/* <input type="button" onClick={() => { this.setState({ category: '' }); }} value="All Orders" />
-                    <input type="button" onClick={() => { this.setState({ category: '/' }); }} value="Reviewable Orders" /> */}
                     <Async promise={getList(this.state.callListAPI, this.state.category, this.state.pageNum)}>
                         <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                         <Async.Resolved>

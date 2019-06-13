@@ -23,6 +23,8 @@ const styles = {
         backgroundColor: 'white',
         margin: '0',
         padding: '0',
+        width: '0px',
+        height: '0px',
     },
 };
 

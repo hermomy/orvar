@@ -2,9 +2,6 @@ const styles = {
     cardHeader: {
         color: 'rgba(0,0,0,0.26)',
     },
-    pageContainer: {
-        justifyContent: 'center',
-    },
     userImage: {
         height: '60px',
         width: '60px',
@@ -43,7 +40,8 @@ const styles = {
         flexDirection: 'column',
         marginTop: '16px',
         marginLeft: '0px',
-        // boxShadow: 'none',
+        // width: '100%',
+        boxShadow: 'none',
     },
     bigShortCardSticky: {
         height: '150px',
@@ -106,12 +104,14 @@ const styles = {
         marginTop: '13px',
     },
     mediumCardProfile: {
-        width: '95%',
         flexDirection: 'column',
         marginTop: '1rem',
         boxShadow: 'none',
+        position: 'relative',
+        width: '100%',
+        marginLeft: '0px',
     },
-    skinDetail: {
+    grayColorWord: {
         display: 'inline',
         color: '#808080',
     },
