@@ -17,6 +17,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
 // Import root app
 import App from 'containers/App';
 

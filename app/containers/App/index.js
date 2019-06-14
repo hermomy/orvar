@@ -20,6 +20,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import withWidth from '@material-ui/core/withWidth';
 
 import Notify from 'containers/Notify';
 import ProductView from 'containers/ProductView';
@@ -28,11 +29,11 @@ import LogoutForm from 'containers/LogoutForm';
 import MallPage from 'containers/MallPage';
 import NotFoundPage from 'containers/NotFoundPage';
 import OnboardingPage from 'containers/OnboardingPage';
+import ProfilePage from 'components/ProfilePage';
 import ProfileWholePage from 'containers/ProfileWholePage';
 // import Cart from 'containers/CartPage';
 import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
-import ProfilePage from 'containers/ProfilePage';
 import ProfileOrder from 'containers/ProfileOrder';
 import ProfileEditInform from 'containers/ProfileEditInform';
 import ProfileReview from 'containers/ProfileReview';
@@ -160,4 +161,5 @@ export default compose(
     withReducer,
     withSaga,
     withConnect,
+    withWidth(),
 )(App);

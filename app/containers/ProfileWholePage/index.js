@@ -4,7 +4,6 @@
  * ProfileWholePage
  *
  */
-// import ProfilePage from 'containers/ProfilePage';
 // import ProfileOrder from 'containers/ProfileOrder';
 // import ProfileWishlist from 'containers/ProfileWishlist';
 // import ProfileWallet from 'containers/ProfileWallet';
