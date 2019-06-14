@@ -69,6 +69,11 @@ const theme = createMuiTheme({
                 width: '100%',
             },
         },
+        MuiCardContent: {
+            root: {
+                position: 'relative',
+            },
+        },
         MuiDivider: {
             root: {
                 backgroundColor: '#CCCCCC',

@@ -33,7 +33,6 @@ import {
     CircularProgress,
     Divider,
     Fade,
-    Badge,
     Paper,
 } from '@material-ui/core';
 import {
@@ -81,7 +80,6 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
         this.orderData = apiRequest('/order?per-page=1', 'get');
         this.profileData = apiRequest('/layout/user', 'get');
 
-
         this.orderdetails = [
             { icon: <CreditCard />, name: 'Unpaid', number: 'to-paid' },
             { icon: <MailOutline />, name: 'To Ship', number: 'to-ship' },
@@ -111,11 +109,11 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                 <CardContent>
                     <Grid container={true} spacing={8}>
                         <Grid item={true} xs={5} style={{ textAlign: 'left' }}>
-                            <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} /><br />
+                            <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} style={{ margin: '1rem' }} /><br />
                             <NavLink to={'/profile/detail'} title="title" style={{ textDecoration: 'none' }}>
                                 <Button>
                                     <Typography variant="body1" color="secondary" >Edit Profile</Typography>
-                                    <Create style={{ fontSize: '14px', color: '#ff146A' }} />
+                                    <Create color="secondary" />
                                 </Button>
                             </NavLink>
                             <Button disabled={true}>
@@ -125,16 +123,14 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                         </Grid>
                         <Grid item={true} xs={7}>
                             <Button style={{ marginTop: '10px', cursor: 'pointer' }} onClick={() => this.setState({ skindetail: true })}>
-                                <AccountBox style={{ marginRight: '1rem', color: '#ff146A' }} />
+                                <AccountBox color="secondary" style={{ marginRight: '1rem' }} />
                                 <Typography variant="body1" color="secondary" >{data.data.profile.name} Skin Details <b color="secondary">&gt;</b></Typography>
                             </Button>
                             <Divider style={{ margin: '1rem' }} />
                             <Grid container={true} spacing={0}>
                                 <Button onClick={() => this.postAttendance()}>
                                     <Grid item={true} xs={2}>
-                                        <Badge color="secondary">
-                                            <PersonPinCircle />
-                                        </Badge>
+                                        <PersonPinCircle />
                                     </Grid>
                                     <Grid item={true} xs={9} style={{ textAlign: 'left' }}>
                                         <Typography align="left" variant="body1" gutterBottom={true}>Update Your attendance here today !</Typography><br />
@@ -158,7 +154,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                                     <Grid item={true} xs={6}>
                                         <Typography variant="body2" gutterBottom={true} className={this.props.classes.grayColorWord}>Skin Type: </Typography><Typography variant="body2">{data.data.profile.skin.type.name}</Typography>
                                     </Grid>
-                                    <Grid item={true} xs={12}>
+                                    <Grid item={true} xs={12} className="mt-1">
                                         <Typography variant="body2" className={this.props.classes.grayColorWord}>Skin Concern: </Typography><Typography variant="body2">{concernString}</Typography>
                                     </Grid>
                                 </Grid>
@@ -182,7 +178,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                         <Grid item={true} xs={6} style={{ textAlign: 'right' }}>
                             <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} /><br />
                             <Button disabled={true}>
-                                <CardGiftcard style={{ marginRight: '10px', color: '#660033' }} />
+                                <CardGiftcard color="primary" style={{ marginRight: '10px' }} />
                                 <Typography variant="body1" color="secondary" > {data.data.profile.membership.name}</Typography>
                             </Button>
                         </Grid>
@@ -475,8 +471,6 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
     }
 
     // attendance api
-    // card content size not fit with card size
-    // skin detail pop up position problem
     // order card view all
     // card title only can like this because if not view all will go to left
     // cart price and RM

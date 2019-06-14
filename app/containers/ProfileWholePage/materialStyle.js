@@ -2,6 +2,7 @@ const styles = {
     progress: {
         position: 'absolute',
         top: '50%',
+        left: '50%',
     },
     userImage: {
         height: '60px',
@@ -12,7 +13,7 @@ const styles = {
         boxShadow: 'none',
         position: 'relative',
         marginLeft: '0px',
-        // backgroundColor: '#F3EFEE',
+        backgroundColor: '#F3EFEE',
     },
     skinDetailPopUp: {
         position: 'absolute',
