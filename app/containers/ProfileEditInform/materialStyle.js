@@ -12,6 +12,7 @@ const styles = {
         height: '517px',
         flexDirection: 'column',
         marginBottom: '25px',
+        paddingBottom: '30px',
     },
     Divider: {
         margin: '20px 15px',
