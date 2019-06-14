@@ -6,7 +6,10 @@
 
 import React from 'react';
 
-import { apiRequest } from 'globalUtils';
+import { apiRequest, dataChecking } from 'globalUtils';
+
+import OwlCarousel from 'react-owl-carousel2';
+import 'assets/react-owl-carousel2.style.scss';
 
 import Async from 'assets/react-async';
 import { NavLink } from 'react-router-dom';
@@ -45,8 +48,8 @@ import {
     LocalActivity,
     Clear,
     KeyboardArrowLeft,
-    KeyboardArrowRight,
 } from '@material-ui/icons';
+import ProductCard from 'components/ProductCard';
 
 // import { FormattedMessage } from 'react-intl';
 
@@ -90,7 +93,6 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
     // }
 
     renderProfileCard = (data) => {
-        this.setState({ callAPI: false });
         let concernString = '';
         data.data.profile.skin.concerns.forEach((concern) => {
             concernString += `${concernString !== '' ? ',' : ''} ${concern.name}`;
@@ -98,7 +100,7 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
         return (
             <Card className={this.props.classes.profileCard}>
                 <CardContent>
-                    <Grid container={true} spacing={8}>
+                    <Grid container={true} spacing={1}>
                         <Grid item={true} xs={5} style={{ textAlign: 'left' }}>
                             <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} style={{ margin: '1rem' }} /><br />
                             <NavLink to={'/profile/detail'} title="title" style={{ textDecoration: 'none' }}>
@@ -398,12 +400,16 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
         )
 
     renderRecommendProduct = (data, arrayindex) => (
-        <NavLink to={`/mall/${data.data.data.product.items[this.state.recommend + arrayindex].id}`}>
-            <div className={this.props.classes.recommendProduct} onClick={() => console.log(data)}>
-                <img src={data.data.data.product.items[this.state.recommend + arrayindex].image.small} width="50%" alt="" /><br />
-                <Typography variant="body2">{data.data.data.product.items[this.state.recommend + arrayindex].name}</Typography><br />
-            </div>
-        </NavLink>
+        // <NavLink to={`/mall/${data.data.data.product.items[this.state.recommend + arrayindex].id}`}>
+        <ProductCard
+            key={data.data.data.product.items[this.state.recommend + arrayindex].id}
+            product={data.data.data.product.items[this.state.recommend + arrayindex]}
+            review={data.data.data.product.items[this.state.recommend + arrayindex].review}
+            url={data.data.data.product.items[this.state.recommend + arrayindex].url}
+            price={dataChecking(data.data.data.product.items[this.state.recommend + arrayindex], 'price')}
+            allowWishlistButton={true}
+        />
+        // </NavLink>
     )
 
     renderRecommend = (profiledata) => {
@@ -423,37 +429,39 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                     <Async promise={this.state.personalizationData}>
                         <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                         <Async.Resolved>
-                            {(personalizationdata) => (
-                                <div>
-                                    <Grid container={true} spacing={2} alignItems="baseline">
-                                        {
-                                            [0, 1, 2].map((num, index) => <Grid key={index} item={true} xs={this.props.width === 'xs' ? 4 : 3}>{this.renderRecommendProduct(personalizationdata, num)}</Grid>)
-                                        }
-                                        {
-                                            this.props.width !== 'xs' ?
-                                                <Grid item={true} xs={this.props.width === 'xs' ? 4 : 3}>
-                                                    {this.renderRecommendProduct(personalizationdata, 3)}
-                                                </Grid>
-                                            :
-                                                null
-                                        }
-                                    </Grid>
-                                    <IconButton
-                                        onClick={() => { this.setState({ recommend: this.state.recommend - 1 }); }}
-                                        disabled={this.state.recommend === 0}
-                                        style={{ position: 'absolute', top: '25%', left: '0' }}
-                                    >
-                                        <KeyboardArrowLeft />
-                                    </IconButton>
-                                    <IconButton
-                                        onClick={() => { this.setState({ recommend: this.state.recommend + 1 }); }}
-                                        disabled={`${personalizationdata.data.data.product.items.length - this.props.width === 'xs' ? 4 : 3}` <= `${this.state.recommend}`}
-                                        style={{ position: 'absolute', top: '25%', right: '0' }}
-                                    >
-                                        <KeyboardArrowRight />
-                                    </IconButton>
-                                </div>
-                            )}
+                            {(personalizationdata) => {
+                                if (dataChecking(personalizationdata, 'data', 'data', 'product', 'items', 'length')) {
+                                    return (
+                                        <OwlCarousel
+                                            options={{
+                                                items: 5,
+                                                loop: true,
+                                                nav: true,
+                                                dots: true,
+                                                navText: ['&lt;', '&gt;'],
+                                            }}
+                                            events={{
+                                                onDragged: (event) => console.log(event),
+                                                onChanged: (event) => console.log(event),
+                                            }}
+                                        >
+                                            {
+                                                personalizationdata.data.data.product.items.map((item) => (
+                                                    <ProductCard
+                                                        key={item.id}
+                                                        product={item}
+                                                        review={item.review}
+                                                        url={item.url}
+                                                        price={dataChecking(item, 'price')}
+                                                        allowWishlistButton={true}
+                                                    />
+                                                ))
+                                            }
+                                        </OwlCarousel>
+                                    );
+                                }
+                                return null;
+                            }}
                         </Async.Resolved>
                         <Async.Rejected>
                             { console.error }
@@ -472,7 +480,7 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
 
     render() {
         return (
-            <div align="center" className="container">
+            <div className="container">
                 <Async promise={this.state.profileData}>
                     <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                     <Async.Resolved>

@@ -17,7 +17,6 @@
     .product-card-content {
         background: #FFF;
         border: 1px solid #F2F2F2;
-        padding: 7px;
         overflow: hidden;
         max-height: 490px;
         position: relative;
@@ -45,11 +44,16 @@
             }
         }
 
+        .product-card-info {
+            padding: 12px;
+        }
+
         .wishlist-btn {
             position: absolute;
-            margin-left: 85%;
             color:green;
+            right: 0;
         }
+
         .wishlist-btn-clicked {
             color:red;
         }
