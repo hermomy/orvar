@@ -196,7 +196,7 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                 title={<Typography variant="subtitle1">My Order</Typography>}
                 action={
                     <NavLink to="/profile/order" style={{ textDecoration: 'none' }}>
-                        <Typography>View All</Typography>
+                        <Typography color="secondary">View All</Typography>
                     </NavLink>
                   }
             />
@@ -251,6 +251,9 @@ export class ProfileWholePage extends React.PureComponent { // eslint-disable-li
                     <LocationOn style={{ color: 'F8E1E7' }} />
                 }
                 title={<Typography variant="subtitle1">My Address</Typography>}
+                action={
+                    <Create style={{ color: '#808080' }} />
+                  }
             />
             <CardContent style={{ textAlign: 'left' }}>
                 <Async promise={this.addressData}>
