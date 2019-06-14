@@ -63,7 +63,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     }
 
     componentWillMount() {
-        this.getList = apiRequest(`/order${this.state.category}?page=${this.state.pageNum}`, 'get');
+        this.setState({ getList: apiRequest(`/order${this.state.category}?page=${this.state.pageNum}`, 'get') });
         this.topbarcontent = [
             {
                 category: '',
@@ -158,16 +158,18 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         this.setState({ callListAPI: false });
         return data.data.items.map((Order) =>
         (
-            <Card classes={{ root: this.props.classes.Card }} key={Order.number}>
-                <CardContent classes={{ root: this.props.classes.Card }}>
+            <Card key={Order.number} className="mb-2">
+                <CardContent>
                     <Grid container={true} spacing={0}>
                         <Grid item={true} xs={8}>
                             <Typography>Order Number</Typography>
                             <Typography>{Order.number}</Typography>
                         </Grid>
                         <Grid item={true} xs={3}>
-                            <ErrorOutline style={{ transform: 'rotate(180deg)' }} />
-                            <Typography inline={true}>{Order.created_at}</Typography>
+                            <Button disabled={true}>
+                                <ErrorOutline style={{ transform: 'rotate(180deg)', color: 'black' }} /><br />
+                                <Typography inline={true}>{Order.created_at}</Typography>
+                            </Button>
                         </Grid>
                         <Grid item={true} xs={1}>
                             {
@@ -179,17 +181,17 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                         </Grid>
                     </Grid>
                     <Divider style={{ margin: '10px 0' }} />
-                    {/* {
+                    {
                         this.checkOpen(1, Order.number, 'check') ?
                             this.renderMerchantList(Order._links.self.href, Order.number, Order.currency.symbol)
                         :
                             null
-                    } */}
+                    }
                     <Grid container={true} spacing={0}>
-                        <Grid item={true} xs={10}>
+                        <Grid item={true} xs={11}>
                             <Typography>View Order Details</Typography>
                         </Grid>
-                        <Grid item={true} xs={2}>
+                        <Grid item={true} xs={1}>
                             <Typography>Total</Typography>
                             <Typography>{Order.currency.symbol}{Order.subtotal}</Typography>
                         </Grid>
@@ -199,7 +201,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         ));
     }
 
-    renderMerchantList = (link, ordernumber, currency) => (
+    renderMerchantList = (link, ordernumber) => (
         <Async promise={getDetail(link, ordernumber, this.state.orders, this.state.newOrder)}>
             <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
             <Async.Resolved>
@@ -207,7 +209,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                     <div>
                         {
                             data.data.merchants.map((merchant) => (
-                                <div key={merchant.name}>
+                                <div key={merchant.name} className="mb-1">
                                     <Grid container={true} spacing={0}>
                                         <Grid item={true} xs={7}>
                                             <div>
@@ -228,12 +230,12 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                                             }
                                         </Grid>
                                     </Grid>
-                                    {
+                                    {/* {
                                         this.checkOpen(2, ordernumber, 'check') ?
                                             this.renderOrderDetail(merchant, currency, ordernumber)
                                         :
                                             null
-                                    }
+                                    } */}
                                     <Divider />
                                 </div>
                             ))
@@ -503,7 +505,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
             <div>
                 <div className="container">
                     {this.renderTopBar()}
-                    <Async promise={this.getList}>
+                    <Async promise={this.state.getList}>
                         <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                         <Async.Resolved>
                             {(datalist) => (
