@@ -48,8 +48,6 @@ import saga from './saga';
 import './style.scss';
 import styles from './materialStyle';
 
-const getList = (callListAPI, category, pageNum) => callListAPI ? apiRequest(`/order${category}?page=${pageNum}`, 'get') : null;
-
 const getDetail = (link) => true ? apiRequest(`${link}`, 'get') : null;
 // checkredundant(order, orders, newOrders)
 
@@ -57,7 +55,6 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     state = {
         category: '',
         pageNum: 3,
-        callListAPI: true,
         detailURL: '',
         orders: null,
         newOrder: '',
@@ -66,6 +63,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     }
 
     componentWillMount() {
+        this.getList = apiRequest(`/order${this.state.category}?page=${this.state.pageNum}`, 'get');
         this.topbarcontent = [
             {
                 category: '',
@@ -181,12 +179,12 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                         </Grid>
                     </Grid>
                     <Divider style={{ margin: '10px 0' }} />
-                    {
+                    {/* {
                         this.checkOpen(1, Order.number, 'check') ?
                             this.renderMerchantList(Order._links.self.href, Order.number, Order.currency.symbol)
                         :
                             null
-                    }
+                    } */}
                     <Grid container={true} spacing={0}>
                         <Grid item={true} xs={10}>
                             <Typography>View Order Details</Typography>
@@ -503,9 +501,9 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     render() {
         return (
             <div>
-                {this.renderTopBar()}
                 <div className="container">
-                    <Async promise={getList(this.state.callListAPI, this.state.category, this.state.pageNum)}>
+                    {this.renderTopBar()}
+                    <Async promise={this.getList}>
                         <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                         <Async.Resolved>
                             {(datalist) => (
