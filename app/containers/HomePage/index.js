@@ -38,13 +38,13 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
                             Mall
                         </NavLink>
                         <NavLink to={'/profile/me'} className="page-select-button hershop-button" title="title">
-                            Profile(WEBSITE)
+                            Profile
                         </NavLink>
-                        <NavLink to={'/profilesmallscreen'} className="page-select-button hershop-button" title="title">
-                            Profile(smallscreen)
+                        <NavLink to={'/profile/order'} className="page-select-button hershop-button" title="title">
+                            Profile order
                         </NavLink>
-                        <NavLink to={'/profilesmallscreen'} className="page-select-button hershop-button" title="title">
-                            Profile(smallscreen)
+                        <NavLink to={'/profile/detail'} className="page-select-button hershop-button" title="title">
+                            Profile edit info
                         </NavLink>
                         <NavLink to={'/onboarding'} className="page-select-button hershop-button" title="title">
                             OnboardingPage

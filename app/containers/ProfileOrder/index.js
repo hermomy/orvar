@@ -31,7 +31,6 @@ import CardContent from '@material-ui/core/CardContent';
 // import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
-import MobileStepper from '@material-ui/core/MobileStepper';
 
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import Tune from '@material-ui/icons/Tune';
@@ -51,15 +50,8 @@ import styles from './materialStyle';
 
 const getList = (callListAPI, category, pageNum) => callListAPI ? apiRequest(`/order${category}?page=${pageNum}`, 'get') : null;
 
-const getDetail = (link, order, orders, newOrders) => checkredundant(order, orders, newOrders) ? apiRequest(`${link}`, 'get') : null;
-
-const checkredundant = (order, orders, newOrders) => {
-    const obj = { ...orders };
-    if (obj[newOrders] === order) {
-        return true;
-    }
-    return false;
-};
+const getDetail = (link) => true ? apiRequest(`${link}`, 'get') : null;
+// checkredundant(order, orders, newOrders)
 
 export class ProfileOrder extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -281,33 +273,22 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                 {merchant.items.length >= 1 ? this.renderItem(merchant, merchant.name, ordernumber, currency, 0) : null}
                 {merchant.items.length >= 2 ? this.renderItem(merchant, merchant.name, ordernumber, currency, 1) : null}
                 {merchant.items.length >= 3 ? this.renderItem(merchant, merchant.name, ordernumber, currency, 2) : null}
-                <MobileStepper
-                    steps={merchant.items.length - 1}
-                    position="static"
-                    variant="progress"
-                    activeStep={0}
-                    className={this.props.classes.mobileStepper}
-                    nextButton={
-                        <Button
-                            onClick={() => { this.logiclistitem(-1, ordernumber, merchant.name); }}
-                            disabled={this.state.listitem[`${merchant.name}_${ordernumber}`] === 0 || !this.state.listitem[`${merchant.name}_${ordernumber}`]}
-                            classes={{ root: this.props.classes.walletButton }}
-                            style={{ position: 'absolute', top: '25%', left: '0' }}
-                        >
-                            <KeyboardArrowLeft />
-                        </Button>
-                    }
-                    backButton={
-                        <Button
-                            onClick={() => { this.logiclistitem(1, ordernumber, merchant.name); }}
-                            disabled={`${merchant.items.length - 3}` <= `${this.state.listitem[`${merchant.name}_${ordernumber}`] || 0}`}
-                            classes={{ root: this.props.classes.walletButton }}
-                            style={{ position: 'absolute', top: '25%', right: '35%' }}
-                        >
-                            <KeyboardArrowRight />
-                        </Button>
-                    }
-                />
+                <Button
+                    onClick={() => { this.logiclistitem(-1, ordernumber, merchant.name); }}
+                    disabled={this.state.listitem[`${merchant.name}_${ordernumber}`] === 0 || !this.state.listitem[`${merchant.name}_${ordernumber}`]}
+                    classes={{ root: this.props.classes.walletButton }}
+                    style={{ position: 'absolute', top: '25%', left: '0' }}
+                >
+                    <KeyboardArrowLeft />
+                </Button>
+                <Button
+                    onClick={() => { this.logiclistitem(1, ordernumber, merchant.name); }}
+                    disabled={`${merchant.items.length - 3}` <= `${this.state.listitem[`${merchant.name}_${ordernumber}`] || 0}`}
+                    classes={{ root: this.props.classes.walletButton }}
+                    style={{ position: 'absolute', top: '25%', right: '35%' }}
+                >
+                    <KeyboardArrowRight />
+                </Button>
             </div>
             <div style={{ position: 'absolute', width: '35%', height: '100%', right: '0', top: '0', borderLeft: '1px gray solid' }}>
                 <Typography inline={true}>guhfdsuijsoersiujo</Typography><br />

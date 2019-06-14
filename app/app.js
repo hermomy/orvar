@@ -64,37 +64,16 @@ const theme = createMuiTheme({
         },
     },
     overrides: {
-        MuiAvatar: {
+        MuiCard: {
             root: {
-                display: 'inline-flex',
+                height: '100%',
+                width: '100%',
             },
-        },
-        MuiBadge: {
-            badge: {
-                height: '10px',
-                minWidth: '10px',
-                right: '5px',
-                top: '2px',
-            },
-        },
-        // MuiCard: {
-        //     root: {
-        //         width: '95%',
-        //         height: '192px',
-        //     },
-        // },
-        MuiCardHeader: {
-            // content: {
-            //     flex: 'none',
-            // },
-            // root: {
-            //     padding: '14px',
-            // },
         },
         MuiCardContent: {
-            // root: {
-            //     padding: '10px',
-            // },
+            root: {
+                position: 'relative',
+            },
         },
         MuiDivider: {
             root: {
@@ -102,6 +81,9 @@ const theme = createMuiTheme({
             },
         },
         MuiTypography: {
+            root: {
+                display: 'inline',
+            },
             h1: {
                 fontSize: '96px',
                 color: '#404040',
@@ -158,21 +140,6 @@ const theme = createMuiTheme({
                 color: '#404040',
             },
         },
-        MuiButton: {
-            root: {
-                color: '#ff146A',
-            },
-            outlined: {
-                border: '1px solid #ff146A',
-            },
-        },
-        // MuiPaper: {
-        //     root: {
-        //         display: 'inline-flex',
-        //         marginLeft: '8px',
-        //         marginRight: '8px',
-        //     },
-        // },
     },
     typography: {
         fontFamily: 'Poppins',
