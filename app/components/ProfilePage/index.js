@@ -61,6 +61,8 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
         skindetail: false,
         recommend: 0,
         width: this.props.width,
+        attendance: false,
+        topbarSkinDetail: false,
     }
 
     componentWillMount() {
@@ -91,77 +93,86 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
         this.setState({ profileData: apiRequest('/layout/user', 'get') });
     }
 
-    renderProfileCard = (data) => {
-        this.setState({ callAPI: false });
+    renderProfileCard = (data) => (
+        <Card className={this.props.classes.profileCard}>
+            <CardContent>
+                <Grid container={true} spacing={8}>
+                    <Grid item={true} xs={5} style={{ textAlign: 'left' }}>
+                        <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} style={{ margin: '1rem' }} /><br />
+                        <NavLink to={'/profile/detail'} title="title" style={{ textDecoration: 'none' }}>
+                            <Button>
+                                <Typography variant="body1" color="secondary" >Edit Profile</Typography>
+                                <Create color="secondary" />
+                            </Button>
+                        </NavLink>
+                        <Button disabled={true}>
+                            <CardGiftcard style={{ marginRight: '1rem', color: '#660033' }} />
+                            <Typography variant="body1" >{data.data.profile.membership.name}</Typography>
+                        </Button>
+                    </Grid>
+                    <Grid item={true} xs={7} style={{ textAlign: 'center' }}>
+                        <Button style={{ marginTop: '1rem', cursor: 'pointer' }} onClick={() => this.setState({ skindetail: true })}>
+                            <AccountBox color="secondary" style={{ marginRight: '1rem' }} />
+                            <Typography variant="body1" color="secondary" >{data.data.profile.name} Skin Details <b color="secondary">&gt;</b></Typography>
+                        </Button>
+                        <Divider style={{ margin: '1rem' }} />
+                        {this.renderAttandence(data)}
+                    </Grid>
+                </Grid>
+                <Fade in={this.state.skindetail === true}>
+                    <Card className={this.props.classes.skinDetailPopUp} style={{ zIndex: `${this.state.skindetail ? 10 : -1}`, marginLeft: '-16px' }}>
+                        <CardContent style={{ textAlign: 'left' }}>
+                            {this.renderSkinDetail(data, 1)}
+                        </CardContent>
+                    </Card>
+                </Fade>
+            </CardContent>
+        </Card>
+    )
+
+    renderAttandence = (data) => (
+        <Grid container={true} spacing={0}>
+            <Button onClick={() => this.postAttendance()}>
+                <Grid item={true} xs={2}>
+                    <PersonPinCircle />
+                </Grid>
+                <Grid item={true} xs={9} style={{ textAlign: 'left' }}>
+                    <Typography align="left" variant="body1" gutterBottom={true}>{`${data.data.attendance.is_taken_today ? "You've already updated your attandence today." : 'Update Your attendance here today !'}`}</Typography><br />
+                    <Typography variant="body1" color={`${data.data.attendance.is_taken_today ? '' : 'secondary'}`} style={{ color: `${data.data.attendance.is_taken_today ? '#808080' : ''}` }}>{data.data.attendance.current}/10 Yes!I&#183;m Here</Typography>
+                </Grid>
+            </Button>
+        </Grid>
+    )
+
+    renderSkinDetail = (data, statetochange) => {
         let concernString = '';
         data.data.profile.skin.concerns.forEach((concern) => {
             concernString += `${concernString !== '' ? ',' : ''} ${concern.name}`;
         });
         return (
-            <Card className={this.props.classes.profileCard}>
-                <CardContent>
-                    <Grid container={true} spacing={8}>
-                        <Grid item={true} xs={5} style={{ textAlign: 'left' }}>
-                            <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} style={{ margin: '1rem' }} /><br />
-                            <NavLink to={'/profile/detail'} title="title" style={{ textDecoration: 'none' }}>
-                                <Button>
-                                    <Typography variant="body1" color="secondary" >Edit Profile</Typography>
-                                    <Create color="secondary" />
-                                </Button>
-                            </NavLink>
-                            <Button disabled={true}>
-                                <CardGiftcard style={{ marginRight: '1rem', color: '#660033' }} />
-                                <Typography variant="body1" >{data.data.profile.membership.name}</Typography>
-                            </Button>
-                        </Grid>
-                        <Grid item={true} xs={7}>
-                            <Button style={{ marginTop: '10px', cursor: 'pointer' }} onClick={() => this.setState({ skindetail: true })}>
-                                <AccountBox color="secondary" style={{ marginRight: '1rem' }} />
-                                <Typography variant="body1" color="secondary" >{data.data.profile.name} Skin Details <b color="secondary">&gt;</b></Typography>
-                            </Button>
-                            <Divider style={{ margin: '1rem' }} />
-                            <Grid container={true} spacing={0}>
-                                <Button onClick={() => this.postAttendance()}>
-                                    <Grid item={true} xs={2}>
-                                        <PersonPinCircle />
-                                    </Grid>
-                                    <Grid item={true} xs={9} style={{ textAlign: 'left' }}>
-                                        <Typography align="left" variant="body1" gutterBottom={true}>Update Your attendance here today !</Typography><br />
-                                        <Typography variant="body1" color={`${data.data.attendance.is_taken_today ? '' : 'secondary'}`} style={{ color: `${data.data.attendance.is_taken_today ? '#808080' : ''}` }}>{data.data.attendance.current}/10 Yes!I&#183;m Here</Typography>
-                                    </Grid>
-                                </Button>
-                            </Grid>
-                        </Grid>
+            <div>
+                <Typography variant="subtitle1" gutterBottom={true}>Skin Details</Typography>
+                <IconButton style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }} onClick={() => statetochange === 1 ? this.setState({ skindetail: false }) : this.setState({ topbarSkinDetail: false })}>
+                    <Clear />
+                </IconButton>
+                <Grid container={true} spacing={0}>
+                    <Grid item={true} xs={6}>
+                        <Typography variant="body2" gutterBottom={true} className={this.props.classes.grayColorWord}>Skin Colour: </Typography><Typography variant="body2">{data.data.profile.skin.tone.name}</Typography>
                     </Grid>
-                    <Fade in={this.state.skindetail === true}>
-                        <Card className={this.props.classes.skinDetailPopUp} style={{ zIndex: `${this.state.skindetail ? 10 : -1}`, marginLeft: '-16px' }}>
-                            <CardContent style={{ textAlign: 'left' }}>
-                                <Typography variant="subtitle1" gutterBottom={true}>Skin Details</Typography>
-                                <IconButton style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }} onClick={() => this.setState({ skindetail: false })}>
-                                    <Clear />
-                                </IconButton>
-                                <Grid container={true} spacing={0}>
-                                    <Grid item={true} xs={6}>
-                                        <Typography variant="body2" gutterBottom={true} className={this.props.classes.grayColorWord}>Skin Colour: </Typography><Typography variant="body2">{data.data.profile.skin.tone.name}</Typography>
-                                    </Grid>
-                                    <Grid item={true} xs={6}>
-                                        <Typography variant="body2" gutterBottom={true} className={this.props.classes.grayColorWord}>Skin Type: </Typography><Typography variant="body2">{data.data.profile.skin.type.name}</Typography>
-                                    </Grid>
-                                    <Grid item={true} xs={12} className="mt-1">
-                                        <Typography variant="body2" className={this.props.classes.grayColorWord}>Skin Concern: </Typography><Typography variant="body2">{concernString}</Typography>
-                                    </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    </Fade>
-                </CardContent>
-            </Card>
+                    <Grid item={true} xs={6}>
+                        <Typography variant="body2" gutterBottom={true} className={this.props.classes.grayColorWord}>Skin Type: </Typography><Typography variant="body2">{data.data.profile.skin.type.name}</Typography>
+                    </Grid>
+                    <Grid item={true} xs={12} className="mt-1">
+                        <Typography variant="body2" className={this.props.classes.grayColorWord}>Skin Concern: </Typography><Typography variant="body2">{concernString}</Typography>
+                    </Grid>
+                </Grid>
+            </div>
         );
     }
 
     renderSmallScreenProfileCard = (data) => (
         <Hidden mdUp={true}>
-            <Card style={{ marginBottom: '16px' }}>
+            <Card style={{ marginBottom: '16px', borderTop: 'none' }}>
                 <CardContent>
                     <Grid container={true}>
                         <Grid item={true} xs={6} style={{ textAlign: 'left' }}>
@@ -262,7 +273,10 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                             <Typography variant="body2">{addressData.data.items[0].full_address}</Typography>
                                         </div>
                                     :
-                                        <Typography variant="body2" className={this.props.classes.grayColorWord}>Havent set :(</Typography>
+                                        <div>
+                                            <Typography variant="body1">You have no Address to show</Typography><br />
+                                            <Typography variant="body2" className={this.props.classes.grayColorWord}>You will see your default address detail when you add it in here.</Typography>
+                                        </div>
                                 }
                             </div>
                             )}
@@ -320,24 +334,32 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                         <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                         <Async.Resolved>
                             {(wishlistData) => (
-                                <div>
-                                    <Grid container={true} spacing={2} alignContent="center" style={{ textAlign: 'center' }}>
-                                        {
-                                            wishlistData.data.items ?
-                                            wishlistData.data.items.slice(0, this.props.width === 'xs' ? 4 : 6).map((item, index) => (
-                                                <Grid xs={6} sm={4} item={true} key={index}>
-                                                    <NavLink to={`/mall/${item.product.id}`}>
-                                                        <img width="100%" src={item.product.image.medium} alt={item.product.name} className="mb-half" />
-                                                    </NavLink>
+                                <div style={{ width: '100%', textAlign: 'center' }}>
+                                    {
+                                        wishlistData.data.items ?
+                                            <div>
+                                                <Grid container={true} spacing={2} alignContent="center" style={{ textAlign: 'center' }}>
+                                                    {
+                                                        wishlistData.data.items.slice(0, this.props.width === 'xs' ? 4 : 6).map((item, index) => (
+                                                            <Grid xs={6} sm={4} item={true} key={index}>
+                                                                <NavLink to={`/mall/${item.product.id}`}>
+                                                                    <img width="100%" src={item.product.image.medium} alt={item.product.name} className="mb-half" />
+                                                                </NavLink>
+                                                            </Grid>
+                                                        ))
+                                                    }
                                                 </Grid>
-                                            ))
-                                            :
-                                                null
+                                                <NavLink to="/profile/wishlist" style={{ textDecoration: 'none' }}>
+                                                    <Typography variant="body1" color="secondary">View All Wishlist</Typography>
+                                                </NavLink>
+                                            </div>
+                                        :
+                                            <div>
+                                                <Typography variant="body1">Your wishlist is empty.</Typography><br />
+                                                <Typography variant="body2">Add some item to showcase it here.</Typography><br />
+                                                <FavoriteBorder style={{ color: 'F8E1E7', fontSize: '70px', margin: '3rem' }} />
+                                            </div>
                                         }
-                                    </Grid>
-                                    <NavLink to="/profile/wishlist" style={{ textDecoration: 'none' }}>
-                                        <Typography variant="body1" color="secondary">View All Wishlist</Typography>
-                                    </NavLink>
                                 </div>
                             )}
                         </Async.Resolved>
@@ -363,9 +385,9 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                     <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                     <Async.Resolved>
                         {(cartData) => (
-                            <div>
+                            <div style={{ textAlign: 'center', width: '100%' }}>
                                 {
-                                    cartData.data.merchants &&
+                                    cartData.data.merchants ?
                                     cartData.data.merchants.map((merchant) => (
                                             merchant.items.slice(0, 2).map((item, index) => (
                                                 <NavLink key={index} to={`/mall/${item.product.id}`} style={{ textDecoration: 'none' }}>
@@ -385,6 +407,13 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                                 </NavLink>
                                             ))
                                         ))
+                                    :
+                                    <div>
+                                        <Typography variant="body1">Your cart currently empty.</Typography><br />
+                                        <Typography variant="body2" className={this.props.classes.grayColorWord}>Add interested items to your cart and check out can be made here!</Typography><br />
+                                        <AddShoppingCart style={{ color: 'F8E1E7', fontSize: '70px', margin: '3rem' }} /><br />
+                                        <Typography variant="body1" color="secondary">Go Shopping</Typography>
+                                    </div>
                                 }
                             </div>
                         )}
@@ -475,8 +504,7 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                         {(profiledata) => (
                             <div className="mb-3">
                                 <div justify="center">
-                                    <AppBar position="static" style={{ backgroundColor: `${this.props.width === 'lg' ? 'green' : '#F3EFEE'}`, boxShadow: 'none' }}>
-                                        {console.log(this.props.width)}
+                                    <AppBar position="static" style={{ backgroundColor: `${this.props.width === 'lg' || this.props.width === 'xl' ? '#F3EFEE' : '#fff'}`, boxShadow: 'none' }}>
                                         <Toolbar>
                                             <IconButton
                                                 edge="start"
@@ -485,12 +513,34 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                             >
                                                 <KeyboardArrowLeft style={{ color: 'rgba(0, 0, 0, 0.26)' }} />
                                             </IconButton>
-                                            <Typography style={{ flexGrow: 1 }}>
+                                            <div style={{ flexGrow: 1 }} />
+                                            <Typography>
                                                 Hello {profiledata.data.profile.name}
                                             </Typography>
+                                            <div style={{ flexGrow: 1 }} />
                                             <div>
-                                                <AccountBox style={{ float: 'right', marginLeft: '40px', color: 'rgba(0, 0, 0, 0.26)' }} />
-                                                <PersonPinCircle style={{ float: 'right', color: 'rgba(0, 0, 0, 0.26)' }} />
+                                                <IconButton onClick={() => this.setState({ attendance: !this.state.attendance })}>
+                                                    <AccountBox style={{ color: 'rgba(0, 0, 0, 0.26)' }} />
+                                                </IconButton>
+                                                {
+                                                    this.state.attendance ?
+                                                        <Paper style={{ position: 'absolute', zIndex: '10', width: '300px', right: '3rem' }}>
+                                                            {this.renderAttandence(profiledata)}
+                                                        </Paper>
+                                                    :
+                                                        null
+                                                }
+                                                <IconButton onClick={() => this.setState({ topbarSkinDetail: !this.state.topbarSkinDetail })}>
+                                                    <PersonPinCircle style={{ color: 'rgba(0, 0, 0, 0.26)' }} />
+                                                </IconButton>
+                                                {
+                                                    this.state.topbarSkinDetail ?
+                                                        <Paper style={{ position: 'absolute', zIndex: '10', right: '3rem' }}>
+                                                            {this.renderSkinDetail(profiledata, 2)}
+                                                        </Paper>
+                                                    :
+                                                        null
+                                                }
                                             </div>
                                         </Toolbar>
                                     </AppBar>
