@@ -70,6 +70,11 @@ const theme = createMuiTheme({
                 width: '100%',
             },
         },
+        // MuiCardHeader: {
+        //     root: {
+        //         textAlign: 'left',
+        //     },
+        // },
         MuiCardContent: {
             root: {
                 position: 'relative',

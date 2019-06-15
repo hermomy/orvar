@@ -25,6 +25,8 @@ import {
     Divider,
     Fade,
     Paper,
+    AppBar,
+    Toolbar,
 } from '@material-ui/core';
 import {
     AccountBalanceWallet,
@@ -84,10 +86,10 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
         ];
     }
 
-    // postAttendance = async() => {
-    //     const a =  await apiRequest('/attendance', 'post');
-    //     console.log(a);
-    // }
+    postAttendance = async () => {
+        await apiRequest('/attendance', 'post');
+        this.setState({ profileData: apiRequest('/layout/user', 'get') });
+    }
 
     renderProfileCard = (data) => {
         this.setState({ callAPI: false });
@@ -125,7 +127,7 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                     </Grid>
                                     <Grid item={true} xs={9} style={{ textAlign: 'left' }}>
                                         <Typography align="left" variant="body1" gutterBottom={true}>Update Your attendance here today !</Typography><br />
-                                        <Typography variant="body1" color="secondary">{data.data.attendance.current}/10 Yes!I&#183;m Here</Typography>
+                                        <Typography variant="body1" color={`${data.data.attendance.is_taken_today ? '' : 'secondary'}`} style={{ color: `${data.data.attendance.is_taken_today ? '#808080' : ''}` }}>{data.data.attendance.current}/10 Yes!I&#183;m Here</Typography>
                                     </Grid>
                                 </Button>
                             </Grid>
@@ -197,7 +199,7 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                     {
                         this.orderdetails.map((orderdetail, index) => (
                             <Grid key={index} item={true} xs={3}>
-                                <div>
+                                <div style={{ textAlign: 'center' }}>
                                     {orderdetail.icon}<br />
                                     <Typography variant="body2">{orderdetail.name}</Typography><br />
                                     <Typography variant="body2">{profiledata.data.profile.order[orderdetail.number]}</Typography>
@@ -223,7 +225,7 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                     {
                         this.walletdetails.map((walletdetail, index) => (
                             <Grid item={true} xs={4} key={index}>
-                                <Card style={{ boxShadow: 'none' }}>
+                                <Card style={{ boxShadow: 'none', textAlign: 'center' }}>
                                     {walletdetail.icon}<br />
                                     <Typography variant="subtitle1">{walletdetail.name}</Typography><br />
                                     <Typography className={this.props.classes.walletCardNum}>{data.data.profile[walletdetail.number].usable}</Typography>
@@ -363,7 +365,7 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                         {(cartData) => (
                             <div>
                                 {
-                                    cartData.data.merchants ?
+                                    cartData.data.merchants &&
                                     cartData.data.merchants.map((merchant) => (
                                             merchant.items.slice(0, 2).map((item, index) => (
                                                 <NavLink key={index} to={`/mall/${item.product.id}`} style={{ textDecoration: 'none' }}>
@@ -376,15 +378,13 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                                                 <Typography variant="body2">{item.product.display_name}</Typography>
                                                             </Grid>
                                                             <Grid item={true} xs={2}>
-                                                                <Typography variant="body2">{item.price.selling}</Typography>
+                                                                <Typography variant="body2">{cartData.data.currency.symbol} {parseFloat(item.price.selling).toFixed(2)}</Typography>
                                                             </Grid>
                                                         </Grid>
                                                     </Paper>
                                                 </NavLink>
                                             ))
                                         ))
-                                    :
-                                        null
                                 }
                             </div>
                         )}
@@ -395,11 +395,11 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                 </Async>
             </CardContent>
         </Card>
-        )
+    )
 
     renderRecommendProduct = (data, arrayindex) => (
         <NavLink to={`/mall/${data.data.data.product.items[this.state.recommend + arrayindex].id}`}>
-            <div className={this.props.classes.recommendProduct} onClick={() => console.log(data)}>
+            <div className={this.props.classes.recommendProduct}>
                 <img src={data.data.data.product.items[this.state.recommend + arrayindex].image.small} width="50%" alt="" /><br />
                 <Typography variant="body2">{data.data.data.product.items[this.state.recommend + arrayindex].name}</Typography><br />
             </div>
@@ -464,30 +464,37 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
         );
     }
 
-    // attendance api
-    // order card view all
-    // card title only can like this because if not view all will go to left
-    // cart price and RM
     // recommendation api
 
     render() {
         return (
-            <div align="center" className="container">
+            <div className="container">
                 <Async promise={this.state.profileData}>
                     <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                     <Async.Resolved>
                         {(profiledata) => (
                             <div className="mb-3">
-                                {this.renderSmallScreenProfileCard(profiledata)}
                                 <div justify="center">
-                                    <Hidden smDown={true}>
-                                        <div style={{ margin: '1rem 0' }}>
-                                            <KeyboardArrowLeft style={{ float: 'left', color: 'rgba(0, 0, 0, 0.26)' }} />
-                                            <Typography color="primary">Hello {profiledata.data.profile.name}</Typography>
-                                            <AccountBox style={{ float: 'right', marginLeft: '40px', color: 'rgba(0, 0, 0, 0.26)' }} />
-                                            <PersonPinCircle style={{ float: 'right', color: 'rgba(0, 0, 0, 0.26)' }} />
-                                        </div>
-                                    </Hidden>
+                                    <AppBar position="static" style={{ backgroundColor: `${this.props.width === 'lg' ? 'green' : '#F3EFEE'}`, boxShadow: 'none' }}>
+                                        {console.log(this.props.width)}
+                                        <Toolbar>
+                                            <IconButton
+                                                edge="start"
+                                                color="inherit"
+                                                aria-label="Open drawer"
+                                            >
+                                                <KeyboardArrowLeft style={{ color: 'rgba(0, 0, 0, 0.26)' }} />
+                                            </IconButton>
+                                            <Typography style={{ flexGrow: 1 }}>
+                                                Hello {profiledata.data.profile.name}
+                                            </Typography>
+                                            <div>
+                                                <AccountBox style={{ float: 'right', marginLeft: '40px', color: 'rgba(0, 0, 0, 0.26)' }} />
+                                                <PersonPinCircle style={{ float: 'right', color: 'rgba(0, 0, 0, 0.26)' }} />
+                                            </div>
+                                        </Toolbar>
+                                    </AppBar>
+                                    {this.renderSmallScreenProfileCard(profiledata)}
                                     <Grid container={true} spacing={2}>
                                         <Hidden smDown={true}>
                                             <Grid item={true} md={6} sm={12}>
