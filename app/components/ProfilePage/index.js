@@ -8,8 +8,7 @@ import React from 'react';
 
 import { apiRequest, dataChecking } from 'globalUtils';
 
-// eslint-disable-next-line import/no-unresolved
-import OwlCarousel from 'react-owl-carousel2';
+// import OwlCarousel from 'react-owl-carousel2';
 import 'assets/react-owl-carousel2.style.scss';
 
 import Async from 'assets/react-async';
@@ -31,6 +30,7 @@ import {
     Paper,
     AppBar,
     Toolbar,
+    Popper,
 } from '@material-ui/core';
 import {
     AccountBalanceWallet,
@@ -50,6 +50,7 @@ import {
     Assignment,
     LocalActivity,
     KeyboardArrowLeft,
+    Clear,
 } from '@material-ui/icons';
 import ProductCard from 'components/ProductCard';
 
@@ -66,6 +67,8 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
         width: this.props.width,
         attendance: false,
         topbarSkinDetail: false,
+        topbarskinanchorEl: null,
+        topbarattendanceanchorEl: null,
     }
 
     componentWillMount() {
@@ -133,9 +136,37 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
         </Card>
     )
 
+    renderSkinDetail = (data, source) => {
+        let concernString = '';
+        data.data.profile.skin.concerns.forEach((concern) => {
+            concernString += `${concernString !== '' ? ',' : ''} ${concern.name}`;
+        });
+        return (
+            <Grid container={true} spacing={0}>
+                <Grid item={true} xs={11}>
+                    <Typography variant="body1" gutterBottom={true}>Skin Details</Typography>
+                </Grid>
+                <Grid item={true} xs={1} style={{ textAlign: 'center' }}>
+                    <IconButton onClick={() => source === 1 ? this.setState({ skindetail: false }) : this.setState({ topbarSkinDetail: false })}>
+                        <Clear />
+                    </IconButton>
+                </Grid>
+                <Grid item={true} xs={6}>
+                    <Typography variant="body2" gutterBottom={true} className={this.props.classes.grayColorWord}>Skin Tone: </Typography><Typography variant="body2">{data.data.profile.skin.tone.name}</Typography>
+                </Grid>
+                <Grid item={true} xs={6}>
+                    <Typography variant="body2" gutterBottom={true} className={this.props.classes.grayColorWord}>Skin Type: </Typography><Typography variant="body2">{data.data.profile.skin.type.name}</Typography>
+                </Grid>
+                <Grid item={true} xs={12} className="mt-1">
+                    <Typography variant="body2" className={this.props.classes.grayColorWord}>Skin Concern: </Typography><Typography variant="body2">{concernString}</Typography>
+                </Grid>
+            </Grid>
+        );
+    }
+
     renderAttandence = (data) => (
-        <Grid container={true} spacing={0}>
-            <Button onClick={() => this.postAttendance()}>
+        <Button onClick={() => this.postAttendance()}>
+            <Grid container={true} spacing={0}>
                 <Grid item={true} xs={2}>
                     <PersonPinCircle />
                 </Grid>
@@ -143,61 +174,48 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                     <Typography align="left" variant="body1" gutterBottom={true}>{`${data.data.attendance.is_taken_today ? "You've already updated your attandence today." : 'Update Your attendance here today !'}`}</Typography><br />
                     <Typography variant="body1" color={`${data.data.attendance.is_taken_today ? '' : 'secondary'}`} style={{ color: `${data.data.attendance.is_taken_today ? '#808080' : ''}` }}>{data.data.attendance.current}/10 Yes!I&#183;m Here</Typography>
                 </Grid>
-            </Button>
-        </Grid>
+            </Grid>
+        </Button>
     )
 
-    renderProfileCard = (data) => {
-        let concernString = '';
-        data.data.profile.skin.concerns.forEach((concern) => {
-            concernString += `${concernString !== '' ? ',' : ''} ${concern.name}`;
-        });
-        return (
-            <Card className={this.props.classes.profileCard}>
-                <CardContent>
-                    <Grid container={true} spacing={1}>
-                        <Grid item={true} xs={5} style={{ textAlign: 'left' }}>
-                            <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} style={{ margin: '1rem' }} /><br />
-                            <NavLink to={'/profile/detail'} title="title" style={{ textDecoration: 'none' }}>
-                                <Button>
-                                    <Typography variant="body1" color="secondary" >Edit Profile</Typography>
-                                    <Create color="secondary" />
-                                </Button>
-                            </NavLink>
-                            <Button disabled={true}>
-                                <CardGiftcard style={{ marginRight: '1rem', color: '#660033' }} />
-                                <Typography variant="body1" >{data.data.profile.membership.name}</Typography>
+    renderProfileCard = (data) => (
+        <Card className={this.props.classes.profileCard}>
+            <CardContent>
+                <Grid container={true} spacing={1}>
+                    <Grid item={true} xs={5} style={{ textAlign: 'left' }}>
+                        <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} style={{ margin: '1rem' }} /><br />
+                        <NavLink to={'/profile/detail'} title="title" style={{ textDecoration: 'none' }}>
+                            <Button>
+                                <Typography variant="body1" color="secondary" >Edit Profile</Typography>
+                                <Create color="secondary" />
                             </Button>
-                        </Grid>
-                        <Grid item={true} xs={7}>
-                            <Button style={{ marginTop: '10px', cursor: 'pointer' }} onClick={() => this.setState({ skindetail: true })}>
-                                <AccountBox color="secondary" style={{ marginRight: '1rem' }} />
-                                <Typography variant="body1" color="secondary" >{data.data.profile.name} Skin Details <b color="secondary">&gt;</b></Typography>
-                            </Button>
-                            <Divider style={{ margin: '1rem' }} />
-                            <Grid container={true} spacing={0}>
-                                <Button onClick={() => this.postAttendance()}>
-                                    <Grid item={true} xs={2}>
-                                        <PersonPinCircle />
-                                    </Grid>
-                                    <Grid item={true} xs={9} style={{ textAlign: 'left' }}>
-                                        <Typography align="left" variant="body1" gutterBottom={true}>Update Your attendance here today !</Typography><br />
-                                        <Typography variant="body1" color="secondary">{data.data.attendance.current}/10 Yes!I&#183;m Here</Typography>
-                                    </Grid>
-                                </Button>
-                            </Grid>
-                        </Grid>
+                        </NavLink>
+                        <Button disabled={true}>
+                            <CardGiftcard style={{ marginRight: '1rem', color: '#660033' }} />
+                            <Typography variant="body1" >{data.data.profile.membership.name}</Typography>
+                        </Button>
                     </Grid>
-                    <Grid item={true} xs={6}>
-                        <Typography variant="body2" gutterBottom={true} className={this.props.classes.grayColorWord}>Skin Type: </Typography><Typography variant="body2">{data.data.profile.skin.type.name}</Typography>
+                    <Grid item={true} xs={7} style={{ textAlign: 'center' }}>
+                        <Button style={{ marginTop: '10px', cursor: 'pointer' }} onClick={() => this.setState({ skindetail: true })}>
+                            <AccountBox color="secondary" style={{ marginRight: '1rem' }} />
+                            <Typography variant="body1" color="secondary" >{data.data.profile.name} Skin Details <b color="secondary">&gt;</b></Typography>
+                        </Button>
+                        <Divider style={{ margin: '1rem' }} />
+                        {this.renderAttandence(data)}
                     </Grid>
-                    <Grid item={true} xs={12} className="mt-1">
-                        <Typography variant="body2" className={this.props.classes.grayColorWord}>Skin Concern: </Typography><Typography variant="body2">{concernString}</Typography>
-                    </Grid>
-                </CardContent>
-            </Card>
-        );
-    }
+                </Grid>
+                { this.state.skindetail ?
+                    <Card style={{ position: 'absolute', top: '0', marginLeft: '-16px' }}>
+                        <CardContent>
+                            {this.renderSkinDetail(data, 1)}
+                        </CardContent>
+                    </Card>
+                    :
+                    null
+                }
+            </CardContent>
+        </Card>
+    )
 
     renderSmallScreenProfileCard = (data) => (
         <Hidden mdUp={true}>
@@ -488,20 +506,20 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                             {(personalizationdata) => {
                                 if (dataChecking(personalizationdata, 'data', 'data', 'product', 'items', 'length')) {
                                     return (
-                                        <OwlCarousel
-                                            options={{
-                                                items: 5,
-                                                loop: true,
-                                                nav: true,
-                                                dots: true,
-                                                navText: ['&lt;', '&gt;'],
-                                            }}
-                                            events={{
-                                                onDragged: (event) => console.log(event),
-                                                onChanged: (event) => console.log(event),
-                                            }}
-                                        >
-                                            {
+                                        // <OwlCarousel
+                                        //     options={{
+                                        //         items: 5,
+                                        //         loop: true,
+                                        //         nav: true,
+                                        //         dots: true,
+                                        //         navText: ['&lt;', '&gt;'],
+                                        //     }}
+                                        //     events={{
+                                        //         onDragged: (event) => console.log(event),
+                                        //         onChanged: (event) => console.log(event),
+                                        //     }}
+                                        // >
+                                            // {
                                                 personalizationdata.data.data.product.items.map((item) => (
                                                     <ProductCard
                                                         key={item.id}
@@ -512,8 +530,8 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                                         allowWishlistButton={true}
                                                     />
                                                 ))
-                                            }
-                                        </OwlCarousel>
+                                        //     }
+                                        // </OwlCarousel>
                                     );
                                 }
                                 return null;
@@ -554,28 +572,30 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                             </Typography>
                                             <div style={{ flexGrow: 1 }} />
                                             <div>
-                                                <IconButton onClick={() => this.setState({ attendance: !this.state.attendance })}>
+                                                <IconButton onClick={(e) => this.setState({ attendance: !this.state.attendance, topbarattendanceanchorEl: e.currentTarget })}>
                                                     <AccountBox style={{ color: 'rgba(0, 0, 0, 0.26)' }} />
                                                 </IconButton>
-                                                {
-                                                    this.state.attendance ?
-                                                        <Paper style={{ position: 'absolute', zIndex: '10', width: '300px', right: '3rem' }}>
-                                                            {this.renderAttandence(profiledata)}
-                                                        </Paper>
-                                                    :
-                                                        null
-                                                }
-                                                <IconButton onClick={() => this.setState({ topbarSkinDetail: !this.state.topbarSkinDetail })}>
+                                                <Popper
+                                                    open={this.state.attendance === true}
+                                                    anchorEl={this.state.topbarattendanceanchorEl}
+                                                    placement="bottom-end"
+                                                >
+                                                    <Paper style={{ zIndex: '10', right: '3rem' }}>
+                                                        {this.renderAttandence(profiledata)}
+                                                    </Paper>
+                                                </Popper>
+                                                <IconButton onClick={(e) => this.setState({ topbarSkinDetail: !this.state.topbarSkinDetail, topbarskinanchorEl: e.currentTarget })}>
                                                     <PersonPinCircle style={{ color: 'rgba(0, 0, 0, 0.26)' }} />
                                                 </IconButton>
-                                                {
-                                                    this.state.topbarSkinDetail ?
-                                                        <Paper style={{ position: 'absolute', zIndex: '10', right: '3rem' }}>
-                                                            {this.renderSkinDetail(profiledata, 2)}
-                                                        </Paper>
-                                                    :
-                                                        null
-                                                }
+                                                <Popper
+                                                    open={this.state.topbarSkinDetail === true}
+                                                    anchorEl={this.state.topbarskinanchorEl}
+                                                    placement="bottom-end"
+                                                >
+                                                    <Paper style={{ zIndex: '10', right: '1rem', padding: '1rem' }}>
+                                                        {this.renderSkinDetail(profiledata, 2)}
+                                                    </Paper>
+                                                </Popper>
                                             </div>
                                         </Toolbar>
                                     </AppBar>
