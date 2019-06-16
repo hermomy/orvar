@@ -39,8 +39,8 @@ import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import ControlPoint from '@material-ui/icons/ControlPoint';
 import RemoveCircleOutlined from '@material-ui/icons/RemoveCircleOutlined';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+// import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+// import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
 import makeSelectProfileOrder from './selectors';
 import reducer from './reducer';
@@ -56,14 +56,13 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         category: '',
         pageNum: 3,
         detailURL: '',
-        orders: null,
+        ordermerchants: null,
         newOrder: '',
-        merchants: null,
-        listitem: { '1': 'for skip checking' },
+        merchantdetails: null,
     }
 
     componentWillMount() {
-        this.setState({ getList: apiRequest(`/order${this.state.category}?page=${this.state.pageNum}`, 'get'), getDetail: apiRequest('', 'get') });
+        this.setState({ getList: apiRequest(`/order${this.state.category}?page=${this.state.pageNum}`, 'get') });
         this.topbarcontent = [
             {
                 category: '',
@@ -88,26 +87,17 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         ];
     }
 
-    checkOpen = (array, targetorder, condition) => {
-        let obj = '';
-        if (array === 1) {
-            obj = { ...this.state.orders };
-        } else if (array === 2) {
-            obj = { ...this.state.merchants };
-        }
+    checkOpen = (array, name, targetorder, condition) => {
+        const obj = { ...this.state[array] };
         if (condition === 'toggle') {
-            if (!obj[targetorder]) {
-                obj[targetorder] = targetorder;
+            if (!obj[name]) {
+                obj[name] = targetorder;
             } else {
-                delete obj[targetorder];
+                delete obj[name];
             }
-            if (array === 1) {
-                this.setState({ orders: obj });
-            } else if (array === 2) {
-                this.setState({ merchants: obj });
-            }
+            this.setState({ [array]: obj });
         } else {
-            if (obj[targetorder]) {
+            if (obj[name]) {
                 return true;
             }
             return false;
@@ -136,8 +126,8 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                     </NavLink>
                     <div>
                         {
-                            this.topbarcontent.map((content) => (
-                                <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: content.category })}>
+                            this.topbarcontent.map((content, index) => (
+                                <Typography key={index} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: content.category })}>
                                     {content.name}
                                 </Typography>
                             ))
@@ -172,16 +162,16 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                         </Grid>
                         <Grid item={true} xs={1}>
                             {
-                                !this.checkOpen(1, Order.number, 'check') ?
-                                    <KeyboardArrowDown style={{ float: 'right' }} onClick={() => { this.checkOpen(1, Order.number, 'toggle'); this.setState({ getDetail: Order._links.self }); }} />
+                                !this.checkOpen('ordermerchants', Order.number, null, 'check') ?
+                                    <KeyboardArrowDown style={{ float: 'right' }} onClick={() => { this.checkOpen('ordermerchants', Order.number, apiRequest(Order._links.self.href, 'get'), 'toggle'); }} />
                                 :
-                                    <KeyboardArrowUp style={{ float: 'right' }} onClick={() => this.checkOpen(1, Order.number, 'toggle')} />
+                                    <KeyboardArrowUp style={{ float: 'right' }} onClick={() => this.checkOpen('ordermerchants', Order.number, null, 'toggle')} />
                             }
                         </Grid>
                     </Grid>
                     <Divider style={{ margin: '10px 0' }} />
                     {
-                        this.checkOpen(1, Order.number, 'check') ?
+                        this.checkOpen('ordermerchants', Order.number, null, 'check') ?
                             this.renderMerchantList(Order.number, Order.currency.symbol)
                         :
                             null
@@ -200,95 +190,62 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         ));
     }
 
-    renderMerchantList = (ordernumber) => (
-        <Async promise={this.state.getDetail}>
-            <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
-            <Async.Resolved>
-                {(data) => (
-                    <div>
-                        {
-                            data.data.merchants.map((merchant) => (
-                                <div key={merchant.name} className="mb-1">
-                                    <Grid container={true} spacing={0}>
-                                        <Grid item={true} xs={7}>
-                                            <div>
-                                                <Typography>Merchant</Typography><br />
-                                                <Typography>{merchant.name}</Typography>
-                                            </div>
+    renderMerchantList = (ordernumber, currency) => (
+        <div>
+            <Async promise={this.state.ordermerchants[ordernumber]}>
+                <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
+                <Async.Resolved>
+                    {(data) => (
+                        <div>
+                            {
+                                data.data.merchants.map((merchant) => (
+                                    <div key={merchant.name} className="mb-1">
+                                        <Grid container={true} spacing={0}>
+                                            <Grid item={true} xs={7}>
+                                                <div>
+                                                    <Typography>Merchant</Typography><br />
+                                                    <Typography>{merchant.name}</Typography>
+                                                </div>
+                                            </Grid>
+                                            <Grid item={true} xs={4}>
+                                                <Typography>Status</Typography><br />
+                                                <Typography>{merchant.summary.shipping.status}</Typography>
+                                            </Grid>
+                                            {console.log(ordernumber)}
+                                            <Grid item={true} xs={1}>
+                                                {
+                                                    !this.checkOpen('merchantdetails', `${merchant.name}_${ordernumber}`, null, 'check') ?
+                                                        <ControlPoint style={{ float: 'right' }} onClick={() => this.checkOpen('merchantdetails', `${merchant.name}_${ordernumber}`, true, 'toggle')} />
+                                                    :
+                                                        <RemoveCircleOutlined style={{ float: 'right' }} onClick={() => this.checkOpen('merchantdetails', `${merchant.name}_${ordernumber}`, true, 'toggle')} />
+                                                }
+                                            </Grid>
                                         </Grid>
-                                        <Grid item={true} xs={4}>
-                                            <Typography>Status</Typography><br />
-                                            <Typography>{merchant.summary.shipping.status}</Typography>
-                                        </Grid>
-                                        <Grid item={true} xs={1}>
-                                            {
-                                                !this.checkOpen(2, ordernumber, 'check') ?
-                                                    <ControlPoint style={{ float: 'right' }} onClick={() => this.checkOpen(2, ordernumber, 'toggle')} />
-                                                :
-                                                    <RemoveCircleOutlined style={{ float: 'right' }} onClick={() => this.checkOpen(2, ordernumber, 'toggle')} />
-                                            }
-                                        </Grid>
-                                    </Grid>
-                                    {/* {
-                                        this.checkOpen(2, ordernumber, 'check') ?
-                                            this.renderOrderDetail(merchant, currency, ordernumber)
-                                        :
-                                            null
-                                    } */}
-                                    <Divider />
-                                </div>
-                            ))
-                        }
-                    </div>
-                    )
-                }
-            </Async.Resolved>
-            <Async.Rejected>
-                { console.error }
-            </Async.Rejected>
-        </Async>
-    )
-
-    renderItem = (merchant, merchantname, ordernumber, currency, number) => (
-        <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
-            <img
-                src={merchant.items[this.state.listitem[`${merchantname}_${ordernumber}`] + number || number].product.image.small}
-                width="60%"
-                alt=""
-            /><br />
-            <Typography inline={true}>
-                {merchant.items[this.state.listitem[`${merchantname}_${ordernumber}`] + number || number].name}
-            </Typography><br />
-            <Typography inline={true}>
-                {merchant.items[this.state.listitem[`${merchantname}_${ordernumber}`] + number || number].qty} x {currency}
-                {merchant.items[this.state.listitem[`${merchantname}_${ordernumber}`] + number || number].price.retail}
-            </Typography>
+                                        {
+                                            this.checkOpen('merchantdetails', `${merchant.name}_${ordernumber}`, null, 'check') ?
+                                                this.renderOrderDetail(merchant, currency, ordernumber)
+                                            :
+                                                null
+                                        }
+                                        <Divider />
+                                    </div>
+                                ))
+                            }
+                        </div>
+                        )
+                    }
+                </Async.Resolved>
+                <Async.Rejected>
+                    { console.error }
+                </Async.Rejected>
+            </Async>
         </div>
     )
 
-    renderOrderDetail = (merchant, currency, ordernumber) => (
+    renderOrderDetail = () => (
         <div style={{ position: 'relative', marginTop: '10px' }}>
-            <div>
-                {merchant.items.length >= 1 ? this.renderItem(merchant, merchant.name, ordernumber, currency, 0) : null}
-                {merchant.items.length >= 2 ? this.renderItem(merchant, merchant.name, ordernumber, currency, 1) : null}
-                {merchant.items.length >= 3 ? this.renderItem(merchant, merchant.name, ordernumber, currency, 2) : null}
-                <Button
-                    onClick={() => { this.logiclistitem(-1, ordernumber, merchant.name); }}
-                    disabled={this.state.listitem[`${merchant.name}_${ordernumber}`] === 0 || !this.state.listitem[`${merchant.name}_${ordernumber}`]}
-                    classes={{ root: this.props.classes.walletButton }}
-                    style={{ position: 'absolute', top: '25%', left: '0' }}
-                >
-                    <KeyboardArrowLeft />
-                </Button>
-                <Button
-                    onClick={() => { this.logiclistitem(1, ordernumber, merchant.name); }}
-                    disabled={`${merchant.items.length - 3}` <= `${this.state.listitem[`${merchant.name}_${ordernumber}`] || 0}`}
-                    classes={{ root: this.props.classes.walletButton }}
-                    style={{ position: 'absolute', top: '25%', right: '35%' }}
-                >
-                    <KeyboardArrowRight />
-                </Button>
-            </div>
+            <p>aefiuasfhusij</p>
+            {console.log('jibai')}
             <div style={{ position: 'absolute', width: '35%', height: '100%', right: '0', top: '0', borderLeft: '1px gray solid' }}>
                 <Typography inline={true}>guhfdsuijsoersiujo</Typography><br />
             </div>

@@ -63,12 +63,12 @@ import materialStyleExtension from './materialStyle';
 class ProfilePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         skindetail: false,
-        recommend: 0,
-        width: this.props.width,
         attendance: false,
         topbarSkinDetail: false,
         topbarskinanchorEl: null,
         topbarattendanceanchorEl: null,
+        recommend: 0,
+        width: this.props.width,
     }
 
     componentWillMount() {
@@ -224,7 +224,9 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                     <Grid container={true}>
                         <Grid item={true} xs={6} style={{ textAlign: 'left' }}>
                             <Typography variant="h5" color="primary" gutterBottom={true}>{data.data.profile.name}</Typography><br />
-                            <Typography variant="body1" color="secondary">Edit Profile  &gt;</Typography>
+                            <NavLink to={'/profile/detail'} title="title" style={{ textDecoration: 'none' }}>
+                                <Typography variant="body1" color="secondary">Edit Profile  &gt;</Typography>
+                            </NavLink>
                         </Grid>
                         <Grid item={true} xs={6} style={{ textAlign: 'right' }}>
                             <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} /><br />
