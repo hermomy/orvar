@@ -127,3 +127,28 @@ label {
 .bg-white {
     background-color: white;
 }
+
+.owl-carousel {
+    .owl-nav {
+        .owl-prev, .owl-next {
+            position: absolute;
+            top: 45%;
+            transform: translateY(-50%);
+            border-radius: 5px;
+            font-size: 20px;
+            padding: 10px 12px;
+            background-color: #0001;
+
+            &:hover {
+                background-color: #0005;
+            }
+        }
+
+        .owl-prev {
+            left: 10px;
+        }
+        .owl-next {
+            right: 10px;
+        }
+    }
+}

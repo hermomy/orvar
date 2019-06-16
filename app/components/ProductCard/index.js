@@ -8,9 +8,10 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { dataChecking } from 'globalUtils';
-import './style.scss';
 import Price from '../Price';
 import Rate from '../Rate';
+
+import './style.scss';
 
 class ProductCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     renderFeatures() {
@@ -61,7 +62,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
     render() {
         return (
             <div
-                className={`product-card ${this.props.listViewMode ? 'grid-view-card' : 'list-view-card'}`}
+                className={`product-card ${this.props.listViewMode ? 'list-view-card' : 'grid-view-card'}`}
                 key={this.props.product.id}
             >
                 <div className={`product-card-content ${!this.props.product.instock ? '' : 'OOS'}`}>
@@ -90,7 +91,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                         </NavLink>
                     </div>
                     <div className="product-card-info">
-                        <div className="product-card-wishlist">
+                        <div className="product-card-wishlist posi-relative">
                             {
                                 this.props.allowWishlistButton &&
                                 <i
@@ -120,7 +121,6 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                     </div>
                     {
                         this.props.listViewMode ?
-
                             <div className="product-card-list-view-actions">special action only show in list view mode</div>
                             :
                             null
@@ -133,7 +133,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
 
 ProductCard.propTypes = {
     product: PropTypes.object.isRequired,
-    listViewMode: PropTypes.bool.isRequired,
+    listViewMode: PropTypes.bool,
 };
 
 export default ProductCard;

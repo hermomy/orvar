@@ -305,6 +305,7 @@
         "react-loadable": "4.0.3",
         "react-moment": "^0.6.6",
         "react-notifications": "^1.4.3",
+        "react-owl-carousel2": "^0.3.0",
         "react-paginate": "^5.0.0",
         "react-redux": "5.0.5",
         "react-router-dom": "4.1.1",

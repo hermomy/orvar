@@ -6,7 +6,11 @@
 
 import React from 'react';
 
-import { apiRequest } from 'globalUtils';
+import { apiRequest, dataChecking } from 'globalUtils';
+
+// eslint-disable-next-line import/no-unresolved
+import OwlCarousel from 'react-owl-carousel2';
+import 'assets/react-owl-carousel2.style.scss';
 
 import Async from 'assets/react-async';
 import { NavLink } from 'react-router-dom';
@@ -45,10 +49,9 @@ import {
     ChatBubbleOutline,
     Assignment,
     LocalActivity,
-    Clear,
     KeyboardArrowLeft,
-    KeyboardArrowRight,
 } from '@material-ui/icons';
+import ProductCard from 'components/ProductCard';
 
 // import { FormattedMessage } from 'react-intl';
 
@@ -144,20 +147,46 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
         </Grid>
     )
 
-    renderSkinDetail = (data, statetochange) => {
+    renderProfileCard = (data) => {
         let concernString = '';
         data.data.profile.skin.concerns.forEach((concern) => {
             concernString += `${concernString !== '' ? ',' : ''} ${concern.name}`;
         });
         return (
-            <div>
-                <Typography variant="subtitle1" gutterBottom={true}>Skin Details</Typography>
-                <IconButton style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }} onClick={() => statetochange === 1 ? this.setState({ skindetail: false }) : this.setState({ topbarSkinDetail: false })}>
-                    <Clear />
-                </IconButton>
-                <Grid container={true} spacing={0}>
-                    <Grid item={true} xs={6}>
-                        <Typography variant="body2" gutterBottom={true} className={this.props.classes.grayColorWord}>Skin Colour: </Typography><Typography variant="body2">{data.data.profile.skin.tone.name}</Typography>
+            <Card className={this.props.classes.profileCard}>
+                <CardContent>
+                    <Grid container={true} spacing={1}>
+                        <Grid item={true} xs={5} style={{ textAlign: 'left' }}>
+                            <Avatar src={data.data.profile.avatar} alt="user" className={this.props.classes.userImage} style={{ margin: '1rem' }} /><br />
+                            <NavLink to={'/profile/detail'} title="title" style={{ textDecoration: 'none' }}>
+                                <Button>
+                                    <Typography variant="body1" color="secondary" >Edit Profile</Typography>
+                                    <Create color="secondary" />
+                                </Button>
+                            </NavLink>
+                            <Button disabled={true}>
+                                <CardGiftcard style={{ marginRight: '1rem', color: '#660033' }} />
+                                <Typography variant="body1" >{data.data.profile.membership.name}</Typography>
+                            </Button>
+                        </Grid>
+                        <Grid item={true} xs={7}>
+                            <Button style={{ marginTop: '10px', cursor: 'pointer' }} onClick={() => this.setState({ skindetail: true })}>
+                                <AccountBox color="secondary" style={{ marginRight: '1rem' }} />
+                                <Typography variant="body1" color="secondary" >{data.data.profile.name} Skin Details <b color="secondary">&gt;</b></Typography>
+                            </Button>
+                            <Divider style={{ margin: '1rem' }} />
+                            <Grid container={true} spacing={0}>
+                                <Button onClick={() => this.postAttendance()}>
+                                    <Grid item={true} xs={2}>
+                                        <PersonPinCircle />
+                                    </Grid>
+                                    <Grid item={true} xs={9} style={{ textAlign: 'left' }}>
+                                        <Typography align="left" variant="body1" gutterBottom={true}>Update Your attendance here today !</Typography><br />
+                                        <Typography variant="body1" color="secondary">{data.data.attendance.current}/10 Yes!I&#183;m Here</Typography>
+                                    </Grid>
+                                </Button>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item={true} xs={6}>
                         <Typography variant="body2" gutterBottom={true} className={this.props.classes.grayColorWord}>Skin Type: </Typography><Typography variant="body2">{data.data.profile.skin.type.name}</Typography>
@@ -165,8 +194,8 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                     <Grid item={true} xs={12} className="mt-1">
                         <Typography variant="body2" className={this.props.classes.grayColorWord}>Skin Concern: </Typography><Typography variant="body2">{concernString}</Typography>
                     </Grid>
-                </Grid>
-            </div>
+                </CardContent>
+            </Card>
         );
     }
 
@@ -427,12 +456,16 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
     )
 
     renderRecommendProduct = (data, arrayindex) => (
-        <NavLink to={`/mall/${data.data.data.product.items[this.state.recommend + arrayindex].id}`}>
-            <div className={this.props.classes.recommendProduct}>
-                <img src={data.data.data.product.items[this.state.recommend + arrayindex].image.small} width="50%" alt="" /><br />
-                <Typography variant="body2">{data.data.data.product.items[this.state.recommend + arrayindex].name}</Typography><br />
-            </div>
-        </NavLink>
+        // <NavLink to={`/mall/${data.data.data.product.items[this.state.recommend + arrayindex].id}`}>
+        <ProductCard
+            key={data.data.data.product.items[this.state.recommend + arrayindex].id}
+            product={data.data.data.product.items[this.state.recommend + arrayindex]}
+            review={data.data.data.product.items[this.state.recommend + arrayindex].review}
+            url={data.data.data.product.items[this.state.recommend + arrayindex].url}
+            price={dataChecking(data.data.data.product.items[this.state.recommend + arrayindex], 'price')}
+            allowWishlistButton={true}
+        />
+        // </NavLink>
     )
 
     renderRecommend = (profiledata) => {
@@ -452,37 +485,39 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                     <Async promise={this.state.personalizationData}>
                         <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                         <Async.Resolved>
-                            {(personalizationdata) => (
-                                <div>
-                                    <Grid container={true} spacing={2} alignItems="baseline">
-                                        {
-                                            [0, 1, 2].map((num, index) => <Grid key={index} item={true} xs={this.props.width === 'xs' ? 4 : 3}>{this.renderRecommendProduct(personalizationdata, num)}</Grid>)
-                                        }
-                                        {
-                                            this.props.width !== 'xs' ?
-                                                <Grid item={true} xs={this.props.width === 'xs' ? 4 : 3}>
-                                                    {this.renderRecommendProduct(personalizationdata, 3)}
-                                                </Grid>
-                                            :
-                                                null
-                                        }
-                                    </Grid>
-                                    <IconButton
-                                        onClick={() => { this.setState({ recommend: this.state.recommend - 1 }); }}
-                                        disabled={this.state.recommend === 0}
-                                        style={{ position: 'absolute', top: '25%', left: '0' }}
-                                    >
-                                        <KeyboardArrowLeft />
-                                    </IconButton>
-                                    <IconButton
-                                        onClick={() => { this.setState({ recommend: this.state.recommend + 1 }); }}
-                                        disabled={`${personalizationdata.data.data.product.items.length - this.props.width === 'xs' ? 4 : 3}` <= `${this.state.recommend}`}
-                                        style={{ position: 'absolute', top: '25%', right: '0' }}
-                                    >
-                                        <KeyboardArrowRight />
-                                    </IconButton>
-                                </div>
-                            )}
+                            {(personalizationdata) => {
+                                if (dataChecking(personalizationdata, 'data', 'data', 'product', 'items', 'length')) {
+                                    return (
+                                        <OwlCarousel
+                                            options={{
+                                                items: 5,
+                                                loop: true,
+                                                nav: true,
+                                                dots: true,
+                                                navText: ['&lt;', '&gt;'],
+                                            }}
+                                            events={{
+                                                onDragged: (event) => console.log(event),
+                                                onChanged: (event) => console.log(event),
+                                            }}
+                                        >
+                                            {
+                                                personalizationdata.data.data.product.items.map((item) => (
+                                                    <ProductCard
+                                                        key={item.id}
+                                                        product={item}
+                                                        review={item.review}
+                                                        url={item.url}
+                                                        price={dataChecking(item, 'price')}
+                                                        allowWishlistButton={true}
+                                                    />
+                                                ))
+                                            }
+                                        </OwlCarousel>
+                                    );
+                                }
+                                return null;
+                            }}
                         </Async.Resolved>
                         <Async.Rejected>
                             { console.error }
