@@ -102,9 +102,9 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                 delete obj[targetorder];
             }
             if (array === 1) {
-                this.setState({ orders: obj, newOrder: targetorder });
+                this.setState({ orders: obj });
             } else if (array === 2) {
-                this.setState({ merchants: obj, newOrder: targetorder });
+                this.setState({ merchants: obj });
             }
         } else {
             if (obj[targetorder]) {
@@ -155,7 +155,6 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         if (!dataChecking(data, 'data', 'items')) {
             return null;
         }
-        this.setState({ callListAPI: false });
         return data.data.items.map((Order) =>
         (
             <Card key={Order.number} className="mb-2">
@@ -168,13 +167,13 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                         <Grid item={true} xs={3}>
                             <Button disabled={true}>
                                 <ErrorOutline style={{ transform: 'rotate(180deg)', color: 'black' }} /><br />
-                                <Typography inline={true}>{Order.created_at}</Typography>
+                                <Typography>{Order.created_at}</Typography>
                             </Button>
                         </Grid>
                         <Grid item={true} xs={1}>
                             {
                                 !this.checkOpen(1, Order.number, 'check') ?
-                                    <KeyboardArrowDown style={{ float: 'right' }} onClick={() => { this.checkOpen(1, Order.number, 'toggle'); this.setState({ getDetail: Order._links }); console.log(Order._links.href); }} />
+                                    <KeyboardArrowDown style={{ float: 'right' }} onClick={() => { this.checkOpen(1, Order.number, 'toggle'); this.setState({ getDetail: Order._links.self }); }} />
                                 :
                                     <KeyboardArrowUp style={{ float: 'right' }} onClick={() => this.checkOpen(1, Order.number, 'toggle')} />
                             }
@@ -183,7 +182,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                     <Divider style={{ margin: '10px 0' }} />
                     {
                         this.checkOpen(1, Order.number, 'check') ?
-                            this.renderMerchantList(Order._links.self.href, Order.number, Order.currency.symbol)
+                            this.renderMerchantList(Order.number, Order.currency.symbol)
                         :
                             null
                     }
@@ -201,7 +200,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         ));
     }
 
-    renderMerchantList = (link, ordernumber) => (
+    renderMerchantList = (ordernumber) => (
         <Async promise={this.state.getDetail}>
             <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
             <Async.Resolved>
