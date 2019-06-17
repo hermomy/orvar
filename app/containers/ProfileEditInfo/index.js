@@ -5,7 +5,10 @@
  */
 
 import React from 'react';
+import { apiRequest, dataChecking } from 'globalUtils';
 import PropTypes from 'prop-types';
+
+import Async from 'react-async';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -19,6 +22,12 @@ import CardContent from '@material-ui/core/CardContent';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Avatar from '@material-ui/core/Avatar';
+import {
+    Create,
+} from '@material-ui/icons/';
 
 import makeSelectProfileEditInfo from './selectors';
 import reducer from './reducer';
@@ -26,43 +35,71 @@ import saga from './saga';
 import './style.scss';
 
 export class ProfileEditInfo extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-    renderInfoCard = () => {
-        console.log();
-        return (
-            <Card className="infoCard">
-                <CardContent>
-                    <List
-                        subheader={
-                            <div>
-                                <Typography>test subheader</Typography>
-                                <Typography>caption</Typography>
-                            </div>
-                        }
-                    >
-                        <ListItem>
-                            <ListItemText primary="PHOTO" />
-                            <ListItemText primary="Add a photo to personalize your account" />
-                        </ListItem>
-                    </List>
-                </CardContent>
-            </Card>
-        );
+    state = {
+        userData: apiRequest('/profile', 'get'),
+        profileInfoConfig: [
+            { label: 'PHOTO', default: 'Add a photo to personalise your account', action: <Avatar onClick={() => console.log} /> },
+            { label: 'NAME', dataPath: ['username'] },
+            { label: 'LEVEL', dataPath: ['membership', 'name'] },
+            { label: 'GENDER', dataPath: ['gender'], action: <Create onClick={() => console.log} /> },
+            { label: 'EMAIL ADDRESS', dataPath: ['email'] },
+            { label: 'BIRTH DATE', dataPath: ['birthday'], action: <Create onClick={() => console.log} /> },
+        ],
+        // skindetailsConfig: [],
     }
+
+    renderProfileInfoCard = (userData) => (
+        <Card className="infoCard">
+            <CardContent>
+                <List
+                    subheader={
+                        <div>
+                            <Typography variant="subtitle1">Profile Info</Typography><br />
+                            <Typography variant="body1">Your personal details are only for Hermo product services, it will not be revealed to the public or other hermo users.</Typography>
+                        </div>
+                    }
+                >
+                    {
+                        this.state.profileInfoConfig.map((config) => (
+                            <ListItem key={config.label}>
+                                <ListItemText primary={<Typography>{config.label}</Typography>} />
+                                <ListItemText primary={<Typography>{config.dataPath ? dataChecking(userData.data, config.dataPath) : config.default}</Typography>} />
+                                {config.action ? <ListItemIcon>{config.action}</ListItemIcon> : '' }
+                            </ListItem>
+                        ))
+                    }
+                </List>
+            </CardContent>
+        </Card>
+    )
 
     render() {
         return (
-            <div className="container">
+            <div align="center" className="container">
                 <NavTab
                     tabs={[
                         {
                             title: 'Profile Info',
+                            description: (
+                                <div align="center">
+                                    <Typography>Profile</Typography>
+                                    <br />
+                                    <Typography>Basic info, like your name, photo and your skin details</Typography>
+                                </div>
+                            ),
                             content: (
                                 <div>
-                                    <div align="center">
-                                        <Typography>Profile</Typography>
-                                        <Typography>Basic info, like your name, photo and your skin details</Typography>
-                                    </div>
-                                    {this.renderInfoCard()}
+                                    <Async promise={this.state.userData}>
+                                        <Async.Loading><CircularProgress /></Async.Loading>
+                                        <Async.Resolved>
+                                            {
+                                                (userData) => this.renderProfileInfoCard(userData)
+                                            }
+                                        </Async.Resolved>
+                                        <Async.Rejected>
+                                            <div>PLACEHOLDER FOR ERROR</div>
+                                        </Async.Rejected>
+                                    </Async>
                                 </div>
                             ),
                         },

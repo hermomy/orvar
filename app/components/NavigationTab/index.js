@@ -5,14 +5,17 @@
 */
 
 import React from 'react';
+import { compose } from 'redux';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
 
 import './style.scss';
+import styles from './materialStyle';
 
 class NavigationTab extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -21,6 +24,7 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
 
     tabContent = (pageValue) => (
         <Typography component="div" style={{ paddingLeft: 30 }}>
+            {this.props.tabs[pageValue].description}
             {this.props.tabs[pageValue].content}
         </Typography>
     );
@@ -31,12 +35,12 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
 
     renderTopBar = () => (
         <div>
-            <AppBar position="static" class={`topBar ${this.props.hasBorder ? 'border' : ''}`}>
+            <AppBar position="static" className={this.props.classes.topBar}>
                 <Toolbar>
                     <Tabs value={this.state.pageValue} onChange={this.handleChange}>
                         {
                             this.props.tabs.map((tab) => (
-                                <Tab label={tab.title} style={{ textTransform: 'none', position: 'relative' }} />
+                                <Tab key={tab.title} label={<Typography>{tab.title}</Typography>} style={{ textTransform: 'none', position: 'relative' }} />
                             ))
                         }
                     </Tabs>
@@ -59,4 +63,6 @@ NavigationTab.propTypes = {
 
 };
 
-export default NavigationTab;
+export default compose(
+    withStyles(styles),
+)(NavigationTab);
