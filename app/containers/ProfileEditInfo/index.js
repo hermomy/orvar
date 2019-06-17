@@ -8,7 +8,7 @@ import React from 'react';
 import { apiRequest, dataChecking } from 'globalUtils';
 import PropTypes from 'prop-types';
 
-import Async from 'react-async';
+import Async from 'assets/react-async';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -18,6 +18,7 @@ import NavTab from 'components/NavigationTab';
 
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -27,6 +28,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Avatar from '@material-ui/core/Avatar';
 import {
     Create,
+    Person,
 } from '@material-ui/icons/';
 
 import makeSelectProfileEditInfo from './selectors';
@@ -50,20 +52,24 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
 
     renderProfileInfoCard = (userData) => (
         <Card className="infoCard">
+            <CardHeader
+                avatar={
+                    <Person style={{ color: 'F8E1E7', marginBottom: '20px' }} />
+                }
+                title={
+                    <div align="left">
+                        <Typography variant="subtitle1">Profile Info</Typography><br />
+                        <Typography variant="body1" style={{ color: '#808080' }}>Your personal details are only for Hermo product services, it will not be reavealed to the public or other hermo users.</Typography>
+                    </div>
+                }
+            />
             <CardContent>
-                <List
-                    subheader={
-                        <div>
-                            <Typography variant="subtitle1">Profile Info</Typography><br />
-                            <Typography variant="body1">Your personal details are only for Hermo product services, it will not be revealed to the public or other hermo users.</Typography>
-                        </div>
-                    }
-                >
+                <List>
                     {
                         this.state.profileInfoConfig.map((config) => (
                             <ListItem key={config.label}>
                                 <ListItemText primary={<Typography>{config.label}</Typography>} />
-                                <ListItemText primary={<Typography>{config.dataPath ? dataChecking(userData.data, config.dataPath) : config.default}</Typography>} />
+                                <ListItemText style={{ align: 'left' }} primary={<Typography>{config.dataPath ? dataChecking(userData.data, config.dataPath) : config.default}</Typography>} />
                                 {config.action ? <ListItemIcon>{config.action}</ListItemIcon> : '' }
                             </ListItem>
                         ))

@@ -8,8 +8,8 @@ import React from 'react';
 
 import { apiRequest, dataChecking } from 'globalUtils';
 
-// import OwlCarousel from 'react-owl-carousel2';
-// import 'assets/react-owl-carousel2.style.scss';
+import OwlCarousel from 'react-owl-carousel2';
+import 'assets/react-owl-carousel2.style.scss';
 
 import Async from 'assets/react-async';
 import { NavLink } from 'react-router-dom';
@@ -430,8 +430,8 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                     <Async promise={this.state.personalizationData}>
                         <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                         <Async.Resolved>
-                            <div>Slider in coming....</div>
-                            {/* {(personalizationdata) => {
+                            {/* <div>Slider in coming....</div> */}
+                            {(personalizationdata) => {
                                 if (dataChecking(personalizationdata, 'data', 'data', 'product', 'items', 'length')) {
                                     return (
                                         <OwlCarousel
@@ -463,7 +463,7 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                     );
                                 }
                                 return null;
-                            }} */}
+                            }}
                         </Async.Resolved>
                         <Async.Rejected>
                             { console.error }
