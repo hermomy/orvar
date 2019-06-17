@@ -20,7 +20,6 @@ import { Switch, Route } from 'react-router-dom';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import withWidth from '@material-ui/core/withWidth';
 
 import Notify from 'containers/Notify';
 import ProductView from 'containers/ProductView';
@@ -113,7 +112,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         <Route exact={true} path="/feedback" component={FeedbackPage} />
                         <Route exact={true} path="/" component={HomePage} />
 
-                        <Route exact={true} path="/profile/me" render={() => <ProfilePage />} />
+                        <PrivateRoute exact={true} path="/profile/me" token={globalScope.token || ''} render={() => <ProfilePage />} />
 
 
                         <Route exact={true} path="/profile/wallet" component={ProfileWallet} />
@@ -161,5 +160,4 @@ export default compose(
     withReducer,
     withSaga,
     withConnect,
-    withWidth(),
 )(App);

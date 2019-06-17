@@ -49,6 +49,7 @@ import {
     Clear,
     KeyboardArrowLeft,
 } from '@material-ui/icons';
+import withWidth from '@material-ui/core/withWidth';
 import ProductCard from 'components/ProductCard';
 
 // import { FormattedMessage } from 'react-intl';
@@ -545,4 +546,9 @@ ProfilePage.propTypes = {
 };
 
 // export default ProfilePage;
-export default withStyles(materialStyleExtension)(ProfilePage);
+export default
+    withStyles(materialStyleExtension)(
+        withWidth()(
+            ProfilePage
+        )
+    );
