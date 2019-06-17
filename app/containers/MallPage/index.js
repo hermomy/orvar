@@ -12,7 +12,7 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import { dataChecking, apiRequest, combineObject } from 'globalUtils';
-import Async from 'react-async';
+import Async from 'assets/react-async';
 import ProductCard from 'components/ProductCard';
 import PageChanger from 'components/PageChanger';
 import FilterSort from 'components/FilterSort';
@@ -241,7 +241,7 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
                     url={item.url}
                     price={dataChecking(item, 'price')}
                     allowDelete={false}
-                    listViewMode={!this.state.listView} // this.props.dispatch(postWishlist(item.id, this.props.mallPage.data.productData._links.self.href))}
+                    listViewMode={this.state.listView} // this.props.dispatch(postWishlist(item.id, this.props.mallPage.data.productData._links.self.href))}
                     allowWishlistButton={true}
                     addOrDeleteWishlist={() => { this.setState({ postWishlist: { URL: `/wishlist/${item.id}`, runpermit: false } }); }}
                 />

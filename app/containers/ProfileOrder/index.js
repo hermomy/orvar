@@ -9,11 +9,11 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { dataChecking, apiRequest } from 'globalUtils';
-import { withRouter } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import Pagination from 'components/Pagination';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import Async from 'react-async';
+import Async from 'assets/react-async';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 
@@ -31,7 +31,6 @@ import CardContent from '@material-ui/core/CardContent';
 // import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
-import MobileStepper from '@material-ui/core/MobileStepper';
 
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import Tune from '@material-ui/icons/Tune';
@@ -49,28 +48,44 @@ import saga from './saga';
 import './style.scss';
 import styles from './materialStyle';
 
-const getList = (callListAPI, category, pageNum) => callListAPI ? apiRequest(`/order${category}?page=${pageNum}`, 'get') : null;
-
-const getDetail = (link, order, orders, newOrders) => checkredundant(order, orders, newOrders) ? apiRequest(`${link}`, 'get') : null;
-
-const checkredundant = (order, orders, newOrders) => {
-    const obj = { ...orders };
-    if (obj[newOrders] === order) {
-        return true;
-    }
-    return false;
-};
+const getDetail = (link) => true ? apiRequest(`${link}`, 'get') : null;
+// checkredundant(order, orders, newOrders)
 
 export class ProfileOrder extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         category: '',
         pageNum: 3,
-        callListAPI: true,
         detailURL: '',
         orders: null,
         newOrder: '',
         merchants: null,
-        recommend: 0,
+        listitem: { '1': 'for skip checking' },
+    }
+
+    componentWillMount() {
+        this.setState({ getList: apiRequest(`/order${this.state.category}?page=${this.state.pageNum}`, 'get') });
+        this.topbarcontent = [
+            {
+                category: '',
+                name: '',
+            },
+            {
+                category: '/to-paid',
+                name: 'Unpaid',
+            },
+            {
+                category: '/to-ship',
+                name: 'To Ship',
+            },
+            {
+                category: '/to-receive',
+                name: 'Posted',
+            },
+            {
+                category: '/reviewable',
+                name: 'Review',
+            },
+        ];
     }
 
     checkOpen = (array, targetorder, condition) => {
@@ -100,29 +115,33 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         return null;
     }
 
+    logiclistitem = (addminus, ordernumber, merchantname) => {
+        const obj = { ...this.state.listitem };
+        if (!obj[`${merchantname}_${ordernumber}`]) {
+            obj[`${merchantname}_${ordernumber}`] = 1;
+        } else {
+            obj[`${merchantname}_${ordernumber}`] += addminus;
+        }
+        this.setState({ listitem: obj });
+    }
+
     renderTopBar = () => (
         <div>
             <AppBar position="static" className={this.props.classes.Appbar}>
                 <Toolbar>
-                    <IconButton>
-                        <ChevronLeft />
-                    </IconButton>
+                    <NavLink to="/profile/me">
+                        <IconButton>
+                            <ChevronLeft />
+                        </IconButton>
+                    </NavLink>
                     <div>
-                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '' })}>
-                            All Order
-                        </Typography>
-                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/to-paid' })}>
-                            Unpaid
-                        </Typography>
-                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/to-ship' })}>
-                            To Ship
-                        </Typography>
-                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/to-receive' })}>
-                            Posted
-                        </Typography>
-                        <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: '/reviewable' })}>
-                            Review
-                        </Typography>
+                        {
+                            this.topbarcontent.map((content) => (
+                                <Typography inline={true} className={this.props.classes.AppBarSection} onClick={() => this.setState({ category: content.category })}>
+                                    {content.name}
+                                </Typography>
+                            ))
+                        }
                     </div>
                     <IconButton style={{ position: 'absolute', right: '8px' }}>
                         <Tune />
@@ -139,16 +158,18 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         this.setState({ callListAPI: false });
         return data.data.items.map((Order) =>
         (
-            <Card classes={{ root: this.props.classes.Card }} key={Order.number}>
-                <CardContent classes={{ root: this.props.classes.Card }}>
+            <Card key={Order.number} className="mb-2">
+                <CardContent>
                     <Grid container={true} spacing={0}>
                         <Grid item={true} xs={8}>
                             <Typography>Order Number</Typography>
                             <Typography>{Order.number}</Typography>
                         </Grid>
                         <Grid item={true} xs={3}>
-                            <ErrorOutline style={{ transform: 'rotate(180deg)' }} />
-                            <Typography inline={true}>{Order.created_at}</Typography>
+                            <Button disabled={true}>
+                                <ErrorOutline style={{ transform: 'rotate(180deg)', color: 'black' }} /><br />
+                                <Typography inline={true}>{Order.created_at}</Typography>
+                            </Button>
                         </Grid>
                         <Grid item={true} xs={1}>
                             {
@@ -167,10 +188,10 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                             null
                     }
                     <Grid container={true} spacing={0}>
-                        <Grid item={true} xs={10}>
+                        <Grid item={true} xs={11}>
                             <Typography>View Order Details</Typography>
                         </Grid>
-                        <Grid item={true} xs={2}>
+                        <Grid item={true} xs={1}>
                             <Typography>Total</Typography>
                             <Typography>{Order.currency.symbol}{Order.subtotal}</Typography>
                         </Grid>
@@ -180,7 +201,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         ));
     }
 
-    renderMerchantList = (link, ordernumber, currency) => (
+    renderMerchantList = (link, ordernumber) => (
         <Async promise={getDetail(link, ordernumber, this.state.orders, this.state.newOrder)}>
             <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
             <Async.Resolved>
@@ -188,7 +209,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                     <div>
                         {
                             data.data.merchants.map((merchant) => (
-                                <div key={merchant.name}>
+                                <div key={merchant.name} className="mb-1">
                                     <Grid container={true} spacing={0}>
                                         <Grid item={true} xs={7}>
                                             <div>
@@ -209,12 +230,12 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
                                             }
                                         </Grid>
                                     </Grid>
-                                    {
+                                    {/* {
                                         this.checkOpen(2, ordernumber, 'check') ?
-                                            this.renderOrderDetail(merchant, currency)
+                                            this.renderOrderDetail(merchant, currency, ordernumber)
                                         :
                                             null
-                                    }
+                                    } */}
                                     <Divider />
                                 </div>
                             ))
@@ -229,67 +250,45 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         </Async>
     )
 
-    renderOrderDetail = (merchant, currency) => (
+    renderItem = (merchant, merchantname, ordernumber, currency, number) => (
+        <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
+            <img
+                src={merchant.items[this.state.listitem[`${merchantname}_${ordernumber}`] + number || number].product.image.small}
+                width="60%"
+                alt=""
+            /><br />
+            <Typography inline={true}>
+                {merchant.items[this.state.listitem[`${merchantname}_${ordernumber}`] + number || number].name}
+            </Typography><br />
+            <Typography inline={true}>
+                {merchant.items[this.state.listitem[`${merchantname}_${ordernumber}`] + number || number].qty} x {currency}
+                {merchant.items[this.state.listitem[`${merchantname}_${ordernumber}`] + number || number].price.retail}
+            </Typography>
+        </div>
+    )
+
+    renderOrderDetail = (merchant, currency, ordernumber) => (
         <div style={{ position: 'relative', marginTop: '10px' }}>
-            {console.log(merchant)}
             <div>
-                {
-                    merchant.items.length >= 1 ?
-                        <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
-                            <img src={merchant.items[this.state.recommend].product.image.small} width="60%" alt="" /><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend].name}</Typography><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend].qty} x {currency} {merchant.items[this.state.recommend].price.retail}</Typography>
-                        </div>
-                    :
-                        null
-                }
-                {
-                    merchant.items.length >= 2 ?
-                        <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
-                            <img src={merchant.items[this.state.recommend + 1].product.image.small} width="60%" alt="" /><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend + 1].name}</Typography><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend + 1].qty} x {currency} {merchant.items[this.state.recommend + 1].price.retail}</Typography>
-                        </div>
-                    :
-                        null
-                }
-                {
-                    merchant.items.length >= 3 ?
-                        <div style={{ width: '20%', height: '100%', display: 'inline-block' }}>
-                            <img src={merchant.items[this.state.recommend + 2].product.image.small} width="60%" alt="" /><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend + 2].name}</Typography><br />
-                            <Typography inline={true}>{merchant.items[this.state.recommend + 2].qty} x {currency} {merchant.items[this.state.recommend + 2].price.retail}</Typography>
-                        </div>
-                    :
-                        null
-                }
-                <MobileStepper
-                    steps={merchant.items.length - 1}
-                    position="static"
-                    variant="progress"
-                    activeStep={0}
-                    className={this.props.classes.mobileStepper}
-                    nextButton={
-                        <Button
-                            onClick={() => { this.setState({ recommend: this.state.recommend - 1 }); }}
-                            disabled={this.state.recommend === 0}
-                            classes={{ root: this.props.classes.walletButton }}
-                            style={{ position: 'absolute', top: '25%', left: '0' }}
-                        >
-                            <KeyboardArrowLeft />
-                        </Button>
-                    }
-                    backButton={
-                        <Button
-                            onClick={() => { this.setState({ recommend: this.state.recommend + 1 }); }}
-                            disabled={`${this.state.recommend - 3}` === `${merchant.items.length}`}
-                            classes={{ root: this.props.classes.walletButton }}
-                            style={{ position: 'absolute', top: '25%', right: '35%' }}
-                        >
-                            <KeyboardArrowRight />
-                        </Button>
-                    }
-                />
+                {merchant.items.length >= 1 ? this.renderItem(merchant, merchant.name, ordernumber, currency, 0) : null}
+                {merchant.items.length >= 2 ? this.renderItem(merchant, merchant.name, ordernumber, currency, 1) : null}
+                {merchant.items.length >= 3 ? this.renderItem(merchant, merchant.name, ordernumber, currency, 2) : null}
+                <Button
+                    onClick={() => { this.logiclistitem(-1, ordernumber, merchant.name); }}
+                    disabled={this.state.listitem[`${merchant.name}_${ordernumber}`] === 0 || !this.state.listitem[`${merchant.name}_${ordernumber}`]}
+                    classes={{ root: this.props.classes.walletButton }}
+                    style={{ position: 'absolute', top: '25%', left: '0' }}
+                >
+                    <KeyboardArrowLeft />
+                </Button>
+                <Button
+                    onClick={() => { this.logiclistitem(1, ordernumber, merchant.name); }}
+                    disabled={`${merchant.items.length - 3}` <= `${this.state.listitem[`${merchant.name}_${ordernumber}`] || 0}`}
+                    classes={{ root: this.props.classes.walletButton }}
+                    style={{ position: 'absolute', top: '25%', right: '35%' }}
+                >
+                    <KeyboardArrowRight />
+                </Button>
             </div>
             <div style={{ position: 'absolute', width: '35%', height: '100%', right: '0', top: '0', borderLeft: '1px gray solid' }}>
                 <Typography inline={true}>guhfdsuijsoersiujo</Typography><br />
@@ -504,11 +503,9 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
     render() {
         return (
             <div>
-                {this.renderTopBar()}
                 <div className="container">
-                    {/* <input type="button" onClick={() => { this.setState({ category: '' }); }} value="All Orders" />
-                    <input type="button" onClick={() => { this.setState({ category: '/' }); }} value="Reviewable Orders" /> */}
-                    <Async promise={getList(this.state.callListAPI, this.state.category, this.state.pageNum)}>
+                    {this.renderTopBar()}
+                    <Async promise={this.state.getList}>
                         <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                         <Async.Resolved>
                             {(datalist) => (

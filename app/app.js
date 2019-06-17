@@ -17,6 +17,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
 // Import root app
 import App from 'containers/App';
 
@@ -63,36 +64,15 @@ const theme = createMuiTheme({
         },
     },
     overrides: {
-        MuiAvatar: {
-            root: {
-                display: 'inline-flex',
-            },
-        },
-        MuiBadge: {
-            badge: {
-                height: '10px',
-                minWidth: '10px',
-                right: '5px',
-                top: '2px',
-            },
-        },
         MuiCard: {
             root: {
-                width: '296px',
-                height: '192px',
-            },
-        },
-        MuiCardHeader: {
-            content: {
-                flex: 'none',
-            },
-            root: {
-                padding: '14px',
+                height: '100%',
+                width: '100%',
             },
         },
         MuiCardContent: {
             root: {
-                padding: '10px',
+                position: 'relative',
             },
         },
         MuiDivider: {
@@ -101,6 +81,9 @@ const theme = createMuiTheme({
             },
         },
         MuiTypography: {
+            root: {
+                display: 'inline',
+            },
             h1: {
                 fontSize: '96px',
                 color: '#404040',
@@ -155,21 +138,6 @@ const theme = createMuiTheme({
                 fontSize: '12px',
                 fontVariant: 'small-caps',
                 color: '#404040',
-            },
-        },
-        MuiButton: {
-            root: {
-                color: '#ff146A',
-            },
-            outlined: {
-                border: '1px solid #ff146A',
-            },
-        },
-        MuiPaper: {
-            root: {
-                display: 'inline-flex',
-                marginLeft: '8px',
-                marginRight: '8px',
             },
         },
     },

@@ -25,15 +25,13 @@ import Notify from 'containers/Notify';
 import ProductView from 'containers/ProductView';
 import HomePage from 'containers/HomePage';
 import LogoutForm from 'containers/LogoutForm';
-import HerListing from 'containers/HerListing';
 import MallPage from 'containers/MallPage';
 import NotFoundPage from 'containers/NotFoundPage';
 import OnboardingPage from 'containers/OnboardingPage';
-import ProfileWholePage from 'containers/ProfileWholePage';
+import ProfilePage from 'components/ProfilePage';
 // import Cart from 'containers/CartPage';
 import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
-import ProfilePage from 'containers/ProfilePage';
 import ProfileOrder from 'containers/ProfileOrder';
 // import ProfileEditInform from 'containers/ProfileEditInform';
 import ProfileEditInfo from 'containers/ProfileEditInfo';
@@ -102,63 +100,6 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                                 <MallPage />
                             )}
                         />
-
-                        <Route
-                            exact={true}
-                            path="/mall1"
-                            render={() => (
-                                <HerListing
-                                    dataType="mall"
-                                />
-                            )}
-                        />
-                        <Route
-                            exact={true}
-                            path="/mall1/page-:pageNum?"
-                            render={() => (
-                                <HerListing
-                                    dataType="mall"
-                                />
-                            )}
-                        />
-
-                        <Route
-                            exact={true}
-                            path="/mall1/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries/:subCategoryQueries?/page-:pageNum(\d+)"
-                            render={() => (
-                                <HerListing
-                                    dataType="mall"
-                                />
-                            )}
-                        />
-                        <Route
-                            exact={true}
-                            path="/mall1/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries/:subCategoryQueries"
-                            render={() => (
-                                <HerListing
-                                    dataType="mall"
-                                />
-                            )}
-                        />
-
-                        <Route
-                            exact={true}
-                            path="/mall1/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?/page-:pageNum(\d+)"
-                            render={() => (
-                                <HerListing
-                                    dataType="mall"
-                                />
-                            )}
-                        />
-                        <Route
-                            exact={true}
-                            path="/mall1/:groupName(skin-care|make-up|fragrance|bath-and-body|set-item|hair|beauty-and-wellness)/:categoryQueries?"
-                            render={() => (
-                                <HerListing
-                                    dataType="mall"
-                                />
-                            )}
-                        />
                         <Route exact={true} path="/mall/:productId" component={ProductView} />
                         <Route exact={true} path="/about" component={AboutUs} />
                         <Route
@@ -168,7 +109,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route exact={true} path="/feedback" component={FeedbackPage} />
                         <Route exact={true} path="/" component={HomePage} />
-                        <Route exact={true} path="/profile/:profilePart(me|review|wishlist|setting|logout)?" component={ProfileWholePage} />
+                        {/* <Route exact={true} path="/profile/:profilePart(me|review|wishlist|setting|logout)?" component={ProfileWholePage} /> */}
                         <Route
                             exact={true}
                             path="/profile/wallet"
