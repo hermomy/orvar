@@ -109,7 +109,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route exact={true} path="/feedback" component={FeedbackPage} />
                         <Route exact={true} path="/" component={HomePage} />
-                        {/* <Route exact={true} path="/profile/:profilePart(me|review|wishlist|setting|logout)?" component={ProfileWholePage} /> */}
+                        <Route exact={true} path="/profile/:profilePart(me|review|wishlist|setting|logout)?" component={ProfilePage} />
                         <Route
                             exact={true}
                             path="/profile/wallet"
