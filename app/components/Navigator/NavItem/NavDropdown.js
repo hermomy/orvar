@@ -52,7 +52,7 @@ function Section(params) {
 }
 
 function NavDropdown(props) {
-    const sections = props.item.items.map((item) => (
+    const sections = props.items.map((item) => (
         <Section
             data={item}
             key={item.code}
@@ -89,7 +89,6 @@ function NavDropdown(props) {
 }
 
 NavDropdown.propTypes = {
-    item: PropTypes.object,
     children: PropTypes.object,
 };
 
