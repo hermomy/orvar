@@ -11,7 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { dataChecking, apiRequest, combineObject } from 'globalUtils';
+import { dataChecking, apiRequest } from 'globalUtils';
 import Async from 'assets/react-async';
 import ProductCard from 'components/ProductCard';
 import PageChanger from 'components/PageChanger';
@@ -23,17 +23,18 @@ import saga from './saga';
 import './style.scss';
 
 const getMallData = (API) => {
-    if (API.a.firsttime) {
-        return apiRequest(API.a.URL, 'get');
+    // TODO: pageNum handling on page load
+    if (API.firstTime) {
+        return apiRequest(API.URL, 'get');
     }
     return null;
 };
 
 const gpProductCard = async (API) => {
-    if (!API.b.firsttime) {
-        await apiRequest(API.b.URL, 'post');
+    if (!API.firstTime) {
+        await apiRequest(API.URL, 'post');
     }
-    return apiRequest(API.a.URL, 'get');
+    return apiRequest(API.URL, 'get');
 };
 
 export class MallPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -42,7 +43,7 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
         listView: false,
         getMall: {
             URL: '',
-            firsttime: true,
+            firstTime: true,
         },
         getProduct: {
             URL: '',
@@ -60,17 +61,17 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
         const params = this.props.match.params;
 
         if (dataChecking(params, 'subCategoryQueries')) {
-            Object.assign(this.state.getMall, { URL: `/subcategory/${this.props.match.params.subCategoryQueries.split('-')[0]}` });
+            // Object.assign(this.state.getMall, { URL: `/subcategory/${this.props.match.params.subCategoryQueries.split('-')[0]}` });
             dispatchlink += `&subcategory_id=${this.props.match.params.subCategoryQueries.split('-')[0]}`;
             this.setState({
                 categoryOfFrontUrl: `&subcategory_id=${this.props.match.params.subCategoryQueries.split('-')[0]}`,
-                getMall: { URL: `/subcategory/${this.props.match.params.subCategoryQueries.split('-')[0]}`, firsttime: true },
+                getMall: { URL: `/subcategory/${this.props.match.params.subCategoryQueries.split('-')[0]}`, firstTime: true },
             });
         } else if (dataChecking(params, 'categoryQueries')) {
             dispatchlink += `&category_id=${this.props.match.params.categoryQueries.split('-')[0]}`;
             this.setState({
                 categoryOfFrontUrl: `&category_id=${this.props.match.params.categoryQueries.split('-')[0]}`,
-                getMall: { URL: `/category/${this.props.match.params.categoryQueries.split('-')[0]}`, firsttime: true },
+                getMall: { URL: `/category/${this.props.match.params.categoryQueries.split('-')[0]}`, firstTime: true },
             });
         } else if (dataChecking(params, 'groupName')) {
             let groupId = '';
@@ -102,10 +103,10 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
             dispatchlink += `&group_id=${groupId}`;
             this.setState({
                 categoryOfFrontUrl: `&group_id=${groupId}`,
-                getMall: { URL: `/group/${groupId}`, firsttime: true },
+                getMall: { URL: `/group/${groupId}`, firstTime: true },
             });
         } else {
-            this.setState({ getMall: { URL: '/mall', firsttime: true } });
+            this.setState({ getMall: { URL: '/mall', firstTime: true } });
         }
         Object.assign(this.state.getProduct, { URL: `/mall/list?${dispatchlink}` });
     }
@@ -226,10 +227,8 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
         );
     }
 
-    renderProductCard = (data) => {
-        Object.assign(this.state.postWishlist, { runpermit: true });
-        Object.assign(this.state.getMall, { firsttime: false });
-        return data.data.items.map((item) => (
+    renderProductCard = (data) => (
+        data.data.items.map((item) => (
             <div
                 key={item.id}
                 className={'product-card-div'}
@@ -246,8 +245,8 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
                     addOrDeleteWishlist={() => { this.setState({ postWishlist: { URL: `/wishlist/${item.id}`, runpermit: false } }); }}
                 />
             </div>
-        ));
-    };
+        ))
+    );
 
     renderFilterSort = (data) => (
         <FilterSort
@@ -262,7 +261,7 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
     render() {
         return (
             <div className="container">
-                <Async promise={getMallData(combineObject(this.state.getMall))}>
+                <Async promise={getMallData(this.state.getMall)}>
                     <Async.Loading>
                         <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
                     </Async.Loading>
@@ -279,7 +278,7 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
                                     <div className="sort-filter-container">
                                         {this.renderFilterSort(data)}
                                     </div>
-                                    <Async promise={gpProductCard(combineObject(this.state.getProduct, this.state.postWishlist))}>
+                                    <Async promise={gpProductCard(this.state.getProduct, this.state.postWishlist)}>
                                         <Async.Loading>
                                             <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="" />
                                         </Async.Loading>

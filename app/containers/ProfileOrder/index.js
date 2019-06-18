@@ -48,7 +48,7 @@ import saga from './saga';
 import './style.scss';
 import styles from './materialStyle';
 
-const getDetail = (link) => true ? apiRequest(`${link}`, 'get') : null;
+const getDetail = (link) => apiRequest(`${link}`, 'get');
 // checkredundant(order, orders, newOrders)
 
 export class ProfileOrder extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -129,7 +129,7 @@ export class ProfileOrder extends React.PureComponent { // eslint-disable-line r
         <div>
             <AppBar position="static" className={this.props.classes.Appbar}>
                 <Toolbar>
-                    <NavLink to="/profile/me">
+                    <NavLink to="/profile">
                         <IconButton>
                             <ChevronLeft />
                         </IconButton>

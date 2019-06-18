@@ -16,6 +16,7 @@ import injectReducer from 'utils/injectReducer';
 import Input from 'components/Input';
 // import Loading from 'components/Loading';
 import ErrorMessage from 'components/ErrorMessage';
+import globalScope from 'globalScope';
 
 import reducer from './reducer';
 import saga from './saga';
@@ -46,7 +47,7 @@ export const Form = (props) => (
 export class LoginForm extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     componentWillReceiveProps(nextProps) {
         if (nextProps.loginSuccess !== this.props.loginSuccess && nextProps.loginSuccess) {
-            window.location.href = window.location.pathname;
+            window.location.href = globalScope.previousPage || window.location.pathname;
         }
 
         if (nextProps.error !== this.props.error && nextProps.error) {

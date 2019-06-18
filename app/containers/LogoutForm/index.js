@@ -55,7 +55,6 @@ export class LogoutForm extends React.PureComponent { // eslint-disable-line rea
                                             this.props.history.push(globalScope.previousPage);
                                         } else {
                                             this.props.history.goBack();
-                                            this.props.history.goBack();
                                         }
                                     }}
                                     className="cancel invert hershop-button"

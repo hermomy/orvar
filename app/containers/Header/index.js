@@ -17,6 +17,9 @@ import { NavLink, withRouter } from 'react-router-dom';
 import CartPage from 'containers/CartPage';
 import { dataChecking } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
+
+import NavDropdown from 'components/Navigator/NavItem/NavDropdown';
+
 import { layoutTopNav, searchResult } from './actions';
 import makeSelectHeader from './selectors';
 import reducer from './reducer';
@@ -52,7 +55,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
      * - result will trigger with minimum 2 characters
      * - result display category as brand, autocomplete and product related
      */
-    searchSection = () => (
+    renderSearchSection = () => (
         <div>
             {
                 !this.state.hideSearchBar ?
@@ -108,21 +111,72 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     )
 
     /**
-     * quicklink section which is right side of the header
+     * User section for menu to profiles
      */
-    quicklinks = () => (
-        <div className="quicklink">
-            {this.searchSection()}
+    renderUserSection = () => {
+        const items = [];
+        if (globalScope.token) {
+            items.push({
+                code: 'logout',
+                require_login: true,
+                type: 'exec_function',
+                text: 'Logout',
+                iconClass: 'fas fa-sign-out-alt px-1',
+                handleLinkClick: () => {
+                    globalScope.previousPage = window.location.pathname;
+                    this.props.history.push('/logout');
+                },
+            });
+        } else {
+            items.push({
+                code: 'login',
+                require_login: true,
+                type: 'exec_function',
+                text: 'Login',
+                iconClass: 'fas fa-sign-in-alt px-1',
+                handleLinkClick: () => {
+                    globalScope.previousPage = window.location.pathname;
+                    this.props.history.push('/login');
+                },
+            });
+        }
+
+        return (
             <div className="ml-3">
-                <i
-                    className="fas fa-user"
+                <NavDropdown
+                    items={items}
+                    // data={props.data}
+                    title="User"
+                    // itemClassName="fas fa-user"
                     style={{
                         color: 'grey',
                         fontSize: '1.5rem',
                         cursor: 'pointer',
                     }}
-                ></i>
+                    clickHandler={() => {}}
+                >
+                    <i
+                        className="fas fa-user"
+                        style={{
+                            color: 'grey',
+                            fontSize: '1.5rem',
+                            cursor: 'pointer',
+                        }}
+                    ></i>
+                </NavDropdown>
             </div>
+        );
+    }
+
+    /**
+     * User cart dropdown
+     */
+    renderCartSection = () => {
+        if (!globalScope.token) {
+            return null;
+        }
+
+        return (
             <div className="cart-in-header ml-3">
                 {
                     globalScope.token ?
@@ -137,7 +191,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                             }}
                         ></i>
                     :
-                        <NavLink to="/login">
+                        <NavLink to="/">
                             <i
                                 className="fas fa-shopping-cart"
                                 style={{
@@ -151,13 +205,24 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                     this.state.showCartPopout && this.renderCartPopout()
                 }
             </div>
+        );
+    }
+
+    /**
+     * quicklink section which is right side of the header
+     */
+    renderQuicklinks = () => (
+        <div className="quicklink">
+            {this.renderSearchSection()}
+            {this.renderUserSection()}
+            {this.renderCartSection()}
         </div>
     )
 
     /**
      * top nav section with data came from api /layout/top-nav
      */
-    topCategory = () => (
+    renderTopCategory = () => (
         <div className={`top-nav ${!this.state.hideSearchBar ? 'show' : ''}`}>
             {
                 dataChecking(this.props.header, 'header', 'data').map((val) => (
@@ -213,8 +278,8 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                             <img src="https://cdn5.hermo.my/hermo/imagelink/2017/hermo-logo_01522372998.png" alt="Hermo Logo" width="100%"></img>
                         </NavLink>
                     </div>
-                    {this.topCategory()}
-                    {this.quicklinks()}
+                    {this.renderTopCategory()}
+                    {this.renderQuicklinks()}
                 </div>
             :
                 null

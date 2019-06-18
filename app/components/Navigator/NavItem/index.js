@@ -38,7 +38,7 @@ function NavItem(props) {
         );
     } else if (props.data.type === 'dropdown') {
         return (
-            <NavDropdown item={props.data} data={props.data} title={props.data.title} vertical={props.vertical} itemClassName={props.itemClassName} clickHandler={props.clickHandler}>
+            <NavDropdown items={props.data.items} data={props.data} title={props.data.title} vertical={props.vertical} itemClassName={props.itemClassName} clickHandler={props.clickHandler}>
                 <span className={`text-hover-hermo-pink ${props.itemClassName}`}>
                     <span className={(props.data.iconClass ? props.data.iconClass : 'dropdown__name ')} title={props.data.title}></span>
                     <span>{ props.vertical ? props.data.verticalText : props.data.text}</span>
