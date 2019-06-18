@@ -67,8 +67,13 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
         return (
             <section>
                 <Notify></Notify>
-                <div id="hershop-content-container">
-                    <Header />
+                <Header />
+                <div
+                    id="hershop-content-container"
+                    style={{
+                        paddingTop: '9rem',
+                    }}
+                >
                     <Switch>
                         <Route exact={true} path="/login" component={globalScope.token ? LogoutForm : LoginForm} />
                         <Route exact={true} path="/onboarding" component={globalScope.token ? OnboardingPage : LoginForm} />
@@ -130,8 +135,8 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route path="" component={NotFoundPage} />
                     </Switch>
-                    <TabBar />
                 </div>
+                <TabBar />
             </section>
         );
     }
