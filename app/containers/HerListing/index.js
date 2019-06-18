@@ -189,7 +189,7 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
                     url={product.url}
                     price={dataChecking(product, 'price')}
                     allowDelete={false}
-                    listViewMode={!this.state.listView}
+                    listViewMode={this.state.listView}
                     allowWishlistButton={true}
                     addOrDeleteWishlist={() => this.props.dispatch(postWishlist(product.id))}
                 />
