@@ -275,7 +275,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                 <div id="header">
                     <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
                         <NavLink to="/">
-                            <img src="https://cdn5.hermo.my/hermo/imagelink/2017/hermo-logo_01522372998.png" alt="Hermo Logo" width="100%"></img>
+                            <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100%" />
                         </NavLink>
                     </div>
                     {this.renderTopCategory()}
