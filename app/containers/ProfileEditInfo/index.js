@@ -36,7 +36,7 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
     state = {
         userData: apiRequest('/profile', 'get'),
         profileInfoConfig: [
-            { label: 'PHOTO', default: 'Add a photo to personalise your account', action: <Avatar  /> },
+            { label: 'PHOTO', default: 'Add a photo to personalise your account', action: <Avatar /> },
             { label: 'NAME', dataPath: ['username'] },
             { label: 'LEVEL', dataPath: ['membership', 'name'] },
             { label: 'GENDER', dataPath: ['gender'], action: <Create /> },
