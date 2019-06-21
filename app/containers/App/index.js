@@ -109,7 +109,13 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                         />
                         <Route exact={true} path="/feedback" component={FeedbackPage} />
                         <Route exact={true} path="/" component={HomePage} />
-                        <Route exact={true} path="/profile/:profilePart(me|review|wishlist|setting|logout)?" component={ProfilePage} />
+                        <PrivateRoute
+                            exact={true}
+                            token={globalScope.token || ''}
+                            path="/profile/me"
+                            // path="/profile/:profilePart(me|review|wishlist|setting|logout)?"
+                            component={ProfilePage}
+                        />
                         <Route
                             exact={true}
                             path="/profile/wallet"
@@ -125,7 +131,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                             path="/profile/detail"
                             component={ProfileEditInfo}
                         />
-                        <Route exact={true} path="/profilesmallscreen" component={ProfilePage} />
+                        {/* <Route exact={true} path="/profilesmallscreen" component={ProfilePage} /> */}
                         <PrivateRoute
                             exact={true}
                             path="/checkout"

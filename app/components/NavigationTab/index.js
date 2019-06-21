@@ -8,9 +8,9 @@ import React from 'react';
 import { compose } from 'redux';
 
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -23,7 +23,7 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
     }
 
     tabContent = (pageValue) => (
-        <Typography component="div" style={{ paddingLeft: 30 }}>
+        <Typography component="div">
             {this.props.tabs[pageValue].description}
             {this.props.tabs[pageValue].content}
         </Typography>
@@ -40,7 +40,7 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
                     <Tabs value={this.state.pageValue} onChange={this.handleChange}>
                         {
                             this.props.tabs.map((tab) => (
-                                <Tab key={tab.title} label={<Typography>{tab.title}</Typography>} style={{ textTransform: 'none', position: 'relative' }} />
+                                <Tab key={tab.title} label={<Typography>{tab.title}</Typography>} style={{ textTransform: 'none' }} />
                             ))
                         }
                     </Tabs>
