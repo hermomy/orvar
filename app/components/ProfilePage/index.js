@@ -430,7 +430,6 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                     <Async promise={this.state.personalizationData}>
                         <Async.Loading><CircularProgress className={this.props.classes.progress} /></Async.Loading>
                         <Async.Resolved>
-                            {/* <div>Slider in coming....</div> */}
                             {(personalizationdata) => {
                                 if (dataChecking(personalizationdata, 'data', 'data', 'product', 'items', 'length')) {
                                     return (
