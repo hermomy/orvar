@@ -39,8 +39,8 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
                 <Toolbar>
                     <Tabs value={this.state.pageValue} onChange={this.handleChange}>
                         {
-                            this.props.tabs.map((tab) => (
-                                <Tab key={tab.title} label={<Typography>{tab.title}</Typography>} style={{ textTransform: 'none' }} />
+                            this.props.tabs.map((tab, index) => (
+                                <Tab key={index} label={<Typography>{tab.title}</Typography>} style={{ textTransform: 'none' }} />
                             ))
                         }
                     </Tabs>

@@ -1,0 +1,18 @@
+.avatar-container {
+    position: relative;
+}
+
+.avatar-container i {
+    position: absolute;
+    transform: translate(17px, -28px);
+    display: none;
+}
+
+.avatar-responsive:hover {
+    opacity: 0.3;
+}
+
+.avatar-container:hover i {
+    display: block;
+    z-index: 500;
+}
