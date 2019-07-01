@@ -32,6 +32,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
 
         this.state = {
             showCartPopout: false,
+            isPopover: false,
             hideSearchBar: true,
             searchQuery: '',
         };
@@ -48,6 +49,12 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             this.props.dispatch(searchResult(this.state.searchQuery));
         }
     }
+
+    megaMenu = () => (
+        <div className="mega-menu-poper">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, ex accusantium quos ipsam inventore perspiciatis a excepturi aliquid illum odio fuga placeat repellendus eum consequatur omnis hic quo, exercitationem qui?
+        </div>
+    )
 
     /**
      * section section
@@ -232,13 +239,20 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                     {val.text}
                                 </span>
                             :
-                                <span>
+                                <span
+                                    onClick={() => this.setState({
+                                        isPopover: !this.state.isPopover,
+                                    })}
+                                >
                                     {val.text}
                                     <i className="fas fa-angle-down ml-quater"></i>
                                 </span>
                         }
                     </div>
                 ))
+            }
+            {
+                this.state.isPopover && this.megaMenu()
             }
         </div>
     )
