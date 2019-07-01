@@ -31,7 +31,6 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         super(props);
 
         this.state = {
-            open: false,
             showCartPopout: false,
             hideSearchBar: true,
             searchQuery: '',
@@ -237,7 +236,6 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                     {val.text}
                                     <i className="fas fa-angle-down ml-quater"></i>
                                 </span>
-
                         }
                     </div>
                 ))
