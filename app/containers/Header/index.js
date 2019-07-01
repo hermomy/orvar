@@ -17,7 +17,6 @@ import { NavLink, withRouter } from 'react-router-dom';
 import CartPage from 'containers/CartPage';
 import { dataChecking } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
-
 import NavDropdown from 'components/Navigator/NavItem/NavDropdown';
 
 import { layoutTopNav, searchResult } from './actions';
@@ -32,6 +31,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         super(props);
 
         this.state = {
+            open: false,
             showCartPopout: false,
             hideSearchBar: true,
             searchQuery: '',
@@ -227,7 +227,18 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             {
                 dataChecking(this.props.header, 'header', 'data').map((val) => (
                     <div className="ml-3 category" key={val.code}>
-                        {val.text}
+                        {
+                            val.type === 'hot-link' ?
+                                <span>
+                                    {val.text}
+                                </span>
+                            :
+                                <span>
+                                    {val.text}
+                                    <i className="fas fa-angle-down ml-quater"></i>
+                                </span>
+
+                        }
                     </div>
                 ))
             }
