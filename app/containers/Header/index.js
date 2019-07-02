@@ -17,6 +17,10 @@ import { NavLink, withRouter } from 'react-router-dom';
 import CartPage from 'containers/CartPage';
 import { dataChecking } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
+
+import { Popover, Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+
 import NavDropdown from 'components/Navigator/NavItem/NavDropdown';
 
 import { layoutTopNav, searchResult } from './actions';
@@ -25,6 +29,7 @@ import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
 import globalScope from '../../globalScope';
+import styles from './materialStyle';
 
 export class Header extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
@@ -32,9 +37,9 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
 
         this.state = {
             showCartPopout: false,
-            isPopover: false,
             hideSearchBar: true,
             searchQuery: '',
+            anchorEl: null,
         };
         this.getSearchResult = this.getSearchResult.bind(this);
     }
@@ -50,11 +55,69 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         }
     }
 
-    megaMenu = () => (
-        <div className="mega-menu-poper">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum, ex accusantium quos ipsam inventore perspiciatis a excepturi aliquid illum odio fuga placeat repellendus eum consequatur omnis hic quo, exercitationem qui?
-        </div>
-    )
+    popMegaMenu = (event) => {
+        this.setState({
+            anchorEl: event.currentTarget,
+        });
+    };
+
+    closeMegaMenu = () => {
+        this.setState({
+            anchorEl: null,
+        });
+    };
+
+    megaMenu = () => {
+        const open = Boolean(this.state.anchorEl);
+        return (
+            <Popover
+                open={open}
+                anchorEl={this.state.anchorEl}
+                onClose={this.closeMegaMenu}
+                anchorReference="anchorPosition"
+                anchorPosition={{ top: 87, left: 70 }}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}
+            >
+                <div>
+                    {
+                        dataChecking(this.props.header, 'header', 'data').map((data) => (
+                            <div key={data.code}>
+                                {
+                                    data.code === 'category-directory'
+                                    ?
+                                        <Grid
+                                            container={true}
+                                        >
+                                            <Grid className={this.props.classes.leftMegaMenu} item={true} xs={2}>
+                                                {
+                                                    data.items.map((item, key) => (
+                                                        <div className="mb-1" key={key}>
+                                                            <Typography className={this.props.classes.leftMegaMenuText}>{item.text}</Typography>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </Grid>
+                                            <Grid item={true} xs={10}>
+                                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minima optio dolor, nobis, corporis fugit illo quaerat commodi quas nesciunt a, architecto ducimus excepturi accusantium molestias qui similique minus quae assumenda?
+                                            </Grid>
+                                        </Grid>
+                                    :
+                                    null
+                                }
+                            </div>
+                        ))
+                    }
+                </div>
+            </Popover>
+        );
+    }
 
     /**
      * section section
@@ -240,9 +303,8 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                 </span>
                             :
                                 <span
-                                    onClick={() => this.setState({
-                                        isPopover: !this.state.isPopover,
-                                    })}
+                                    id={val.code}
+                                    onClick={this.popMegaMenu}
                                 >
                                     {val.text}
                                     <i className="fas fa-angle-down ml-quater"></i>
@@ -251,9 +313,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                     </div>
                 ))
             }
-            {
-                this.state.isPopover && this.megaMenu()
-            }
+            { this.megaMenu() }
         </div>
     )
 
@@ -333,5 +393,6 @@ export default compose(
     withRouter,
     withReducer,
     withSaga,
+    withStyles(styles),
     withConnect,
 )(Header);
