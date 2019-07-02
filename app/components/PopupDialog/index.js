@@ -6,28 +6,54 @@
 
 import React from 'react';
 
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 
 class PopupDialog extends React.PureComponent {
     render() {
         return (
             <div>
-                <Dialog open={this.props.display} fullWidth={true}>
-                    <DialogTitle id="alert-dialog-title">{this.props.title}</DialogTitle>
+                <Dialog open={this.props.display} onClose={this.props.onClose} fullWidth={true}>
+                    <DialogTitle id="alert-dialog-title">
+                        <span>{this.props.title}</span>
+                        {
+                            this.props.onClose &&
+                                <IconButton
+                                    aria-label="Close"
+                                    onClick={this.props.onClose}
+                                    style={{
+                                        position: 'absolute',
+                                        right: '1rem',
+                                        top: '1rem',
+                                    }}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                        }
+                    </DialogTitle>
                     <DialogContent>
                         {this.props.children}
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.props.onCancel} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={this.props.onUpdate} color="primary" autoFocus={true}>
-                            Update
-                        </Button>
+                        {
+                            this.props.onCancel &&
+                                <Button onClick={this.props.onCancel} color="primary">
+                                    Cancel
+                                </Button>
+                        }
+                        {
+                            this.props.onUpdate &&
+                                <Button onClick={this.props.onUpdate} color="primary">
+                                    Update
+                                </Button>
+                        }
                     </DialogActions>
                 </Dialog>
             </div>

@@ -67,7 +67,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                 {
                                     dataChecking(this.props, 'header', 'suggestionData', 'loading') ?
                                         <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="hermo loading" />
-                                    :
+                                        :
                                         <div>
                                             {
                                                 dataChecking(this.props, 'header', 'suggestionData', 'error') ?
@@ -225,11 +225,14 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     renderTopCategory = () => (
         <div className={`top-nav ${!this.state.hideSearchBar ? 'show' : ''}`}>
             {
-                dataChecking(this.props.header, 'header', 'data').map((val) => (
-                    <div className="ml-3 category" key={val.code}>
-                        {val.text}
-                    </div>
-                ))
+                dataChecking(this.props.header, 'header', 'data', 'length') ?
+                    this.props.header.header.data.map((val) => (
+                        <div className="ml-3 category" key={val.code}>
+                            {val.text}
+                        </div>
+                    ))
+                    :
+                    null
             }
         </div>
     )

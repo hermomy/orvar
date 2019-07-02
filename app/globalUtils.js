@@ -2,7 +2,7 @@ import 'whatwg-fetch';
 import globalScope from 'globalScope';
 import Cookies from 'universal-cookie';
 
-export const apiRequest = (path, type, body, baseUrl, headerParams) => {
+export const apiRequest = (path, type = 'get', body, baseUrl, headerParams) => {
     globalScope.axios.setBaseURL(baseUrl || globalScope.api);
     return globalScope.axios[type](path, body, headerParams);
 };
@@ -43,13 +43,31 @@ export const dataChecking = (object, ...argsArr) => {
 
     let obj = object;
     for (let i = 0; i < args.length; i += 1) {
-        if (!obj || !Object.prototype.hasOwnProperty.call(obj, args[i])) {
+        if (!obj || !(Object.prototype.hasOwnProperty.call(obj, args[i]) || obj[args[i]])) {
             return null;
         }
         obj = obj[args[i]];
     }
     return obj;
 };
+
+// TODO: TP: need to assume the case that original ovject have other value
+export const setDataByPath = (data, ...argsArr) => {
+    let args = argsArr;
+    if (argsArr[0].constructor === Array) {
+        args = argsArr[0];
+    }
+
+    let obj = data;
+    for (let i = args.length - 1; i >= 0; i--) {
+        obj = {
+            [args[i]]: obj,
+        };
+    }
+
+    return obj;
+};
+export const createObjectByPath = setDataByPath;
 
 export const combineObject = (...argsArr) => {
     const i = ['a', 'b', 'c', 'd'];

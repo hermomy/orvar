@@ -5,45 +5,50 @@
  */
 
 import React from 'react';
-import { apiRequest, dataChecking } from 'globalUtils';
-import { fromJS } from 'immutable';
+import { dataChecking } from 'globalUtils';
 import PropTypes from 'prop-types';
 
-import Async from 'assets/react-async';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import PopupDialog from 'components/PopupDialog';
+import { notifySuccess, notifyError } from 'containers/Notify';
 
-import globalScope from 'globalScope';
-
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import Checkbox from '@material-ui/core/Checkbox';
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Container from '@material-ui/core/Container';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormLabel from '@material-ui/core/FormLabel';
-import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Select from '@material-ui/core/Select';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { Create } from '@material-ui/icons/';
+import {
+    Avatar,
+    Card,
+    Checkbox,
+    Divider,
+    Grid,
+    CardContent,
+    CardHeader,
+    CircularProgress,
+    Container,
+    FormControl,
+    FormControlLabel,
+    FormGroup,
+    FormLabel,
+    FormHelperText,
+    IconButton,
+    Input,
+    InputAdornment,
+    InputLabel,
+    Radio,
+    RadioGroup,
+    TextField,
+    Typography,
+    Button,
+} from '@material-ui/core';
+import {
+    Create,
+    Visibility,
+    VisibilityOff,
+} from '@material-ui/icons';
 
 import makeSelectProfileEditInfo from './selectors';
+import * as actions from './actions';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
@@ -51,9 +56,9 @@ import './style.scss';
 export class ProfileEditInfo extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         popup: false,
-
-        value: '',
-        genderValue: '',
+        showCurrentPassword: false,
+        showPassword: false,
+        showPasswordConfirmation: false,
 
         profileInfoConfigs: [
             { label: 'PHOTO', default: 'Add a photo to personalise your account', isAvatar: true },
@@ -71,11 +76,18 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
         ],
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        if (nextState.userData !== this.state.userData) {
-            console.log('not same', nextState.userData);
-        } else {
-            console.log('same', this.state.userData);
+    componentWillMount() {
+        this.props.dispatch(actions.getUserData());
+        this.props.dispatch(actions.getCommonConfig());
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.profileEditInfo.notification !== nextProps.profileEditInfo.notification) {
+            if (nextProps.profileEditInfo.notification.type === 'fail') {
+                notifyError(nextProps.profileEditInfo.notification.message);
+            } else {
+                notifySuccess(nextProps.profileEditInfo.notification.message);
+            }
         }
     }
 
@@ -112,127 +124,307 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
         });
     }
 
-    getUserData = apiRequest('/profile', 'get');
-    getCommonData = apiRequest('/common', 'get');
-    getData = () => Promise.all([this.getUserData, this.getCommonData]);
-
-    putProfileData = (dataPath) => apiRequest('/profile', 'put', dataChecking(this.state, dataPath));
-
-    handleChange = (value, objKey, path) => {
-        // fromJS
-        const immuObj = fromJS(dataChecking(this.state, objKey));
-        const updatedObj = immuObj.setIn(path, value);
-        globalScope.test = updatedObj.toJS();
-        console.log('check1', globalScope.test);
-        this.setState({ [objKey]: updatedObj.toJS() });
-        const newState = { ...this.state };
-        newState[objKey] = updatedObj.toJS();
-        this.setState(newState);
-        console.log('check2', newState);
-        // this.setState({ value: event.target.value });
-    };
-
     renderDialogContent = () => {
         switch (this.state.dialogType) {
             case 'edit_gender':
                 return (
                     <form>
-                        <FormControl style={{ display: 'flex', flexWrap: 'wrap' }}>
-                            <InputLabel htmlFor="gender-selector">Gender</InputLabel>
-                            <Select
-                                value={this.state.genderValue}
-                                onChange={this.handleChange}
-                                input={<Input id="gender-selector" />}
-                            >
-                                <MenuItem value={'Male'}>Male</MenuItem>
-                                <MenuItem value={'Female'}>Female</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <RadioGroup
+                            value={dataChecking(this.props.profileEditInfo, 'userData', 'gender')}
+                            onChange={(event) => {
+                                this.props.dispatch(actions.changePropsAndUpdate({
+                                    objKey: 'userData',
+                                    dataPath: ['gender'],
+                                    value: event.target.value,
+                                    currentValue: dataChecking(this.props.profileEditInfo, 'userData', 'gender'),
+                                    formName: 'Gender',
+                                    successCallback: setTimeout(() => this.setState({ popup: false }), 900),
+                                }));
+                            }}
+                        >
+                            <FormControlLabel
+                                value={'Female'}
+                                disabled={false}
+                                control={<Radio disabled={false} />}
+                                label={'Female'}
+                            />
+                            <FormControlLabel
+                                value={'Male'}
+                                disabled={false}
+                                control={<Radio disabled={false} />}
+                                label={'Male'}
+                            />
+                        </RadioGroup>
                     </form>
                 );
             case 'edit_birthday':
                 return (
-                    <div>
-                        <form noValidate={true}>
-                            <TextField
-                                id="date"
-                                type="date"
-                            />
-                        </form>
-                    </div>
+                    <form>
+                        <TextField
+                            id="date"
+                            type="date"
+                            value={dataChecking(this.props.profileEditInfo, 'newBirthday', 'value') || dataChecking(this.props, 'profileEditInfo', 'userData', 'birthday')}
+                            onChange={() => {
+                                this.props.dispatch(actions.changeProps({
+                                    objKey: 'newBirthday',
+                                    dataPath: ['value'],
+                                    value: event.target.value,
+                                }));
+                            }}
+                            style={{ display: 'flex', flexWrap: 'wrap' }}
+                            required={true}
+                        />
+                        <Button
+                            onClick={() => {
+                                if (dataChecking(this.props.profileEditInfo, 'newBirthday', 'value')) {
+                                    this.props.dispatch(actions.changePropsAndUpdate({
+                                        objKey: 'userData',
+                                        dataPath: ['birthday'],
+                                        value: this.props.profileEditInfo.newBirthday.value,
+                                        currentValue: dataChecking(this.props, 'profileEditInfo', 'userData', 'birthday'),
+                                        formName: 'Birthday',
+                                        successCallback: setTimeout(() => this.setState({ popup: false }), 900),
+                                    }));
+                                }
+                            }}
+                            color="secondary"
+                            style={{ float: 'right', marginTop: 10 }}
+                        >
+                            Update
+                        </Button>
+                    </form>
                 );
             case 'edit_password':
-                return <div>password</div>;
+                return (
+                    <form>
+                        <FormControl style={{ display: 'flex' }}>
+                            <InputLabel required={true} htmlFor="current-password">Current Password</InputLabel>
+                            <Input
+                                id="current-password"
+                                type={this.state.showCurrentPassword ? 'text' : 'password'}
+                                value={dataChecking(this.props.profileEditInfo, 'currentPassword', 'value') || ''}
+                                onChange={() => {
+                                    this.props.dispatch(actions.changeProps({
+                                        objKey: 'currentPassword',
+                                        dataPath: ['value'],
+                                        value: event.target.value,
+                                    }));
+                                }}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => {
+                                                this.setState({ showCurrentPassword: !this.state.showCurrentPassword });
+                                            }}
+                                        >
+                                            {this.state.showCurrentPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                autoComplete="off"
+                                required={true}
+                            />
+                        </FormControl>
+                        <FormControl required={true} style={{ display: 'flex', marginTop: 20 }}>
+                            <InputLabel htmlFor="password">New Password</InputLabel>
+                            <Input
+                                id="password"
+                                type={this.state.showPassword ? 'text' : 'password'}
+                                value={dataChecking(this.props.profileEditInfo, 'password', 'value') || ''}
+                                onChange={() => {
+                                    this.props.dispatch(actions.changeProps({
+                                        objKey: 'password',
+                                        dataPath: ['value'],
+                                        value: event.target.value,
+                                    }));
+                                }}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => {
+                                                this.setState({ showPassword: !this.state.showPassword });
+                                            }}
+                                        >
+                                            {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                autoComplete="off"
+                                required={true}
+                                aria-describedby="password-helper"
+                            />
+                            <FormHelperText id="password-helper">Use at least 8 characters.</FormHelperText>
+                        </FormControl>
+                        <FormControl required={true} style={{ display: 'flex', marginTop: 10 }}>
+                            <InputLabel htmlFor="password-confirmation">Confirm New Password</InputLabel>
+                            <Input
+                                id="password-confirmation"
+                                type={this.state.showPasswordConfirmation ? 'text' : 'password'}
+                                value={dataChecking(this.props.profileEditInfo, 'passwordConfirmation', 'value') || ''}
+                                onChange={() => {
+                                    this.props.dispatch(actions.changeProps({
+                                        objKey: 'passwordConfirmation',
+                                        dataPath: ['value'],
+                                        value: event.target.value,
+                                    }));
+                                }}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => {
+                                                this.setState({ showPasswordConfirmation: !this.state.showPasswordConfirmation });
+                                            }}
+                                        >
+                                            {this.state.showPasswordConfirmation ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                autoComplete="off"
+                                required={true}
+                            />
+                        </FormControl>
+                        <Button
+                            disabled={(() => {
+                                if (dataChecking(this.props.profileEditInfo, 'currentPassword', 'value', 'length') && dataChecking(this.props.profileEditInfo, 'password', 'value', 'length') && dataChecking(this.props.profileEditInfo, 'passwordConfirmation', 'value', 'length')) {
+                                    return false;
+                                }
+                                return true;
+                            })()}
+                            onClick={() => {
+                                if (dataChecking(this.props.profileEditInfo, 'password', 'value') !== dataChecking(this.props.profileEditInfo, 'passwordConfirmation', 'value')) {
+                                    this.props.dispatch(actions.updatePasswordFailed(
+                                        'Password and confirmation password do not match.'
+                                    ));
+                                } if (dataChecking(this.props.profileEditInfo, 'password', 'value') === dataChecking(this.props.profileEditInfo, 'passwordConfirmation', 'value')) {
+                                    this.props.dispatch(actions.updatePassword({
+                                        currentPassword: this.props.profileEditInfo.currentPassword.value,
+                                        password: this.props.profileEditInfo.password.value,
+                                        passwordConfirmation: this.props.profileEditInfo.passwordConfirmation.value,
+                                        successCallback: setTimeout(() => this.setState({ popup: false }), 900),
+                                    }));
+                                }
+                            }}
+                            color="secondary"
+                            style={{ float: 'right', marginTop: 20 }}
+                        >
+                            Change Password
+                        </Button>
+                    </form>
+                );
             case 'skin_tone':
                 return (
-                    <FormControl component="fieldset">
+                    <form>
                         <RadioGroup
-                            value={`${dataChecking(this.state, 'userData', 'data', 'skin', 'tone', 'id')}`}
+                            value={JSON.stringify({
+                                id: dataChecking(this.props.profileEditInfo, 'userData', 'skin', 'tone', 'id'),
+                                name: dataChecking(this.props.profileEditInfo, 'userData', 'skin', 'tone', 'name'),
+                                color_code: dataChecking(this.props.profileEditInfo, 'userData', 'skin', 'tone', 'color_code'),
+                            })}
                             onChange={(event) => {
-                                this.handleChange(parseInt(event.target.value, 10), 'userData', ['data', 'skin', 'tone', 'id']);
+                                this.props.dispatch(actions.changePropsAndUpdate({
+                                    objKey: 'userData',
+                                    dataPath: ['skin', 'tone'],
+                                    value: JSON.parse(event.target.value),
+                                    currentValue: dataChecking(this.props.profileEditInfo, 'userData', 'skin', 'tone'),
+                                    formName: 'Skin Tone',
+                                    successCallback: setTimeout(() => this.setState({ popup: false }), 900),
+                                }));
                             }}
                         >
                             {
-                                this.state.skinData.data.skin_tone.items.map((option, index) => (
-                                    <FormControlLabel
-                                        key={option.name + index}
-                                        value={`${option.id}`}
-                                        disabled={false}
-                                        control={<Radio disabled={false} />}
-                                        label={
-                                            <div style={{ flexDirection: 'row', display: 'flex' }}>
-                                                <span style={{ borderRadius: 100, backgroundColor: option.color_code, width: 20, height: 20, marginTop: 10 }} />
-                                                <span>{option.name}</span>
-                                            </div>
-                                        }
-                                    />
+                                dataChecking(this.props.profileEditInfo, 'commonConfig', 'skin_tone', 'items') &&
+                                    this.props.profileEditInfo.commonConfig.skin_tone.items.map((option, index) => (
+                                        <FormControlLabel
+                                            key={option.name + index}
+                                            value={JSON.stringify({ id: option.id, name: option.name, color_code: option.color_code })}
+                                            control={<Radio disabled={false} />}
+                                            label={
+                                                <div style={{ flexDirection: 'row', display: 'flex' }}>
+                                                    <span style={{ borderRadius: 100, backgroundColor: option.color_code, width: 20, height: 20, marginRight: 10 }} />
+                                                    <span>{option.name}</span>
+                                                </div>
+                                            }
+                                        />
                                 ))
                             }
                         </RadioGroup>
-                    </FormControl>
+                    </form>
                 );
             case 'skin_type':
                 return (
-                    <FormControl component="fieldset">
+                    <form>
                         <RadioGroup
-                            value={this.state.value}
-                            onChange={this.handleChange}
+                            value={JSON.stringify({
+                                id: dataChecking(this.props.profileEditInfo, 'userData', 'skin', 'type', 'id'),
+                                name: dataChecking(this.props.profileEditInfo, 'userData', 'skin', 'type', 'name'),
+                            })}
+                            onChange={(event) => {
+                                this.props.dispatch(actions.changePropsAndUpdate({
+                                    objKey: 'userData',
+                                    dataPath: ['skin', 'type'],
+                                    value: JSON.parse(event.target.value),
+                                    currentValue: dataChecking(this.props.profileEditInfo, 'userData', 'skin', 'type'),
+                                    formName: 'Skin Type',
+                                    successCallback: setTimeout(() => this.setState({ popup: false }), 900),
+                                }));
+                            }}
                         >
                             {
-                                this.state.skinData.data.skin_type.items.map((option, index) => (
-                                    <FormControlLabel
-                                        key={option.name + index}
-                                        value={option.name}
-                                        disabled={false}
-                                        control={<Radio disabled={false} />}
-                                        label={option.name}
-                                    />
-                                ))
+                                dataChecking(this.props.profileEditInfo, 'commonConfig', 'skin_type', 'items') &&
+                                    this.props.profileEditInfo.commonConfig.skin_type.items.map((option, index) => (
+                                        <FormControlLabel
+                                            key={option.name + index}
+                                            value={JSON.stringify({ id: option.id, name: option.name })}
+                                            disabled={false}
+                                            control={<Radio disabled={false} />}
+                                            label={option.name}
+                                        />
+                                    ))
                             }
                         </RadioGroup>
-                    </FormControl>
+                    </form>
                 );
             case 'skin_concern':
                 return (
-                    <FormControl component="fieldset">
+                    <form>
                         <FormLabel>* You can select more than one option</FormLabel>
-                        <FormGroup
-                            value={this.state.value}
-                            onChange={this.handleRadioChange}
-                        >
+                        <FormGroup>
                             {
-                                this.state.skinData.data.skin_concern.items.map((option, index) => (
-                                    <FormControlLabel
-                                        key={option.name + index}
-                                        value={option.name}
-                                        disabled={false}
-                                        control={<Checkbox value={option.name} disabled={false} />}
-                                        label={option.name}
-                                    />
-                                ))
+                                dataChecking(this.props.profileEditInfo, 'commonConfig', 'skin_concern', 'items') &&
+                                    this.props.profileEditInfo.commonConfig.skin_concern.items.map((option, index) => (
+                                        <FormControlLabel
+                                            key={option.name + index}
+                                            label={option.name}
+                                            control={
+                                                <Checkbox
+                                                    value={JSON.stringify({ id: option.id, name: option.name })}
+                                                    checked={(() => {
+                                                        if (dataChecking(this.props.profileEditInfo, 'userData', 'skin', 'concerns')) {
+                                                            const obj = this.props.profileEditInfo.userData.skin.concerns.find((item) => item.id === option.id);
+                                                            return !!obj;
+                                                        }
+                                                        return false;
+                                                    })()}
+                                                    onChange={(event) => {
+                                                        const concerns = [...this.props.profileEditInfo.userData.skin.concerns];
+                                                        const targetValue = JSON.parse(event.target.value);
+
+                                                        this.props.dispatch(actions.changePropsAndUpdate({
+                                                            objKey: 'userData',
+                                                            dataPath: ['skin', 'concerns'],
+                                                            value: event.target.checked ? [...concerns, targetValue] : concerns.filter((item) => item.id !== targetValue.id),
+                                                            currentValue: dataChecking(this.props.profileEditInfo, 'userData', 'skin', 'concerns'),
+                                                            formName: 'Skin Concerns',
+                                                            showUpdatedTo: false,
+                                                        }));
+                                                    }}
+                                                />
+                                            }
+                                        />
+                                    ))
                             }
                         </FormGroup>
-                    </FormControl>
+                    </form>
                 );
             default:
                 break;
@@ -242,7 +434,7 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
     }
 
     renderProfileInfoCard = () => (
-        this.state.userData ?
+        this.props.profileEditInfo.userData ?
             <Card>
                 <CardHeader
                     title={
@@ -258,22 +450,74 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
                             <div key={index}>
                                 <Grid container={true} className="m-1">
                                     <Grid item={true} lg={2} md={2} xs={12}><Typography variant="body2" color="textSecondary">{config.label}</Typography></Grid>
-                                    <Grid item={true} lg={9} md={9} xs={10}><Typography variant="body2">{config.dataPath ? dataChecking(this.state.userData.data, config.dataPath) : config.default}</Typography></Grid>
+                                    <Grid item={true} lg={9} md={9} xs={10}>
+                                        <Typography variant="body2">
+                                            {
+                                                config.dataPath ?
+                                                    dataChecking(this.props.profileEditInfo.userData, config.dataPath)
+                                                    :
+                                                    config.default
+                                            }
+                                        </Typography>
+                                    </Grid>
                                     <Grid item={true} lg={1} md={1} xs={2}>
-                                        {config.isAvatar ?
-                                            <div className="avatar-container">
-                                                <input id="avatar-uploader" accept="image/*" type="file" style={{ display: 'none' }} />
-                                                <label htmlFor="avatar-uploader">
-                                                    <IconButton size="small" component="span"><Avatar src={this.state.userData.data.avatar} className="avatar-responsive" /></IconButton>
-                                                    <i className="fa fa-camera" />
-                                                </label>
-                                            </div>
-                                            :
-                                            <IconButton size="small" onClick={() => this.onActionButtonClick({ type: config.action })}>{config.icon}</IconButton>
+                                        {
+                                            config.isAvatar ?
+                                                <div className="avatar-container">
+                                                    <input
+                                                        id="avatar-uploader"
+                                                        accept="image/*"
+                                                        type="file"
+                                                        style={{ display: 'none' }}
+                                                        onChange={(event) => {
+                                                            const file = dataChecking(event, 'target', 'files', 0);
+
+                                                            if (file) {
+                                                                const reader = new FileReader();
+                                                                reader.readAsDataURL(file);
+                                                                reader.onload = () => {
+                                                                    const result = reader.result;
+                                                                    const fileString = (result.split(';base64,')[1]) || null;
+                                                                    if (fileString) {
+                                                                        this.props.dispatch(actions.updateAvatar({
+                                                                            fileString,
+                                                                            file,
+                                                                            dataPath: ['avatar'],
+                                                                        }));
+                                                                    }
+                                                                };
+                                                                reader.onerror = (error) => {
+                                                                    console.log('Error: ', error);
+                                                                };
+                                                            }
+                                                        }}
+                                                    />
+                                                    <label htmlFor="avatar-uploader">
+                                                        {
+                                                            this.props.profileEditInfo.updatingAvatar ?
+                                                                <CircularProgress size={30} />
+                                                                :
+                                                                <IconButton
+                                                                    size="small"
+                                                                    component="span"
+                                                                >
+                                                                    <Avatar src={this.props.profileEditInfo.userData.avatar} className="avatar-responsive" />
+                                                                </IconButton>
+                                                        }
+                                                        <i className="fa fa-camera" />
+                                                    </label>
+                                                </div>
+                                                :
+                                                <IconButton size="small" onClick={() => this.onActionButtonClick({ type: config.action })}>{config.icon}</IconButton>
                                         }
                                     </Grid>
                                 </Grid>
-                                {(this.state.profileInfoConfigs.length - 1 !== index) ? <Divider /> : '' }
+                                {
+                                    (this.state.profileInfoConfigs.length - 1 !== index) ?
+                                        <Divider />
+                                        :
+                                        ''
+                                }
                             </div>
                         ))
                     }
@@ -284,10 +528,11 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
     )
 
     renderSkinDetailCard = () => {
-        if (!this.state.userData || !this.state.skinData) {
+        if (!this.props.profileEditInfo.userData || !this.props.profileEditInfo.commonConfig) {
             return null;
         }
-        const skinConcern = this.state.userData.data.skin.concerns.map((concern) => concern.name);
+
+        const skinConcern = this.props.profileEditInfo.userData.skin.concerns.map((concern) => concern.name);
         const concernList = skinConcern.join(', ');
 
         return (
@@ -308,17 +553,30 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
                                     <Grid item={true} md={2} xs={12}><Typography variant="body2" color="textSecondary">{config.label}</Typography></Grid>
                                     <Grid item={true} md={9} xs={10}>
                                         <div style={{ flexDirection: 'row', display: 'flex' }}>
-                                            {config.isColorCoded ?
-                                                <div style={{ borderRadius: 100, backgroundColor: this.state.userData.data.skin.tone.color_code, width: 20, height: 20, marginRight: 10 }} />
-                                                :
-                                                null
+                                            {
+                                                config.isColorCoded ?
+                                                    <div style={{ borderRadius: 100, backgroundColor: this.props.profileEditInfo.userData.skin.tone.color_code, width: 20, height: 20, marginRight: 10 }} />
+                                                    :
+                                                    null
                                             }
-                                            <Typography variant="body2">{config.dataPath ? dataChecking(this.state.userData.data, config.dataPath) : concernList}</Typography>
+                                            <Typography variant="body2">
+                                                {
+                                                    config.dataPath ?
+                                                        dataChecking(this.props.profileEditInfo.userData, config.dataPath)
+                                                        :
+                                                        concernList
+                                                }
+                                            </Typography>
                                         </div>
                                     </Grid>
                                     <Grid item={true} md={1} xs={1}><IconButton size="small" onClick={() => this.onActionButtonClick({ type: config.action })}>{config.icon}</IconButton></Grid>
                                 </Grid>
-                                {(this.state.skinDetailConfigs.length - 1 !== index) ? <Divider /> : '' }
+                                {
+                                    (this.state.skinDetailConfigs.length - 1 !== index) ?
+                                        <Divider />
+                                        :
+                                        ''
+                                    }
                             </div>
                         ))
                     }
@@ -334,39 +592,19 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
                     <Typography variant="subtitle1" display="block" gutterBottom={true}>Profile</Typography>
                     <Typography>Basic info, like your name, photo and your skin details</Typography>
                 </div>
-                <Async promise={this.getData()}>
-                    <Async.Loading><CircularProgress /></Async.Loading>
-                    <Async.Resolved>
-                        {(data) => {
-                            this.state.userData = data[0];
-                            this.state.skinData = data[1];
-                            return (
-                                <div>
-                                    {this.renderProfileInfoCard()}
-                                    {this.renderSkinDetailCard()}
-                                </div>
-                            );
-                        }}
-                    </Async.Resolved>
-                    <Async.Rejected>
-                        <div>PLACEHOLDER FOR ERROR</div>
-                    </Async.Rejected>
-                </Async>
+                {
+                    this.props.profileEditInfo.loading ?
+                        <div style={{ textAlign: 'center' }}><CircularProgress /></div>
+                        :
+                        <div>
+                            {this.renderProfileInfoCard()}
+                            {this.renderSkinDetailCard()}
+                        </div>
+                }
                 <PopupDialog
                     display={this.state.popup}
                     title={this.state.dialogTitle}
-                    onUpdate={() => {
-                        console.log({
-                            // global: globalScope.test.data.skin.tone,
-                            state: this.state.userData.data.skin.tone,
-                        });
-                        // this.putProfileData(dataChecking(globalScope.test, 'data')).then((response) => {
-                        this.putProfileData(['userData', 'data']).then((response) => {
-                            console.log(response);
-                            this.setState({ popup: false, userData: response });
-                        });
-                    }}
-                    onCancel={() => {
+                    onClose={() => {
                         this.setState({ popup: false });
                     }}
                 >
