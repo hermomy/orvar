@@ -18,7 +18,7 @@ import CartPage from 'containers/CartPage';
 import { dataChecking } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
 
-import { Popover, Typography, Grid } from '@material-ui/core';
+import { Popover, Typography, Grid, Container, AppBar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import NavDropdown from 'components/Navigator/NavItem/NavDropdown';
@@ -40,6 +40,8 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             hideSearchBar: true,
             searchQuery: '',
             anchorEl: null,
+            anchorElID: null,
+            tabVal: 'skin-care',
         };
         this.getSearchResult = this.getSearchResult.bind(this);
     }
@@ -58,24 +60,83 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     popMegaMenu = (event) => {
         this.setState({
             anchorEl: event.currentTarget,
+            anchorElID: event.target.id,
         });
     };
 
     closeMegaMenu = () => {
         this.setState({
             anchorEl: null,
+            anchorElID: null,
         });
     };
 
-    megaMenu = () => {
+    megaMenu = (el) => {
         const open = Boolean(this.state.anchorEl);
+        let content;
+        dataChecking(this.props.header, 'header', 'data').map((data) => {
+            if (el === 'category-directory') {
+                if (data.code === 'category-directory') {
+                    content = (
+                        <Grid container={true}>
+                            <Grid className={this.props.classes.leftMegaMenu} item={true} xs={2}>
+                                {
+                                    data.items.map((item) => (
+                                        <div
+                                            key={item.text}
+                                            onClick={() => item.type !== 'link' && this.setState({ tabVal: item.code })}
+                                            className="mb-1"
+                                        >
+                                            {item.text}
+                                        </div>
+                                    ))
+                                }
+                            </Grid>
+                            <Grid className={this.props.classes.rightMegaMenu} item={true} xs={10}>
+                                <Grid container={true}>
+                                    {
+                                        data.items.map((item) => (
+                                            this.state.tabVal === item.code
+                                            ?
+                                                item.categories.map((category) => (
+                                                    <Grid item={true} xs={3} key={category.url}>
+                                                        <Typography className="mb-1" color="primary" variant="h6">{category.text}</Typography>
+                                                        {
+                                                            category.childs.map((child) => (
+                                                                <div className="mb-1" key={child.url}>
+                                                                    <Typography className="pl-1">{child.text}</Typography>
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </Grid>
+                                                ))
+                                            :
+                                                null
+                                        ))
+                                    }
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    );
+                }
+            } else if (el === 'what-is-new') {
+                if (data.code === 'what-is-new') {
+                    content = <div>{data.code}</div>;
+                }
+            } else if (el === 'brand-directory') {
+                if (data.code === 'brand-directory') {
+                    content = <div>{data.code}</div>;
+                }
+            }
+            return null;
+        });
         return (
             <Popover
                 open={open}
                 anchorEl={this.state.anchorEl}
                 onClose={this.closeMegaMenu}
                 anchorReference="anchorPosition"
-                anchorPosition={{ top: 87, left: 70 }}
+                anchorPosition={{ top: 81, left: 70 }}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'center',
@@ -85,36 +146,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                     horizontal: 'center',
                 }}
             >
-                <div>
-                    {
-                        dataChecking(this.props.header, 'header', 'data').map((data) => (
-                            <div key={data.code}>
-                                {
-                                    data.code === 'category-directory'
-                                    ?
-                                        <Grid
-                                            container={true}
-                                        >
-                                            <Grid className={this.props.classes.leftMegaMenu} item={true} xs={2}>
-                                                {
-                                                    data.items.map((item, key) => (
-                                                        <div className="mb-1" key={key}>
-                                                            <Typography className={this.props.classes.leftMegaMenuText}>{item.text}</Typography>
-                                                        </div>
-                                                    ))
-                                                }
-                                            </Grid>
-                                            <Grid item={true} xs={10}>
-                                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minima optio dolor, nobis, corporis fugit illo quaerat commodi quas nesciunt a, architecto ducimus excepturi accusantium molestias qui similique minus quae assumenda?
-                                            </Grid>
-                                        </Grid>
-                                    :
-                                    null
-                                }
-                            </div>
-                        ))
-                    }
-                </div>
+                {content}
             </Popover>
         );
     }
@@ -313,7 +345,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                     </div>
                 ))
             }
-            { this.megaMenu() }
+            { this.megaMenu(this.state.anchorElID) }
         </div>
     )
 
@@ -355,15 +387,19 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     render() {
         return (
             dataChecking(this.props.header, 'header', 'data') ?
-                <div id="header">
-                    <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
-                        <NavLink to="/">
-                            <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100%" />
-                        </NavLink>
-                    </div>
-                    {this.renderTopCategory()}
-                    {this.renderQuicklinks()}
-                </div>
+                <AppBar color="default">
+                    <Container>
+                        <div id="header">
+                            <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
+                                <NavLink to="/">
+                                    <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100%" />
+                                </NavLink>
+                            </div>
+                            {this.renderTopCategory()}
+                            {this.renderQuicklinks()}
+                        </div>
+                    </Container>
+                </AppBar>
             :
                 null
         );

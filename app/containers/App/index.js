@@ -67,7 +67,7 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
                 <div
                     id="hershop-content-container"
                     style={{
-                        paddingTop: '9rem',
+                        paddingTop: '7rem',
                     }}
                 >
                     <Switch>
