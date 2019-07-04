@@ -85,7 +85,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                         <div
                                             key={item.text}
                                             onClick={() => item.type !== 'link' && this.setState({ tabVal: item.code })}
-                                            className="mb-1"
+                                            className={`${this.props.classes.leftMegaMenuText} ${this.state.tabVal === item.code ? this.props.classes.leftMegaMenuTextActive : ''} mb-1`}
                                         >
                                             {item.text}
                                         </div>
