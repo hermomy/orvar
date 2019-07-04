@@ -41,8 +41,13 @@ export default function App() {
     return (
         <section>
             <Notify></Notify>
-            <div id="hershop-content-container">
-                <Header />
+            <Header />
+            <div
+                id="hershop-content-container"
+                style={{
+                    paddingTop: '9rem',
+                }}
+            >
                 <Switch>
                     <Route exact={true} path="/" component={HomePage} />
                     <PrivateRoute exact={true} path="/login" component={LogoutForm} />
@@ -93,8 +98,8 @@ export default function App() {
 
                     <Route component={NotFoundPage} />
                 </Switch>
-                <TabBar />
             </div>
+            <TabBar />
         </section>
     );
 }
