@@ -70,16 +70,17 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                     :
                                         <div>
                                             {
-                                                dataChecking(this.props, 'header', 'suggestionData', 'error') ?
-                                                    <div>
-                                                        {this.props.header.suggestionData.data.messages[0].text} for <b>{this.state.searchQuery}</b>
-                                                    </div>
-                                                :
-                                                    <div>
-                                                        {this.renderSearchResult('brand')}
-                                                        {this.renderSearchResult('autocomplete')}
-                                                        {this.renderSearchResult('mall')}
-                                                    </div>
+                                                dataChecking(this.props, 'header', 'suggestionData', 'error') &&
+                                                    dataChecking(this.props, 'header', 'suggestionData', 'data', 'messages', 0, 'text') ?
+                                                        <div>
+                                                            {this.props.header.suggestionData.data.messages[0].text} for <b>{this.state.searchQuery}</b>
+                                                        </div>
+                                                        :
+                                                        <div>
+                                                            {this.renderSearchResult('brand')}
+                                                            {this.renderSearchResult('autocomplete')}
+                                                            {this.renderSearchResult('mall')}
+                                                        </div>
                                             }
                                         </div>
                                 }
@@ -225,7 +226,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     renderTopCategory = () => (
         <div className={`top-nav ${!this.state.hideSearchBar ? 'show' : ''}`}>
             {
-                dataChecking(this.props.header, 'header', 'data').map((val) => (
+                dataChecking(this.props.header, 'header', 'data', 'map') && this.props.header.data.map((val) => (
                     <div className="ml-3 category" key={val.code}>
                         {val.text}
                     </div>
