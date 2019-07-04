@@ -18,7 +18,7 @@ import CartPage from 'containers/CartPage';
 import { dataChecking } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
 
-import { Popover, Typography, Grid, Container, AppBar } from '@material-ui/core';
+import { Typography, Grid, Container, AppBar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import NavDropdown from 'components/Navigator/NavItem/NavDropdown';
@@ -39,9 +39,9 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             showCartPopout: false,
             hideSearchBar: true,
             searchQuery: '',
-            anchorEl: null,
             anchorElID: null,
             tabVal: 'skin-care',
+            megaMenuToggle: false,
         };
         this.getSearchResult = this.getSearchResult.bind(this);
     }
@@ -57,25 +57,10 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         }
     }
 
-    popMegaMenu = (event) => {
-        this.setState({
-            anchorEl: event.currentTarget,
-            anchorElID: event.target.id,
-        });
-    };
-
-    closeMegaMenu = () => {
-        this.setState({
-            anchorEl: null,
-            anchorElID: null,
-        });
-    };
-
-    megaMenu = (el) => {
-        const open = Boolean(this.state.anchorEl);
+    megaMenu = () => {
         let content;
         dataChecking(this.props.header, 'header', 'data').map((data) => {
-            if (el === 'category-directory') {
+            if (this.state.anchorElID === 'category-directory') {
                 if (data.code === 'category-directory') {
                     content = (
                         <Grid container={true}>
@@ -119,11 +104,11 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                         </Grid>
                     );
                 }
-            } else if (el === 'what-is-new') {
+            } else if (this.state.anchorElID === 'what-is-new') {
                 if (data.code === 'what-is-new') {
                     content = <div>{data.code}</div>;
                 }
-            } else if (el === 'brand-directory') {
+            } else if (this.state.anchorElID === 'brand-directory') {
                 if (data.code === 'brand-directory') {
                     content = <div>{data.code}</div>;
                 }
@@ -131,23 +116,25 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             return null;
         });
         return (
-            <Popover
-                open={open}
-                anchorEl={this.state.anchorEl}
-                onClose={this.closeMegaMenu}
-                anchorReference="anchorPosition"
-                anchorPosition={{ top: 81, left: 70 }}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
+            <div
+                style={{
+                    position: 'relative',
+                    top: '89px',
                 }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
+                onMouseEnter={() => this.setState({ megaMenuToggle: true })}
+                onMouseLeave={() => this.setState({ megaMenuToggle: false, anchorElID: null })}
             >
-                {content}
-            </Popover>
+                <Container>
+                    <div
+                        style={{
+                            backgroundColor: 'white',
+                            padding: '1rem',
+                        }}
+                    >
+                        {content}
+                    </div>
+                </Container>
+            </div>
         );
     }
 
@@ -336,7 +323,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                             :
                                 <span
                                     id={val.code}
-                                    onClick={this.popMegaMenu}
+                                    onMouseEnter={(event) => this.setState({ megaMenuToggle: true, anchorElID: event.target.id })}
                                 >
                                     {val.text}
                                     <i className="fas fa-angle-down ml-quater"></i>
@@ -345,7 +332,6 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                     </div>
                 ))
             }
-            { this.megaMenu(this.state.anchorElID) }
         </div>
     )
 
@@ -387,19 +373,22 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     render() {
         return (
             dataChecking(this.props.header, 'header', 'data') ?
-                <AppBar color="default">
-                    <Container>
-                        <div id="header">
-                            <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
-                                <NavLink to="/">
-                                    <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100%" />
-                                </NavLink>
+                <div>
+                    <AppBar color="default">
+                        <Container>
+                            <div id="header">
+                                <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
+                                    <NavLink to="/">
+                                        <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100%" />
+                                    </NavLink>
+                                </div>
+                                {this.renderTopCategory()}
+                                {this.renderQuicklinks()}
                             </div>
-                            {this.renderTopCategory()}
-                            {this.renderQuicklinks()}
-                        </div>
-                    </Container>
-                </AppBar>
+                        </Container>
+                    </AppBar>
+                    {this.state.anchorElID && this.megaMenu()}
+                </div>
             :
                 null
         );
