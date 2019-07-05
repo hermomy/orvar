@@ -70,8 +70,8 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
             { label: 'PASSWORD', default: '••••••••', action: 'edit_password', icon: <Create /> },
         ],
         skinDetailConfigs: [
-            { label: 'SKIN TONE', isSkinTone: true, dataPath: ['skin', 'tone', 'name'], action: 'skin_tone', icon: <Create /> },
-            { label: 'SKIN TYPE', isSkinType: true, dataPath: ['skin', 'type', 'name'], action: 'skin_type', icon: <Create /> },
+            { label: 'SKIN TONE', dataPath: ['skin', 'tone', 'name'], action: 'skin_tone', icon: <Create /> },
+            { label: 'SKIN TYPE', dataPath: ['skin', 'type', 'name'], action: 'skin_type', icon: <Create /> },
             { label: 'SKIN CONCERN', action: 'skin_concern', icon: <Create /> },
         ],
     }
@@ -559,13 +559,13 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
                                     <Grid item={true} md={9} xs={10}>
                                         <div style={{ flexDirection: 'row', display: 'flex' }}>
                                             {
-                                                config.isSkinTone ?
+                                                config.label === 'SKIN TONE' ?
                                                     <div style={{ borderRadius: 100, backgroundColor: this.props.profileEditInfo.userData.skin.tone.color_code, width: 20, height: 20, marginRight: 10 }} />
                                                     :
                                                     null
                                             }
                                             {
-                                                config.isSkinType ?
+                                                config.label === 'SKIN TYPE' ?
                                                     dataChecking(this.props.profileEditInfo, 'commonConfig', 'skin_type', 'items').map((item) => (
                                                         item.id === this.props.profileEditInfo.userData.skin.type.id ?
                                                             <div
