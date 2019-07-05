@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    getUserData,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    GET_USER_DATA,
 } from '../constants';
 
 describe('ProfileEditInfo actions', () => {
     describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+        it('has a type of GET_USER_DATA', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: GET_USER_DATA,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(getUserData()).toEqual(expected);
         });
     });
 });
