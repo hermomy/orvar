@@ -18,7 +18,7 @@ import CartPage from 'containers/CartPage';
 import { dataChecking } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
 
-import { Typography, Grid, Container, AppBar } from '@material-ui/core';
+import { Typography, Grid, Container, AppBar, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import NavDropdown from 'components/Navigator/NavItem/NavDropdown';
@@ -70,10 +70,10 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                         <div
                                             key={item.text}
                                             onClick={() => item.type !== 'link' && this.setState({ tabVal: item.code })}
-                                            className={`${this.props.classes.leftMegaMenuText} ${this.state.tabVal === item.code ? this.props.classes.leftMegaMenuTextActive : ''} mb-2`}
+                                            className="mb-2"
                                         >
                                             <NavLink className={this.props.classes.urlLink} to={item.url}>
-                                                <Typography className={this.props.classes.linkText}>
+                                                <Typography className={`${this.props.classes.normalFont} ${this.state.tabVal === item.code ? this.props.classes.leftMegaMenuTextActive : ''}`}>
                                                     {item.text}
                                                 </Typography>
                                             </NavLink>
@@ -91,14 +91,14 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                                     <Grid className="mb-1" item={true} xs={3} key={category.url}>
                                                         <div className="mb-half">
                                                             <NavLink className={this.props.classes.urlLink} to={category.url}>
-                                                                <Typography color="primary" className={`${this.props.classes.linkText} ${this.props.classes.leadTitle}`}>{category.text}</Typography>
+                                                                <Typography color="primary" className={`${this.props.classes.headText} ${this.props.classes.leadTitle}`}>{category.text}</Typography>
                                                             </NavLink>
                                                         </div>
                                                         {
                                                             category.childs.map((child) => (
                                                                 <div className="mb-half" key={child.url}>
                                                                     <NavLink className={this.props.classes.urlLink} to={child.url}>
-                                                                        <Typography className={this.props.classes.linkText}>{child.text}</Typography>
+                                                                        <Typography className={this.props.classes.normalFont}>{child.text}</Typography>
                                                                     </NavLink>
                                                                 </div>
                                                             ))
@@ -187,14 +187,29 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                     null
             }
             <div className={`search ml-3 ${!this.state.hideSearchBar ? 'show' : ''}`}>
+                <div
+                    className="search-background-overlay"
+                    onClick={() => this.setState({
+                        hideSearchBar: !this.state.hideSearchBar,
+                        searchQuery: '',
+                    })}
+                />
                 {
                     !this.state.hideSearchBar ?
-                        <input autoFocus={true} type="text" value={this.state.searchQuery} onChange={this.getSearchResult}></input>
+                        <TextField
+                            type="search"
+                            margin="normal"
+                            autoFocus={true}
+                            value={this.state.searchQuery}
+                            onChange={this.getSearchResult}
+                            autocomplete="off"
+                            placeholder="Find your product.."
+                        />
                     :
                         null
                 }
                 <i
-                    className={`fas icon ${!this.state.hideSearchBar ? 'fa-times' : 'fa-search'}`}
+                    className="fas search-icon fa-search"
                     onClick={() => this.setState({
                         hideSearchBar: !this.state.hideSearchBar,
                     })}
