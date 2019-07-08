@@ -45,7 +45,7 @@ export default function App() {
             <div
                 id="hershop-content-container"
                 style={{
-                    paddingTop: '9rem',
+                    paddingTop: '7rem',
                 }}
             >
                 <Switch>

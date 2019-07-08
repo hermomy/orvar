@@ -323,7 +323,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     renderTopCategory = () => (
         <div className={`top-nav ${!this.state.hideSearchBar ? 'show' : ''}`}>
             {
-                dataChecking(this.props.header, 'header', 'data', 'map') && this.props.header.data.map((val) => (
+                dataChecking(this.props.header, 'header', 'data').map((val) => (
                     <div className="ml-3 category" key={val.code}>
                         {
                             val.type === 'hot-link' ?
