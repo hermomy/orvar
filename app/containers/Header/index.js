@@ -70,26 +70,36 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                         <div
                                             key={item.text}
                                             onClick={() => item.type !== 'link' && this.setState({ tabVal: item.code })}
-                                            className={`${this.props.classes.leftMegaMenuText} ${this.state.tabVal === item.code ? this.props.classes.leftMegaMenuTextActive : ''} mb-1`}
+                                            className={`${this.props.classes.leftMegaMenuText} ${this.state.tabVal === item.code ? this.props.classes.leftMegaMenuTextActive : ''} mb-2`}
                                         >
-                                            {item.text}
+                                            <NavLink className={this.props.classes.urlLink} to={item.url}>
+                                                <Typography className={this.props.classes.linkText}>
+                                                    {item.text}
+                                                </Typography>
+                                            </NavLink>
                                         </div>
                                     ))
                                 }
                             </Grid>
-                            <Grid className={this.props.classes.rightMegaMenu} item={true} xs={10}>
+                            <Grid className="p-2" item={true} xs={10}>
                                 <Grid container={true}>
                                     {
                                         data.items.map((item) => (
                                             this.state.tabVal === item.code
                                             ?
                                                 item.categories.map((category) => (
-                                                    <Grid item={true} xs={3} key={category.url}>
-                                                        <Typography className="mb-1" color="primary" variant="h6">{category.text}</Typography>
+                                                    <Grid className="mb-1" item={true} xs={3} key={category.url}>
+                                                        <div className="mb-half">
+                                                            <NavLink className={this.props.classes.urlLink} to={category.url}>
+                                                                <Typography color="primary" className={`${this.props.classes.linkText} ${this.props.classes.leadTitle}`}>{category.text}</Typography>
+                                                            </NavLink>
+                                                        </div>
                                                         {
                                                             category.childs.map((child) => (
-                                                                <div className="mb-1" key={child.url}>
-                                                                    <Typography className="pl-1">{child.text}</Typography>
+                                                                <div className="mb-half" key={child.url}>
+                                                                    <NavLink className={this.props.classes.urlLink} to={child.url}>
+                                                                        <Typography className={this.props.classes.linkText}>{child.text}</Typography>
+                                                                    </NavLink>
                                                                 </div>
                                                             ))
                                                         }
@@ -118,18 +128,17 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         return (
             <div
                 style={{
-                    position: 'relative',
-                    top: '89px',
+                    position: 'absolute',
+                    top: '82px',
+                    left: 0,
+                    right: 0,
                 }}
                 onMouseEnter={() => this.setState({ megaMenuToggle: true })}
                 onMouseLeave={() => this.setState({ megaMenuToggle: false, anchorElID: null })}
             >
                 <Container>
                     <div
-                        style={{
-                            backgroundColor: 'white',
-                            padding: '1rem',
-                        }}
+                        style={{ backgroundColor: 'white' }}
                     >
                         {content}
                     </div>
@@ -374,7 +383,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         return (
             dataChecking(this.props.header, 'header', 'data') ?
                 <div>
-                    <AppBar color="default">
+                    <AppBar className={this.props.classes.header} color="default">
                         <Container>
                             <div id="header">
                                 <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
@@ -385,9 +394,10 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                 {this.renderTopCategory()}
                                 {this.renderQuicklinks()}
                             </div>
+                    {this.state.anchorElID && this.megaMenu()}
+
                         </Container>
                     </AppBar>
-                    {this.state.anchorElID && this.megaMenu()}
                 </div>
             :
                 null
