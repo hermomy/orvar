@@ -202,8 +202,8 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                             autoFocus={true}
                             value={this.state.searchQuery}
                             onChange={this.getSearchResult}
-                            autocomplete="off"
-                            placeholder="Find your product.."
+                            autoComplete="off"
+                            placeholder="Search for Products, Brands, etc.."
                         />
                     :
                         null
@@ -367,13 +367,15 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     renderSearchResult = (type) => dataChecking(this.props.header, 'suggestionData', 'data').map((data) => {
         if (data.type === type) {
             return data.items.map((item, key) => (
-                <div key={key}>
-                    <Highlighter
-                        highlightClassName="search-keyword"
-                        searchWords={[this.state.searchQuery]}
-                        autoEscape={true}
-                        textToHighlight={item.text}
-                    />
+                <div className="mb-1" key={key}>
+                    <Typography>
+                        <Highlighter
+                            highlightClassName="search-keyword"
+                            searchWords={[this.state.searchQuery]}
+                            autoEscape={true}
+                            textToHighlight={item.text}
+                        />
+                    </Typography>
                 </div>
             ));
         }
