@@ -13,15 +13,14 @@ const styles = {
     },
     leftMegaMenuTextActive: {
         color: '#603',
+        fontWeight: 500,
         borderBottom: '2px solid #603',
     },
     urlLink: { textDecoration: 'none' },
     headText: {
         textTransform: 'uppercase',
         textDecoration: 'none',
-        '&:hover': {
-            color: '#603',
-        },
+        '&:hover': { color: '#603' },
     },
 };
 

@@ -413,6 +413,25 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                             {this.state.anchorElID && this.megaMenu()}
                         </Container>
                     </AppBar>
+                    {
+                        this.state.anchorElID
+                        ?
+                            <div
+                                style={{
+                                    position: 'fixed',
+                                    top: 0,
+                                    backgroundColor: 'black',
+                                    bottom: 0,
+                                    right: 0,
+                                    left: 0,
+                                    zIndex: 1,
+                                    opacity: '0.2',
+                                }}
+                            >
+                            </div>
+                        :
+                            null
+                    }
                 </div>
             :
                 null
