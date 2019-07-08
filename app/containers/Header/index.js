@@ -395,8 +395,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                 {this.renderTopCategory()}
                                 {this.renderQuicklinks()}
                             </div>
-                    {this.state.anchorElID && this.megaMenu()}
-
+                            {this.state.anchorElID && this.megaMenu()}
                         </Container>
                     </AppBar>
                 </div>
