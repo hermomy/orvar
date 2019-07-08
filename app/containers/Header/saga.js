@@ -17,7 +17,7 @@ export function* querySearchResult(action) {
         action: 'suggestion',
         keyword: action.keyword,
     });
-    const response = yield call(apiRequest, '/search/suggestion', 'post', body);
+    const response = yield call(apiRequest, 'search/suggestion', 'post', body);
     if (response && response.ok) {
         yield put(searchResultSuccess(response.data));
     } else {
