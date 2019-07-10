@@ -26,10 +26,9 @@ import ProfilePage from 'components/ProfilePage';
 import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
 import ProfileOrder from 'containers/ProfileOrder';
-import ProfileEditInform from 'containers/ProfileEditInform';
-import ProfileReview from 'containers/ProfileReview';
+import ProfileEditInfo from 'containers/ProfileEditInfo';
 import ProfileWishlist from 'containers/ProfileWishlist';
-// import ProfileSetting from 'containers/ProfileSetting';
+import ProfileReview from 'containers/ProfileReview';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
 
@@ -90,7 +89,7 @@ export default function App() {
                     <PrivateRoute exact={true} path="/checkout" component={CheckoutPage} />
                     <PrivateRoute exact={true} path="/profile" component={ProfilePage} />
                     <PrivateRoute exact={true} path="/profile/wallet" component={ProfileWallet} />
-                    <PrivateRoute exact={true} path="/profile/detail" component={ProfileEditInform} />
+                    <PrivateRoute exact={true} path="/profile/detail" component={ProfileEditInfo} />
                     <PrivateRoute exact={true} path="/profile/review" component={ProfileReview} />
                     <PrivateRoute exact={true} path="/profile/wishlist" component={ProfileWishlist} />
                     <PrivateRoute exact={true} path="/profile/order" component={ProfileOrder} />

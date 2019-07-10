@@ -164,7 +164,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                 {
                                     dataChecking(this.props, 'header', 'suggestionData', 'loading') ?
                                         <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="hermo loading" />
-                                    :
+                                        :
                                         <div>
                                             {
                                                 dataChecking(this.props, 'header', 'suggestionData', 'error') &&
