@@ -18,6 +18,9 @@ import CartPage from 'containers/CartPage';
 import { dataChecking } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
 
+import { Typography, Grid, Container, AppBar, TextField } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+
 import NavDropdown from 'components/Navigator/NavItem/NavDropdown';
 
 import { layoutTopNav, searchResult } from './actions';
@@ -26,6 +29,7 @@ import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
 import globalScope from '../../globalScope';
+import styles from './materialStyle';
 
 export class Header extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
@@ -35,6 +39,9 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             showCartPopout: false,
             hideSearchBar: true,
             searchQuery: '',
+            anchorElID: null,
+            tabVal: 'skin-care',
+            megaMenuToggle: false,
         };
         this.getSearchResult = this.getSearchResult.bind(this);
     }
@@ -48,6 +55,96 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         if (e.target.value.length > 2) {
             this.props.dispatch(searchResult(this.state.searchQuery));
         }
+    }
+
+    megaMenu = () => {
+        let content;
+        dataChecking(this.props.header, 'header', 'data').map((data) => {
+            if (this.state.anchorElID === 'category-directory') {
+                if (data.code === 'category-directory') {
+                    content = (
+                        <Grid container={true}>
+                            <Grid className={this.props.classes.leftMegaMenu} item={true} xs={2}>
+                                {
+                                    data.items.map((item) => (
+                                        <div
+                                            key={item.text}
+                                            onClick={() => item.type !== 'link' && this.setState({ tabVal: item.code })}
+                                            className="mb-2"
+                                        >
+                                            <NavLink className={this.props.classes.urlLink} to={item.url}>
+                                                <Typography className={`${this.props.classes.normalFont} ${this.state.tabVal === item.code ? this.props.classes.leftMegaMenuTextActive : ''}`}>
+                                                    {item.text}
+                                                </Typography>
+                                            </NavLink>
+                                        </div>
+                                    ))
+                                }
+                            </Grid>
+                            <Grid className="p-2" item={true} xs={10}>
+                                <Grid container={true}>
+                                    {
+                                        data.items.map((item) => (
+                                            this.state.tabVal === item.code
+                                            ?
+                                                item.categories.map((category) => (
+                                                    <Grid className="mb-1" item={true} xs={3} key={category.url}>
+                                                        <div className="mb-half">
+                                                            <NavLink className={this.props.classes.urlLink} to={category.url}>
+                                                                <Typography color="primary" className={`${this.props.classes.headText} ${this.props.classes.leadTitle}`}>{category.text}</Typography>
+                                                            </NavLink>
+                                                        </div>
+                                                        {
+                                                            category.childs.map((child) => (
+                                                                <div className="mb-half" key={child.url}>
+                                                                    <NavLink className={this.props.classes.urlLink} to={child.url}>
+                                                                        <Typography className={this.props.classes.normalFont}>{child.text}</Typography>
+                                                                    </NavLink>
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </Grid>
+                                                ))
+                                            :
+                                                null
+                                        ))
+                                    }
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    );
+                }
+            } else if (this.state.anchorElID === 'what-is-new') {
+                if (data.code === 'what-is-new') {
+                    content = <div>{data.code}</div>;
+                }
+            } else if (this.state.anchorElID === 'brand-directory') {
+                if (data.code === 'brand-directory') {
+                    content = <div>{data.code}</div>;
+                }
+            }
+            return null;
+        });
+        return (
+            <div
+                style={{
+                    position: 'absolute',
+                    top: '82px',
+                    left: 0,
+                    right: 0,
+                }}
+                onMouseEnter={() => this.setState({ megaMenuToggle: true })}
+                onMouseLeave={() => this.setState({ megaMenuToggle: false, anchorElID: null })}
+            >
+                <Container>
+                    <div
+                        style={{ backgroundColor: 'white' }}
+                    >
+                        {content}
+                    </div>
+                </Container>
+            </div>
+        );
     }
 
     /**
@@ -90,14 +187,29 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                     null
             }
             <div className={`search ml-3 ${!this.state.hideSearchBar ? 'show' : ''}`}>
+                <div
+                    className="search-background-overlay"
+                    onClick={() => this.setState({
+                        hideSearchBar: !this.state.hideSearchBar,
+                        searchQuery: '',
+                    })}
+                />
                 {
                     !this.state.hideSearchBar ?
-                        <input autoFocus={true} type="text" value={this.state.searchQuery} onChange={this.getSearchResult}></input>
+                        <TextField
+                            type="search"
+                            margin="normal"
+                            autoFocus={true}
+                            value={this.state.searchQuery}
+                            onChange={this.getSearchResult}
+                            autoComplete="off"
+                            placeholder="Search for Products, Brands, etc.."
+                        />
                     :
                         null
                 }
                 <i
-                    className={`fas icon ${!this.state.hideSearchBar ? 'fa-times' : 'fa-search'}`}
+                    className="fas search-icon fa-search"
                     onClick={() => this.setState({
                         hideSearchBar: !this.state.hideSearchBar,
                     })}
@@ -226,9 +338,22 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     renderTopCategory = () => (
         <div className={`top-nav ${!this.state.hideSearchBar ? 'show' : ''}`}>
             {
-                dataChecking(this.props.header, 'header', 'data', 'map') && this.props.header.data.map((val) => (
+                dataChecking(this.props.header, 'header', 'data').map((val) => (
                     <div className="ml-3 category" key={val.code}>
-                        {val.text}
+                        {
+                            val.type === 'hot-link' ?
+                                <span>
+                                    {val.text}
+                                </span>
+                            :
+                                <span
+                                    id={val.code}
+                                    onMouseEnter={(event) => this.setState({ megaMenuToggle: true, anchorElID: event.target.id })}
+                                >
+                                    {val.text}
+                                    <i className="fas fa-angle-down ml-quater"></i>
+                                </span>
+                        }
                     </div>
                 ))
             }
@@ -242,13 +367,15 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     renderSearchResult = (type) => dataChecking(this.props.header, 'suggestionData', 'data').map((data) => {
         if (data.type === type) {
             return data.items.map((item, key) => (
-                <div key={key}>
-                    <Highlighter
-                        highlightClassName="search-keyword"
-                        searchWords={[this.state.searchQuery]}
-                        autoEscape={true}
-                        textToHighlight={item.text}
-                    />
+                <div className="mb-1" key={key}>
+                    <Typography>
+                        <Highlighter
+                            highlightClassName="search-keyword"
+                            searchWords={[this.state.searchQuery]}
+                            autoEscape={true}
+                            textToHighlight={item.text}
+                        />
+                    </Typography>
                 </div>
             ));
         }
@@ -273,14 +400,40 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
     render() {
         return (
             dataChecking(this.props.header, 'header', 'data') ?
-                <div id="header">
-                    <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
-                        <NavLink to="/">
-                            <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100%" />
-                        </NavLink>
-                    </div>
-                    {this.renderTopCategory()}
-                    {this.renderQuicklinks()}
+                <div>
+                    <AppBar className={this.props.classes.header} color="default">
+                        <Container>
+                            <div id="header">
+                                <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
+                                    <NavLink to="/">
+                                        <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100%" />
+                                    </NavLink>
+                                </div>
+                                {this.renderTopCategory()}
+                                {this.renderQuicklinks()}
+                            </div>
+                            {this.state.anchorElID && this.megaMenu()}
+                        </Container>
+                    </AppBar>
+                    {
+                        this.state.anchorElID
+                        ?
+                            <div
+                                style={{
+                                    position: 'fixed',
+                                    top: 0,
+                                    backgroundColor: 'black',
+                                    bottom: 0,
+                                    right: 0,
+                                    left: 0,
+                                    zIndex: 1,
+                                    opacity: '0.2',
+                                }}
+                            >
+                            </div>
+                        :
+                            null
+                    }
                 </div>
             :
                 null
@@ -311,5 +464,6 @@ export default compose(
     withRouter,
     withReducer,
     withSaga,
+    withStyles(styles),
     withConnect,
 )(Header);
