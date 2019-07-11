@@ -25,7 +25,7 @@ import ProfilePage from 'components/ProfilePage';
 // import Cart from 'containers/CartPage';
 import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
-import ProfileOrder from 'containers/ProfileOrder';
+import ProfileOrderDetail from 'containers/ProfileOrderDetail';
 import ProfileEditInfo from 'containers/ProfileEditInfo';
 import ProfileWishlist from 'containers/ProfileWishlist';
 import ProfileReview from 'containers/ProfileReview';
@@ -92,8 +92,8 @@ export default function App() {
                     <PrivateRoute exact={true} path="/profile/detail" component={ProfileEditInfo} />
                     <PrivateRoute exact={true} path="/profile/review" component={ProfileReview} />
                     <PrivateRoute exact={true} path="/profile/wishlist" component={ProfileWishlist} />
-                    <PrivateRoute exact={true} path="/profile/order" component={ProfileOrder} />
-                    <PrivateRoute exact={true} path="/profile/order:ordercatergory(/to-paid|/to-ship|/to-receive|/reviewable)" component={ProfileOrder} />
+                    <PrivateRoute exact={true} path="/profile/order" component={ProfileOrderDetail} />
+                    <PrivateRoute exact={true} path="/profile/order:ordercatergory(/to-paid|/to-ship|/to-receive|/reviewable)" component={ProfileOrderDetail} />
 
                     <Route component={NotFoundPage} />
                 </Switch>

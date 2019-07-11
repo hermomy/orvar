@@ -1,0 +1,12 @@
+.item-card {
+    padding: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 180px;
+    overflow: hidden;
+
+    .item-name {
+        height: 4.5em;
+        overflow: hidden;
+    }
+}
