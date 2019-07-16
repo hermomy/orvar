@@ -18,7 +18,16 @@ import CartPage from 'containers/CartPage';
 import { dataChecking } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
 
-import { Typography, Grid, Container, AppBar, TextField } from '@material-ui/core';
+import {
+    Typography,
+    Grid,
+    Container,
+    AppBar,
+    TextField,
+    Hidden,
+    Drawer,
+    Divider,
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import NavDropdown from 'components/Navigator/NavItem/NavDropdown';
@@ -42,6 +51,8 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             anchorElID: null,
             tabVal: 'skin-care',
             megaMenuToggle: false,
+            left: false,
+            toggleChildDrawer: false,
         };
         this.getSearchResult = this.getSearchResult.bind(this);
     }
@@ -56,6 +67,16 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             this.props.dispatch(searchResult(this.state.searchQuery));
         }
     }
+
+    toggleDrawer = (event) => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+
+        this.setState({
+            left: !this.state.left,
+        });
+    };
 
     megaMenu = () => {
         let content;
@@ -146,6 +167,68 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             </div>
         );
     }
+    childDrawer = () => {
+        console.log();
+        return (
+            <div>lorem</div>
+        );
+    }
+
+    hamburger =() => (
+        <Drawer open={this.state.left} onClose={this.toggleDrawer}>
+            <div style={{ width: '200px' }}>
+                {
+                    !this.state.toggleChildDrawer ?
+                        <div>
+                            {
+                                dataChecking(this.props.header, 'header', 'data') ?
+                                    this.props.header.header.data.map((data) => (
+                                        <div key={data.code}>
+                                            <div className="p-1">
+                                                {
+                                                    data.type !== 'hot-link' ?
+                                                        <Typography
+                                                            onClick={() => this.setState({ toggleChildDrawer: !this.state.toggleChildDrawer })}
+                                                        >
+                                                            {data.text}
+                                                            <i
+                                                                className="fas fa-angle-right"
+                                                                style={{ float: 'right' }}
+                                                            ></i>
+                                                        </Typography>
+                                                    :
+                                                        <Typography>
+                                                            {data.text}
+                                                        </Typography>
+
+                                                }
+                                            </div>
+                                            <Divider />
+                                        </div>
+                                    ))
+                                :
+                                    null
+                            }
+                        </div>
+                        :
+                        <div>
+                            <div
+                                className="p-1"
+                            >
+                                <Typography
+                                    onClick={() => this.setState({ toggleChildDrawer: !this.state.toggleChildDrawer })}
+                                >
+                                    <i className="fas fa-angle-left pr-1"></i>
+                                    Back
+                                </Typography>
+                            </div>
+                            <Divider />
+                            {this.childDrawer()}
+                        </div>
+                }
+            </div>
+        </Drawer>
+    )
 
     /**
      * section section
@@ -402,18 +485,37 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             dataChecking(this.props.header, 'header', 'data') ?
                 <div>
                     <AppBar className={this.props.classes.header} color="default">
-                        <Container>
-                            <div id="header">
-                                <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
-                                    <NavLink to="/">
-                                        <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100%" />
-                                    </NavLink>
-                                </div>
-                                {this.renderTopCategory()}
-                                {this.renderQuicklinks()}
+                        <Hidden mdUp={true}>
+                            <div id="header-mobile">
+                                <Grid container={true} justify="space-between" className="p-1">
+                                    <Grid item={true}>
+                                        <i
+                                            className="fas fa-bars"
+                                            onClick={this.toggleDrawer}
+                                        ></i>
+                                    </Grid>
+                                    <Grid item={true}>
+                                        <i className="fas fa-shopping-cart pr-1"></i>
+                                        <i className="fas fa-user"></i>
+                                    </Grid>
+                                </Grid>
                             </div>
-                            {this.state.anchorElID && this.megaMenu()}
-                        </Container>
+                            {this.hamburger()}
+                        </Hidden>
+                        <Hidden xsDown={true}>
+                            <Container>
+                                <div id="header">
+                                    <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
+                                        <NavLink to="/">
+                                            <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100%" />
+                                        </NavLink>
+                                    </div>
+                                    {this.renderTopCategory()}
+                                    {this.renderQuicklinks()}
+                                </div>
+                                {this.state.anchorElID && this.megaMenu()}
+                            </Container>
+                        </Hidden>
                     </AppBar>
                     {
                         this.state.anchorElID
