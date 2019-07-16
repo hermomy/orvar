@@ -449,11 +449,11 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
                         </div>
                     }
                 />
-                <CardContent>
+                <CardContent style={{ paddingBottom: 16 }}>
                     {
                         this.state.profileInfoConfigs.map((config, index) => (
                             <div key={index}>
-                                <Grid container={true} className="m-1">
+                                <Grid container={true} style={{ margin: '16px 16px 16px 0' }}>
                                     <Grid item={true} lg={2} md={2} xs={12}><Typography variant="body2" color="textSecondary">{config.label}</Typography></Grid>
                                     <Grid item={true} lg={9} md={9} xs={10}>
                                         <Typography variant="body2">
@@ -505,8 +505,13 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
                                                                 <IconButton
                                                                     size="small"
                                                                     component="span"
+                                                                    style={{ padding: 0 }}
                                                                 >
-                                                                    <Avatar src={this.props.profileEditInfo.userData.avatar} className="avatar-responsive" />
+                                                                    <Avatar
+                                                                        src={this.props.profileEditInfo.userData.avatar}
+                                                                        className="avatar-responsive"
+                                                                        style={{ width: 50, height: 50 }}
+                                                                    />
                                                                 </IconButton>
                                                         }
                                                         <i className="fa fa-camera" />
@@ -550,7 +555,7 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
                         </div>
                     }
                 />
-                <CardContent>
+                <CardContent >
                     {
                         this.state.skinDetailConfigs.map((config, index) => (
                             <div key={index}>
@@ -607,7 +612,7 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
     render() {
         return (
             <Container>
-                <div align="center" className="m-2">
+                <div align="center" style={{ margin: 16 }}>
                     <Typography variant="subtitle1" display="block" gutterBottom={true}>Profile</Typography>
                     <Typography>Basic info, like your name, photo and your skin details</Typography>
                 </div>

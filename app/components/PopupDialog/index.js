@@ -30,8 +30,8 @@ class PopupDialog extends React.PureComponent {
                                     onClick={this.props.onClose}
                                     style={{
                                         position: 'absolute',
-                                        right: '1rem',
-                                        top: '1rem',
+                                        right: '0rem',
+                                        top: '0.8rem',
                                     }}
                                 >
                                     <CloseIcon />
