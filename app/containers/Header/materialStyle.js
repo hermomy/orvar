@@ -22,6 +22,10 @@ const styles = {
         textDecoration: 'none',
         '&:hover': { color: '#603' },
     },
+    childDrawer: {
+        paddingLeft: '2rem',
+        backgroundColor: '#ccc',
+    },
 };
 
 export default styles;

@@ -27,6 +27,10 @@ import {
     Hidden,
     Drawer,
     Divider,
+    ListItem,
+    ListItemText,
+    List,
+    Collapse,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -53,6 +57,9 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             megaMenuToggle: false,
             left: false,
             toggleChildDrawer: false,
+            code: null,
+            open: false,
+            childVal: null,
         };
         this.getSearchResult = this.getSearchResult.bind(this);
     }
@@ -167,10 +174,54 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             </div>
         );
     }
+
     childDrawer = () => {
-        console.log();
+        let content;
+        this.props.header.header.data.map((data) => {
+            if (data.code === 'category-directory') {
+                content = data.items.map((item) => (
+                    <div key={item.code}>
+                        {
+                            item.categories ?
+                                <div>
+                                    <ListItem button={true} divider={true}>
+                                        <ListItemText
+                                            primary={item.text}
+                                            onClick={() => this.setState({
+                                                open: !this.state.open,
+                                                childVal: item.code,
+                                            })}
+                                        />
+                                        {this.state.open && this.state.childVal === item.code ? <i className="fas fa-angle-up"></i> : <i className="fas fa-angle-down"></i>}
+                                    </ListItem>
+                                    <Collapse in={this.state.open && this.state.childVal === item.code} timeout="auto" unmountOnExit={true}>
+                                        <List component="div" disablePadding={true}>
+                                            {
+                                                item.categories.map((category) => (
+                                                    <div key={category.url}>
+                                                        <ListItem className={this.props.classes.childDrawer} component={NavLink} button={true} divider={true} to={category.url}>
+                                                            <ListItemText primary={category.text} />
+                                                        </ListItem>
+                                                    </div>
+                                                ))
+                                            }
+                                        </List>
+                                    </Collapse>
+                                </div>
+                            :
+                                <ListItem button={true}>
+                                    <ListItemText primary={item.text} />
+                                </ListItem>
+                        }
+                    </div>
+                ));
+            }
+            return null;
+        });
         return (
-            <div>lorem</div>
+            <List component="div">
+                {content}
+            </List>
         );
     }
 
@@ -180,6 +231,17 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                 {
                     !this.state.toggleChildDrawer ?
                         <div>
+                            <div>
+                                <Grid className="p-1" container={true}>
+                                    <Grid item={true}>
+                                        <i className="fas fa-bars pr-1"></i>
+                                    </Grid>
+                                    <Grid item={true}>
+                                        <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100px" />
+                                    </Grid>
+                                </Grid>
+                                <Divider />
+                            </div>
                             {
                                 dataChecking(this.props.header, 'header', 'data') ?
                                     this.props.header.header.data.map((data) => (
@@ -188,7 +250,10 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                                 {
                                                     data.type !== 'hot-link' ?
                                                         <Typography
-                                                            onClick={() => this.setState({ toggleChildDrawer: !this.state.toggleChildDrawer })}
+                                                            onClick={() => this.setState({
+                                                                toggleChildDrawer: !this.state.toggleChildDrawer,
+                                                                code: data.code,
+                                                            })}
                                                         >
                                                             {data.text}
                                                             <i
@@ -487,12 +552,21 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                     <AppBar className={this.props.classes.header} color="default">
                         <Hidden mdUp={true}>
                             <div id="header-mobile">
-                                <Grid container={true} justify="space-between" className="p-1">
+                                <Grid container={true} justify="space-between" className="p-1" alignItem="center">
                                     <Grid item={true}>
-                                        <i
-                                            className="fas fa-bars"
-                                            onClick={this.toggleDrawer}
-                                        ></i>
+                                        <Grid container={true} alignItem="center">
+                                            <Grid item={true}>
+                                                <i
+                                                    className="fas fa-bars pr-1"
+                                                    onClick={this.toggleDrawer}
+                                                ></i>
+                                            </Grid>
+                                            <Grid item={true}>
+                                                <NavLink to="/">
+                                                    <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100px" />
+                                                </NavLink>
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
                                     <Grid item={true}>
                                         <i className="fas fa-shopping-cart pr-1"></i>
