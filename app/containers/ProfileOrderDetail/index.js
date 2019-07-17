@@ -17,7 +17,6 @@ import injectReducer from 'utils/injectReducer';
 import moment from 'moment';
 import OwlCarousel from 'react-owl-carousel2';
 import 'assets/react-owl-carousel2.style.scss';
-// import ProductCard from 'components/ProductCard';
 
 import {
     Box,
@@ -46,6 +45,7 @@ import './style.scss';
 
 export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
+        expanded: false,
         anchorEl: null,
         targetOrderID: null,
         orderDate: '',
@@ -53,6 +53,15 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
 
     componentWillMount() {
         this.props.dispatch(actions.getOrderList());
+    }
+
+    componentDidMount() {
+        const script = document.createElement('script');
+
+        script.src = 'https://www.tracking.my/track-button.js';
+        script.async = true;
+
+        document.body.appendChild(script);
     }
 
     renderOrderListCard = () => {
@@ -100,6 +109,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                         onClick={() => {
                                             this.setState({
                                                 targetOrderID: order.id,
+                                                expanded: !this.state.expanded,
                                             });
 
                                             if (dataChecking(this.props.profileOrderDetail, 'orderData', 'id') !== order.id) {
@@ -118,7 +128,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                         </CardActions>
                         {
                             this.state.targetOrderID === order.id ?
-                                <Collapse in={Boolean(this.state.targetOrderID)}>
+                                <Collapse in={this.state.expanded}>
                                     {
                                         this.props.profileOrderDetail.loadingData ?
                                             <div style={{ textAlign: 'center' }}><CircularProgress /></div>
@@ -185,12 +195,15 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                     variant="outlined"
                                     color="primary"
                                     disabled={merchant.summary.shipping.tracking_number === null}
+                                    onClick={() => {
+                                        window.TrackButton.track({ tracking_no: merchant.summary.shipping.tracking_number });
+                                    }}
                                 >
                                     {
-                                        merchant.summary.shipping.tracking_number === null ?
-                                        'tracking not available'
+                                        merchant.summary.shipping.tracking_number !== null ?
+                                        `tracking info: ${merchant.summary.shipping.tracking_number}`
                                         :
-                                        'track order'
+                                        'tracking not available'
                                     }
                                 </Button>
                             </Grid>
