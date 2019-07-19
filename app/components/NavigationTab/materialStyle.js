@@ -1,7 +1,8 @@
 const styles = {
     topBar: {
         backgroundColor: 'transparent !important',
-        boxShadow: 'none',
+        // boxShadow: 'none',
+        width: '100%',
     },
 };
 

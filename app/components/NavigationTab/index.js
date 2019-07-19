@@ -8,6 +8,7 @@ import React from 'react';
 import { compose } from 'redux';
 
 import AppBar from '@material-ui/core/AppBar';
+import Container from '@material-ui/core/Container';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -35,15 +36,26 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
 
     renderTopBar = () => (
         <div>
-            <AppBar position="static" className={this.props.classes.topBar}>
+            <AppBar position="static" className={this.props.classes.topBar} style={{ marginBottom: 16 }}>
                 <Toolbar>
-                    <Tabs value={this.state.pageValue} onChange={this.handleChange}>
-                        {
-                            this.props.tabs.map((tab, index) => (
-                                <Tab key={index} label={<Typography>{tab.title}</Typography>} style={{ textTransform: 'none' }} />
-                            ))
-                        }
-                    </Tabs>
+                    <Container style={{ padding: 0 }}>
+                        <Tabs
+                            value={this.state.pageValue}
+                            onChange={this.handleChange}
+                            variant="scrollable"
+                            scrollButtons="auto"
+                        >
+                            {
+                                this.props.tabs.map((tab, index) => (
+                                    <Tab
+                                        key={index}
+                                        label={<Typography>{tab.title}</Typography>}
+                                        style={{ textTransform: 'none', margin: 0, padding: 0 }}
+                                    />
+                                ))
+                            }
+                        </Tabs>
+                    </Container>
                 </Toolbar>
             </AppBar>
             { this.tabContent(this.state.pageValue) }
