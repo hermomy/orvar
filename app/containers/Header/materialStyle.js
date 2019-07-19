@@ -26,6 +26,9 @@ const styles = {
         paddingLeft: '2rem',
         backgroundColor: '#ccc',
     },
+    mobileSearch: {
+        width: '100%',
+    },
 };
 
 export default styles;

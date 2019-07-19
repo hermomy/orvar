@@ -80,9 +80,14 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             return;
         }
 
-        this.setState({
-            left: !this.state.left,
-        });
+        if (this.state.toggleChildDrawer === true) {
+            this.setState({
+                toggleChildDrawer: false,
+                childVal: null,
+            });
+        }
+
+        this.setState({ left: !this.state.left });
     };
 
     megaMenu = () => {
@@ -490,17 +495,17 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                     <div className="ml-3 category" key={val.code}>
                         {
                             val.type === 'hot-link' ?
-                                <span>
+                                <Typography>
                                     {val.text}
-                                </span>
+                                </Typography>
                             :
-                                <span
+                                <Typography
                                     id={val.code}
                                     onMouseEnter={(event) => this.setState({ megaMenuToggle: true, anchorElID: event.target.id })}
                                 >
                                     {val.text}
                                     <i className="fas fa-angle-down ml-quater"></i>
-                                </span>
+                                </Typography>
                         }
                     </div>
                 ))
@@ -551,10 +556,10 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                 <div>
                     <AppBar className={this.props.classes.header} color="default">
                         <Hidden mdUp={true}>
-                            <div id="header-mobile">
-                                <Grid container={true} justify="space-between" className="p-1" alignItem="center">
+                            <div id="header-mobile" className="p-1">
+                                <Grid container={true} justify="space-between" alignItems="center">
                                     <Grid item={true}>
-                                        <Grid container={true} alignItem="center">
+                                        <Grid container={true} alignItems="center">
                                             <Grid item={true}>
                                                 <i
                                                     className="fas fa-bars pr-1"
@@ -573,6 +578,12 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                         <i className="fas fa-user"></i>
                                     </Grid>
                                 </Grid>
+                                <TextField
+                                    type="search"
+                                    variant="outlined"
+                                    margin="dense"
+                                    className={this.props.classes.mobileSearch}
+                                />
                             </div>
                             {this.hamburger()}
                         </Hidden>
