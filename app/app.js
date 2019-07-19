@@ -53,14 +53,19 @@ const MOUNT_NODE = document.getElementById('app');
 
 const theme = createMuiTheme({
     palette: {
-        primary: {
-            main: '#603',
+        primary: { main: '#603' },
+        secondary: { main: '#ff4081' },
+        disabled: { main: '#989898' },
+    },
+    overrides: {
+        MuiCard: {
+            root: {
+                height: '100%',
+                width: '100%',
+            },
         },
-        secondary: {
-            main: '#ff4081',
-        },
-        disabled: {
-            main: '#989898',
+        MuiTypography: {
+            root: { display: 'inline' },
         },
     },
 });
