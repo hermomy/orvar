@@ -68,6 +68,12 @@ const theme = createMuiTheme({
             root: { display: 'inline' },
         },
     },
+    typography: {
+        fontFamily: [
+            'Poppins',
+            'sans-serif',
+        ].join(','),
+    },
 });
 
 const render = (messages) => {
