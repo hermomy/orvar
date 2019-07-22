@@ -5,18 +5,24 @@
 */
 
 import React from 'react';
-import { compose } from 'redux';
+import { NavLink } from 'react-router-dom';
 
-import AppBar from '@material-ui/core/AppBar';
-import Container from '@material-ui/core/Container';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
+import {
+    AppBar,
+    Hidden,
+    IconButton,
+    Tab,
+    Tabs,
+    Toolbar,
+    Typography,
+} from '@material-ui/core';
+
+import {
+    ChevronLeft,
+    Tune,
+} from '@material-ui/icons';
 
 import './style.scss';
-import styles from './materialStyle';
 
 class NavigationTab extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -36,26 +42,76 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
 
     renderTopBar = () => (
         <div>
-            <AppBar position="static" className={this.props.classes.topBar} style={{ marginBottom: 16 }}>
+            <AppBar color="default" position="static" style={{ marginBottom: 15 }}>
+                {
+                    this.props.isLinked ?
+                        <div>
+                            <Hidden mdUp={true}>
+                                <NavLink to="/profile">
+                                    <IconButton color="primary">
+                                        <ChevronLeft />
+                                    </IconButton>
+                                </NavLink>
+                            </Hidden>
+                        </div>
+                        :
+                        null
+                }
+                {
+                    this.props.isFiltered ?
+                        <div style={{ position: 'absolute', right: '2%' }}>
+                            <Hidden mdUp={true}>
+                                <IconButton>
+                                    <Tune />
+                                </IconButton>
+                            </Hidden>
+                        </div>
+                        :
+                        null
+                }
                 <Toolbar>
-                    <Container style={{ padding: 0 }}>
-                        <Tabs
-                            value={this.state.pageValue}
-                            onChange={this.handleChange}
-                            variant="scrollable"
-                            scrollButtons="auto"
-                        >
-                            {
-                                this.props.tabs.map((tab, index) => (
-                                    <Tab
-                                        key={index}
-                                        label={<Typography>{tab.title}</Typography>}
-                                        style={{ textTransform: 'none', margin: 0, padding: 0 }}
-                                    />
-                                ))
-                            }
-                        </Tabs>
-                    </Container>
+                    {
+                        this.props.isLinked ?
+                            <div>
+                                <Hidden xsDown={true}>
+                                    <NavLink to="/profile">
+                                        <IconButton color="primary">
+                                            <ChevronLeft />
+                                        </IconButton>
+                                    </NavLink>
+                                </Hidden>
+                            </div>
+                            :
+                            null
+                    }
+                    <Tabs
+                        value={this.state.pageValue}
+                        onChange={this.handleChange}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                    >
+                        {
+                            this.props.tabs.map((tab, index) => (
+                                <Tab
+                                    key={index}
+                                    label={<Typography>{tab.title}</Typography>}
+                                    style={{ textTransform: 'none' }}
+                                />
+                            ))
+                        }
+                    </Tabs>
+                    {
+                        this.props.isFiltered ?
+                            <div style={{ position: 'absolute', right: '3%' }}>
+                                <Hidden xsDown={true}>
+                                    <IconButton>
+                                        <Tune />
+                                    </IconButton>
+                                </Hidden>
+                            </div>
+                            :
+                            null
+                    }
                 </Toolbar>
             </AppBar>
             { this.tabContent(this.state.pageValue) }
@@ -75,6 +131,4 @@ NavigationTab.propTypes = {
 
 };
 
-export default compose(
-    withStyles(styles),
-)(NavigationTab);
+export default NavigationTab;

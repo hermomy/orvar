@@ -159,74 +159,78 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
 
     render() {
         return (
-            <NavTab
-                tabs={[
-                    {
-                        title: 'All Orders',
-                        content: (
-                            <Container>
-                                {
-                                    this.props.profileOrderList.loading ?
-                                        <div style={{ textAlign: 'center' }}><CircularProgress /></div>
-                                        :
-                                        <div>
-                                            {this.renderOrderListCard()}
-                                        </div>
-                                }
-                                <Popover
-                                    open={Boolean(this.state.anchorEl)}
-                                    anchorEl={this.state.anchorEl}
-                                    onClose={() => {
-                                        this.setState({ anchorEl: null });
-                                    }}
-                                    anchorOrigin={{
-                                        vertical: 'center',
-                                        horizontal: 'left',
-                                    }}
-                                    transformOrigin={{
-                                        vertical: 'center',
-                                        horizontal: 'right',
-                                    }}
-                                >
-                                    <div style={{ padding: 10 }}><Typography>{this.state.orderDate}</Typography></div>
-                                </Popover>
-                            </Container>
-                        ),
-                    },
-                    {
-                        title: 'Unpaid',
-                        content: (
-                            <div>
-                                UNPAID ORDERS
-                            </div>
-                        ),
-                    },
-                    {
-                        title: 'To Ship',
-                        content: (
-                            <div>
-                                TO SHIP ORDERS
-                            </div>
-                        ),
-                    },
-                    {
-                        title: 'Posted',
-                        content: (
-                            <div>
-                                POSTED ORDERS
-                            </div>
-                        ),
-                    },
-                    {
-                        title: 'Review',
-                        content: (
-                            <div>
-                                REVIEW ORDERS
-                            </div>
-                        ),
-                    },
-                ]}
-            />
+            <div>
+                <NavTab
+                    isLinked="true"
+                    isFiltered="true"
+                    tabs={[
+                        {
+                            title: 'All Orders',
+                            content: (
+                                <Container>
+                                    {
+                                        this.props.profileOrderList.loading ?
+                                            <div style={{ textAlign: 'center' }}><CircularProgress /></div>
+                                            :
+                                            <div>
+                                                {this.renderOrderListCard()}
+                                            </div>
+                                    }
+                                    <Popover
+                                        open={Boolean(this.state.anchorEl)}
+                                        anchorEl={this.state.anchorEl}
+                                        onClose={() => {
+                                            this.setState({ anchorEl: null });
+                                        }}
+                                        anchorOrigin={{
+                                            vertical: 'center',
+                                            horizontal: 'left',
+                                        }}
+                                        transformOrigin={{
+                                            vertical: 'center',
+                                            horizontal: 'right',
+                                        }}
+                                    >
+                                        <div style={{ padding: 10 }}><Typography>{this.state.orderDate}</Typography></div>
+                                    </Popover>
+                                </Container>
+                            ),
+                        },
+                        {
+                            title: 'Unpaid',
+                            content: (
+                                <div>
+                                    UNPAID ORDERS
+                                </div>
+                            ),
+                        },
+                        {
+                            title: 'To Ship',
+                            content: (
+                                <div>
+                                    TO SHIP ORDERS
+                                </div>
+                            ),
+                        },
+                        {
+                            title: 'Posted',
+                            content: (
+                                <div>
+                                    POSTED ORDERS
+                                </div>
+                            ),
+                        },
+                        {
+                            title: 'Review',
+                            content: (
+                                <div>
+                                    IN REVIEW ORDERS
+                                </div>
+                            ),
+                        },
+                    ]}
+                />
+            </div>
         );
     }
 }
