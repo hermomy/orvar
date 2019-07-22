@@ -34,7 +34,6 @@ import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
 
 import Header from 'containers/Header';
-import TabBar from 'components/TabBar';
 import { ProfileWallet } from '../ProfileWallet';
 
 export default function App() {
@@ -100,7 +99,6 @@ export default function App() {
                     <Route component={NotFoundPage} />
                 </Switch>
             </div>
-            <TabBar />
         </section>
     );
 }

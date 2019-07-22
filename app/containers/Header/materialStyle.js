@@ -1,6 +1,6 @@
 const styles = {
     header: { boxShadow: '0 4px 2px -2px #ccc' },
-    leadTitle: { fontWeight: 500 },
+    leadTitle: { fontWeight: 600 },
     normalFont: {
         color: '#969696',
         cursor: 'pointer',
@@ -13,7 +13,7 @@ const styles = {
     },
     leftMegaMenuTextActive: {
         color: '#603',
-        fontWeight: 500,
+        fontWeight: 600,
         borderBottom: '2px solid #603',
     },
     urlLink: { textDecoration: 'none' },
@@ -21,6 +21,13 @@ const styles = {
         textTransform: 'uppercase',
         textDecoration: 'none',
         '&:hover': { color: '#603' },
+    },
+    childDrawer: {
+        paddingLeft: '2rem',
+        backgroundColor: '#ccc',
+    },
+    mobileSearch: {
+        width: '100%',
     },
 };
 
