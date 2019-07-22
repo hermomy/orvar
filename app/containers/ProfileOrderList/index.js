@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { Link } from 'react-router-dom';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
@@ -22,6 +23,7 @@ import {
     Chip,
     CircularProgress,
     Container,
+    Hidden,
     IconButton,
     Popover,
     Table,
@@ -30,7 +32,6 @@ import {
     TableHead,
     TableRow,
     Typography,
-    Hidden,
 } from '@material-ui/core';
 import {
     KeyboardArrowRight,
@@ -106,9 +107,8 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                                         <Typography color="secondary">{order.number}</Typography>
                                         <IconButton
                                             size="small"
-                                            onClick={() => {
-                                                console.log(`view ${order.id} detail`);
-                                            }}
+                                            component={Link}
+                                            to={`order/${order.id}`}
                                         >
                                             <KeyboardArrowRight color="secondary" />
                                         </IconButton>
@@ -188,7 +188,7 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                                         horizontal: 'right',
                                     }}
                                 >
-                                    <div style={{ padding: 13 }}><Typography style={{ paddingTop: 200 }}>{this.state.orderDate}</Typography></div>
+                                    <div style={{ padding: 10 }}><Typography>{this.state.orderDate}</Typography></div>
                                 </Popover>
                             </Container>
                         ),

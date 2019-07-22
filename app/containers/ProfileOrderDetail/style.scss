@@ -1,9 +1,10 @@
 .item-card {
-    padding: 20px;
+    padding: 5px;
     margin-left: 20px;
     margin-right: 20px;
     height: 180px;
     overflow: hidden;
+    min-width: 100px;
 
     .item-name {
         height: 4.5em;

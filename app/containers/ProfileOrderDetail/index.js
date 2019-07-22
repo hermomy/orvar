@@ -22,10 +22,9 @@ import {
     Box,
     Button,
     Card,
-    CardActions,
-    CardHeader,
+    CardContent,
+    Chip,
     CircularProgress,
-    Collapse,
     Container,
     Divider,
     Grid,
@@ -34,7 +33,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import {
-    ErrorOutline,
+    QueryBuilder,
 } from '@material-ui/icons';
 
 import makeSelectProfileOrderDetail from './selectors';
@@ -45,14 +44,12 @@ import './style.scss';
 
 export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
-        expanded: false,
         anchorEl: null,
-        targetOrderID: null,
         orderDate: '',
     }
 
     componentWillMount() {
-        this.props.dispatch(actions.getOrderList());
+        this.props.dispatch(actions.getOrderData(this.props.match.params.orderID));
     }
 
     componentDidMount() {
@@ -64,168 +61,53 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
         document.body.appendChild(script);
     }
 
-    renderOrderListCard = () => {
-        const orderData = this.props.profileOrderDetail.orderData;
-
-        if (!this.props.profileOrderDetail.orderList) {
-            return null;
+    renderStatusColor = (status) => {
+        switch (status.toLowerCase()) {
+            case 'paid':
+                return '#71F888';
+            case 'received':
+                return '#98DBFF';
+            case 'unpaid':
+                return '#EEEEEE';
+            case 'in process':
+                return '#FCCC4C';
+            case 'multiple':
+                return '#FC4CCD';
+            case 'expired':
+                return '#FDC789';
+            case 'posted':
+                return '#660033';
+            case 'cancel':
+                return '#FFFFFF';
+            default:
+                break;
         }
 
-        return (
-            dataChecking(this.props.profileOrderDetail, 'orderList') &&
-                this.props.profileOrderDetail.orderList.map((order, index) => (
-                    <Card key={index} className="mb-2">
-                        <CardHeader
-                            title={
-                                <Typography display="block" color="textSecondary">Order Number</Typography>
-                            }
-                            subheader={
-                                <Typography style={{ color: '#6298FF' }}>{order.number}</Typography>
-                            }
-                            action={
-                                <div style={{ paddingTop: 20 }}>
-                                    <IconButton
-                                        size="small"
-                                        onClick={(event) => {
-                                            this.setState({
-                                                anchorEl: event.currentTarget,
-                                                orderDate: order.created_at,
-                                            });
-                                        }}
-                                    >
-                                        <ErrorOutline style={{ transform: 'rotate(180deg)', color: 'black', fontSize: 16 }} />
-                                    </IconButton>
-                                    <Typography>{moment(order.created_at).fromNow()}</Typography>
-                                </div>
-                            }
-                        />
-                        <Divider />
-                        <CardActions>
-                            <Grid container={true}>
-                                <Grid item={true} lg={11} md={11} xs={9}>
-                                    <Button
-                                        color="secondary"
-                                        style={{ textTransform: 'none' }}
-                                        onClick={() => {
-                                            this.setState({
-                                                targetOrderID: order.id,
-                                                expanded: !this.state.expanded,
-                                            });
-
-                                            if (dataChecking(this.props.profileOrderDetail, 'orderData', 'id') !== order.id) {
-                                                this.props.dispatch(actions.getOrderData(order.id));
-                                            }
-                                        }}
-                                    >
-                                        View order details
-                                    </Button>
-                                </Grid>
-                                <Grid item={true} lg={1} md={1} xs={3}>
-                                    <Typography display="block" color="textSecondary">Total</Typography>
-                                    <Typography color="primary">{order.currency.symbol}{order.subtotal.toFixed(2)}</Typography>
-                                </Grid>
-                            </Grid>
-                        </CardActions>
-                        {
-                            this.state.targetOrderID === order.id ?
-                                <Collapse in={this.state.expanded}>
-                                    {
-                                        this.props.profileOrderDetail.loadingData ?
-                                            <div style={{ textAlign: 'center' }}><CircularProgress /></div>
-                                            :
-                                            <div>
-                                                {this.renderOrderDetails()}
-                                                <Divider className="mb-2" />
-                                                <Grid container={true}>
-                                                    <Grid item={true} lg={6} md={6} xs={12}>
-                                                        <Typography color="primary">Payment Information</Typography>
-                                                        {
-                                                            this.renderInfoCard([
-                                                                { label: 'Shipping Fee', dataPath: dataChecking(orderData, 'currency', 'symbol') + dataChecking(orderData, 'summary', 'shipping', 'total') },
-                                                                { label: 'Promotional Discount', dataPath: dataChecking(orderData, 'currency', 'symbol') + dataChecking(orderData, 'summary', 'discount', 'total') },
-                                                                { label: 'Total', dataPath: dataChecking(orderData, 'currency', 'symbol') + dataChecking(orderData, 'summary', 'grand_total') },
-                                                            ])
-                                                        }
-                                                    </Grid>
-                                                    <Grid item={true} lg={6} md={6} xs={12}>
-                                                        <Typography color="primary">Shipping Information</Typography>
-                                                        {
-                                                            this.renderInfoCard([
-                                                                { label: 'Receiver Name', dataPath: dataChecking(orderData, 'address', 'receiver_name') },
-                                                                { label: 'Address', dataPath: dataChecking(orderData, 'address', 'full_address') },
-                                                                { label: 'Contact Number', dataPath: dataChecking(orderData, 'address', 'full_contact') },
-                                                                { label: 'Payment Method', dataPath: dataChecking(orderData, 'gateway_name') },
-                                                            ])
-                                                        }
-                                                    </Grid>
-                                                </Grid>
-                                            </div>
-                                    }
-                                </Collapse>
-                                :
-                                null
-                        }
-                    </Card>
-                ))
-        );
+        return null;
     }
 
-    renderOrderDetails = () => {
-        const orderData = this.props.profileOrderDetail.orderData;
-
-        return (
-            dataChecking(this.props.profileOrderDetail, 'orderData') &&
-                orderData.merchants.map((merchant, index) => (
-                    <div key={index}>
-                        <Divider className="mb-2" />
-                        <Grid container={true} spacing={5}>
-                            <Grid item={true} lg={6} md={6} xs={12}>
-                                <Typography variant="body2" display="block" color="textSecondary">Sold & Shipped by</Typography>
-                                <Typography variant="body1" display="block" color="primary" style={{ textTransform: 'uppercase' }}>{merchant.name}</Typography>
-                                <Typography variant="body2" display="block" color="textSecondary">{merchant.logo.brief} ({merchant.shipping.estimate_arrival})</Typography>
-                            </Grid>
-                            <Grid item={true} lg={3} md={3} xs={12}>
-                                <Typography variant="body2" display="block" color="textSecondary">Status</Typography>
-                                <div style={{ borderRadius: 100, backgroundColor: '#C5E3BF', width: 80, height: 20, marginTop: 5 }}>
-                                    <Typography align="center" variant="body2" display="block" style={{ textTransform: 'uppercase' }}>{merchant.summary.shipping.status}</Typography>
-                                </div>
-                            </Grid>
-                            <Grid item={true} lg={3} md={3} xs={12}>
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    disabled={merchant.summary.shipping.tracking_number === null}
-                                    onClick={() => {
-                                        window.TrackButton.track({ tracking_no: merchant.summary.shipping.tracking_number });
-                                    }}
-                                >
-                                    {
-                                        merchant.summary.shipping.tracking_number !== null ?
-                                        `tracking info: ${merchant.summary.shipping.tracking_number}`
-                                        :
-                                        'tracking not available'
-                                    }
-                                </Button>
-                            </Grid>
-                            <Grid item={true} lg={9} md={9} xs={12}>
-                                {this.renderCarousel(orderData, merchant)}
-                            </Grid>
-                            <Grid item={true} lg={3} md={3} xs={12}>
-                                {
-                                    this.renderInfoCard([
-                                        { label: 'Courier', dataPath: merchant.summary.shipping.name },
-                                        { label: 'Tracking Number', dataPath: merchant.summary.shipping.tracking_number !== null ? merchant.summary.shipping.tracking_number : 'Not Available' },
-                                        { label: 'Quanity', dataPath: merchant.items.length },
-                                        { label: 'Shipping Fee', dataPath: orderData.currency.symbol + merchant.summary.shipping.value.toFixed(2) },
-                                        { label: 'Subtotal', dataPath: orderData.currency.symbol + merchant.summary.subtotal.toFixed(2) },
-                                    ])
-                                }
-                            </Grid>
-                        </Grid>
-                    </div>
-                ))
-        );
-    }
+    renderMerchantInfo = (order, merchant) => (
+        <div>
+            <div>
+                <Typography color="textSecondary">Sold & Shipped by</Typography>
+                <Typography color="textSecondary" style={{ float: 'right' }}>Status</Typography>
+            </div>
+            <div>
+                <Typography variant="h6" color="primary" style={{ textTransform: 'uppercase' }}>{merchant.name}</Typography>
+                <Chip
+                    label={order.status}
+                    variant="outlined"
+                    size="small"
+                    style={{
+                        backgroundColor: this.renderStatusColor(order.status),
+                        color: (order.status.toLowerCase() === 'multiple' || order.status.toLowerCase() === 'posted') ? '#FFFFFF' : '#000000',
+                        float: 'right',
+                    }}
+                />
+            </div>
+            <Typography color="textSecondary">{merchant.logo.brief} ({merchant.shipping.estimate_arrival})</Typography>
+        </div>
+    )
 
     renderCarousel = (orderData, merchant) => (
         <OwlCarousel
@@ -258,7 +140,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
         </OwlCarousel>
     )
 
-    renderInfoCard = (infoConfigs) => (
+    renderOrderInfo = (infoConfigs) => (
         infoConfigs.map((config, index) => (
             <Grid key={index} container={true}>
                 <Grid item={true} lg={6} md={6} xs={6}>
@@ -271,6 +153,130 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
         ))
     )
 
+    renderOrderDetailCard = () => {
+        const order = this.props.profileOrderDetail.orderData;
+
+        if (!order) {
+            return null;
+        }
+
+        return (
+            dataChecking(this.props.profileOrderDetail, 'orderData') &&
+                <Grid container={true} spacing={2}>
+                    <Grid item={true} lg={12} md={12} xs={12}>
+                        <Card>
+                            <CardContent>
+                                <Typography color="textSecondary">Order Number</Typography>
+                                <div style={{ float: 'right' }}>
+                                    <IconButton
+                                        size="small"
+                                        color="primary"
+                                        onClick={(event) => {
+                                            this.setState({
+                                                anchorEl: event.currentTarget,
+                                                orderDate: order.created_at,
+                                            });
+                                        }}
+                                    >
+                                        <QueryBuilder />
+                                    </IconButton>
+                                    <Typography>{moment(order.created_at).fromNow()}</Typography>
+                                </div>
+                                <Typography display="block" color="primary">{order.number}</Typography>
+                                {
+                                    order.merchants.map((merchant, index) => (
+                                        <div key={index}>
+                                            <Divider />
+                                            <Grid container={true}>
+                                                <Grid item={true} lg={8} md={12} xs={12}>
+                                                    <Grid container={true}>
+                                                        <Grid item={true} lg={12} md={12} xs={12}>
+                                                            {this.renderMerchantInfo(order, merchant)}
+                                                        </Grid>
+                                                        <Grid item={true} lg={12} md={12} xs={12}>
+                                                            {this.renderCarousel(order, merchant)}
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid item={true} lg={4} md={12} xs={12}>
+                                                    <Grid container={true}>
+                                                        <Grid item={true} lg={12} md={12} xs={12}>
+                                                            <Button
+                                                                variant="outlined"
+                                                                color="primary"
+                                                                disabled={merchant.summary.shipping.tracking_number === null}
+                                                                onClick={() => {
+                                                                    window.TrackButton.track({ tracking_no: merchant.summary.shipping.tracking_number });
+                                                                }}
+                                                                style={{ float: 'right' }}
+                                                            >
+                                                                {
+                                                                    merchant.summary.shipping.tracking_number !== null ?
+                                                                    `track order ${merchant.summary.shipping.tracking_number}`
+                                                                    :
+                                                                    'tracking not available'
+                                                                }
+                                                            </Button>
+                                                        </Grid>
+                                                        <Grid item={true} lg={12} md={12} xs={12}>
+                                                            {
+                                                                this.renderOrderInfo([
+                                                                    { label: 'Courier', dataPath: merchant.summary.shipping.name },
+                                                                    { label: 'Tracking Number', dataPath: merchant.summary.shipping.tracking_number !== null ? merchant.summary.shipping.tracking_number : 'Not Available' },
+                                                                ])
+                                                            }
+                                                        </Grid>
+                                                        <Grid item={true} lg={12} md={12} xs={12} className="mt-3">
+                                                            {
+                                                                this.renderOrderInfo([
+                                                                    { label: 'Quanity', dataPath: merchant.items.length },
+                                                                    { label: 'Shipping Fee', dataPath: `${dataChecking(order, 'currency', 'symbol')} ${merchant.summary.shipping.value.toFixed(2)}` },
+                                                                    { label: 'Subtotal', dataPath: `${dataChecking(order, 'currency', 'symbol')} ${merchant.summary.subtotal.toFixed(2)}` },
+                                                                ])
+                                                            }
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    ))
+                                }
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid item={true} lg={6} md={12} xs={12}>
+                        <Card>
+                            <CardContent>
+                                <Typography color="primary">Payment Information</Typography>
+                                {
+                                    this.renderOrderInfo([
+                                        { label: 'Shipping Fee', dataPath: `${dataChecking(order, 'currency', 'symbol')} ${dataChecking(order, 'summary', 'shipping', 'total')}` },
+                                        { label: 'Promotional Discount', dataPath: `${dataChecking(order, 'currency', 'symbol')} ${dataChecking(order, 'summary', 'discount', 'total')}` },
+                                        { label: 'Total', dataPath: `${dataChecking(order, 'currency', 'symbol')} ${dataChecking(order, 'summary', 'grand_total')}` },
+                                    ])
+                                }
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid item={true} lg={6} md={12} xs={12}>
+                        <Card>
+                            <CardContent>
+                                <Typography color="primary">Shipping Information</Typography>
+                                {
+                                    this.renderOrderInfo([
+                                        { label: 'Receiver Name', dataPath: dataChecking(order, 'address', 'receiver_name') },
+                                        { label: 'Address', dataPath: dataChecking(order, 'address', 'full_address') },
+                                        { label: 'Contact Number', dataPath: dataChecking(order, 'address', 'full_contact') },
+                                        { label: 'Payment Method', dataPath: dataChecking(order, 'gateway_name') },
+                                    ])
+                                }
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+        );
+    }
+
     render() {
         return (
             <Container>
@@ -279,7 +285,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                         <div style={{ textAlign: 'center' }}><CircularProgress /></div>
                         :
                         <div>
-                            {this.renderOrderListCard()}
+                            {this.renderOrderDetailCard()}
                         </div>
                 }
                 <Popover
@@ -297,7 +303,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                         horizontal: 'right',
                     }}
                 >
-                    <Typography variant="subtitle1" style={{ margin: 10 }}>{this.state.orderDate}</Typography>
+                    <div style={{ padding: 10 }}><Typography>{this.state.orderDate}</Typography></div>
                 </Popover>
             </Container>
         );
