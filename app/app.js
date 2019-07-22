@@ -53,15 +53,9 @@ const MOUNT_NODE = document.getElementById('app');
 
 const theme = createMuiTheme({
     palette: {
-        primary: {
-            main: '#660033',
-        },
-        secondary: {
-            main: '#ff4081',
-        },
-        disabled: {
-            main: '#989898',
-        },
+        primary: { main: '#603' },
+        secondary: { main: '#ff4081' },
+        disabled: { main: '#989898' },
     },
     overrides: {
         MuiCard: {
@@ -70,79 +64,15 @@ const theme = createMuiTheme({
                 width: '100%',
             },
         },
-        MuiCardContent: {
-            root: {
-                position: 'relative',
-            },
-        },
-        MuiDivider: {
-            root: {
-                backgroundColor: '#CCCCCC',
-            },
-        },
         MuiTypography: {
-            root: {
-                display: 'inline',
-            },
-            h1: {
-                fontSize: '96px',
-                color: '#404040',
-            },
-            h2: {
-                fontSize: '60px',
-                color: '#404040',
-            },
-            h3: {
-                fontSize: '48px',
-                color: '#404040',
-            },
-            h4: {
-                fontSize: '34px',
-                color: '#404040',
-            },
-            h5: {
-                fontSize: '24px',
-                color: '#404040',
-            },
-            h6: {
-                fontSize: '20px',
-                color: '#404040',
-            },
-            subtitle1: {
-                fontSize: '16px',
-                color: '#404040',
-            },
-            subtitle2: {
-                fontSize: '10px',
-                color: '#404040',
-            },
-            body1: {
-                fontSize: '14px',
-                color: '#404040',
-            },
-            body2: {
-                fontSize: '12px',
-                color: '#404040',
-            },
-            button: {
-                fontSize: '14px',
-                fontVariant: 'small-caps',
-                fontWeight: '500',
-                color: '#989898',
-            },
-            caption: {
-                fontSize: '14px',
-                color: '#404040',
-            },
-            overline: {
-                fontSize: '12px',
-                fontVariant: 'small-caps',
-                color: '#404040',
-            },
+            root: { display: 'inline' },
         },
     },
     typography: {
-        fontFamily: 'Poppins',
+        fontFamily: [
+            'Poppins',
+            'sans-serif',
+        ].join(','),
     },
 });
 
