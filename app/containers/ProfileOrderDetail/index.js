@@ -28,6 +28,7 @@ import {
     Container,
     Divider,
     Grid,
+    Hidden,
     IconButton,
     Popover,
     Typography,
@@ -90,7 +91,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
         <div>
             <div>
                 <Typography color="textSecondary">Sold & Shipped by</Typography>
-                <Typography color="textSecondary" style={{ float: 'right' }}>Status</Typography>
+                <Typography color="textSecondary" style={{ float: 'right', paddingRight: 20 }}>Status</Typography>
             </div>
             <div>
                 <Typography variant="h6" color="primary" style={{ textTransform: 'uppercase' }}>{merchant.name}</Typography>
@@ -102,55 +103,80 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                         backgroundColor: this.renderStatusColor(order.status),
                         color: (order.status.toLowerCase() === 'multiple' || order.status.toLowerCase() === 'posted') ? '#FFFFFF' : '#000000',
                         float: 'right',
+                        marginTop: 5,
                     }}
                 />
             </div>
-            <Typography color="textSecondary">{merchant.logo.brief} ({merchant.shipping.estimate_arrival})</Typography>
+            <Hidden smDown={true}>
+                <Typography color="textSecondary">{merchant.logo.brief} ({merchant.shipping.estimate_arrival})</Typography>
+            </Hidden>
+            <Hidden smUp={true}>
+                <Typography color="textSecondary">{merchant.logo.brief}</Typography>
+                <Typography color="textSecondary" display="block">({merchant.shipping.estimate_arrival})</Typography>
+            </Hidden>
         </div>
     )
 
     renderCarousel = (orderData, merchant) => (
-        <OwlCarousel
-            options={{
-                items: 4,
-                loop: false,
-                nav: true,
-                navText: ['&lt;', '&gt;'],
-            }}
-            style={{ zIndex: 0 }}
-        >
-            {
-                dataChecking(this.props.profileOrderDetail, 'orderData', 'merchants') &&
-                    merchant.items.map((item, index) => (
-                        <Box
-                            key={index}
-                            border={1}
-                            borderColor="#F2F3F4"
-                            borderRadius={5}
-                            className="item-card"
-                        >
-                            <img src={item.product.image.large} alt="product" />
-                            <div className="item-name">
-                                <Typography variant="body2" color="primary">{item.name}</Typography>
-                            </div>
-                            <Typography variant="body2" display="block">{item.qty} x {orderData.currency.symbol}{item.price.selling.toFixed(2)}</Typography>
-                        </Box>
-                    ))
-            }
-        </OwlCarousel>
+        <div>
+            <OwlCarousel
+                options={{
+                    items: 4,
+                    loop: false,
+                    nav: true,
+                    navText: ['&lt;', '&gt;'],
+                    responsive: {
+                        320: {
+                            items: 1,
+                        },
+                        700: {
+                            items: 4,
+                        },
+                    },
+                }}
+                style={{ zIndex: 0 }}
+            >
+                {
+                    dataChecking(this.props.profileOrderDetail, 'orderData', 'merchants') &&
+                        merchant.items.map((item, index) => (
+                            <Box
+                                key={index}
+                                border={1}
+                                borderColor="#F2F3F4"
+                                borderRadius={5}
+                                width="auto"
+                                className="item-card"
+                            >
+                                <img src={item.product.image.large} alt="product" className="item-image" />
+                                <div className="item-name">
+                                    <Typography color="primary">{item.name}</Typography>
+                                </div>
+                                <Typography display="block">{item.qty} x {orderData.currency.symbol}{item.price.retail.toFixed(2)}</Typography>
+                            </Box>
+                        ))
+                }
+            </OwlCarousel>
+        </div>
     )
 
     renderOrderInfo = (infoConfigs) => (
         infoConfigs.map((config, index) => (
             <Grid key={index} container={true}>
-                <Grid item={true} lg={6} md={6} xs={6}>
-                    <Typography variant="body2">{config.label}</Typography>
+                <Grid item={true} lg={6} md={6} xs={4}>
+                    <Typography color="textSecondary" style={{ lineHeight: 2 }}>{config.label}</Typography>
                 </Grid>
-                <Grid item={true} lg={6} md={6} xs={6}>
-                    <Typography variant="body2">{config.dataPath}</Typography>
+                <Grid item={true} lg={6} md={6} xs={8} align="right">
+                    <Typography style={{ lineHeight: 2 }}>{config.dataPath}</Typography>
                 </Grid>
             </Grid>
         ))
+    )
+
+    renderOrderItems = () => (
+        dataChecking(this.props.profileOrderDetail, 'orderData') &&
+            this.props.profileOrderDetail.orderData.merchants.map((merchant, index) => (
+                <div key={index}>{merchant.name}</div>
+            ))
     )
 
     renderOrderDetailCard = () => {
@@ -166,59 +192,83 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                     <Grid item={true} lg={12} md={12} xs={12}>
                         <Card>
                             <CardContent>
-                                <Typography color="textSecondary">Order Number</Typography>
-                                <div style={{ float: 'right' }}>
-                                    <IconButton
-                                        size="small"
-                                        color="primary"
-                                        onClick={(event) => {
-                                            this.setState({
-                                                anchorEl: event.currentTarget,
-                                                orderDate: order.created_at,
-                                            });
-                                        }}
-                                    >
-                                        <QueryBuilder />
-                                    </IconButton>
-                                    <Typography>{moment(order.created_at).fromNow()}</Typography>
+                                <div className="order-header">
+                                    <Typography color="textSecondary">Order Number</Typography>
+                                    <div style={{ float: 'right' }}>
+                                        <IconButton
+                                            size="small"
+                                            color="primary"
+                                            onClick={(event) => {
+                                                this.setState({
+                                                    anchorEl: event.currentTarget,
+                                                    orderDate: order.created_at,
+                                                });
+                                            }}
+                                        >
+                                            <QueryBuilder />
+                                        </IconButton>
+                                        <Typography>{moment(order.created_at).fromNow()}</Typography>
+                                    </div>
+                                    <Typography display="block" color="primary">{order.number}</Typography>
                                 </div>
-                                <Typography display="block" color="primary">{order.number}</Typography>
                                 {
                                     order.merchants.map((merchant, index) => (
-                                        <div key={index}>
-                                            <Divider />
+                                        <div key={index} className="order-merchant">
+                                            <Divider className="mt-1 mb-1" />
                                             <Grid container={true}>
-                                                <Grid item={true} lg={8} md={12} xs={12}>
-                                                    <Grid container={true}>
-                                                        <Grid item={true} lg={12} md={12} xs={12}>
+                                                <Grid item={true} lg={9} md={12} xs={12}>
+                                                    <Grid container={true} spacing={3}>
+                                                        <Grid item={true} lg={11} md={12} xs={12}>
                                                             {this.renderMerchantInfo(order, merchant)}
+                                                            <Hidden lgUp={true}>
+                                                                <div className="pt-1">
+                                                                    <Button
+                                                                        size="large"
+                                                                        variant="outlined"
+                                                                        color="primary"
+                                                                        disabled={merchant.summary.shipping.tracking_number === null}
+                                                                        onClick={() => {
+                                                                            window.TrackButton.track({ tracking_no: merchant.summary.shipping.tracking_number });
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            merchant.summary.shipping.tracking_number !== null ?
+                                                                            'track order'
+                                                                            :
+                                                                            'tracking not available'
+                                                                        }
+                                                                    </Button>
+                                                                </div>
+                                                            </Hidden>
                                                         </Grid>
-                                                        <Grid item={true} lg={12} md={12} xs={12}>
+                                                        <Grid item={true} lg={11} md={12} xs={12}>
                                                             {this.renderCarousel(order, merchant)}
                                                         </Grid>
                                                     </Grid>
                                                 </Grid>
-                                                <Grid item={true} lg={4} md={12} xs={12}>
+                                                <Grid item={true} lg={3} md={12} xs={12}>
                                                     <Grid container={true}>
-                                                        <Grid item={true} lg={12} md={12} xs={12}>
-                                                            <Button
-                                                                variant="outlined"
-                                                                color="primary"
-                                                                disabled={merchant.summary.shipping.tracking_number === null}
-                                                                onClick={() => {
-                                                                    window.TrackButton.track({ tracking_no: merchant.summary.shipping.tracking_number });
-                                                                }}
-                                                                style={{ float: 'right' }}
-                                                            >
-                                                                {
-                                                                    merchant.summary.shipping.tracking_number !== null ?
-                                                                    `track order ${merchant.summary.shipping.tracking_number}`
-                                                                    :
-                                                                    'tracking not available'
-                                                                }
-                                                            </Button>
-                                                        </Grid>
-                                                        <Grid item={true} lg={12} md={12} xs={12}>
+                                                        <Hidden mdDown={true}>
+                                                            <Grid item={true} lg={12} md={12} xs={12} className="mt-2">
+                                                                <Button
+                                                                    variant="outlined"
+                                                                    color="primary"
+                                                                    disabled={merchant.summary.shipping.tracking_number === null}
+                                                                    onClick={() => {
+                                                                        window.TrackButton.track({ tracking_no: merchant.summary.shipping.tracking_number });
+                                                                    }}
+                                                                    style={{ float: 'right' }}
+                                                                >
+                                                                    {
+                                                                        merchant.summary.shipping.tracking_number !== null ?
+                                                                        'track order'
+                                                                        :
+                                                                        'tracking not available'
+                                                                    }
+                                                                </Button>
+                                                            </Grid>
+                                                        </Hidden>
+                                                        <Grid item={true} lg={12} md={12} xs={12} className="mt-3">
                                                             {
                                                                 this.renderOrderInfo([
                                                                     { label: 'Courier', dataPath: merchant.summary.shipping.name },
@@ -229,9 +279,9 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                                         <Grid item={true} lg={12} md={12} xs={12} className="mt-3">
                                                             {
                                                                 this.renderOrderInfo([
-                                                                    { label: 'Quanity', dataPath: merchant.items.length },
+                                                                    { label: 'Quantity', dataPath: merchant.items.length },
                                                                     { label: 'Shipping Fee', dataPath: `${dataChecking(order, 'currency', 'symbol')} ${merchant.summary.shipping.value.toFixed(2)}` },
-                                                                    { label: 'Subtotal', dataPath: `${dataChecking(order, 'currency', 'symbol')} ${merchant.summary.subtotal.toFixed(2)}` },
+                                                                    { label: 'Subtotal', dataPath: <span style={{ color: '#660033' }}>{dataChecking(order, 'currency', 'symbol')} {merchant.summary.subtotal.toFixed(2)}</span> },
                                                                 ])
                                                             }
                                                         </Grid>
@@ -241,30 +291,58 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                         </div>
                                     ))
                                 }
+                                <div className="order-summary">
+                                    <Divider className="mt-1 mb-1" />
+                                    <Grid container={true}>
+                                        <Hidden mdDown={true}>
+                                            <Grid item={true} lg={9} />
+                                        </Hidden>
+                                        <Grid item={true} lg={3} md={12} xs={12}>
+                                            {
+                                                this.renderOrderInfo([
+                                                    { label: <span style={{ color: '#FF4081' }}>Promotional Discount</span>, dataPath: <span style={{ color: '#FF4081' }}>- {dataChecking(order, 'currency', 'symbol')} {order.summary.discount.total.toFixed(2)}</span> },
+                                                    { label: 'Total', dataPath: <span style={{ color: '#660033' }}>{dataChecking(order, 'currency', 'symbol')} {dataChecking(order, 'summary', 'grand_total').toFixed(2)}</span> },
+                                                ])
+                                            }
+                                        </Grid>
+                                    </Grid>
+                                </div>
                             </CardContent>
                         </Card>
                     </Grid>
                     <Grid item={true} lg={6} md={12} xs={12}>
                         <Card>
                             <CardContent>
-                                <Typography color="primary">Payment Information</Typography>
+                                <Typography variant="h6" color="primary">Payment Information</Typography>
+                                <div className="mb-2" />
+                                {
+                                    order.merchants.map((merchant) => (
+                                        this.renderOrderInfo([
+                                            { label: merchant.name, dataPath: `${dataChecking(order, 'currency', 'symbol')} ${merchant.summary.subtotal.toFixed(2)}` },
+                                        ])
+                                    ))
+                                }
                                 {
                                     this.renderOrderInfo([
                                         { label: 'Shipping Fee', dataPath: `${dataChecking(order, 'currency', 'symbol')} ${dataChecking(order, 'summary', 'shipping', 'total')}` },
-                                        { label: 'Promotional Discount', dataPath: `${dataChecking(order, 'currency', 'symbol')} ${dataChecking(order, 'summary', 'discount', 'total')}` },
-                                        { label: 'Total', dataPath: `${dataChecking(order, 'currency', 'symbol')} ${dataChecking(order, 'summary', 'grand_total')}` },
+                                        { label: <span style={{ color: '#FF4081' }}>Promotional Discount</span>, dataPath: <span style={{ color: '#FF4081' }}>- {dataChecking(order, 'currency', 'symbol')} {order.summary.discount.total.toFixed(2)}</span> },
+                                        { label: 'Total', dataPath: <span style={{ color: '#660033' }}>{dataChecking(order, 'currency', 'symbol')} {dataChecking(order, 'summary', 'grand_total')}</span> },
                                     ])
                                 }
+                                <div align="center" className="mt-3">
+                                    <Typography color="textSecondary">**DISCOUNT IS NOT APPLICABLE ON HERMO GLOBAL PURCHASE</Typography>
+                                </div>
                             </CardContent>
                         </Card>
                     </Grid>
                     <Grid item={true} lg={6} md={12} xs={12}>
                         <Card>
                             <CardContent>
-                                <Typography color="primary">Shipping Information</Typography>
+                                <Typography variant="h6" color="primary" gutterBottom={true}>Shipping Information</Typography>
+                                <div className="mb-2" />
                                 {
                                     this.renderOrderInfo([
-                                        { label: 'Receiver Name', dataPath: dataChecking(order, 'address', 'receiver_name') },
+                                        { label: 'Receiver Name', dataPath: <span style={{ color: '#660033' }}>{dataChecking(order, 'address', 'receiver_name')}</span> },
                                         { label: 'Address', dataPath: dataChecking(order, 'address', 'full_address') },
                                         { label: 'Contact Number', dataPath: dataChecking(order, 'address', 'full_contact') },
                                         { label: 'Payment Method', dataPath: dataChecking(order, 'gateway_name') },

@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
@@ -104,14 +104,14 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                             this.props.profileOrderList.orderList.map((order, index) => (
                                 <TableRow key={index}>
                                     <TableCell component="th" scope="row">
-                                        <Typography color="secondary">{order.number}</Typography>
-                                        <IconButton
-                                            size="small"
-                                            component={Link}
-                                            to={`order/${order.id}`}
-                                        >
-                                            <KeyboardArrowRight color="secondary" />
-                                        </IconButton>
+                                        <NavLink to={`order/${order.id}`} style={{ textDecoration: 'none' }}>
+                                            <Typography color="secondary">
+                                                {order.number}
+                                            </Typography>
+                                            <IconButton size="small">
+                                                <KeyboardArrowRight color="secondary" />
+                                            </IconButton>
+                                        </NavLink>
                                     </TableCell>
                                     <Hidden xsDown={true}>
                                         <TableCell>
@@ -166,6 +166,13 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                     tabs={[
                         {
                             title: 'All Orders',
+                            description: (
+                                <div align="center" style={{ margin: 16 }}>
+                                    <Typography variant="h6" display="block" gutterBottom={true}>All orders</Typography>
+                                    <Typography display="block">Click on the order number to view your order details.</Typography>
+                                    <Typography>Confirm receipt of your order to get 20 credits.</Typography>
+                                </div>
+                            ),
                             content: (
                                 <Container>
                                     {
