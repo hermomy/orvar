@@ -14,16 +14,10 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
 import { NavLink, withRouter } from 'react-router-dom';
-// import CartPage from 'containers/CartPage';
+import CartPage from 'containers/CartPage';
 import { dataChecking } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
 
-import {
-    Person,
-    Search,
-    ShoppingCart,
-    Close,
-} from '@material-ui/icons';
 import {
     Typography,
     Grid,
@@ -37,15 +31,17 @@ import {
     ListItemText,
     List,
     Collapse,
-    InputAdornment,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+
+import NavDropdown from 'components/Navigator/NavItem/NavDropdown';
 
 import { layoutTopNav, searchResult } from './actions';
 import makeSelectHeader from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
+import globalScope from '../../globalScope';
 import styles from './materialStyle';
 
 export class Header extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -54,13 +50,14 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
 
         this.state = {
             showCartPopout: false,
-            searchBar: false,
+            hideSearchBar: true,
             searchQuery: '',
             anchorElID: null,
             tabVal: 'skin-care',
             megaMenuToggle: false,
             left: false,
             toggleChildDrawer: false,
+            code: null,
             open: false,
             childVal: null,
         };
@@ -165,7 +162,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             <div
                 style={{
                     position: 'absolute',
-                    top: '5rem',
+                    top: '82px',
                     left: 0,
                     right: 0,
                 }}
@@ -303,78 +300,190 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         </Drawer>
     )
 
-    rightHeader = () => {
-        console.log();
-        return (
-            <Grid item={true}>
-                <span className="mr-1" onClick={() => this.setState({ searchBar: !this.state.searchBar })}>
-                    {
-                        this.state.searchBar ?
-                            <Close
-                                onClick={() => this.setState({ searchBar: !this.state.searchBar, searchQuery: '' })}
-                                className="animated rotateIn"
-                            />
-                        :
-                            <Search className="animated rotateIn" />
-
-                    }
-                </span>
-                <Person className="mr-1" />
-                <ShoppingCart />
-            </Grid>
-        );
-    }
-
-    leftHeader = () => (
-        <Grid item={true} style={{ flex: 1 }}>
+    /**
+     * section section
+     * - result will trigger with minimum 2 characters
+     * - result display category as brand, autocomplete and product related
+     */
+    renderSearchSection = () => (
+        <div>
             {
-                this.state.searchBar ?
-                    <div className="animated fadeInLeft">
+                !this.state.hideSearchBar ?
+                    this.state.searchQuery.length < 3 ?
+                        null
+                    :
+                        <div style={{ position: 'relative' }}>
+                            <div className={this.state.hideSearchBar ? 'resultBoxhide' : 'resultBoxshow'}>
+                                {
+                                    dataChecking(this.props, 'header', 'suggestionData', 'loading') ?
+                                        <img className="herlisting-loading content-loading" src={require('images/preloader-02.gif')} alt="hermo loading" />
+                                        :
+                                        <div>
+                                            {
+                                                dataChecking(this.props, 'header', 'suggestionData', 'error') &&
+                                                    dataChecking(this.props, 'header', 'suggestionData', 'data', 'messages', 0, 'text') ?
+                                                        <div>
+                                                            {this.props.header.suggestionData.data.messages[0].text} for <b>{this.state.searchQuery}</b>
+                                                        </div>
+                                                        :
+                                                        <div>
+                                                            {this.renderSearchResult('brand')}
+                                                            {this.renderSearchResult('autocomplete')}
+                                                            {this.renderSearchResult('mall')}
+                                                        </div>
+                                            }
+                                        </div>
+                                }
+                            </div>
+                        </div>
+                :
+                    null
+            }
+            <div className={`search ml-3 ${!this.state.hideSearchBar ? 'show' : ''}`}>
+                <div
+                    className="search-background-overlay"
+                    onClick={() => this.setState({
+                        hideSearchBar: !this.state.hideSearchBar,
+                        searchQuery: '',
+                    })}
+                />
+                {
+                    !this.state.hideSearchBar ?
                         <TextField
+                            type="search"
+                            margin="normal"
                             autoFocus={true}
                             value={this.state.searchQuery}
                             onChange={this.getSearchResult}
                             autoComplete="off"
                             placeholder="Search for Products, Brands, etc.."
-                            style={{ width: '100%' }}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <Search />
-                                    </InputAdornment>
-                                ),
-                            }}
                         />
-                    </div>
-                :
-                    <Grid className="animated fadeInLeft" container={true} spacing={2} alignItems="center">
-                        <Grid item={true}>
-                            <NavLink to="/">
-                                <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" style={{ width: '100px' }} />
-                            </NavLink>
-                        </Grid>
-                        <Grid item={true} style={{ flex: 1 }}>
-                            {this.renderTopCategory()}
-                        </Grid>
-                    </Grid>
-            }
-        </Grid>
+                    :
+                        null
+                }
+                <i
+                    className="fas search-icon fa-search"
+                    onClick={() => this.setState({
+                        hideSearchBar: !this.state.hideSearchBar,
+                    })}
+                    style={{
+                        color: 'grey',
+                        fontSize: '1.5rem',
+                        cursor: 'pointer',
+                    }}
+                ></i>
+            </div>
+        </div>
     )
 
     /**
      * User section for menu to profiles
      */
-    renderUserSection = () => {}
+    renderUserSection = () => {
+        const items = [];
+        if (globalScope.token) {
+            items.push({
+                code: 'logout',
+                require_login: true,
+                type: 'exec_function',
+                text: 'Logout',
+                iconClass: 'fas fa-sign-out-alt px-1',
+                handleLinkClick: () => {
+                    globalScope.previousPage = window.location.pathname;
+                    this.props.history.push('/logout');
+                },
+            });
+        } else {
+            items.push({
+                code: 'login',
+                require_login: true,
+                type: 'exec_function',
+                text: 'Login',
+                iconClass: 'fas fa-sign-in-alt px-1',
+                handleLinkClick: () => {
+                    globalScope.previousPage = window.location.pathname;
+                    this.props.history.push('/login');
+                },
+            });
+        }
+
+        return (
+            <div className="ml-3">
+                <NavDropdown
+                    items={items}
+                    // data={props.data}
+                    title="User"
+                    // itemClassName="fas fa-user"
+                    style={{
+                        color: 'grey',
+                        fontSize: '1.5rem',
+                        cursor: 'pointer',
+                    }}
+                    clickHandler={() => {}}
+                >
+                    <i
+                        className="fas fa-user"
+                        style={{
+                            color: 'grey',
+                            fontSize: '1.5rem',
+                            cursor: 'pointer',
+                        }}
+                    ></i>
+                </NavDropdown>
+            </div>
+        );
+    }
 
     /**
      * User cart dropdown
      */
-    renderCartSection = () => {}
+    renderCartSection = () => {
+        if (!globalScope.token) {
+            return null;
+        }
+
+        return (
+            <div className="cart-in-header ml-3">
+                {
+                    globalScope.token ?
+                        <i
+                            className="fas fa-shopping-cart"
+                            onClick={() => this.setState({
+                                showCartPopout: !this.state.showCartPopout,
+                            })}
+                            style={{
+                                color: 'grey',
+                                fontSize: '1.5rem',
+                            }}
+                        ></i>
+                    :
+                        <NavLink to="/">
+                            <i
+                                className="fas fa-shopping-cart"
+                                style={{
+                                    color: 'grey',
+                                    fontSize: '1.5rem',
+                                }}
+                            ></i>
+                        </NavLink>
+                }
+                {
+                    this.state.showCartPopout && this.renderCartPopout()
+                }
+            </div>
+        );
+    }
 
     /**
      * quicklink section which is right side of the header
      */
-    renderQuicklinks = () => {}
+    renderQuicklinks = () => (
+        <div className="quicklink">
+            {this.renderSearchSection()}
+            {this.renderUserSection()}
+            {this.renderCartSection()}
+        </div>
+    )
 
     /**
      * top nav section with data came from api /layout/top-nav
@@ -383,7 +492,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         <div className={`top-nav ${!this.state.hideSearchBar ? 'show' : ''}`}>
             {
                 dataChecking(this.props.header, 'header', 'data').map((val) => (
-                    <span className="ml-3 category" key={val.code}>
+                    <div className="ml-3 category" key={val.code}>
                         {
                             val.type === 'hot-link' ?
                                 <Typography>
@@ -398,7 +507,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                     <i className="fas fa-angle-down ml-quater"></i>
                                 </Typography>
                         }
-                    </span>
+                    </div>
                 ))
             }
         </div>
@@ -426,61 +535,16 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         return null;
     });
 
-    renderCartPopout = () => {}
-
-    /**
-     * section section
-     * - result will trigger with minimum 2 characters
-     * - result display category as brand, autocomplete and product related
-     */
-    renderSearchSection = () => {
-        console.log();
-        return (
-            <div>
-                {
-                    this.state.searchQuery !== '' && dataChecking(this.props, 'header', 'suggestionData', 'data') ?
-                        <div
-                            className="search-box"
-                        >
-                            <Container>
-                                <div
-                                    style={{
-                                        backgroundColor: 'white',
-                                        padding: '1rem',
-                                        height: '39rem',
-                                        overflow: 'scroll',
-                                    }}
-                                >
-                                    {this.renderSearchResult('brand')}
-                                    {this.renderSearchResult('autocomplete')}
-                                    {this.renderSearchResult('mall')}
-                                </div>
-                            </Container>
-                        </div>
-                    :
-                        null
-                }
-                {
-                    this.state.searchBar || this.state.searchQuery !== '' ?
-                        <div
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                position: 'absolute',
-                                top: '6rem',
-                                left: '0',
-                                right: '0',
-                                zIndex: '1101',
-                            }}
-                            onClick={() => this.setState({ searchBar: !this.state.searchBar, searchQuery: '' })}
-                        ></div>
-                    :
-                        null
-
-                }
+    renderCartPopout = () => (
+        <div className="cart-popup-modal">
+            <CartPage />
+            <div className="text-right">
+                <NavLink className="hershop-button" to="/checkout">
+                    Checkout Now
+                </NavLink>
             </div>
-        );
-    }
+        </div>
+    )
 
     /**
      * - This is desktop header component
@@ -490,17 +554,9 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         return (
             dataChecking(this.props.header, 'header', 'data') ?
                 <div>
-                    <AppBar color="default" className={this.props.classes.header}>
-                        <Hidden xsDown={true}>
-                            <Container>
-                                <Grid container={true} alignItems="center">
-                                    {this.leftHeader()}
-                                    {this.rightHeader()}
-                                </Grid>
-                            </Container>
-                        </Hidden>
+                    <AppBar className={this.props.classes.header} color="default">
                         <Hidden mdUp={true}>
-                            <div>
+                            <div id="header-mobile" className="p-1">
                                 <Grid container={true} justify="space-between" alignItems="center">
                                     <Grid item={true}>
                                         <Grid container={true} alignItems="center">
@@ -523,29 +579,48 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                     </Grid>
                                 </Grid>
                                 <TextField
-                                    className={this.props.classes.mobileSearch}
-                                    autoFocus={true}
-                                    value={this.state.searchQuery}
-                                    onChange={this.getSearchResult}
+                                    type="search"
                                     variant="outlined"
-                                    autoComplete="off"
                                     margin="dense"
-                                    placeholder="Search for Products, Brands, etc.."
-                                    style={{ width: '100%' }}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <Search />
-                                            </InputAdornment>
-                                        ),
-                                    }}
+                                    className={this.props.classes.mobileSearch}
                                 />
                             </div>
                             {this.hamburger()}
                         </Hidden>
+                        <Hidden xsDown={true}>
+                            <Container>
+                                <div id="header">
+                                    <div className={`logo ${!this.state.hideSearchBar ? 'show' : ''}`}>
+                                        <NavLink to="/">
+                                            <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100%" />
+                                        </NavLink>
+                                    </div>
+                                    {this.renderTopCategory()}
+                                    {this.renderQuicklinks()}
+                                </div>
+                                {this.state.anchorElID && this.megaMenu()}
+                            </Container>
+                        </Hidden>
                     </AppBar>
-                    {this.state.anchorElID && this.megaMenu()}
-                    {this.renderSearchSection()}
+                    {
+                        this.state.anchorElID
+                        ?
+                            <div
+                                style={{
+                                    position: 'fixed',
+                                    top: 0,
+                                    backgroundColor: 'black',
+                                    bottom: 0,
+                                    right: 0,
+                                    left: 0,
+                                    zIndex: 1,
+                                    opacity: '0.2',
+                                }}
+                            >
+                            </div>
+                        :
+                            null
+                    }
                 </div>
             :
                 null
