@@ -34,6 +34,7 @@ import FeedbackPage from 'containers/FeedbackPage';
 
 import Header from 'containers/Header';
 import { ProfileWallet } from '../ProfileWallet';
+import './style.scss';
 
 export default function App() {
     return (
@@ -42,9 +43,6 @@ export default function App() {
             <Header />
             <div
                 id="hershop-content-container"
-                style={{
-                    paddingTop: '7rem',
-                }}
             >
                 <Switch>
                     <Route exact={true} path="/" component={HomePage} />

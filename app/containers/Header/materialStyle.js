@@ -1,5 +1,8 @@
 const styles = {
-    header: { boxShadow: '0 4px 2px -2px #ccc' },
+    header: {
+        boxShadow: '0 4px 2px -2px #ccc',
+        padding: '1rem',
+    },
     leadTitle: { fontWeight: 600 },
     normalFont: {
         color: '#969696',
