@@ -87,6 +87,24 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
         return null;
     }
 
+    renderTrackingButton = (merchant) => (
+        <Button
+            variant="outlined"
+            color="primary"
+            disabled={merchant.summary.shipping.tracking_number === null}
+            onClick={() => {
+                window.TrackButton.track({ tracking_no: merchant.summary.shipping.tracking_number });
+            }}
+        >
+            {
+                merchant.summary.shipping.tracking_number !== null ?
+                'track order'
+                :
+                'tracking not available'
+            }
+        </Button>
+    )
+
     renderMerchantInfo = (order, merchant) => (
         <div>
             <div>
@@ -107,17 +125,16 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                     }}
                 />
             </div>
-            <Hidden smDown={true}>
-                <Typography color="textSecondary">{merchant.logo.brief} ({merchant.shipping.estimate_arrival})</Typography>
-            </Hidden>
-            <Hidden smUp={true}>
-                <Typography color="textSecondary">{merchant.logo.brief}</Typography>
-                <Typography color="textSecondary" display="block">({merchant.shipping.estimate_arrival})</Typography>
+            <Typography color="textSecondary">{merchant.logo.brief} ({merchant.shipping.estimate_arrival})</Typography>
+            <Hidden lgUp={true}>
+                <div className="pt-1">
+                    {this.renderTrackingButton(merchant)}
+                </div>
             </Hidden>
         </div>
     )
 
-    renderCarousel = (orderData, merchant) => (
+    renderCarousel = (order, merchant) => (
         <div>
             <OwlCarousel
                 options={{
@@ -141,17 +158,17 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                         merchant.items.map((item, index) => (
                             <Box
                                 key={index}
+                                className="item-card"
                                 border={1}
                                 borderColor="#F2F3F4"
                                 borderRadius={5}
                                 width="auto"
-                                className="item-card"
                             >
                                 <img src={item.product.image.large} alt="product" className="item-image" />
                                 <div className="item-name">
                                     <Typography color="primary">{item.name}</Typography>
                                 </div>
-                                <Typography display="block">{item.qty} x {orderData.currency.symbol}{item.price.retail.toFixed(2)}</Typography>
+                                <Typography display="block">{item.qty} x {order.currency.symbol}{item.price.selling.toFixed(2)}</Typography>
                             </Box>
                         ))
                 }
@@ -172,19 +189,8 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
         ))
     )
 
-    renderOrderItems = () => (
-        dataChecking(this.props.profileOrderDetail, 'orderData') &&
-            this.props.profileOrderDetail.orderData.merchants.map((merchant, index) => (
-                <div key={index}>{merchant.name}</div>
-            ))
-    )
-
     renderOrderDetailCard = () => {
         const order = this.props.profileOrderDetail.orderData;
-
-        if (!order) {
-            return null;
-        }
 
         return (
             dataChecking(this.props.profileOrderDetail, 'orderData') &&
@@ -212,7 +218,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                     <Typography display="block" color="primary">{order.number}</Typography>
                                 </div>
                                 {
-                                    order.merchants.map((merchant, index) => (
+                                    dataChecking(this.props.profileOrderDetail, 'orderData', 'merchants').map((merchant, index) => (
                                         <div key={index} className="order-merchant">
                                             <Divider className="mt-1 mb-1" />
                                             <Grid container={true}>
@@ -220,26 +226,6 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                                     <Grid container={true} spacing={3}>
                                                         <Grid item={true} lg={11} md={12} xs={12}>
                                                             {this.renderMerchantInfo(order, merchant)}
-                                                            <Hidden lgUp={true}>
-                                                                <div className="pt-1">
-                                                                    <Button
-                                                                        size="large"
-                                                                        variant="outlined"
-                                                                        color="primary"
-                                                                        disabled={merchant.summary.shipping.tracking_number === null}
-                                                                        onClick={() => {
-                                                                            window.TrackButton.track({ tracking_no: merchant.summary.shipping.tracking_number });
-                                                                        }}
-                                                                    >
-                                                                        {
-                                                                            merchant.summary.shipping.tracking_number !== null ?
-                                                                            'track order'
-                                                                            :
-                                                                            'tracking not available'
-                                                                        }
-                                                                    </Button>
-                                                                </div>
-                                                            </Hidden>
                                                         </Grid>
                                                         <Grid item={true} lg={11} md={12} xs={12}>
                                                             {this.renderCarousel(order, merchant)}
@@ -250,22 +236,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                                     <Grid container={true}>
                                                         <Hidden mdDown={true}>
                                                             <Grid item={true} lg={12} md={12} xs={12} className="mt-2">
-                                                                <Button
-                                                                    variant="outlined"
-                                                                    color="primary"
-                                                                    disabled={merchant.summary.shipping.tracking_number === null}
-                                                                    onClick={() => {
-                                                                        window.TrackButton.track({ tracking_no: merchant.summary.shipping.tracking_number });
-                                                                    }}
-                                                                    style={{ float: 'right' }}
-                                                                >
-                                                                    {
-                                                                        merchant.summary.shipping.tracking_number !== null ?
-                                                                        'track order'
-                                                                        :
-                                                                        'tracking not available'
-                                                                    }
-                                                                </Button>
+                                                                {this.renderTrackingButton(merchant)}
                                                             </Grid>
                                                         </Hidden>
                                                         <Grid item={true} lg={12} md={12} xs={12} className="mt-3">
@@ -276,12 +247,11 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                                                 ])
                                                             }
                                                         </Grid>
-                                                        <Grid item={true} lg={12} md={12} xs={12} className="mt-3">
+                                                        <Grid item={true} lg={12} md={12} xs={12} className="mt-2">
                                                             {
                                                                 this.renderOrderInfo([
-                                                                    { label: 'Quantity', dataPath: merchant.items.length },
-                                                                    { label: 'Shipping Fee', dataPath: `${dataChecking(order, 'currency', 'symbol')} ${merchant.summary.shipping.value.toFixed(2)}` },
-                                                                    { label: 'Subtotal', dataPath: <span style={{ color: '#660033' }}>{dataChecking(order, 'currency', 'symbol')} {merchant.summary.subtotal.toFixed(2)}</span> },
+                                                                    { label: 'Subtotal', dataPath: <span style={{ color: '#660033' }}>{order.currency.symbol} {merchant.summary.subtotal.toFixed(2)}</span> },
+                                                                    { label: 'Shipping Fee', dataPath: `${order.currency.symbol} ${merchant.summary.shipping.value.toFixed(2)}` },
                                                                 ])
                                                             }
                                                         </Grid>
@@ -299,10 +269,11 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                         </Hidden>
                                         <Grid item={true} lg={3} md={12} xs={12}>
                                             {
-                                                this.renderOrderInfo([
-                                                    { label: <span style={{ color: '#FF4081' }}>Promotional Discount</span>, dataPath: <span style={{ color: '#FF4081' }}>- {dataChecking(order, 'currency', 'symbol')} {order.summary.discount.total.toFixed(2)}</span> },
-                                                    { label: 'Total', dataPath: <span style={{ color: '#660033' }}>{dataChecking(order, 'currency', 'symbol')} {dataChecking(order, 'summary', 'grand_total').toFixed(2)}</span> },
-                                                ])
+                                                dataChecking(this.props.profileOrderDetail, 'orderData') &&
+                                                    this.renderOrderInfo([
+                                                        { label: <span style={{ color: '#FF4081' }}>Promotional Discount</span>, dataPath: <span style={{ color: '#FF4081' }}>- {order.currency.symbol} {order.summary.discount.total.toFixed(2)}</span> },
+                                                        { label: 'Total', dataPath: <span style={{ color: '#660033' }}>{order.currency.symbol} {order.summary.grand_total.toFixed(2)}</span> },
+                                                    ])
                                             }
                                         </Grid>
                                     </Grid>
@@ -316,18 +287,19 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                 <Typography variant="h6" color="primary">Payment Information</Typography>
                                 <div className="mb-2" />
                                 {
-                                    order.merchants.map((merchant) => (
+                                    dataChecking(this.props.profileOrderDetail, 'orderData', 'merchants').map((merchant) => (
                                         this.renderOrderInfo([
-                                            { label: merchant.name, dataPath: `${dataChecking(order, 'currency', 'symbol')} ${merchant.summary.subtotal.toFixed(2)}` },
+                                            { label: merchant.name, dataPath: `${order.currency.symbol} ${merchant.summary.subtotal.toFixed(2)}` },
                                         ])
                                     ))
                                 }
                                 {
-                                    this.renderOrderInfo([
-                                        { label: 'Shipping Fee', dataPath: `${dataChecking(order, 'currency', 'symbol')} ${dataChecking(order, 'summary', 'shipping', 'total')}` },
-                                        { label: <span style={{ color: '#FF4081' }}>Promotional Discount</span>, dataPath: <span style={{ color: '#FF4081' }}>- {dataChecking(order, 'currency', 'symbol')} {order.summary.discount.total.toFixed(2)}</span> },
-                                        { label: 'Total', dataPath: <span style={{ color: '#660033' }}>{dataChecking(order, 'currency', 'symbol')} {dataChecking(order, 'summary', 'grand_total')}</span> },
-                                    ])
+                                    dataChecking(this.props.profileOrderDetail, 'orderData') &&
+                                        this.renderOrderInfo([
+                                            { label: 'Shipping Fee', dataPath: `${order.currency.symbol} ${order.summary.shipping.total.toFixed(2)}` },
+                                            { label: <span style={{ color: '#FF4081' }}>Promotional Discount</span>, dataPath: <span style={{ color: '#FF4081' }}>- {order.currency.symbol} {order.summary.discount.total.toFixed(2)}</span> },
+                                            { label: 'Total', dataPath: <span style={{ color: '#660033' }}>{order.currency.symbol} {order.summary.grand_total.toFixed(2)}</span> },
+                                        ])
                                 }
                                 <div align="center" className="mt-3">
                                     <Typography color="textSecondary">**DISCOUNT IS NOT APPLICABLE ON HERMO GLOBAL PURCHASE</Typography>

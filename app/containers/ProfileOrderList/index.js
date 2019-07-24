@@ -30,6 +30,7 @@ import {
     TableBody,
     TableCell,
     TableHead,
+    TablePagination,
     TableRow,
     Typography,
 } from '@material-ui/core';
@@ -48,10 +49,13 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
     state = {
         anchorEl: null,
         orderDate: '',
+
+        page: 0,
+        rowsPerPage: 10,
     }
 
     componentWillMount() {
-        this.props.dispatch(actions.getOrderList());
+        this.props.dispatch(actions.getOrderList(10));
     }
 
     renderStatusColor = (status) => {
@@ -153,6 +157,21 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                         }
                     </TableBody>
                 </Table>
+                <TablePagination
+                    component="div"
+                    rowsPerPageOptions={[10, 25, 40]}
+                    rowsPerPage={this.state.rowsPerPage}
+                    count={dataChecking(this.props.profileOrderList, 'orderMeta', 'totalCount')}
+                    page={this.state.page}
+                    onChangePage={(event, newPage) => {
+                        this.setState({ page: newPage });
+                    }}
+                    onChangeRowsPerPage={(event) => {
+                        this.props.dispatch(actions.getOrderList(event.target.value));
+                        this.setState({ rowsPerPage: event.target.value });
+                        this.setState({ page: 0 });
+                    }}
+                />
             </Card>
         );
     }

@@ -13,6 +13,7 @@ import {
 
 export const initialState = fromJS({
     orderList: null,
+    orderMeta: null,
 });
 
 function profileOrderListReducer(state = initialState, action) {
@@ -25,12 +26,14 @@ function profileOrderListReducer(state = initialState, action) {
             return state
                 .set('error', false)
                 .set('loading', false)
-                .set('orderList', action.data.items);
+                .set('orderList', action.data.items)
+                .set('orderMeta', action.data._meta);
         case GET_ORDER_LIST_FAILED:
             return state
                 .set('error', action.data.items)
                 .set('loading', false)
-                .set('orderList', null);
+                .set('orderList', null)
+                .set('orderMeta', null);
         default:
             return state;
     }

@@ -9,11 +9,11 @@ import {
     getOrderListFailed,
 } from './actions';
 
-export function* getOrderListWorker() {
+export function* getOrderListWorker(action) {
     let err;
 
     try { // Trying the HTTP Request
-        const response = yield call(apiRequest, '/order');
+        const response = yield call(apiRequest, `/order?per-page=${action.orderCount}`);
         if (response && response.ok !== false) {
             yield put(getOrderListSuccess(response));
         } else if (response && response.ok === false) {
