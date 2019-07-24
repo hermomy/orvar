@@ -1,4 +1,6 @@
-#header {
+@import 'app/breakpoints';
+
+#header {    
     display: flex;
     align-items: center;
     height: 80px;
@@ -68,4 +70,12 @@
             box-shadow: 0px 0px 2px 0px rgba(204,204,204,1);
         }
     }
+}
+.search-box {
+    top: 3rem;
+    position: fixed;
+    z-index: 1102;
+    left: 0;
+    right: 0;
+    @include media-breakpoint-down(md) { top: 7rem; }
 }

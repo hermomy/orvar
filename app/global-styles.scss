@@ -69,25 +69,12 @@ ol, ul { margin: 0; padding-left: 2rem; }
 
 .posi-relative { position: relative; }
 
-html,
 body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-}
-
-body { font-family: "Poppins", sans-serif; }
-
-#app {
-    // background-color: #fafafa;
+    font-family: "Poppins", sans-serif;
     background-color: #F3EFEE;
-    min-height: 100%;
-    min-width: 100%;
 }
 
-.text-white {
-    color: white;
-}
+.text-white { color: white; }
 
 .text-hover-hermo-pink:hover,
 .text-hover-hermo-pink:focus {
