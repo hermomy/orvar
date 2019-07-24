@@ -55,7 +55,7 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
     }
 
     componentWillMount() {
-        this.props.dispatch(actions.getOrderList(10));
+        this.props.dispatch(actions.getOrderList({ pageCount: 1, orderCount: this.state.rowsPerPage }));
     }
 
     renderStatusColor = (status) => {
@@ -164,10 +164,11 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                     count={dataChecking(this.props.profileOrderList, 'orderMeta', 'totalCount')}
                     page={this.state.page}
                     onChangePage={(event, newPage) => {
+                        this.props.dispatch(actions.getOrderList({ orderCount: this.state.rowsPerPage, pageCount: (newPage + 1) }));
                         this.setState({ page: newPage });
                     }}
                     onChangeRowsPerPage={(event) => {
-                        this.props.dispatch(actions.getOrderList(event.target.value));
+                        this.props.dispatch(actions.getOrderList({ pageCount: 1, orderCount: event.target.value }));
                         this.setState({ rowsPerPage: event.target.value });
                         this.setState({ page: 0 });
                     }}

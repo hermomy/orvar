@@ -10,10 +10,11 @@ import {
     GET_ORDER_LIST_FAILED,
 } from './constants';
 
-export function getOrderList(orderCount) {
+export function getOrderList({ orderCount, pageCount }) {
     return {
         type: GET_ORDER_LIST,
         orderCount,
+        pageCount,
     };
 }
 
