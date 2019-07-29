@@ -19,8 +19,8 @@ import moment from 'moment';
 import NavTab from 'components/NavigationTab';
 
 import {
+    Button,
     Card,
-    Chip,
     CircularProgress,
     Container,
     Hidden,
@@ -47,6 +47,15 @@ import './style.scss';
 
 export class ProfileOrderList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
+        orderStatusConfigs: [
+            { title: 'All Orders', urlParam: '' },
+            { title: 'To Pay', urlParam: '/to-paid' },
+            { title: 'To Ship', urlParam: '/to-ship' },
+            { title: 'To Receive', urlParam: '/to-receive' },
+            { title: 'To Review', urlParam: '/to-review' },
+            { title: 'Cancelled', urlParam: '/canceled' },
+        ],
+
         anchorEl: null,
         orderDate: '',
 
@@ -55,27 +64,27 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
     }
 
     componentWillMount() {
-        this.props.dispatch(actions.getOrderList({ pageCount: 1, orderCount: this.state.rowsPerPage }));
+        this.props.dispatch(actions.getOrderList({ urlParam: '', pageCount: 1, orderCount: this.state.rowsPerPage }));
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.profileOrderList !== this.props.profileOrderList) {
+            if (dataChecking(nextProps, 'profileOrderList', 'orderMeta', 'currentPage')) {
+                this.setState({ page: (nextProps.profileOrderList.orderMeta.currentPage - 1) });
+            }
+        }
     }
 
     renderStatusColor = (status) => {
         switch (status.toLowerCase()) {
-            case 'paid':
-                return '#71F888';
-            case 'received':
-                return '#98DBFF';
-            case 'unpaid':
-                return '#EEEEEE';
-            case 'in process':
-                return '#FCCC4C';
-            case 'multiple':
-                return '#FC4CCD';
-            case 'expired':
-                return '#FDC789';
-            case 'posted':
-                return '#660033';
-            case 'cancel':
-                return '#FFFFFF';
+            case 'paid' || 'cod received' || 'received' || 'posted' || 'cod posted':
+                return '#00B047';
+            case 'in process' || 'pending':
+                return '#E98800';
+            case 'unpaid' || 'cod unpaid' || 'cod rejected' || 'cod delivery failed' || 'cod returned':
+                return '#F50000';
+            case 'cancel' || 'expired' || 'shipment_delayed' || 'deleted' || 'cod cancel' || 'cod shipment delayed':
+                return '#B7B7B7';
             default:
                 break;
         }
@@ -83,7 +92,62 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
         return null;
     }
 
-    renderOrderListCard = () => {
+    renderStatus = (order) => {
+        const arr = Object.keys(order.attribute).filter((a) => (a === 'is_payable' || a === 'is_receivable' || a === 'is_reviewable') && order.attribute[a]);
+        if (arr.length) {
+            return arr.map((attr, index) => {
+                if (order.attribute[attr]) {
+                    switch (attr) {
+                        case 'is_payable':
+                            return (
+                                <Button
+                                    key={index}
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => {
+                                        console.log('clicked payable', order.id);
+                                    }}
+                                >
+                                    <Typography>Pay Now</Typography>
+                                </Button>
+                            );
+                        case 'is_receivable':
+                            return (
+                                <Button
+                                    key={index}
+                                    variant="outlined"
+                                    color="secondary"
+                                    onClick={() => {
+                                        console.log('clicked receivable', order.id);
+                                    }}
+                                >
+                                    <Typography>Confirm Received</Typography>
+                                </Button>
+                            );
+                        case 'is_reviewable':
+                            return (
+                                <Button
+                                    key={index}
+                                    variant="outlined"
+                                    color="secondary"
+                                    onClick={() => {
+                                        console.log('clicked reviewable', order.id);
+                                    }}
+                                >
+                                    <Typography>Rate &amp; Review</Typography>
+                                </Button>
+                            );
+                        default:
+                            return null;
+                    }
+                }
+                return null;
+            });
+        }
+        return <Typography style={{ color: this.renderStatusColor(order.status) }}>{order.status}</Typography>;
+    }
+
+    renderOrderListCard = (urlParam) => {
         if (!this.props.profileOrderList.orderList) {
             return null;
         }
@@ -142,15 +206,7 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                                         <Typography>{order.currency.symbol + order.subtotal.toFixed(2)}</Typography>
                                     </TableCell>
                                     <TableCell>
-                                        <Chip
-                                            label={order.status}
-                                            variant="outlined"
-                                            size="small"
-                                            style={{
-                                                backgroundColor: this.renderStatusColor(order.status),
-                                                color: (order.status.toLowerCase() === 'multiple' || order.status.toLowerCase() === 'posted') ? '#FFFFFF' : '#000000',
-                                            }}
-                                        />
+                                        {this.renderStatus(order)}
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -164,13 +220,12 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                     count={dataChecking(this.props.profileOrderList, 'orderMeta', 'totalCount')}
                     page={this.state.page}
                     onChangePage={(event, newPage) => {
-                        this.props.dispatch(actions.getOrderList({ orderCount: this.state.rowsPerPage, pageCount: (newPage + 1) }));
+                        this.props.dispatch(actions.getOrderList({ urlParam, pageCount: (newPage + 1), orderCount: this.state.rowsPerPage }));
                         this.setState({ page: newPage });
                     }}
                     onChangeRowsPerPage={(event) => {
-                        this.props.dispatch(actions.getOrderList({ pageCount: 1, orderCount: event.target.value }));
-                        this.setState({ rowsPerPage: event.target.value });
-                        this.setState({ page: 0 });
+                        this.props.dispatch(actions.getOrderList({ urlParam, pageCount: 1, orderCount: event.target.value }));
+                        this.setState({ page: 0, rowsPerPage: event.target.value });
                     }}
                 />
             </Card>
@@ -181,14 +236,15 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
         return (
             <div>
                 <NavTab
-                    isLinked="true"
-                    isFiltered="true"
-                    tabs={[
+                    isOrderList="true"
+                    tabs={this.state.orderStatusConfigs.map((config) => (
                         {
-                            title: 'All Orders',
+                            title: config.title,
+                            urlParam: config.urlParam,
+                            ordersPerPage: this.state.rowsPerPage,
                             description: (
                                 <div align="center" style={{ margin: 16 }}>
-                                    <Typography variant="h6" display="block" gutterBottom={true}>All orders</Typography>
+                                    <Typography variant="h6" display="block" gutterBottom={true}>{config.title}</Typography>
                                     <Typography display="block">Click on the order number to view your order details.</Typography>
                                     <Typography>Confirm receipt of your order to get 20 credits.</Typography>
                                 </div>
@@ -200,63 +256,31 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                                             <div style={{ textAlign: 'center' }}><CircularProgress /></div>
                                             :
                                             <div>
-                                                {this.renderOrderListCard()}
+                                                {this.renderOrderListCard(config.urlParam)}
                                             </div>
                                     }
-                                    <Popover
-                                        open={Boolean(this.state.anchorEl)}
-                                        anchorEl={this.state.anchorEl}
-                                        onClose={() => {
-                                            this.setState({ anchorEl: null });
-                                        }}
-                                        anchorOrigin={{
-                                            vertical: 'center',
-                                            horizontal: 'left',
-                                        }}
-                                        transformOrigin={{
-                                            vertical: 'center',
-                                            horizontal: 'right',
-                                        }}
-                                    >
-                                        <div style={{ padding: 10 }}><Typography>{this.state.orderDate}</Typography></div>
-                                    </Popover>
                                 </Container>
                             ),
-                        },
-                        {
-                            title: 'Unpaid',
-                            content: (
-                                <div>
-                                    UNPAID ORDERS
-                                </div>
-                            ),
-                        },
-                        {
-                            title: 'To Ship',
-                            content: (
-                                <div>
-                                    TO SHIP ORDERS
-                                </div>
-                            ),
-                        },
-                        {
-                            title: 'Posted',
-                            content: (
-                                <div>
-                                    POSTED ORDERS
-                                </div>
-                            ),
-                        },
-                        {
-                            title: 'Review',
-                            content: (
-                                <div>
-                                    IN REVIEW ORDERS
-                                </div>
-                            ),
-                        },
-                    ]}
+                        }
+                    ))}
                 />
+                <Popover
+                    open={Boolean(this.state.anchorEl)}
+                    anchorEl={this.state.anchorEl}
+                    onClose={() => {
+                        this.setState({ anchorEl: null });
+                    }}
+                    anchorOrigin={{
+                        vertical: 'center',
+                        horizontal: 'left',
+                    }}
+                    transformOrigin={{
+                        vertical: 'center',
+                        horizontal: 'right',
+                    }}
+                >
+                    <div style={{ padding: 10 }}><Typography>{this.state.orderDate}</Typography></div>
+                </Popover>
             </div>
         );
     }

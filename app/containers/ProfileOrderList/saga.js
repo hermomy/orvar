@@ -13,7 +13,7 @@ export function* getOrderListWorker(action) {
     let err;
 
     try { // Trying the HTTP Request
-        const response = yield call(apiRequest, `/order?page=${action.pageCount}&per-page=${action.orderCount}`);
+        const response = yield call(apiRequest, `/order${action.urlParam}?page=${action.pageCount}&per-page=${action.orderCount}`);
         if (response && response.ok !== false) {
             yield put(getOrderListSuccess(response));
         } else if (response && response.ok === false) {
