@@ -19,6 +19,7 @@ import ProductView from 'containers/ProductView';
 import HomePage from 'containers/HomePage';
 import LogoutForm from 'containers/LogoutForm';
 import MallPage from 'containers/MallPage';
+import BrandPage from 'containers/BrandPage';
 import NotFoundPage from 'containers/NotFoundPage';
 import OnboardingPage from 'containers/OnboardingPage';
 import ProfilePage from 'components/ProfilePage';
@@ -51,6 +52,7 @@ export default function App() {
                     <PrivateRoute exact={true} path="/onboarding" component={OnboardingPage} />
 
                     <Route exact={true} path="/mall" component={MallPage} />
+                    <Route exact={true} path="/brand" component={BrandPage} />
                     <Route exact={true} path="/mall/page-:pageNum?" component={MallPage} />
                     {/* group or category without pagenum */}
                     <Route
