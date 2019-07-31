@@ -1,14 +1,17 @@
 const styles = {
+    navLink: {
+        color: 'black',
+        cursor: 'pointer',
+        textDecoration: 'none',
+        '&:hover': { color: '#603' },
+    },
     header: {
         boxShadow: '0 4px 2px -2px #ccc',
         padding: '1rem',
+        backgroundColor: 'white',
     },
     leadTitle: { fontWeight: 600 },
-    normalFont: {
-        color: '#969696',
-        cursor: 'pointer',
-        '&:hover': { color: '#603' },
-    },
+    normalFont: { color: '#969696' },
     leftMegaMenu: {
         backgroundColor: '#f2f2f2',
         textTransform: 'uppercase',
