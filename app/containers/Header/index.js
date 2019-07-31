@@ -109,7 +109,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                             className="mb-2"
                                         >
                                             <NavLink className={this.props.classes.urlLink} to={item.url}>
-                                                <Typography className={`${this.props.classes.normalFont} ${this.state.tabVal === item.code ? this.props.classes.leftMegaMenuTextActive : ''}`}>
+                                                <Typography className={`${this.props.classes.normalFont} ${this.props.classes.navLink} ${this.state.tabVal === item.code ? this.props.classes.leftMegaMenuTextActive : ''}`}>
                                                     {item.text}
                                                 </Typography>
                                             </NavLink>
@@ -134,7 +134,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                                                             category.childs.map((child) => (
                                                                 <div className="mb-half" key={child.url}>
                                                                     <NavLink className={this.props.classes.urlLink} to={child.url}>
-                                                                        <Typography className={this.props.classes.normalFont}>{child.text}</Typography>
+                                                                        <Typography className={`${this.props.classes.normalFont} ${this.props.classes.navLink}`}>{child.text}</Typography>
                                                                     </NavLink>
                                                                 </div>
                                                             ))
@@ -164,10 +164,11 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
         return (
             <div
                 style={{
-                    position: 'absolute',
-                    top: '5rem',
+                    position: 'fixed',
+                    top: '60px',
                     left: 0,
                     right: 0,
+                    zIndex: 2,
                 }}
                 onMouseEnter={() => this.setState({ megaMenuToggle: true })}
                 onMouseLeave={() => this.setState({ megaMenuToggle: false, anchorElID: null })}
@@ -386,9 +387,14 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                     <span className="ml-3 category" key={val.code}>
                         {
                             val.type === 'hot-link' ?
-                                <Typography>
-                                    {val.text}
-                                </Typography>
+                                <NavLink
+                                    className={this.props.classes.navLink}
+                                    to={val.url}
+                                >
+                                    <Typography>
+                                        {val.text}
+                                    </Typography>
+                                </NavLink>
                             :
                                 <Typography
                                     id={val.code}
@@ -408,23 +414,61 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
      * result searching function that display items based on type of search
      * - this function will receive type as params e.g: brand
      */
-    renderSearchResult = (type) => dataChecking(this.props.header, 'suggestionData', 'data').map((data) => {
-        if (data.type === type) {
-            return data.items.map((item, key) => (
-                <div className="mb-1" key={key}>
-                    <Typography>
-                        <Highlighter
-                            highlightClassName="search-keyword"
-                            searchWords={[this.state.searchQuery]}
-                            autoEscape={true}
-                            textToHighlight={item.text}
-                        />
-                    </Typography>
-                </div>
-            ));
+    renderSearchResult = (type) => {
+        let searchQueryResult;
+        if (!this.props.header.suggestionData.error) {
+            dataChecking(this.props.header, 'suggestionData', 'data').map((data) => {
+                if (data.type === type) {
+                    searchQueryResult = data.items.map((item, key) => (
+                        <div className="mb-1" key={key}>
+                            {
+                                data.type === 'autocomplete' ?
+                                    <Typography
+                                        onClick={() => { this.setState({ searchQuery: item.text }); this.props.dispatch(searchResult(this.state.searchQuery)); }}
+                                        className={this.props.classes.navLink}
+                                    >
+                                        <Highlighter
+                                            highlightClassName="search-keyword"
+                                            searchWords={[this.state.searchQuery]}
+                                            autoEscape={true}
+                                            textToHighlight={item.text}
+                                        />
+                                    </Typography>
+                                :
+                                    <Typography
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        <NavLink
+                                            className={this.props.classes.navLink}
+                                            to={item.model.url}
+                                            onClick={() => this.setState({
+                                                searchBar: false,
+                                                searchQuery: '',
+                                            })}
+                                        >
+                                            <Highlighter
+                                                highlightClassName="search-keyword"
+                                                searchWords={[this.state.searchQuery]}
+                                                autoEscape={true}
+                                                textToHighlight={item.text}
+                                            />
+                                        </NavLink>
+                                    </Typography>
+                            }
+                        </div>
+                    ));
+                }
+                return null;
+            });
+        } else {
+            searchQueryResult = <div><b>{this.state.searchQuery}</b> product not found</div>;
         }
-        return null;
-    });
+        return (
+            <div>
+                {searchQueryResult}
+            </div>
+        );
+    }
 
     renderCartPopout = () => {}
 
