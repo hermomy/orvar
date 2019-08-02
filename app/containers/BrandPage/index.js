@@ -14,6 +14,7 @@ import injectReducer from 'utils/injectReducer';
 import { Container, Typography, TextField, InputAdornment, MenuItem, Grid } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 
+import { dataChecking } from 'globalUtils';
 import makeSelectBrandPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -28,7 +29,7 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
     brandFilter = () => {
         console.log();
         return (
-            <Container>
+            <Container className="mb-1">
                 <Typography variant="h5">All Brands</Typography>
                 <Grid container={true} spacing={2}>
                     <Grid item={true}>
@@ -93,10 +94,45 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
         );
     }
 
+    brandFilterByAlphabet = () => {
+        let alpabetFilter;
+        if (this.props.brandPage.data && this.props.brandPage.data.items) {
+            const Obj = Object.keys(dataChecking(this.props, 'brandPage', 'data', 'items'));
+            alpabetFilter = Obj.map((key) => (
+                <Grid className="text-uppercase" item={true} key={key}>
+                    <Typography>{key}</Typography>
+                </Grid>
+            ));
+        }
+        return (
+            <div
+                className="py-1"
+                style={{
+                    backgroundColor: 'white',
+                }}
+            >
+                <Container>
+                    <Grid container={true} justify="space-evenly">
+                        {alpabetFilter}
+                    </Grid>
+                </Container>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="pt-1">
-                {this.brandFilter()}
+                <div
+                    style={{
+                        position: 'sticky',
+                        top: '60px',
+                        backgroundColor: '#f3efee',
+                    }}
+                >
+                    {this.brandFilter()}
+                    {this.brandFilterByAlphabet()}
+                </div>
             </div>
         );
     }

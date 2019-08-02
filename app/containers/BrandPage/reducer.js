@@ -14,7 +14,7 @@ import {
 export const initialState = fromJS({
     loading: false,
     error: false,
-    data: null,
+    data: {},
 });
 
 function brandPageReducer(state = initialState, action) {
@@ -23,7 +23,7 @@ function brandPageReducer(state = initialState, action) {
             return state
                 .set('loading', true)
                 .set('error', false)
-                .set('data', null);
+                .set('data', {});
         case GET_BRAND_LIST_SUCCESS:
             return state
                 .set('loading', false)
