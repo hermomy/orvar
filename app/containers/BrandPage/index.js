@@ -11,8 +11,9 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { Container, Typography, TextField, InputAdornment, MenuItem, Grid } from '@material-ui/core';
+import { Container, Typography, TextField, InputAdornment, MenuItem, Grid, Box } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
+import { NavLink } from 'react-router-dom';
 
 import { dataChecking } from 'globalUtils';
 import makeSelectBrandPage from './selectors';
@@ -120,6 +121,72 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
         );
     }
 
+    brandList = () => {
+        let listBrand;
+        let featureBrand;
+
+        if (this.props.brandPage.data && this.props.brandPage.data.feature) {
+            const Obj2 = Object.keys(dataChecking(this.props, 'brandPage', 'data', 'feature'));
+            featureBrand = Obj2.map((key) => (
+                <Grid container={true} spacing={2}>
+                    {
+                        dataChecking(this.props, 'brandPage', 'data', 'feature', key) && this.props.brandPage.data.feature[key].map((item) => (
+                            <Grid item={true} key={key} md={4}>
+                                <NavLink className="navLink"to={item.url} >
+                                    <Typography>{item.name}</Typography>
+                                </NavLink>
+                            </Grid>
+                            ))
+                    }
+                </Grid>));
+        }
+        if (this.props.brandPage.data && this.props.brandPage.data.items) {
+            const Obj = Object.keys(dataChecking(this.props, 'brandPage', 'data', 'items'));
+            listBrand = Obj.map((key) => (
+                <Grid container={true} spacing={2} className="mb-3 p-3">
+                    <Grid className="brand-name text-uppercase" item={true} key={key} sm={3}>
+                        <Typography variant="h2"><u>{key}</u></Typography>
+                    </Grid>
+                    <Grid item={true} key={key} sm={7}>
+                        <Grid container={true} spacing={2}>
+                            {
+                                dataChecking(this.props, 'brandPage', 'data', 'items', key) && this.props.brandPage.data.items[key].map((item) => (
+                                    <Grid item={true} key={key} md={4}>
+                                        <NavLink className="navLink"to={item.url} >
+                                            <Typography>{item.name}</Typography>
+                                        </NavLink>
+                                    </Grid>
+                                    ))
+                            }
+                        </Grid>
+                    </Grid>
+                </Grid>));
+        }
+
+        return (
+            <div
+                className="py-1"
+                style={{
+                    backgroundColor: 'white',
+                }}
+            >
+                <Box bgcolor="#f7f7f7" className="ml-1 mr-1 p-3">
+                    <Grid container={true} spacing={2} className="mb-3 p-3">
+                        <Grid className="featured-brand" item={true} sm={3}>
+                            <Typography variant="h3"><u>Featured Brands</u></Typography>
+                        </Grid>
+                        <Grid item={true} sm={7}>
+                            {featureBrand}
+                        </Grid>
+                    </Grid>
+                    {listBrand}
+                </Box>
+
+            </div>
+        );
+    }
+
+
     render() {
         return (
             <div className="pt-1">
@@ -133,6 +200,7 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
                     {this.brandFilter()}
                     {this.brandFilterByAlphabet()}
                 </div>
+                    {this.brandList()}
             </div>
         );
     }
