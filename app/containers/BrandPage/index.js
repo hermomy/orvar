@@ -200,7 +200,7 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
                     {this.brandFilter()}
                     {this.brandFilterByAlphabet()}
                 </div>
-                    {this.brandList()}
+                {this.brandList()}
             </div>
         );
     }
