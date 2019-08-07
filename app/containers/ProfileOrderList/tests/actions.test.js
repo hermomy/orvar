@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    getOrderList,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    GET_ORDER_LIST,
 } from '../constants';
 
-describe('ProfileOrderList actions', () => {
-    describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+describe('Header actions', () => {
+    describe('Get Order List', () => {
+        it('has a type of LAYOUT_TOP_NAV', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: GET_ORDER_LIST,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(getOrderList({})).toEqual(expected);
         });
     });
 });
