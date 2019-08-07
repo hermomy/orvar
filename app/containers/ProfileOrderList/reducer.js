@@ -11,8 +11,6 @@ import {
     GET_ORDER_LIST_FAILED,
     CONFIRM_ORDER,
     SUBMIT_REVIEW,
-    SUBMIT_REVIEW_SUCCESS,
-    SUBMIT_REVIEW_FAILED,
 } from './constants';
 
 export const initialState = fromJS({
