@@ -25,7 +25,6 @@ import {
     Tune,
 } from '@material-ui/icons';
 
-import * as actions from 'containers/ProfileOrderList/actions';
 import './style.scss';
 
 class NavigationTab extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -35,8 +34,12 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
 
     tabContent = (pageValue) => (
         <Typography component="div">
-            {this.props.tabs[pageValue].description}
-            {this.props.tabs[pageValue].content}
+            {
+                this.props.renderDescription(this.props.data[pageValue])
+            }
+            {
+                this.props.renderContent(this.props.data[pageValue])
+            }
         </Typography>
     );
 
@@ -84,14 +87,14 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
                             variant="scrollable"
                         >
                             {
-                                this.props.tabs.map((tab, index) => (
+                                this.props.data.map((item, index) => (
                                     <Tab
                                         key={index}
-                                        label={<Typography>{tab.title}</Typography>}
+                                        label={<Typography>{item.title}</Typography>}
                                         style={{ textTransform: 'none' }}
                                         onClick={() => {
-                                            if (this.props.isOrderList) {
-                                                this.props.dispatch(actions.getOrderList({ urlParam: tab.urlParam, pageCount: 1, orderCount: tab.ordersPerPage }));
+                                            if (this.props.onTabClick) {
+                                                this.props.onTabClick(item);
                                             }
                                         }}
                                     />

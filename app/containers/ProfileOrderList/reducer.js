@@ -9,11 +9,16 @@ import {
     GET_ORDER_LIST,
     GET_ORDER_LIST_SUCCESS,
     GET_ORDER_LIST_FAILED,
+    CONFIRM_ORDER,
+    SUBMIT_REVIEW,
+    SUBMIT_REVIEW_SUCCESS,
+    SUBMIT_REVIEW_FAILED,
 } from './constants';
 
 export const initialState = fromJS({
     orderList: null,
     orderMeta: null,
+    reviewResponse: null,
 });
 
 function profileOrderListReducer(state = initialState, action) {
@@ -34,6 +39,12 @@ function profileOrderListReducer(state = initialState, action) {
                 .set('loading', false)
                 .set('orderList', null)
                 .set('orderMeta', null);
+        case CONFIRM_ORDER:
+            return state
+                .set('confirmingOrder', true);
+        case SUBMIT_REVIEW:
+            return state
+                .set('submittingReview', true);
         default:
             return state;
     }
