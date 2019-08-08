@@ -5,7 +5,7 @@
 */
 
 import React from 'react';
-import { AppBar, Tabs, Tab, Typography, Button } from '@material-ui/core';
+import { AppBar, Tabs, Tab, Typography } from '@material-ui/core';
 import { KeyboardArrowLeft } from '@material-ui/icons';
 
 import './style.scss';
