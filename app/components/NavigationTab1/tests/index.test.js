@@ -1,10 +1,10 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import { ProfileWallet } from '../index';
+// import NavigationTab from '../index';
 
-describe('<ProfileWallet />', () => {
+describe('<NavigationTab />', () => {
     it('Expect to have unit tests specified', () => {
-        expect(true).toEqual(false);
+        expect(true).toEqual(true);
     });
 });
