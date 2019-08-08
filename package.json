@@ -311,6 +311,7 @@
         "react-redux": "5.0.5",
         "react-router-dom": "4.1.1",
         "react-router-redux": "5.0.0-alpha.6",
+        "react-scroll": "^1.7.12",
         "react-select": "^2.4.1",
         "react-simple-dropdown": "^3.2.0",
         "react-switch": "^3.0.4",

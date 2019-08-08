@@ -12,6 +12,8 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import { Container, Typography, TextField, InputAdornment, MenuItem, Grid, Box } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+
 import { Search } from '@material-ui/icons';
 import { NavLink } from 'react-router-dom';
 
@@ -21,8 +23,11 @@ import reducer from './reducer';
 import saga from './saga';
 import { getBrandList } from './actions';
 import './style.scss';
+import styles from './materialStyle';
+
 
 export class BrandPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+
     componentDidMount() {
         this.props.dispatch(getBrandList());
     }
@@ -31,7 +36,7 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
         console.log();
         return (
             <Container className="mb-1">
-                <Typography variant="h5">All Brands</Typography>
+                <Typography variant="h5"><b>All Brands</b></Typography>
                 <Grid container={true} spacing={2}>
                     <Grid item={true}>
                         <TextField
@@ -48,7 +53,7 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
                             placeholder="Search for brand"
                         />
                     </Grid>
-                    <Grid item={true}>
+                    <Grid item={true} >
                         <TextField
                             variant="outlined"
                             select={true}
@@ -69,7 +74,7 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
                             </MenuItem>
                         </TextField>
                     </Grid>
-                    <Grid item={true}>
+                    <Grid item={true} >
                         <TextField
                             variant="outlined"
                             select={true}
@@ -100,8 +105,8 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
         if (this.props.brandPage.data && this.props.brandPage.data.items) {
             const Obj = Object.keys(dataChecking(this.props, 'brandPage', 'data', 'items'));
             alpabetFilter = Obj.map((key) => (
-                <Grid className="text-uppercase" item={true} key={key}>
-                    <Typography>{key}</Typography>
+                <Grid key={key} className="text-uppercase" item={true}>
+                    <Typography onClick={() => (this.scroolTo(key))} variant="button" className="navLink">{key}</Typography>
                 </Grid>
             ));
         }
@@ -113,7 +118,7 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
                 }}
             >
                 <Container>
-                    <Grid container={true} justify="space-evenly">
+                    <Grid container={true} justify="space-evenly" spacing={3}>
                         {alpabetFilter}
                     </Grid>
                 </Container>
@@ -121,18 +126,17 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
         );
     }
 
-    brandList = () => {
-        let listBrand;
-        let featureBrand;
 
+    featuredBrandList = () => {
+        let featureBrand;
         if (this.props.brandPage.data && this.props.brandPage.data.feature) {
-            const Obj2 = Object.keys(dataChecking(this.props, 'brandPage', 'data', 'feature'));
-            featureBrand = Obj2.map((key) => (
-                <Grid container={true} spacing={2}>
+            const feature = Object.keys(dataChecking(this.props, 'brandPage', 'data', 'feature'));
+            featureBrand = feature.map((key) => (
+                <Grid key={key} container={true}>
                     {
-                        dataChecking(this.props, 'brandPage', 'data', 'feature', key) && this.props.brandPage.data.feature[key].map((item) => (
-                            <Grid item={true} key={key} md={4}>
-                                <NavLink className="navLink"to={item.url} >
+                        dataChecking(this.props, 'brandPage', 'data', 'feature') && this.props.brandPage.data.feature[key].map((item) => (
+                            <Grid item={true} key={item.url} className="mb-1" xs={12} sm={4}>
+                                <NavLink className="navLink" to={item.url} >
                                     <Typography>{item.name}</Typography>
                                 </NavLink>
                             </Grid>
@@ -140,19 +144,35 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
                     }
                 </Grid>));
         }
+
+        return (
+            <Grid container={true} className="mb-3">
+                <Grid className={`featured-brand ${this.props.classes.featureBrand}`} item={true} md={3}>
+                    <Typography variant="h4"><b><u>Featured Brands</u></b></Typography>
+                </Grid>
+                <Grid item={true} xs={12} md={7}>
+                    {featureBrand}
+                </Grid>
+            </Grid>
+
+        );
+    }
+
+    normalbrandList = () => {
+        let listBrand;
         if (this.props.brandPage.data && this.props.brandPage.data.items) {
-            const Obj = Object.keys(dataChecking(this.props, 'brandPage', 'data', 'items'));
-            listBrand = Obj.map((key) => (
-                <Grid container={true} spacing={2} className="mb-3 p-3">
-                    <Grid className="brand-name text-uppercase" item={true} key={key} sm={3}>
-                        <Typography variant="h2"><u>{key}</u></Typography>
+            const normalBrand = Object.keys(dataChecking(this.props, 'brandPage', 'data', 'items'));
+            listBrand = normalBrand.map((key) => (
+                <Grid key={key} container={true} className="mb-3">
+                    <Grid className={`text-uppercase featured-brand ${this.props.classes.featureBrand}`} item={true} md={3}>
+                        <Typography variant="h3"><b><u>{key}</u></b></Typography>
                     </Grid>
-                    <Grid item={true} key={key} sm={7}>
-                        <Grid container={true} spacing={2}>
+                    <Grid item={true} xs={12} md={7}>
+                        <Grid container={true}>
                             {
                                 dataChecking(this.props, 'brandPage', 'data', 'items', key) && this.props.brandPage.data.items[key].map((item) => (
-                                    <Grid item={true} key={key} md={4}>
-                                        <NavLink className="navLink"to={item.url} >
+                                    <Grid item={true} key={item.url} className="mb-1" xs={12} sm={4}>
+                                        <NavLink className="navLink" to={item.url} >
                                             <Typography>{item.name}</Typography>
                                         </NavLink>
                                     </Grid>
@@ -164,28 +184,9 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
         }
 
         return (
-            <div
-                className="py-1"
-                style={{
-                    backgroundColor: 'white',
-                }}
-            >
-                <Box bgcolor="#f7f7f7" className="ml-1 mr-1 p-3">
-                    <Grid container={true} spacing={2} className="mb-3 p-3">
-                        <Grid className="featured-brand" item={true} sm={3}>
-                            <Typography variant="h3"><u>Featured Brands</u></Typography>
-                        </Grid>
-                        <Grid item={true} sm={7}>
-                            {featureBrand}
-                        </Grid>
-                    </Grid>
-                    {listBrand}
-                </Box>
-
-            </div>
+            listBrand
         );
     }
-
 
     render() {
         return (
@@ -200,7 +201,18 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
                     {this.brandFilter()}
                     {this.brandFilterByAlphabet()}
                 </div>
-                {this.brandList()}
+                <div
+                    style={{
+                        backgroundColor: 'white',
+                    }}
+                >
+                    <Container>
+                        <Box bgcolor="#f7f7f7" className="p-2">
+                            {this.featuredBrandList()}
+                            {this.normalbrandList()}
+                        </Box>
+                    </Container>
+                </div>
             </div>
         );
     }
@@ -228,5 +240,6 @@ const withSaga = injectSaga({ key: 'brandPage', saga });
 export default compose(
     withReducer,
     withSaga,
+    withStyles(styles),
     withConnect,
 )(BrandPage);
