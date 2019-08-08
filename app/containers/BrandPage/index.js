@@ -13,6 +13,8 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import { Container, Typography, TextField, InputAdornment, MenuItem, Grid, Box } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { Link } from 'react-scroll';
+
 
 import { Search } from '@material-ui/icons';
 import { NavLink } from 'react-router-dom';
@@ -25,12 +27,12 @@ import { getBrandList } from './actions';
 import './style.scss';
 import styles from './materialStyle';
 
-
-export class BrandPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class BrandPage extends React.PureComponent {
 
     componentDidMount() {
         this.props.dispatch(getBrandList());
     }
+
 
     brandFilter = () => {
         console.log();
@@ -104,9 +106,11 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
         let alpabetFilter;
         if (this.props.brandPage.data && this.props.brandPage.data.items) {
             const Obj = Object.keys(dataChecking(this.props, 'brandPage', 'data', 'items'));
-            alpabetFilter = Obj.map((key) => (
-                <Grid key={key} className="text-uppercase" item={true}>
-                    <Typography onClick={() => (this.scroolTo(key))} variant="button" className="navLink">{key}</Typography>
+            alpabetFilter = Obj.map((index) => (
+                <Grid key={index} className="text-uppercase" item={true}>
+                    <Typography variant="button" className="navLink">
+                        <Link to={index} smooth={true} offset={-210} duration={800}>{index}</Link>
+                    </Typography>
                 </Grid>
             ));
         }
@@ -162,15 +166,15 @@ export class BrandPage extends React.PureComponent { // eslint-disable-line reac
         let listBrand;
         if (this.props.brandPage.data && this.props.brandPage.data.items) {
             const normalBrand = Object.keys(dataChecking(this.props, 'brandPage', 'data', 'items'));
-            listBrand = normalBrand.map((key) => (
-                <Grid key={key} container={true} className="mb-3">
-                    <Grid className={`text-uppercase featured-brand ${this.props.classes.featureBrand}`} item={true} md={3}>
-                        <Typography variant="h3"><b><u>{key}</u></b></Typography>
+            listBrand = normalBrand.map((index) => (
+                <Grid key={index} container={true} className="mb-3">
+                    <Grid id={index} className={`text-uppercase featured-brand ${this.props.classes.featureBrand}`} item={true} md={3}>
+                        <Typography variant="h3"><b><u>{index}</u></b></Typography>
                     </Grid>
                     <Grid item={true} xs={12} md={7}>
                         <Grid container={true}>
                             {
-                                dataChecking(this.props, 'brandPage', 'data', 'items', key) && this.props.brandPage.data.items[key].map((item) => (
+                                dataChecking(this.props, 'brandPage', 'data', 'items') && this.props.brandPage.data.items[index].map((item) => (
                                     <Grid item={true} key={item.url} className="mb-1" xs={12} sm={4}>
                                         <NavLink className="navLink" to={item.url} >
                                             <Typography>{item.name}</Typography>
