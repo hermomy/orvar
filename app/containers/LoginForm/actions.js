@@ -6,31 +6,22 @@
 
 import {
     AUTH_LOGIN,
-    AUTH_LOGOUT,
     AUTH_LOGIN_SUCCESS,
     AUTH_LOGIN_FAILED,
 } from './constants';
 
-export function doLogin(userdata) {
+export function doLogin(loginData) {
     return {
         type: AUTH_LOGIN,
-        payload: userdata,
+        loginData,
     };
 }
-
-export function doLogout() {
-    return {
-        type: AUTH_LOGOUT,
-    };
-}
-
 export function loginSuccess(response) {
     return {
         type: AUTH_LOGIN_SUCCESS,
-        payload: response.token,
+        response,
     };
 }
-
 export function loginFailed(response) {
     return {
         type: AUTH_LOGIN_FAILED,
