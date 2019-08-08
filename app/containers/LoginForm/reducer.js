@@ -3,15 +3,16 @@
  * LoginForm reducer
  *
  */
-import { fromJS } from 'immutable';
 
+import { fromJS } from 'immutable';
 import {
     AUTH_LOGIN,
     AUTH_LOGIN_SUCCESS,
     AUTH_LOGIN_FAILED,
 } from './constants';
 
-const initialState = fromJS({
+
+export const initialState = fromJS({
     loading: false,
     error: false,
     loginSuccess: false,
