@@ -5,17 +5,27 @@
 */
 
 import React from 'react';
-import { compose } from 'redux';
 
-import AppBar from '@material-ui/core/AppBar';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { NavLink } from 'react-router-dom';
+
+import {
+    AppBar,
+    Hidden,
+    IconButton,
+    Tab,
+    Tabs,
+    Toolbar,
+    Typography,
+} from '@material-ui/core';
+
+import {
+    ChevronLeft,
+    Tune,
+} from '@material-ui/icons';
 
 import './style.scss';
-import styles from './materialStyle';
 
 class NavigationTab extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -24,8 +34,12 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
 
     tabContent = (pageValue) => (
         <Typography component="div">
-            {this.props.tabs[pageValue].description}
-            {this.props.tabs[pageValue].content}
+            {
+                this.props.renderDescription(this.props.data[pageValue])
+            }
+            {
+                this.props.renderContent(this.props.data[pageValue])
+            }
         </Typography>
     );
 
@@ -33,27 +47,63 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
         this.setState({ pageValue: newValue });
     }
 
-    renderTopBar = () => (
-        <div>
-            <AppBar position="static" className={this.props.classes.topBar}>
-                <Toolbar>
-                    <Tabs value={this.state.pageValue} onChange={this.handleChange}>
-                        {
-                            this.props.tabs.map((tab, index) => (
-                                <Tab key={index} label={<Typography>{tab.title}</Typography>} style={{ textTransform: 'none' }} />
-                            ))
-                        }
-                    </Tabs>
-                </Toolbar>
-            </AppBar>
-            { this.tabContent(this.state.pageValue) }
-        </div>
+    renderLinkIcon = () => (
+        <NavLink to="/profile">
+            <IconButton color="primary">
+                <ChevronLeft />
+            </IconButton>
+        </NavLink>
     )
+
+    renderFilterIcon = () => {
+        if (this.props.isOrderList) {
+            return (
+                <div style={{ position: 'absolute', right: '2%' }}>
+                    <IconButton>
+                        <Tune />
+                    </IconButton>
+                </div>
+            );
+        }
+        return null;
+    }
 
     render() {
         return (
             <div>
-                {this.renderTopBar()}
+                <AppBar color="default" position="static" style={{ marginBottom: 15 }}>
+                    <Hidden lgUp={true}>
+                        {this.renderLinkIcon()}
+                        {this.renderFilterIcon()}
+                    </Hidden>
+                    <Toolbar>
+                        <Hidden mdDown={true}>
+                            {this.renderLinkIcon()}
+                            {this.renderFilterIcon()}
+                        </Hidden>
+                        <Tabs
+                            value={this.state.pageValue}
+                            onChange={this.handleChange}
+                            variant="scrollable"
+                        >
+                            {
+                                this.props.data.map((item, index) => (
+                                    <Tab
+                                        key={index}
+                                        label={<Typography>{item.title}</Typography>}
+                                        style={{ textTransform: 'none' }}
+                                        onClick={() => {
+                                            if (this.props.onTabClick) {
+                                                this.props.onTabClick(item);
+                                            }
+                                        }}
+                                    />
+                                ))
+                            }
+                        </Tabs>
+                    </Toolbar>
+                </AppBar>
+                { this.tabContent(this.state.pageValue) }
             </div>
         );
     }
@@ -63,6 +113,14 @@ NavigationTab.propTypes = {
 
 };
 
+function mapDispatchToProps(dispatch) {
+    return {
+        dispatch,
+    };
+}
+
+const withConnect = connect(mapDispatchToProps);
+
 export default compose(
-    withStyles(styles),
+    withConnect,
 )(NavigationTab);
