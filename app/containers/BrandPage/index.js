@@ -13,7 +13,7 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import { Container, Typography, TextField, InputAdornment, MenuItem, Grid, Box } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { Link } from 'react-scroll';
+import { Link, Element } from 'react-scroll';
 
 
 import { Search } from '@material-ui/icons';
@@ -27,17 +27,22 @@ import { getBrandList } from './actions';
 import './style.scss';
 import styles from './materialStyle';
 
+
 export class BrandPage extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.containerRef = React.createRef();
+    }
+    state = {};
 
     componentDidMount() {
         this.props.dispatch(getBrandList());
     }
 
-
     brandFilter = () => {
         console.log();
         return (
-            <Container className="mb-1">
+            <Container className="all-brand-title my-2">
                 <Typography variant="h5"><b>All Brands</b></Typography>
                 <Grid container={true} spacing={2}>
                     <Grid item={true}>
@@ -106,10 +111,17 @@ export class BrandPage extends React.PureComponent {
         let alpabetFilter;
         if (this.props.brandPage.data && this.props.brandPage.data.items) {
             const Obj = Object.keys(dataChecking(this.props, 'brandPage', 'data', 'items'));
-            alpabetFilter = Obj.map((index) => (
-                <Grid key={index} className="text-uppercase" item={true}>
+            alpabetFilter = Obj.map((alphabet) => (
+                <Grid id="filAlphabet" key={alphabet} className="text-uppercase" item={true}>
                     <Typography variant="button" className="navLink">
-                        <Link to={index} smooth={true} offset={-210} duration={800}>{index}</Link>
+                        <Link
+                            to={alphabet}
+                            smooth={true}
+                            offset={-((this.containerRef && this.containerRef.current && this.containerRef.current.offsetTop) + 15 || 0)}
+                            duration={800}
+                        >
+                            {alphabet}
+                        </Link>
                     </Typography>
                 </Grid>
             ));
@@ -167,24 +179,26 @@ export class BrandPage extends React.PureComponent {
         if (this.props.brandPage.data && this.props.brandPage.data.items) {
             const normalBrand = Object.keys(dataChecking(this.props, 'brandPage', 'data', 'items'));
             listBrand = normalBrand.map((index) => (
-                <Grid key={index} container={true} className="mb-3">
-                    <Grid id={index} className={`text-uppercase featured-brand ${this.props.classes.featureBrand}`} item={true} md={3}>
-                        <Typography variant="h3"><b><u>{index}</u></b></Typography>
-                    </Grid>
-                    <Grid item={true} xs={12} md={7}>
-                        <Grid container={true}>
-                            {
-                                dataChecking(this.props, 'brandPage', 'data', 'items') && this.props.brandPage.data.items[index].map((item) => (
-                                    <Grid item={true} key={item.url} className="mb-1" xs={12} sm={4}>
-                                        <NavLink className="navLink" to={item.url} >
-                                            <Typography>{item.name}</Typography>
-                                        </NavLink>
-                                    </Grid>
-                                    ))
-                            }
+                <Element name={index} key={index}>
+                    <Grid container={true} className="mb-3">
+                        <Grid id={index} className={`text-uppercase featured-brand ${this.props.classes.featureBrand}`} item={true} md={3}>
+                            <Typography variant="h3"><b><u>{index}</u></b></Typography>
+                        </Grid>
+                        <Grid item={true} xs={12} md={7}>
+                            <Grid container={true}>
+                                {
+                                    dataChecking(this.props, 'brandPage', 'data', 'items') && this.props.brandPage.data.items[index].map((item) => (
+                                        <Grid item={true} key={item.url} className="mb-1" xs={12} sm={4}>
+                                            <NavLink className="navLink" to={item.url} >
+                                                <Typography>{item.name}</Typography>
+                                            </NavLink>
+                                        </Grid>
+                                        ))
+                                }
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>));
+                </Element>));
         }
 
         return (
@@ -212,8 +226,10 @@ export class BrandPage extends React.PureComponent {
                 >
                     <Container>
                         <Box bgcolor="#f7f7f7" className="p-2">
-                            {this.featuredBrandList()}
-                            {this.normalbrandList()}
+                            <div className="brand-container-reference" ref={this.containerRef}>
+                                {this.featuredBrandList()}
+                                {this.normalbrandList()}
+                            </div>
                         </Box>
                     </Container>
                 </div>

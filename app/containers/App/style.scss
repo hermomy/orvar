@@ -2,5 +2,5 @@
 
 #hershop-content-container {
     padding-top: 53px;
-    @include media-breakpoint-down(md) { padding-top: 100px; }
+    @include media-breakpoint-down(sm) { padding-top: 100px; }
 }
