@@ -48,7 +48,7 @@ import saga from './saga';
 import './style.scss';
 import styles from './materialStyle';
 
-export class Header extends React.PureComponent {
+export class Header extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
         super(props);
 
