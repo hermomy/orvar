@@ -52,6 +52,7 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
                             this.state.SignUpPage ? <SignUpPage /> : null
                         }
                     </div>
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquam porro quis tenetur quas sit, iusto asperiores, debitis qui aperiam rem labore consequuntur ipsa mollitia animi voluptas, earum cupiditate facere ex.
                 </section>
             </div>
         );
