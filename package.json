@@ -383,6 +383,7 @@
         "offline-plugin": "4.8.1",
         "plop": "^2.1.0",
         "pre-commit": "1.2.2",
+        "react-scroll": "^1.7.12",
         "react-test-renderer": "15.6.1",
         "rimraf": "2.6.1",
         "sass-loader": "^6.0.6",
