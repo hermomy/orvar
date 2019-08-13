@@ -19,11 +19,52 @@ import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
 
+const a = [
+    {
+        title: 'home 1',
+    },
+    {
+        title: 'home 2',
+    },
+];
 export class ProfileWallet extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+    state = {
+        tabVal: 0,
+    }
+    home1 = () => (
+        <div>lorem 1</div>
+    )
+
+    home2 = () => (
+        <div>home 2</div>
+    )
+
+    renderContents = () => {
+        let b;
+        switch (this.state.tabVal) {
+            case 0:
+                b = this.home1();
+                break;
+            case 1:
+                b = this.home2();
+                break;
+            default:
+                break;
+        }
+
+        return (
+            <div>{b}</div>
+        );
+    }
+
     render() {
         return (
             <div>
-                <NavigationTab />
+                <NavigationTab
+                    data={a}
+                    renderTabID={(tabVal) => this.setState({ tabVal })}
+                />
+                {this.renderContents()}
             </div>
         );
     }
