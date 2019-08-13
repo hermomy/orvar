@@ -5,105 +5,63 @@
 */
 
 import React from 'react';
-
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { AppBar, Tabs, Tab, Grid, Container } from '@material-ui/core';
+import { KeyboardArrowLeft } from '@material-ui/icons';
 import { NavLink } from 'react-router-dom';
-
-import {
-    AppBar,
-    Hidden,
-    IconButton,
-    Tab,
-    Tabs,
-    Toolbar,
-    Typography,
-} from '@material-ui/core';
-
-import {
-    ChevronLeft,
-    Tune,
-} from '@material-ui/icons';
 
 import './style.scss';
 
 class NavigationTab extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-    state = {
-        pageValue: 0,
+    constructor(props) {
+        super(props);
+
+        this.state = { value: 0 };
     }
 
-    tabContent = (pageValue) => (
-        <Typography component="div">
-            {
-                this.props.renderDescription(this.props.data[pageValue])
+    renderTabID = (event, value) => {
+        this.setState({ value });
+        this.props.data.map((data) => {
+            if (data.url) {
+                this.setState({ url: data.url });
             }
-            {
-                this.props.renderContent(this.props.data[pageValue])
-            }
-        </Typography>
-    );
-
-    handleChange = (event, newValue) => {
-        this.setState({ pageValue: newValue });
-    }
-
-    renderLinkIcon = () => (
-        <NavLink to="/profile">
-            <IconButton color="primary">
-                <ChevronLeft />
-            </IconButton>
-        </NavLink>
-    )
-
-    renderFilterIcon = () => {
-        if (this.props.isOrderList) {
-            return (
-                <div style={{ position: 'absolute', right: '2%' }}>
-                    <IconButton>
-                        <Tune />
-                    </IconButton>
-                </div>
-            );
-        }
-        return null;
-    }
-
+            return null;
+        });
+        this.setState({ value });
+        this.props.renderTabID(value);
+    };
     render() {
         return (
             <div>
-                <AppBar color="default" position="static" style={{ marginBottom: 15 }}>
-                    <Hidden lgUp={true}>
-                        {this.renderLinkIcon()}
-                        {this.renderFilterIcon()}
-                    </Hidden>
-                    <Toolbar>
-                        <Hidden mdDown={true}>
-                            {this.renderLinkIcon()}
-                            {this.renderFilterIcon()}
-                        </Hidden>
-                        <Tabs
-                            value={this.state.pageValue}
-                            onChange={this.handleChange}
-                            variant="scrollable"
-                        >
-                            {
-                                this.props.data.map((item, index) => (
-                                    <Tab
-                                        key={index}
-                                        label={<Typography>{item.title}</Typography>}
-                                        style={{ textTransform: 'none' }}
-                                        onClick={() => {
-                                            if (this.props.onTabClick) {
-                                                this.props.onTabClick(item);
-                                            }
-                                        }}
-                                    />
-                                ))
-                            }
-                        </Tabs>
-                    </Toolbar>
+                <AppBar position="static" color="default">
+                    <Container>
+                        <Grid container={true}>
+                            <Grid item={true}>
+                                <NavLink to="/profile">
+                                    <div className="pt-1">
+                                        <KeyboardArrowLeft />
+                                    </div>
+                                </NavLink>
+                            </Grid>
+                            <Grid item={true}>
+                                <Tabs value={this.state.value} onChange={(event, value) => this.renderTabID(event, value)}>
+                                    {
+                                        this.props.data.map((data) => (
+                                            <Tab
+                                                key={data.title}
+                                                label={data.title}
+                                                onClick={() => {
+                                                    if (this.props.onTabClick) {
+                                                        this.props.onTabClick(data);
+                                                    }
+                                                }}
+                                            />
+                                        ))
+                                    }
+                                </Tabs>
+                            </Grid>
+                        </Grid>
+                    </Container>
                 </AppBar>
-                { this.tabContent(this.state.pageValue) }
             </div>
         );
     }
@@ -113,14 +71,4 @@ NavigationTab.propTypes = {
 
 };
 
-function mapDispatchToProps(dispatch) {
-    return {
-        dispatch,
-    };
-}
-
-const withConnect = connect(mapDispatchToProps);
-
-export default compose(
-    withConnect,
-)(NavigationTab);
+export default NavigationTab;

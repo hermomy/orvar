@@ -28,7 +28,6 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import {
     Button,
     Card,
-    CircularProgress,
     Container,
     Grid,
     Hidden,
@@ -64,7 +63,7 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, F
 
 export class ProfileOrderList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
-        currentTab: null,
+        currentConfig: { title: 'All Orders', urlParam: '' },
         orderStatusConfigs: [
             { title: 'All Orders', urlParam: '' },
             { title: 'To Pay', urlParam: '/to-paid' },
@@ -303,7 +302,7 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                             <Link
                                 onClick={() => {
                                     this.setState({ popup: false });
-                                    this.fetchOrderDataByTab(this.state.currentTab);
+                                    this.fetchOrderDataByTab(this.state.currentConfig);
                                 }}
                             >
                                 <Typography color="secondary">Ok, I got it</Typography>
@@ -339,7 +338,7 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                             <Link
                                 onClick={() => {
                                     this.setState({ popup: false });
-                                    this.fetchOrderDataByTab(this.state.currentTab);
+                                    this.fetchOrderDataByTab(this.state.currentConfig);
                                 }}
                             >
                                 <Typography color="secondary">Awesome, I&apos;m done here!</Typography>
@@ -527,37 +526,28 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
         );
     }
 
+    renderContents = () => {
+        console.log(this.state.orderStatusConfigs);
+        console.log('Tab', this.state.currentConfig);
+        return (
+            <Container>
+                {this.renderOrderListCard(this.state.currentConfig)}
+            </Container>
+        );
+    }
+
     render() {
         return (
             <div>
                 <NavTab
-                    isOrderList={true}
+                    data={this.state.orderStatusConfigs}
                     onTabClick={(config) => {
                         this.fetchOrderDataByTab(config);
-                        this.setState({ currentTab: config });
+                        this.setState({ currentConfig: config });
                     }}
-                    data={this.state.orderStatusConfigs}
-                    rowsPerPage={this.state.rowsPerPage}
-                    renderDescription={(config) => (
-                        <div align="center" style={{ margin: 16 }}>
-                            <Typography variant="h6" display="block" gutterBottom={true}>{config.title}</Typography>
-                            <Typography display="block">Click on the order number to view your order details.</Typography>
-                            <Typography>Confirm receipt of your order to get 20 credits.</Typography>
-                        </div>
-                    )}
-                    renderContent={(config) => (
-                        <Container>
-                            {
-                                this.props.profileOrderList.loading ?
-                                    <div style={{ textAlign: 'center' }}><CircularProgress /></div>
-                                    :
-                                    <div>
-                                        {this.renderOrderListCard(config)}
-                                    </div>
-                            }
-                        </Container>
-                    )}
+                    renderTabID={(tabValue) => this.setState({ tabValue })}
                 />
+                {this.renderContents()}
                 <Popover
                     open={Boolean(this.state.anchorEl)}
                     anchorEl={this.state.anchorEl}
