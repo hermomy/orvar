@@ -5,96 +5,119 @@
  */
 
 import React from 'react';
+import { dataChecking } from 'globalUtils';
 import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { apiRequest, combineObject } from 'globalUtils';
-import Async from 'assets/react-async';
+import { NavLink } from 'react-router-dom';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+
+import PopupDialog from 'components/PopupDialog';
 import ProductCard from 'components/ProductCard';
-import PageChanger from 'components/PageChanger';
+
+import {
+    AppBar,
+    CircularProgress,
+    Container,
+    Grid,
+    IconButton,
+    Toolbar,
+    Typography,
+} from '@material-ui/core';
+import {
+    ChevronLeft,
+} from '@material-ui/icons';
 
 import makeSelectProfileWishlist from './selectors';
+import * as actions from './actions';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
 
-const wishlistData = async (API) => {
-    if (API.b.runpermit) {
-        await apiRequest(API.b.URL, 'delete');
-    }
-    return apiRequest(API.a.URL, 'get');
-};
-
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
-        page: 1,
-        getProductURL: {
-            URL: '/wishlist?page=1',
-        },
-        deleteProduct: {
-            URL: '/wishlist/-1',
-            runpermit: false,
-        },
+        popup: false,
     }
 
-    renderPageChanger = (data) => (
-        <div>
-            <PageChanger
-                productData={data.data}
-                pagenum={1}
-                changePage={(link, pageNum) => {
-                    this.setState({ getProductURL: { URL: `/wishlist?page=${pageNum}` } });
-                }}
-            />
-        </div>
-    );
+    componentWillMount() {
+        this.props.dispatch(actions.getWishlist());
+    }
 
-    renderProductCard = (data) => {
-        Object.assign(this.state.deleteProduct, { runpermit: false });
-        return data.data.items.map((item, index) => (
-            <div
-                className="product-card-div"
-                key={index}
-            >
-                <ProductCard
-                    product={item.product}
-                    review={false}
-                    price={false}
-                    url={item.product.brand.url}
-                    listViewMode={true}
-                    allowDelete={true}
-                    allowWishlistButton={false}
-                    deleteFromWishlist={
-                        () => {
-                            this.setState({ deleteProduct: { URL: `/wishlist/${item.id}`, runpermit: true } });
-                        }
+    renderProductCard = () => {
+        if (!this.props.profileWishlist.wishlist) {
+            return null;
+        }
+
+        return (
+            <Container>
+                <Typography variant="h6">My Wishlist</Typography>
+                <Grid container={true} spacing={2}>
+                    {
+                        dataChecking(this.props.profileWishlist, 'wishlist') &&
+                            this.props.profileWishlist.wishlist.map((item, index) => (
+                                <Grid key={index} item={true} xs={6} md={3}>
+                                    <ProductCard
+                                        product={item.product}
+                                        url={item.product.url}
+                                        removeFromWishlist={() => {
+                                            this.setState({ popup: !this.state.popup });
+                                        }}
+                                        addToCart={() => {
+                                            console.log(`added item ${item.id} to cart`);
+                                        }}
+                                    />
+                                </Grid>
+                            ))
                     }
-                />
-            </div>
-        ));
+                </Grid>
+            </Container>
+        );
     };
 
     render() {
         return (
-            <Async promise={wishlistData(combineObject(this.state.getProductURL, this.state.deleteProduct))}>
-                <Async.Loading>Loading... ProductCard</Async.Loading>
-                <Async.Resolved>
-                    {(data) => (
+            <div>
+                {
+                    this.props.profileWishlist.loading ?
+                        <div style={{ textAlign: 'center' }}><CircularProgress /></div>
+                        :
                         <div>
-                            {this.renderPageChanger(data)}
-                            <div className="grid-view">
-                                {this.renderProductCard(data)}
-                            </div>
+                            <AppBar color="default" position="static" style={{ marginBottom: 15 }}>
+                                <Toolbar>
+                                    <NavLink to="/profile">
+                                        <IconButton edge="start">
+                                            <ChevronLeft fontSize="large" />
+                                        </IconButton>
+                                    </NavLink>
+                                    <Typography color="primary">Wishlist</Typography>
+                                    <div style={{ backgroundColor: '#FF4081', width: 20, height: 20, marginLeft: 10, textAlign: 'center', borderRadius: 5 }}>
+                                        <Typography style={{ color: '#FFFFFF' }}>{dataChecking(this.props.profileWishlist, 'wishlist', 'length')}</Typography>
+                                    </div>
+                                </Toolbar>
+                            </AppBar>
+                            {this.renderProductCard()}
                         </div>
-                    )}
-                </Async.Resolved>
-                <Async.Rejected>
-                    { console.error }
-                </Async.Rejected>
-            </Async>
+                }
+                <PopupDialog
+                    display={this.state.popup}
+                    onClose={() => {
+                        this.setState({ popup: false });
+                    }}
+                    onCancel={() => {
+                        this.setState({ popup: false });
+                    }}
+                    onUpdate={() => {
+                        this.setState({ popup: false });
+                    }}
+                >
+                    <form style={{ textAlign: 'center' }}>
+                        <Typography>Confirm remove this wishlist item?</Typography>
+                    </form>
+                </PopupDialog>
+            </div>
         );
     }
 }

@@ -1,35 +1,36 @@
-import { apiRequest } from 'globalUtils';
-import { takeLatest, call, put } from 'redux-saga/effects';
-import { GET_WISHLIST, DELETE_WISHLIST } from './constants';
-import { getWishlistSuccess, getWishlistFail, getWishlist } from './actions';
+import { takeLatest, put, call } from 'redux-saga/effects';
+import { staticErrorResponse, apiRequest } from 'globalUtils';
 
-export function* WishlistDataWorker(action) {
-    let res = '';
-    if (action.targetpage) {
-        res = yield call(apiRequest, `/wishlist?page=${action.targetpage}`, 'get', null);
-    } else {
-        res = yield call(apiRequest, '/wishlist?page=1', 'get', null);
-    }
-    if (res && res.ok) {
-        yield put(getWishlistSuccess(res.data));
-    } else {
-        yield put(getWishlistFail(res.data));
-    }
-}
+import {
+    GET_WISHLIST,
+} from './constants';
+import {
+    getWishlistSuccess,
+    getWishlistFailed,
+} from './actions';
 
-export function* DeleteWishlistWorker(action) {
-    const res = yield call(apiRequest, `/wishlist/${action.productId}`, 'delete');
-    if (res && res.ok) {
-        yield put(getWishlist(action.pageNumber));
-    } else {
-        yield put(getWishlistFail(res.data));
+export function* getWishlistWorker() {
+    let err;
+
+    try { // Trying the HTTP Request
+        const response = yield call(apiRequest, '/wishlist');
+        if (response && response.ok !== false) {
+            yield put(getWishlistSuccess(response));
+        } else if (response && response.ok === false) {
+            yield put(getWishlistFailed(response));
+        } else {
+            err = staticErrorResponse({ text: 'No response from server' });
+            throw err;
+        }
+    } catch (e) {
+        console.log('error: ', e);
+        yield put(getWishlistFailed(e));
     }
 }
 
 // Individual exports for testing
 export default function* profileWishlistSaga() {
     yield [
-        takeLatest(GET_WISHLIST, WishlistDataWorker),
-        takeLatest(DELETE_WISHLIST, DeleteWishlistWorker),
+        takeLatest(GET_WISHLIST, getWishlistWorker),
     ];
 }

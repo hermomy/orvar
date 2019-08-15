@@ -6,35 +6,25 @@
 import {
     GET_WISHLIST,
     GET_WISHLIST_SUCCESS,
-    GET_WISHLIST_FAIL,
-    DELETE_WISHLIST,
+    GET_WISHLIST_FAILED,
 } from './constants';
 
-export function getWishlist(targetpage) {
+export function getWishlist() {
     return {
         type: GET_WISHLIST,
-        targetpage,
     };
 }
 
-export function getWishlistSuccess(res) {
+export function getWishlistSuccess(response) {
     return {
         type: GET_WISHLIST_SUCCESS,
-        payload: res,
+        data: response.data,
     };
 }
 
-export function getWishlistFail(res) {
+export function getWishlistFailed(response) {
     return {
-        type: GET_WISHLIST_FAIL,
-        error: res,
-    };
-}
-
-export function deleteWishlist(productId, pageNumber) {
-    return {
-        type: DELETE_WISHLIST,
-        productId,
-        pageNumber,
+        type: GET_WISHLIST_FAILED,
+        data: response.data,
     };
 }
