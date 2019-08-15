@@ -33,6 +33,7 @@ import ProfileWishlist from 'containers/ProfileWishlist';
 import ProfileReview from 'containers/ProfileReview';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
+import AuthPage from 'containers/AuthPage';
 
 import Header from 'containers/Header';
 import { ProfileWallet } from '../ProfileWallet';
@@ -49,6 +50,7 @@ export default function App() {
                 <Switch>
                     <Route exact={true} path="/" component={HomePage} />
                     <PrivateRoute exact={true} path="/login" component={LogoutForm} />
+                    <Route exact={true} path="/test" component={AuthPage} />
                     <PrivateRoute exact={true} path="/logout" component={LogoutForm} />
                     <PrivateRoute exact={true} path="/onboarding" component={OnboardingPage} />
 
