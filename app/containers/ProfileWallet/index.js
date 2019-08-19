@@ -14,6 +14,8 @@ import injectReducer from 'utils/injectReducer';
 
 import NavigationTab from 'components/NavigationTab';
 
+import { Container, Box, Tabs, Tab, Paper, Typography } from '@material-ui/core';
+
 import makeSelectProfileWallet from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -21,18 +23,61 @@ import './style.scss';
 
 const a = [
     {
-        title: 'home 1',
+        title: 'vouchers',
     },
     {
-        title: 'home 2',
+        title: 'points',
+    },
+    {
+        title: 'balance',
     },
 ];
 export class ProfileWallet extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
-        tabVal: 0,
+        navigationTabValue: 0,
+        pointNavTabValue: 0,
     }
-    home1 = () => (
-        <div>lorem 1</div>
+    allVoucher = () => (
+        <div>
+            <Paper className="p-1">
+                <div>
+                    <Typography className="text-uppercase">
+                        vouchers
+                    </Typography>
+                </div>
+                <Typography>
+                    Did you know? You can get freebies by inviting your friends.
+                </Typography>
+            </Paper>
+        </div>
+    )
+    hermoVoucher = () => (
+        <Paper className="p-1">Hermo</Paper>
+    )
+    partnersVoucher = () => (
+        <Paper className="p-1">Partners</Paper>
+    )
+    voucher = () => (
+        <Container>
+            <Box className="my-1">
+                <Tabs
+                    value={this.state.pointNavTabValue}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    centered={true}
+                    onChange={(event, pointNavTabValue) => this.setState({ pointNavTabValue })}
+                    className="mb-2"
+                >
+                    <Tab label="All" />
+                    <Tab label="Hermo" />
+                    <Tab label="Partners" />
+                </Tabs>
+            </Box>
+            {}
+            {this.state.pointNavTabValue === 0 && this.allVoucher()}
+            {this.state.pointNavTabValue === 1 && this.hermoVoucher()}
+{ this.state.pointNavTabValue === 2 && this.partnersVoucher()}
+        </Container>
     )
 
     home2 = () => (
@@ -41,9 +86,9 @@ export class ProfileWallet extends React.PureComponent { // eslint-disable-line 
 
     renderContents = () => {
         let b;
-        switch (this.state.tabVal) {
+        switch (this.state.navigationTabValue) {
             case 0:
-                b = this.home1();
+                b = this.voucher();
                 break;
             case 1:
                 b = this.home2();
@@ -62,7 +107,7 @@ export class ProfileWallet extends React.PureComponent { // eslint-disable-line 
             <div>
                 <NavigationTab
                     data={a}
-                    renderTabID={(tabVal) => this.setState({ tabVal })}
+                    renderTabID={(navigationTabValue) => this.setState({ navigationTabValue })}
                 />
                 {this.renderContents()}
             </div>
