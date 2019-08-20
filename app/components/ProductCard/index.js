@@ -21,6 +21,7 @@ import {
     AddShoppingCart,
     Cancel,
     KeyboardArrowRight,
+    NotificationImportant,
     Star,
     StarBorder,
 } from '@material-ui/icons';
@@ -34,7 +35,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                 <img
                     src={dataChecking(this.props.product, 'image', 'small')}
                     alt="product_image"
-                    style={{ width: '60%' }}
+                    style={{ width: '50%' }}
                 />
                 {
                     dataChecking(this.props.product, 'instock') ?
@@ -51,34 +52,28 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
     renderFeature = () => {
         const features = dataChecking(this.props.product, 'features');
         const discount = dataChecking(this.props.product, 'price', 'discount_text');
-        const featureArr = [];
-
-        features.map((feature) => featureArr.push(
-            <Grid item={true}>
-                <img
-                    src={feature.value}
-                    alt="product_feature"
-                    className="feature-tag"
-                />
-            </Grid>
-        ));
-
-        if (discount !== null) {
-            featureArr.push(
-                <Grid item={true} className="discount-tag">
-                    <Typography>{discount}</Typography>
-                </Grid>
-            );
-        }
+        const isEmpty = features.length === 0 && discount === null;
 
         return (
-            <Grid
-                container={true}
-                justify="center"
-                style={{ padding: `${(featureArr.length > 0) ? '10px 0' : '35px 0'}` }}
-                // style={{ padding: '10px 0' }}
-            >
-                {featureArr}
+            <Grid container={true} justify="center" className={`${isEmpty ? 'empty-product-feature' : 'product-feature'}`}>
+                {
+                    features.length > 0 &&
+                        features.map((feature, key) => (
+                            <Grid item={true} key={`${this.props.product.id}-${key}`}>
+                                <img
+                                    src={feature.value}
+                                    alt="product_feature"
+                                    className="feature-tag"
+                                />
+                            </Grid>
+                        ))
+                }
+                {
+                    discount !== null &&
+                        <Grid item={true} className="discount-tag">
+                            <Typography variant="caption">{discount}</Typography>
+                        </Grid>
+                }
             </Grid>
         );
     }
@@ -95,7 +90,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
 
         return (
             <div className="product-price">
-                <Typography variant="h6" style={{ paddingRight: `${discountText === null ? 0 : '10px'}` }}>
+                <Typography variant="h6" style={{ paddingRight: `${discountText === null ? 0 : '10px'}`, fontWeight: 'bold' }}>
                     {symbol}{sellingPrice.toFixed(2)}
                 </Typography>
                 {
@@ -113,7 +108,11 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
     renderBrand = () => (
         <div className="product-brand">
             <NavLink to={dataChecking(this.props.product, 'brand', 'url')} style={{ textDecoration: 'none' }}>
-                <Typography color="primary" variant="h6">
+                <Typography
+                    color="primary"
+                    variant="button"
+                    style={{ fontWeight: 'bold' }}
+                >
                     {dataChecking(this.props.product, 'brand', 'name')}
                 </Typography>
                 <IconButton size="small" style={{ padding: '0 0 2px 3px' }}>
@@ -125,7 +124,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
 
     renderDescription = () => (
         <div className="product-description">
-            <Typography variant="subtitle1">{this.props.product.display_name}</Typography>
+            <Typography>{this.props.product.display_name}</Typography>
         </div>
     )
 
@@ -141,36 +140,38 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
 
         for (let i = 0; i < 5; i++) {
             if ((i + 1) <= rate) {
-                rateArr.push(<Star style={{ color: '#FFD700' }} />);
+                rateArr.push(<Star key={`${this.props.product.id}-${i}`} style={{ color: '#FFD700' }} />);
             } else {
-                rateArr.push(<StarBorder style={{ color: '#FFD700' }} />);
+                rateArr.push(<StarBorder key={`${this.props.product.id}-${i}`} style={{ color: '#FFD700' }} />);
             }
         }
 
         return (
-            <div className="product-rating" style={{ paddingLeft: 5 }}>
-                {rateArr}
-                <Typography variant="caption"> ({count})</Typography>
+            <div style={{ display: 'flex', flexDirection: 'row' }} className="product-rating">
+                <div style={{ justifyContent: 'flex-start', display: 'flex', flexDirection: 'row' }}>
+                    {rateArr}
+                </div>
+                <Typography style={{ marginLeft: 10, alignSelf: 'center' }} variant="overline"> ({count})</Typography>
             </div>
         );
     }
 
     render() {
         return (
-            <Card style={{ boxShadow: 'none' }}>
+            <Card style={{ boxShadow: 'none' }} className="product-container">
                 {
                     this.props.removeFromWishlist &&
-                    <CardHeader
-                        action={
-                            <IconButton
-                                size="small"
-                                onClick={() => this.props.removeFromWishlist()}
-                            >
-                                <Cancel />
-                            </IconButton>
-                        }
-                        style={{ paddingBottom: 0 }}
-                    />
+                        <CardHeader
+                            action={
+                                <IconButton
+                                    onClick={() => this.props.removeFromWishlist()}
+                                    style={{ float: 'right', padding: 0 }}
+                                >
+                                    <Cancel />
+                                </IconButton>
+                            }
+                            style={{ display: 'block' }}
+                        />
                 }
                 <CardContent className="product-content">
                     {this.renderImage()}
@@ -182,16 +183,18 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                 </CardContent>
                 {
                     this.props.addToCart &&
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        fullWidth={true}
-                        style={{ borderRadius: 2, height: 50 }}
-                        onClick={() => this.props.addToCart()}
-                    >
-                        <AddShoppingCart />
-                        <Typography variant="overline" className="pl-1">Add to cart</Typography>
-                    </Button>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            fullWidth={true}
+                            style={{ borderRadius: 2, height: 40 }}
+                            onClick={dataChecking(this.props.product, 'instock') ? () => this.props.addToCart() : () => this.props.notifyMe()}
+                        >
+                            {dataChecking(this.props.product, 'instock') ? <AddShoppingCart /> : <NotificationImportant />}
+                            <Typography variant="overline" className="pl-1">
+                                {dataChecking(this.props.product, 'instock') ? 'Add to cart' : 'Notify Me'}
+                            </Typography>
+                        </Button>
                 }
             </Card>
         );

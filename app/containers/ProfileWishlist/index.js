@@ -14,12 +14,14 @@ import { compose } from 'redux';
 import { NavLink } from 'react-router-dom';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import { notifySuccess, notifyError } from 'containers/Notify';
 
 import PopupDialog from 'components/PopupDialog';
 import ProductCard from 'components/ProductCard';
 
 import {
     AppBar,
+    Button,
     CircularProgress,
     Container,
     Grid,
@@ -27,6 +29,7 @@ import {
     Toolbar,
     Typography,
 } from '@material-ui/core';
+
 import {
     ChevronLeft,
 } from '@material-ui/icons';
@@ -40,10 +43,25 @@ import './style.scss';
 export class ProfileWishlist extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         popup: false,
+        orderID: null,
     }
 
     componentWillMount() {
         this.props.dispatch(actions.getWishlist());
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.profileWishlist.notification !== nextProps.profileWishlist.notification) {
+            if (nextProps.profileWishlist.notification.type === 'fail' || nextProps.profileWishlist.notification.type === 'error') {
+                notifyError(nextProps.profileWishlist.notification.message);
+            } else {
+                notifySuccess(nextProps.profileWishlist.notification.message);
+
+                if (nextProps.profileWishlist.notification.category === 'deleteItem') {
+                    this.props.dispatch(actions.getWishlist());
+                }
+            }
+        }
     }
 
     renderProductCard = () => {
@@ -63,10 +81,12 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                                         product={item.product}
                                         url={item.product.url}
                                         removeFromWishlist={() => {
-                                            this.setState({ popup: !this.state.popup });
+                                            this.setState({ popup: !this.state.popup, orderID: item.id });
                                         }}
                                         addToCart={() => {
-                                            console.log(`added item ${item.id} to cart`);
+                                            this.props.dispatch(actions.addToCart({
+                                                orderID: item.product.id,
+                                            }));
                                         }}
                                     />
                                 </Grid>
@@ -106,15 +126,39 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                     onClose={() => {
                         this.setState({ popup: false });
                     }}
-                    onCancel={() => {
-                        this.setState({ popup: false });
-                    }}
-                    onUpdate={() => {
-                        this.setState({ popup: false });
-                    }}
                 >
-                    <form style={{ textAlign: 'center' }}>
+                    <form style={{ textAlign: 'center', padding: 50 }}>
                         <Typography>Confirm remove this wishlist item?</Typography>
+                        <Grid container={true} justify="center" spacing={2}>
+                            <Grid item={true}>
+                                <Button
+                                    variant="outlined"
+                                    onClick={() => {
+                                        this.setState({ popup: false });
+                                    }}
+                                    style={{ width: 170 }}
+                                >
+                                    CANCEL
+                                </Button>
+                            </Grid>
+                            <Grid item={true}>
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => {
+                                        this.props.dispatch(actions.deleteWishlistItem({
+                                            orderID: this.state.orderID,
+                                            successCallback: setTimeout(() => this.setState({ popup: false })),
+                                        }));
+
+                                        this.props.dispatch(actions.getWishlist());
+                                    }}
+                                    style={{ width: 170 }}
+                                >
+                                    CONFIRM
+                                </Button>
+                            </Grid>
+                        </Grid>
                     </form>
                 </PopupDialog>
             </div>

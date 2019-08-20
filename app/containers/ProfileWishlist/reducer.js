@@ -9,6 +9,12 @@ import {
     GET_WISHLIST,
     GET_WISHLIST_SUCCESS,
     GET_WISHLIST_FAILED,
+    DELETE_WISHLIST_ITEM,
+    DELETE_WISHLIST_ITEM_SUCCESS,
+    DELETE_WISHLIST_ITEM_FAILED,
+    ADD_TO_CART,
+    ADD_TO_CART_SUCCESS,
+    ADD_TO_CART_FAILED,
 } from './constants';
 
 export const initialState = fromJS({
@@ -31,6 +37,37 @@ function profileWishlistReducer(state = initialState, action) {
                 .set('error', action.data.items)
                 .set('loading', false)
                 .set('wishlist', null);
+        case DELETE_WISHLIST_ITEM:
+            return state
+                .set('deletingWishlist', true);
+        case DELETE_WISHLIST_ITEM_SUCCESS:
+            return state
+                .set('notification', {
+                    type: 'success',
+                    category: 'deleteItem',
+                    message: action.message,
+                });
+        case DELETE_WISHLIST_ITEM_FAILED:
+            return state
+                .set('notification', {
+                    type: 'fail',
+                    message: action.message,
+                });
+        case ADD_TO_CART:
+            return state
+                .set('addingToCart', true);
+        case ADD_TO_CART_SUCCESS:
+            return state
+                .set('notification', {
+                    type: 'success',
+                    message: action.message,
+                });
+        case ADD_TO_CART_FAILED:
+            return state
+                .set('notification', {
+                    type: 'fail',
+                    message: action.message,
+                });
         default:
             return state;
     }

@@ -1,74 +1,138 @@
 @import 'app/breakpoints';
 
-.product-content {
-    min-height: 380px;
-    padding-top: 0 !important;
+.product-container {
+    .product-content {
+        min-height: 280px;
+        padding: 0 16px 0 16px;
 
-    @include media-breakpoint-down(sm) {
-        min-height: 250px;
-        padding: 8px !important;
-    }
-
-    .product-img {
-        position: relative;
-
-        .out-of-stock {
-            height: 60px;
-            width: 60px;
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            margin: auto auto;
-            padding: 20px;
-            background: rgba(0,0,0,0.6);
-            border-radius: 50%;
+        @include media-breakpoint-down(sm) {
+            min-height: 220px;
+            padding: 8px !important;
         }
 
-        .oos-text {
-            color: #FFFFFF;
-            line-height: 0;
+        @media only screen and (max-width: 320px) {
+            min-height: 200px;
+        }
+
+        .product-img {
             position: relative;
-            top: 25%;
+
+            .out-of-stock {
+                height: 60px;
+                width: 60px;
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                margin: auto auto;
+                padding: 20px;
+                background: rgba(0,0,0,0.6);
+                border-radius: 50%;
+            }
+
+            .oos-text {
+                color: #FFFFFF;
+                line-height: 0;
+                position: relative;
+                top: 25%;
+            }
         }
-    }
 
-    .feature-tag {
-        width: 45px;
-        height: 45px;
-        border-radius: 50px;
+        .product-feature {
+            margin-right: 20px;
+            padding: 5px;
+            height: 55px;
 
-        @include media-breakpoint-down(sm) {
-            width: 35px;
-            height: 35px;
+            @include media-breakpoint-down(sm) {
+                height: 45px;
+                padding: 8px 0;
+            }
+
+            .feature-tag {
+                width: 40px;
+                height: 40px;
+                border-radius: 50px;
+
+                @include media-breakpoint-down(sm) {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+
+            .discount-tag {
+                width: 40px;
+                height: 40px;
+                border-radius: 50px;
+                background-color: #FF0068;
+                color: #FFFFFF;
+                line-height: 40px;
+                text-align: center;
+
+                @include media-breakpoint-down(sm) {
+                    width: 30px;
+                    height: 30px;
+                    line-height: 30px;
+                }
+            }
         }
-    }
 
-    .discount-tag {
-        width: 45px;
-        height: 45px;
-        border-radius: 50px;
-        background-color: #FF0068;
-        color: #FFFFFF;
-        line-height: 45px;
-        text-align: center;
+        .empty-product-feature {
+            padding: 5px;
+            height: 55px;
 
-        @include media-breakpoint-down(sm) {
-            width: 35px;
-            height: 35px;
-            line-height: 35px;
+            @media only screen and (max-width: 414px) {
+                height: 45px;
+                padding: 8px 0;
+            }
         }
-    }
 
-    .product-description {
-        padding: 5px 0;
-        display: -webkit-box;
-        max-width: 250px;
-        height: 42px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
+        .product-brand {
+            display: -webkit-box;
+            max-width: 250px;
+            height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+
+            @media only screen and (max-width: 320px) {
+                height: 15px;
+            }
+        }
+
+        .product-description {
+            display: -webkit-box;
+            max-width: 250px;
+            height: 38px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+
+            @media only screen and (max-width: 1024px) {
+                height: 36px;
+            }
+
+            @media only screen and (max-width: 768px) {
+                height: 43px;
+            }
+
+            @media only screen and (max-width: 414px) {
+                height: 32px;
+            }
+
+            @media only screen and (max-width: 320px) {
+                height: 28px;
+            }
+        }
+
+        .product-rating {
+            padding: 10px;
+
+            @include media-breakpoint-down(sm) {
+                padding: 5px;
+            }
+        }
     }
 }
