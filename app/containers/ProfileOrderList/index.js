@@ -213,7 +213,7 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
             </Stepper>
             {
                 this.state.activeStep === this.state.stepperConfigs.length && (
-                    <Paper square={true} elevation={0}>
+                    <Paper square={true} elevation={0} style={{ paddingBottom: 20 }}>
                         <Button
                             onClick={() => {
                                 this.setState({ activeStep: this.state.activeStep - 1 });
@@ -577,9 +577,11 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                 </Popover>
                 <PopupDialog
                     display={this.state.popup}
+                    fullWidth={true}
                     onClose={() => {
                         this.setState({ popup: false, activeStep: 0, files: [], comment: '' });
                     }}
+                    style={{ paddingBottom: 20 }}
                 >
                     {this.renderDialogContent()}
                 </PopupDialog>

@@ -128,7 +128,7 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                     }}
                 >
                     <form style={{ textAlign: 'center', padding: 50 }}>
-                        <Typography>Confirm remove this wishlist item?</Typography>
+                        <Typography variant="h6" display="block" className="mb-2">Confirm remove this wishlist item?</Typography>
                         <Grid container={true} justify="center" spacing={2}>
                             <Grid item={true}>
                                 <Button
@@ -136,7 +136,7 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                                     onClick={() => {
                                         this.setState({ popup: false });
                                     }}
-                                    style={{ width: 170 }}
+                                    style={{ width: 130 }}
                                 >
                                     CANCEL
                                 </Button>
@@ -150,10 +150,8 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                                             orderID: this.state.orderID,
                                             successCallback: setTimeout(() => this.setState({ popup: false })),
                                         }));
-
-                                        this.props.dispatch(actions.getWishlist());
                                     }}
-                                    style={{ width: 170 }}
+                                    style={{ width: 130 }}
                                 >
                                     CONFIRM
                                 </Button>
