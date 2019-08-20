@@ -14,11 +14,11 @@ import injectReducer from 'utils/injectReducer';
 
 import globalScope from 'globalScope';
 
-import { TextField, Button, Card, CardContent, CardActions, Container, FormControl, Typography, InputLabel, Input, InputAdornment, IconButton } from '@material-ui/core';
+import { Button, Card, CardContent, CardActions, Container, FormControl, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 import ErrorMessage from 'components/ErrorMessage';
+import InputForm from 'components/InputForm';
 import makeSelectLoginForm from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -34,6 +34,7 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
             email: '',
             password: '',
             showPassword: false,
+            clearField: false,
         };
     }
 
@@ -55,47 +56,47 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
     handleClickShowPassword = () => {
         this.setState((state) => ({ showPassword: !state.showPassword }));
     }
+
     render() {
         return (
             <Container className={this.props.classes.card}>
                 <Card>
                     <Container className="p-3">
-                        <div className=" mt-2 text-xs-center">
-                            <Typography variant="h4">Welcome back!</Typography>
-                            <Typography variant="h6"><br />Lets go shopping.</Typography>
+                        <div className=" mt-2 pl-1">
+                            <Typography variant="h5" color="primary"><b>Welcome back!</b></Typography>
+                            <Typography variant="h6" color="textSecondary"><br />Lets go shopping.</Typography>
                         </div>
                         <form onSubmit={() => { this.props.dispatch(doLogin(this.state)); event.preventDefault(); }}>
                             <CardContent>
                                 <FormControl fullWidth={true}>
-                                    <TextField
+                                    <InputForm
+                                        label="Email address"
                                         id="email"
-                                        label="Email"
+                                        handleChange={this.handleChange}
                                         value={this.state.email}
-                                        onChange={this.handleChange}
-                                        margin="normal"
+                                        onClear={() => {
+                                            this.setState({ email: '' });
+                                        }}
                                     />
                                 </FormControl>
                                 <FormControl fullWidth={true}>
-                                    <InputLabel htmlFor="adornment-password">Password</InputLabel>
-                                    <Input
+                                    <InputForm
+                                        label="Password"
                                         id="password"
                                         type={this.state.showPassword ? 'text' : 'password'}
                                         value={this.state.password}
-                                        onChange={this.handleChange}
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="Toggle password visibility"
-                                                    onClick={this.handleClickShowPassword}
-                                                >
-                                                    {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
+                                        showPassword={this.state.showPassword}
+                                        handleChange={this.handleChange}
+                                        handleClickShowPassword={this.handleClickShowPassword}
+                                        onClear={() => {
+                                            this.setState({ password: '' });
+                                        }}
+                                        togglePassword={true}
                                     />
                                 </FormControl>
-                                <FormControl fullWidth={true}>
-                                    <Typography className="mt-1" variant="caption" color="textSecondary">Password should contain at least 8 characters.</Typography>
+                                <FormControl fullWidth={true} className="mt-1">
+                                    <Typography variant="caption" color="textSecondary">Password should contain at least 8 characters.</Typography>
+                                    <Typography variant="caption" color="textSecondary"><u>Forgot Password?</u></Typography>
                                 </FormControl>
                                 {
                                     this.props.loginForm.error && <ErrorMessage error={this.props.loginForm.error} type="danger" />
@@ -104,11 +105,16 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                             <CardActions>
                                 <FormControl fullWidth={true} className="text-xs-center">
                                     <Button type="submit" variant="contained" color="primary">
-                                        Login
+                                        <Typography>Login</Typography>
                                     </Button>
                                 </FormControl>
                             </CardActions>
                         </form>
+                        <div className="text-xs-center">
+                            <Typography variant="h6">or<br /></Typography>
+                            <Typography className="mt-1" variant="caption" color="textSecondary">By logging, you agree to our <br /><u>Terms Conditions</u></Typography>
+                        </div>
+
                     </Container>
                 </Card>
             </Container>
