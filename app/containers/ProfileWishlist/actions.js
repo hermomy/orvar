@@ -7,6 +7,9 @@ import {
     GET_WISHLIST,
     GET_WISHLIST_SUCCESS,
     GET_WISHLIST_FAILED,
+    GET_PRODUCT_DATA,
+    GET_PRODUCT_DATA_SUCCESS,
+    GET_PRODUCT_DATA_FAILED,
     DELETE_WISHLIST_ITEM,
     DELETE_WISHLIST_ITEM_SUCCESS,
     DELETE_WISHLIST_ITEM_FAILED,
@@ -35,6 +38,27 @@ export function getWishlistFailed(response) {
     };
 }
 
+export function getProductData({ orderID }) {
+    return {
+        type: GET_PRODUCT_DATA,
+        orderID,
+    };
+}
+
+export function getProductDataSuccess(response) {
+    return {
+        type: GET_PRODUCT_DATA_SUCCESS,
+        data: response.data,
+    };
+}
+
+export function getProductDataFailed(response) {
+    return {
+        type: GET_PRODUCT_DATA_FAILED,
+        data: response.data,
+    };
+}
+
 export function deleteWishlistItem({ orderID, successCallback }) {
     return {
         type: DELETE_WISHLIST_ITEM,
@@ -57,10 +81,14 @@ export function deleteWishlistItemFailed(message) {
     };
 }
 
-export function addToCart({ orderID }) {
+export function addToCart({ orderID, urlParam, quantity, selections, successCallback }) {
     return {
         type: ADD_TO_CART,
         orderID,
+        urlParam,
+        quantity,
+        selections,
+        successCallback,
     };
 }
 

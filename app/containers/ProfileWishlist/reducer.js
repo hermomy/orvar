@@ -9,6 +9,9 @@ import {
     GET_WISHLIST,
     GET_WISHLIST_SUCCESS,
     GET_WISHLIST_FAILED,
+    GET_PRODUCT_DATA,
+    GET_PRODUCT_DATA_SUCCESS,
+    GET_PRODUCT_DATA_FAILED,
     DELETE_WISHLIST_ITEM,
     DELETE_WISHLIST_ITEM_SUCCESS,
     DELETE_WISHLIST_ITEM_FAILED,
@@ -19,6 +22,7 @@ import {
 
 export const initialState = fromJS({
     wishlist: null,
+    productData: null,
 });
 
 function profileWishlistReducer(state = initialState, action) {
@@ -37,6 +41,19 @@ function profileWishlistReducer(state = initialState, action) {
                 .set('error', action.data.items)
                 .set('loading', false)
                 .set('wishlist', null);
+        case GET_PRODUCT_DATA:
+            return state
+                .set('productData', null)
+                .set('dataLoading', true)
+                .set('error', false);
+        case GET_PRODUCT_DATA_SUCCESS:
+            return state
+                .set('error', false)
+                .set('productData', action.data);
+        case GET_PRODUCT_DATA_FAILED:
+            return state
+                .set('error', action.data)
+                .set('productData', null);
         case DELETE_WISHLIST_ITEM:
             return state
                 .set('deletingWishlist', true);

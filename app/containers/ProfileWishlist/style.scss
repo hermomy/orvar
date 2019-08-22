@@ -1,18 +1,20 @@
 @import 'app/breakpoints';
 
-.grid-view {
-    display: flex;
-    flex-wrap: wrap;
+.product-content {
+    min-height: 0 !important;
+}
 
-    .product-card-div {
-        width: 50%;
+.add-to-cart-content {
+    @include media-breakpoint-down(sm) {
+        padding: 8px 10px !important;
+    }
 
-        @include media-breakpoint-up(md) {
-            width: 33%;
-        }
+    .add-to-cart-image {
+        width: 70%;
 
-        @include media-breakpoint-up(lg) {
-            width: 25%;
+        @include media-breakpoint-down(sm) {
+            width: 80%;
+            padding: 10px;
         }
     }
 }

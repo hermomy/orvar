@@ -151,7 +151,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                 <div style={{ justifyContent: 'flex-start', display: 'flex', flexDirection: 'row' }}>
                     {rateArr}
                 </div>
-                <Typography style={{ marginLeft: 10, alignSelf: 'center' }} variant="overline"> ({count})</Typography>
+                <Typography style={{ marginLeft: 5, alignSelf: 'center' }}> ({count})</Typography>
             </div>
         );
     }
@@ -174,8 +174,8 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                         />
                 }
                 <CardContent className="product-content">
-                    {this.renderImage()}
-                    {this.renderFeature()}
+                    {this.props.image && this.renderImage()}
+                    {this.props.feature && this.renderFeature()}
                     {this.renderPrice()}
                     {this.renderBrand()}
                     {this.renderDescription()}
@@ -185,7 +185,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                     this.props.addToCart &&
                         <Button
                             variant="contained"
-                            color="secondary"
+                            color={dataChecking(this.props.product, 'instock') ? 'secondary' : 'primary'}
                             fullWidth={true}
                             style={{ borderRadius: 2, height: 40 }}
                             onClick={dataChecking(this.props.product, 'instock') ? () => this.props.addToCart() : () => this.props.notifyMe()}

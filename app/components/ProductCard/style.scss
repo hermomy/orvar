@@ -41,8 +41,8 @@
 
         .product-feature {
             margin-right: 20px;
-            padding: 5px;
-            height: 55px;
+            padding: 20px 0;
+            height: 78px;
 
             @include media-breakpoint-down(sm) {
                 height: 45px;
@@ -78,8 +78,8 @@
         }
 
         .empty-product-feature {
-            padding: 5px;
-            height: 55px;
+            padding: 20px 0;
+            height: 78px;
 
             @media only screen and (max-width: 414px) {
                 height: 45px;
@@ -128,10 +128,10 @@
         }
 
         .product-rating {
-            padding: 10px;
+            padding: 10px 0;
 
             @include media-breakpoint-down(sm) {
-                padding: 5px;
+                padding: 5px 0;
             }
         }
     }

@@ -451,10 +451,11 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                                     <ProductCard
                                                         key={item.id}
                                                         product={item}
-                                                        review={item.review}
                                                         url={item.url}
                                                         price={dataChecking(item, 'price')}
                                                         allowWishlistButton={true}
+                                                        image={true}
+                                                        feature={true}
                                                     />
                                                 ))
                                             }
