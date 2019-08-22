@@ -34,7 +34,6 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
             email: '',
             password: '',
             showPassword: false,
-            clearField: false,
         };
     }
 
@@ -57,62 +56,83 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
         this.setState((state) => ({ showPassword: !state.showPassword }));
     }
 
+    cardHeader = () => (
+        <div className=" mt-2 pl-1">
+            <Typography variant="h5" color="primary"><b>Welcome back!</b></Typography>
+            <Typography variant="h6" color="textSecondary"><br />Lets go shopping.</Typography>
+        </div>
+    )
+
+    formInput = () => (
+        <div>
+            <FormControl fullWidth={true}>
+                <InputForm
+                    label="Email address"
+                    id="email"
+                    handleChange={this.handleChange}
+                    value={this.state.email}
+                    onClear={() => {
+                        this.setState({ email: '' });
+                    }}
+                />
+            </FormControl>
+            <FormControl fullWidth={true}>
+                <InputForm
+                    label="Password"
+                    id="password"
+                    type={this.state.showPassword ? 'text' : 'password'}
+                    value={this.state.password}
+                    showPassword={this.state.showPassword}
+                    handleChange={this.handleChange}
+                    handleClickShowPassword={this.handleClickShowPassword}
+                    onClear={() => {
+                        this.setState({ password: '' });
+                    }}
+                    togglePassword={true}
+                />
+                <Typography className="pb-half" variant="caption" color="textSecondary">Password should contain at least 8 characters.</Typography>
+            </FormControl>
+        </div>
+    )
+
+    forgotPassword = () => ( // Need update on function
+        <FormControl fullWidth={true}>
+            <Typography variant="caption" color="textSecondary"><u>Forgot Password?</u></Typography>
+        </FormControl>
+    )
+
+    formAction = () => (
+        <FormControl fullWidth={true} className="text-xs-center">
+            <Button type="submit" variant="contained" color="primary">
+                <Typography>Login</Typography>
+            </Button>
+            <Typography className="text-xs-center mt-1" variant="h6">or<br /></Typography>
+            {/* Need to add login with FB  */}
+        </FormControl>
+    )
+
     render() {
         return (
             <Container className={this.props.classes.card}>
                 <Card>
                     <Container className="p-3">
-                        <div className=" mt-2 pl-1">
-                            <Typography variant="h5" color="primary"><b>Welcome back!</b></Typography>
-                            <Typography variant="h6" color="textSecondary"><br />Lets go shopping.</Typography>
-                        </div>
+                        {this.cardHeader()}
                         <form onSubmit={() => { this.props.dispatch(doLogin(this.state)); event.preventDefault(); }}>
                             <CardContent>
-                                <FormControl fullWidth={true}>
-                                    <InputForm
-                                        label="Email address"
-                                        id="email"
-                                        handleChange={this.handleChange}
-                                        value={this.state.email}
-                                        onClear={() => {
-                                            this.setState({ email: '' });
-                                        }}
-                                    />
-                                </FormControl>
-                                <FormControl fullWidth={true}>
-                                    <InputForm
-                                        label="Password"
-                                        id="password"
-                                        type={this.state.showPassword ? 'text' : 'password'}
-                                        value={this.state.password}
-                                        showPassword={this.state.showPassword}
-                                        handleChange={this.handleChange}
-                                        handleClickShowPassword={this.handleClickShowPassword}
-                                        onClear={() => {
-                                            this.setState({ password: '' });
-                                        }}
-                                        togglePassword={true}
-                                    />
-                                </FormControl>
-                                <FormControl fullWidth={true} className="mt-1">
-                                    <Typography variant="caption" color="textSecondary">Password should contain at least 8 characters.</Typography>
-                                    <Typography variant="caption" color="textSecondary"><u>Forgot Password?</u></Typography>
-                                </FormControl>
+                                {this.formInput()}
+                                {this.forgotPassword()}
                                 {
                                     this.props.loginForm.error && <ErrorMessage error={this.props.loginForm.error} type="danger" />
                                 }
                             </CardContent>
                             <CardActions>
-                                <FormControl fullWidth={true} className="text-xs-center">
-                                    <Button type="submit" variant="contained" color="primary">
-                                        <Typography>Login</Typography>
-                                    </Button>
-                                </FormControl>
+                                {this.formAction()}
                             </CardActions>
                         </form>
                         <div className="text-xs-center">
-                            <Typography variant="h6">or<br /></Typography>
-                            <Typography className="mt-1" variant="caption" color="textSecondary">By logging, you agree to our <br /><u>Terms Conditions</u></Typography>
+                            <Typography className="mt-1" variant="caption" color="textSecondary">
+                                By logging, you agree to our <br /><u>Terms Conditions</u> {/* Need to add Link for Terms and condition */}
+                            </Typography>
                         </div>
 
                     </Container>

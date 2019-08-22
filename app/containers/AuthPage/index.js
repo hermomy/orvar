@@ -11,7 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { Grid } from '@material-ui/core';
+import { Grid, Container, Hidden, Button, Typography } from '@material-ui/core';
 
 import LoginForm from 'containers/LoginForm';
 import SignUpPage from 'containers/SignUpPage';
@@ -26,32 +26,65 @@ export class AuthPage extends React.PureComponent { // eslint-disable-line react
         super(props);
 
         this.state = {
-            email: '',
-            password: '',
+            login: true,
         };
     }
 
-
-    // logIn = () => {
-    //     console.log('test');
-    //     return (
-    //         <div>
-    //             <LoginForm />
-    //             <SignUpPage />
-    //         </div>
-
-    //     );
-    // }
     render() {
+        const variantLogin = this.state.login ? 'contained' : 'outlined';
+        const variantSignup = this.state.login ? 'outlined' : 'contained';
+
         return (
-            <Grid container={true}>
-                <Grid item={true}>
-                    <LoginForm />
-                </Grid>
-                <Grid item={true}>
-                    <SignUpPage />
-                </Grid>
-            </Grid>
+            <div>
+                <Hidden smDown={true}>
+                    <Container className="authpage-desktop">
+                        <Grid container={true} justify="space-evenly">
+                            <Grid item={true}>
+                                <LoginForm />
+                            </Grid>
+                            <Grid item={true}>
+                                <SignUpPage />
+                            </Grid>
+                        </Grid>
+                    </Container>
+                </Hidden>
+                <Hidden mdUp={true}>
+                    <Container className="authpage-mobile mt-2">
+                        <Container className="btn">
+                            <Grid container={true} spacing={1}>
+                                <Grid item={true} xs={6}>
+                                    <Button
+                                        fullWidth={true}
+                                        variant={variantLogin}
+                                        color="primary"
+                                        className="btnLogin"
+                                        onClick={() => {
+                                            this.setState({ login: true });
+                                        }}
+                                    >
+                                        <Typography>Log In</Typography>
+                                    </Button>
+                                </Grid>
+                                <Grid item={true} xs={6}>
+                                    <Button
+                                        fullWidth={true}
+                                        variant={variantSignup}
+                                        color="primary"
+                                        className="btnSignup"
+                                        onClick={() => {
+                                            this.setState({ login: false });
+                                        }}
+                                    >
+                                        <Typography>Sign Up</Typography>
+                                    </Button>
+                                </Grid>
+
+                            </Grid>
+                        </Container>
+                        {this.state.login ? <LoginForm /> : <SignUpPage />}
+                    </Container>
+                </Hidden>
+            </div>
         );
     }
 }

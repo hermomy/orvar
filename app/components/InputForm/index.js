@@ -5,7 +5,7 @@
 */
 
 import React from 'react';
-import { Input, InputLabel, InputAdornment, FormControl, IconButton } from '@material-ui/core';
+import { TextField, InputAdornment, FormControl, IconButton, Typography, Button } from '@material-ui/core';
 import { Visibility, VisibilityOff, Cancel } from '@material-ui/icons';
 
 // import styled from 'styled-components';
@@ -21,38 +21,55 @@ class InputForm extends React.PureComponent { // eslint-disable-line react/prefe
     }
 
     showCancelButton = () => (
-        <Cancel
-            color="action"
+        <IconButton
+            disableRipple={true}
             onClick={() => {
                 this.props.onClear();
             }}
-        />
+        >
+            <Cancel color="action" />
+        </IconButton>
     )
 
     showVisibilty = () => (
         <IconButton
             aria-label="Toggle password visibility"
             onClick={this.props.handleClickShowPassword}
+            disableFocusRipple={true}
         >
             {this.props.showPassword ? <Visibility /> : <VisibilityOff />}
         </IconButton>
     )
 
+    showOTP = () => (
+        <Button onClick={() => { this.props.onClick(); }}>
+            <Typography color="secondary" noWrap={true} variant="body2">
+                <b>Send OTP</b>
+            </Typography>
+        </Button>
+    )
+
     render() {
         return (
             <FormControl fullWidth={true}>
-                {(this.props.label) ? <InputLabel className="text-capitalize">{this.props.label}</InputLabel> : ''}
-                <Input
+                <TextField
+                    className="pb-1"
                     id={this.props.id}
+                    label={this.props.label}
+                    variant="outlined"
+                    value={this.props.value}
                     onChange={this.props.handleChange}
                     type={this.props.type}
-                    value={this.props.value}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            {this.props.value ? this.showCancelButton() : null}
-                            {this.props.togglePassword ? this.showVisibilty() : null}
-                        </InputAdornment>
-                    }
+                    placeholder={this.props.placeholder}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                {this.props.value ? this.showCancelButton() : null}
+                                {this.props.togglePassword ? this.showVisibilty() : null}
+                                {this.props.requestOTP ? this.showOTP() : null}
+                            </InputAdornment>
+                        ),
+                    }}
                 />
             </FormControl>
         );
