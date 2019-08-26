@@ -1,15 +1,81 @@
-.item-card {
-    padding: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
-    // min-height: 200px;
-    max-height: 300px;
-    overflow: hidden;
+@import 'app/breakpoints';
 
-    .item-name {
-        height: 6em;
-        overflow: hidden;
-        padding-top: 20px;
+.item-card {
+    padding: 16px;
+    margin: 0 10px;
+    min-height: 280px;
+
+    @include media-breakpoint-down(sm) {
+        min-height: 260px;
     }
 
+    @media only screen and (max-width: 320px) {
+        min-height: 230px;
+    }
+
+    .carousel-item-image-container {
+        padding: 20px;
+        text-align: center;
+
+        @media only screen and (max-width: 768px) {
+            padding: 10px;
+        }
+
+        @include media-breakpoint-down(sm) {
+            padding: 5px;
+        }
+
+        .carousel-item-image {
+            @include media-breakpoint-down(sm) {
+                width: 60% !important;
+            }
+        }
+    }
+
+    .empty-label {
+        height: 27px;
+
+        @include media-breakpoint-down(sm) {
+            padding: 0;
+        }
+    }
+
+    .item-label {
+        width: 70% !important;
+
+        @include media-breakpoint-down(sm) {
+            width: 50% !important;
+        }
+    }
+
+    .brand-name {
+        font-weight: bold;
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+    }
+
+    .item-name {
+        display: -webkit-box;
+        max-width: 250px;
+        min-height: 38px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+
+        @media only screen and (max-width: 768px) {
+            min-height: 44px;
+        }
+
+        @media only screen and (max-width: 414px) {
+            height: 32px;
+        }
+
+        @media only screen and (max-width: 320px) {
+            height: 28px;
+        }
+    }
 }

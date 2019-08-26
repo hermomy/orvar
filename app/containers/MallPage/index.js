@@ -231,15 +231,15 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
         data.data.items.map((item) => (
             <div
                 key={item.id}
-                className={'product-card-div'}
+                className="product-card-div"
             >
                 <ProductCard
                     key={item.id}
                     product={item}
-                    review={item.review}
                     url={item.url}
-                    price={dataChecking(item, 'price')}
-                    allowDelete={false}
+                    image={true}
+                    feature={true}
+                    rating={true}
                     listViewMode={this.state.listView} // this.props.dispatch(postWishlist(item.id, this.props.mallPage.data.productData._links.self.href))}
                     allowWishlistButton={true}
                     addOrDeleteWishlist={() => { this.setState({ postWishlist: { URL: `/wishlist/${item.id}`, runpermit: false } }); }}

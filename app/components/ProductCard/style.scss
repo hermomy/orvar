@@ -3,7 +3,7 @@
 .product-container {
     .product-content {
         min-height: 280px;
-        padding: 0 16px 0 16px;
+        padding: 12px 16px;
 
         @include media-breakpoint-down(sm) {
             min-height: 220px;
@@ -133,6 +133,15 @@
             @include media-breakpoint-down(sm) {
                 padding: 5px 0;
             }
+        }
+    }
+
+    .add-to-cart-button {
+        border-radius: 2px;
+        height: 40px;
+
+        @include media-breakpoint-down(sm) {
+            height: 35px;
         }
     }
 }

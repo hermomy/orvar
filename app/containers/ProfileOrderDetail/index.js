@@ -7,6 +7,7 @@
 import React from 'react';
 import { dataChecking } from 'globalUtils';
 import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -14,6 +15,7 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
+import PopupDialog from 'components/PopupDialog';
 import moment from 'moment';
 import OwlCarousel from 'react-owl-carousel2';
 import 'assets/react-owl-carousel2.style.scss';
@@ -34,6 +36,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import {
+    KeyboardArrowRight,
     QueryBuilder,
 } from '@material-ui/icons';
 
@@ -47,6 +50,10 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
     state = {
         anchorEl: null,
         orderDate: '',
+
+        popup: false,
+        product: {},
+        selectedType: [],
     }
 
     componentWillMount() {
@@ -61,6 +68,74 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
 
         document.body.appendChild(script);
     }
+
+    renderDialogContent = () => (
+        <form style={{ padding: 20 }}>
+            <div style={{ textAlign: 'center', minHeight: '0 !important', padding: '0 20px 20px 20px' }}>
+                <img
+                    src={dataChecking(this.state.product, 'image', 'small')}
+                    alt="product_image"
+                    style={{ width: '50%' }}
+                />
+            </div>
+            {
+                dataChecking(this.state.selectedType, 'length') > 0 &&
+                    this.state.selectedType.map((type, index) => (
+                        <Typography key={index} color="textSecondary" display="block">• {type.name}</Typography>
+                    ))
+            }
+        </form>
+    )
+
+    renderLabel = (item) => {
+        if (dataChecking(item, 'product', 'url') && (dataChecking(item, 'product', 'url') === '/sample')) {
+            if (dataChecking(item, 'price', 'selling') && (dataChecking(item, 'price', 'selling') !== 0)) {
+                return (
+                    <div style={{ textAlign: 'center' }}>
+                        <img src={require('Resources/order/beauty_grab_label.png')} alt="beauty-grab-label" className="item-label" />
+                    </div>
+                );
+            }
+            return (
+                <div style={{ textAlign: 'center' }}>
+                    <img src={require('Resources/order/free_item_label.png')} alt="free-item-label" className="item-label" />
+                </div>
+            );
+        }
+        return (
+            <div className="empty-label" />
+        );
+    }
+
+    renderPrice = (order, item) => (
+        <div className="product-price" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: 20 }}>
+            <div>
+                <Typography variant="h6" style={{ fontWeight: 'bold' }}>
+                    {order.currency.symbol}{item.price.selling.toFixed(2)}
+                </Typography>
+            </div>
+            <div>
+                <Typography>x {item.qty}</Typography>
+            </div>
+        </div>
+    )
+
+    renderBrand = (item) => (
+        <div className="brand-name">
+            <NavLink to={dataChecking(item, 'product', 'brand', 'url')} style={{ textDecoration: 'none' }}>
+                <Typography
+                    color="primary"
+                    variant="button"
+                    style={{ fontWeight: 'bold' }}
+                >
+                    {dataChecking(item, 'product', 'brand', 'name')}
+                </Typography>
+                <IconButton size="small" style={{ padding: '0 0 2px 3px' }}>
+                    <KeyboardArrowRight color="primary" />
+                </IconButton>
+            </NavLink>
+        </div>
+    )
 
     renderStatusColor = (status) => {
         switch (status.toLowerCase()) {
@@ -106,7 +181,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
     )
 
     renderMerchantInfo = (order, merchant) => (
-        <div>
+        <div style={{ paddingBottom: 16 }}>
             <div>
                 <Typography color="textSecondary">Sold & Shipped by</Typography>
                 <Typography color="textSecondary" style={{ float: 'right', paddingRight: 20 }}>Status</Typography>
@@ -125,7 +200,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                     }}
                 />
             </div>
-            <Typography color="textSecondary">{merchant.logo.brief} ({merchant.shipping.estimate_arrival})</Typography>
+            <Typography color="textSecondary" variant="body2">{merchant.logo.brief} ({merchant.shipping.estimate_arrival})</Typography>
             <Hidden lgUp={true}>
                 <div className="pt-1">
                     {this.renderTrackingButton(merchant)}
@@ -135,7 +210,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
     )
 
     renderCarousel = (order, merchant) => (
-        <div>
+        <div style={{ padding: '16px 0' }}>
             <OwlCarousel
                 options={{
                     items: 4,
@@ -163,12 +238,31 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                 borderColor="#F2F3F4"
                                 borderRadius={5}
                                 width="auto"
+                                style={{ backgroundColor: '#FFFFFF' }}
                             >
-                                <img src={item.product.image.large} alt="product" className="item-image" />
-                                <div className="item-name">
-                                    <Typography color="primary">{item.name}</Typography>
+                                <div className="carousel-item-image-container">
+                                    <NavLink to={item.product.url}>
+                                        <img src={item.product.image.large} alt="product" className="carousel-item-image" />
+                                    </NavLink>
                                 </div>
-                                <Typography display="block">{item.qty} x {order.currency.symbol}{item.price.selling.toFixed(2)}</Typography>
+                                {this.renderLabel(item)}
+                                {this.renderPrice(order, item)}
+                                {this.renderBrand(item)}
+                                <Typography display="block" gutterBottom={true} className="item-name">{item.product.plain_name}</Typography>
+                                {
+                                    item.items.length > 0 &&
+                                        <Button
+                                            fullWidth={true}
+                                            size="small"
+                                            variant="outlined"
+                                            color="primary"
+                                            onClick={() => {
+                                                this.setState({ popup: !this.state.popup, selectedType: item.items, product: item.product });
+                                            }}
+                                        >
+                                            view more
+                                        </Button>
+                                }
                             </Box>
                         ))
                 }
@@ -223,11 +317,11 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                             <Divider className="mt-1 mb-1" />
                                             <Grid container={true}>
                                                 <Grid item={true} lg={9} md={12} xs={12}>
-                                                    <Grid container={true} spacing={3}>
+                                                    <Grid container={true}>
                                                         <Grid item={true} lg={11} md={12} xs={12}>
                                                             {this.renderMerchantInfo(order, merchant)}
                                                         </Grid>
-                                                        <Grid item={true} lg={11} md={12} xs={12}>
+                                                        <Grid item={true} lg={11} md={12} xs={12} style={{ backgroundColor: '#F6F6F6' }}>
                                                             {this.renderCarousel(order, merchant)}
                                                         </Grid>
                                                     </Grid>
@@ -355,6 +449,14 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                 >
                     <div style={{ padding: 10 }}><Typography>{this.state.orderDate}</Typography></div>
                 </Popover>
+                <PopupDialog
+                    display={this.state.popup}
+                    onClose={() => {
+                        this.setState({ popup: false });
+                    }}
+                >
+                    {this.renderDialogContent()}
+                </PopupDialog>
             </Container>
         );
     }

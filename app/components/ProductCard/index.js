@@ -179,7 +179,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                     {this.renderPrice()}
                     {this.renderBrand()}
                     {this.renderDescription()}
-                    {this.renderRating()}
+                    {this.props.rating && this.renderRating()}
                 </CardContent>
                 {
                     this.props.addToCart &&
@@ -187,7 +187,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                             variant="contained"
                             color={dataChecking(this.props.product, 'instock') ? 'secondary' : 'primary'}
                             fullWidth={true}
-                            style={{ borderRadius: 2, height: 40 }}
+                            className="add-to-cart-button"
                             onClick={dataChecking(this.props.product, 'instock') ? () => this.props.addToCart() : () => this.props.notifyMe()}
                         >
                             {dataChecking(this.props.product, 'instock') ? <AddShoppingCart /> : <NotificationImportant />}

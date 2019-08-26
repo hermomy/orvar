@@ -268,6 +268,7 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                                         url={item.product.url}
                                         image={true}
                                         feature={true}
+                                        rating={true}
                                         removeFromWishlist={() => {
                                             this.setState({ popup: !this.state.popup, orderID: item.id, dialogType: 'remove_item' });
                                         }}
@@ -304,7 +305,7 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                                         </IconButton>
                                     </NavLink>
                                     <Typography color="primary">Wishlist</Typography>
-                                    <div style={{ backgroundColor: '#FF4081', width: 20, height: 20, marginLeft: 10, textAlign: 'center', borderRadius: 5 }}>
+                                    <div className="wishlist-quantity">
                                         <Typography style={{ color: '#FFFFFF' }}>{dataChecking(this.props.profileWishlist, 'wishlist', 'length')}</Typography>
                                     </div>
                                 </Toolbar>
