@@ -151,7 +151,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                 <div style={{ justifyContent: 'flex-start', display: 'flex', flexDirection: 'row' }}>
                     {rateArr}
                 </div>
-                <Typography style={{ marginLeft: 5, alignSelf: 'center' }}> ({count})</Typography>
+                <Typography variant="overline" style={{ marginLeft: 5, alignSelf: 'center' }}> ({count})</Typography>
             </div>
         );
     }

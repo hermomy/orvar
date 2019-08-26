@@ -1,9 +1,9 @@
 import { createSelector } from 'reselect';
 
 /**
- * Direct selector to the session state domain
+ * Direct selector to the loginForm state domain
  */
-const selectSession = (state) => state.get('LoginForm');
+const selectLoginFormDomain = (state) => state.get('loginForm');
 
 /**
  * Other specific selectors
@@ -14,24 +14,12 @@ const selectSession = (state) => state.get('LoginForm');
  * Default selector used by LoginForm
  */
 
-const makeSelectAuthError = () => createSelector(
-    selectSession,
-    (session) => session.get('error')
+const makeSelectLoginForm = () => createSelector(
+    selectLoginFormDomain,
+    (substate) => substate.toJS()
 );
 
-const makeSelectAuthLoading = () => createSelector(
-    selectSession,
-    (session) => session.get('loading')
-);
-
-const makeSelectAuthLoginSuccess = () => createSelector(
-    selectSession,
-    (session) => session.get('loginSuccess')
-);
-
+export default makeSelectLoginForm;
 export {
-    selectSession,
-    makeSelectAuthError,
-    makeSelectAuthLoading,
-    makeSelectAuthLoginSuccess,
+    selectLoginFormDomain,
 };

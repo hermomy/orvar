@@ -12,12 +12,38 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { NavLink } from 'react-router-dom';
-import SignUpPage from '../SignUpPage';
+import { Grid, Button, Typography, Container } from '@material-ui/core';
+
 // import { dataChecking } from 'globalUtils';
-// import Fancy from '@tienping/my-react-dom';
 
 import messages from './messages';
 import './style.scss';
+const a = [
+    {
+        'title': 'mall',
+        'url': '/mall',
+    },
+    {
+        'title': 'Profile',
+        'url': '/profile',
+    },
+    {
+        'title': 'Profile order',
+        'url': '/profile/order',
+    },
+    {
+        'title': 'Profile edit info',
+        'url': '/profile/detail',
+    },
+    {
+        'title': 'OnboardingPage',
+        'url': '/onboarding',
+    },
+    {
+        'title': 'Brand Page',
+        'url': '/brand',
+    },
+];
 
 export default class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
@@ -26,34 +52,26 @@ export default class HomePage extends React.PureComponent { // eslint-disable-li
 
     render() {
         return (
-            <div className="container">
+            <Container>
                 <h1 style={{ textAlign: 'center' }}>
                     <FormattedMessage {...messages.header} />
                 </h1>
-                {/* <div><Fancy /></div> */}
-                <section style={{ textAlign: 'center', padding: '5vw 1vw' }}>
-                    <div key="sadfsdf">
-                        <NavLink to={'/mall'} className="page-select-button hershop-button" title="title">
-                            Mall
-                        </NavLink>
-                        <NavLink to={'/profile'} className="page-select-button hershop-button" title="title">
-                            Profile
-                        </NavLink>
-                        <NavLink to={'/profile/order'} className="page-select-button hershop-button" title="title">
-                            Profile order
-                        </NavLink>
-                        <NavLink to={'/profile/detail'} className="page-select-button hershop-button" title="title">
-                            Profile edit info
-                        </NavLink>
-                        <NavLink to={'/onboarding'} className="page-select-button hershop-button" title="title">
-                            OnboardingPage
-                        </NavLink>
-                        {
-                            this.state.SignUpPage ? <SignUpPage /> : null
-                        }
-                    </div>
-                </section>
-            </div>
+                <Grid container={true} justify="center" spacing={2}>
+                    {
+                        a.map((data) => (
+                            <Grid key={data.title} item={true}>
+                                <NavLink to={data.url} style={{ textDecoration: 'none' }}>
+                                    <Button variant="contained" color="primary">
+                                        <Typography>
+                                            {data.title}
+                                        </Typography>
+                                    </Button>
+                                </NavLink>
+                            </Grid>
+                        ))
+                    }
+                </Grid>
+            </Container>
         );
     }
 }

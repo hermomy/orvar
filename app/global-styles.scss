@@ -25,15 +25,11 @@ html {
 .hermo-red { color: #660033 !important; }
 .hermo-pink { color: #FF0068 !important; } //lighten($hermo-red, 40%);
 
-a {outline : none !important;}
-
 ::placeholder {
     color: rgb(196, 187, 201);
     font-weight: 300;
     font-size: 80%;
 }
-
-ol, ul { margin: 0; padding-left: 2rem; }
 
 .bigger { font-size: 130%; }
 
@@ -92,6 +88,7 @@ ol, ul { margin: 0; padding-left: 2rem; }
 body {
     font-family: "Poppins", sans-serif;
     background-color: #F3EFEE;
+    margin: 0;
 }
 
 .text-white { color: white; }

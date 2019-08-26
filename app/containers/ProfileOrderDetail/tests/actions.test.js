@@ -1,18 +1,18 @@
 
 import {
-    defaultAction,
+    getOrderData,
 } from '../actions';
 import {
-    DEFAULT_ACTION,
+    GET_ORDER_DATA,
 } from '../constants';
 
 describe('ProfileOrderDetail actions', () => {
-    describe('Default Action', () => {
-        it('has a type of DEFAULT_ACTION', () => {
+    describe('Get Order Data', () => {
+        it('has a type of GET_ORDER_DATA', () => {
             const expected = {
-                type: DEFAULT_ACTION,
+                type: GET_ORDER_DATA,
             };
-            expect(defaultAction()).toEqual(expected);
+            expect(getOrderData()).toEqual(expected);
         });
     });
 });
