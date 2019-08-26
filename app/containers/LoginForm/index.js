@@ -14,7 +14,16 @@ import injectReducer from 'utils/injectReducer';
 
 import globalScope from 'globalScope';
 
-import { Button, Card, CardContent, CardActions, Container, FormControl, Typography } from '@material-ui/core';
+import {
+    Button,
+    Card,
+    CardContent,
+    CardActions,
+    Container,
+    FormControl,
+    FormHelperText,
+    Typography,
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import ErrorMessage from 'components/ErrorMessage';
@@ -69,6 +78,7 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                 <InputForm
                     label="Email address"
                     id="email"
+                    type="email"
                     handleChange={this.handleChange}
                     value={this.state.email}
                     onClear={() => {
@@ -88,14 +98,15 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                     onClear={() => {
                         this.setState({ password: '' });
                     }}
+                    autoComplete="off"
                     togglePassword={true}
                 />
-                <Typography className="pb-half" variant="caption" color="textSecondary">Password should contain at least 8 characters.</Typography>
+                <FormHelperText id="password-helper">Password should contain at least 8 characters.</FormHelperText>
             </FormControl>
         </div>
     )
-
-    forgotPassword = () => ( // Need update on function
+    // Need update on function
+    forgotPassword = () => (
         <FormControl fullWidth={true}>
             <Typography variant="caption" color="textSecondary"><u>Forgot Password?</u></Typography>
         </FormControl>
@@ -106,8 +117,14 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
             <Button type="submit" variant="contained" color="primary">
                 <Typography>Login</Typography>
             </Button>
-            <Typography className="text-xs-center mt-1" variant="h6">or<br /></Typography>
-            {/* Need to add login with FB  */}
+            <Typography className="text-xs-center my-half" variant="h6">or<br /></Typography>
+            <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+            >
+                <Typography>FACEBOOK</Typography>
+            </Button>
         </FormControl>
     )
 

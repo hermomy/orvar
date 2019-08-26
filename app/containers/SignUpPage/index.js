@@ -11,13 +11,32 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { Button, Card, CardContent, CardActions, Container, FormControl, Typography, Grid, Select, InputLabel, OutlinedInput } from '@material-ui/core';
+import globalScope from 'globalScope';
+import {
+    Button,
+    Card,
+    CardContent,
+    CardActions,
+    Container,
+    FormControl,
+    FormHelperText,
+    Typography,
+    Grid,
+    Select,
+    InputLabel,
+    OutlinedInput,
+} from '@material-ui/core';
+import ErrorMessage from 'components/ErrorMessage';
+import { dataChecking } from 'globalUtils';
 import InputForm from 'components/InputForm';
 import { withStyles } from '@material-ui/core/styles';
 
-import { dataChecking } from 'globalUtils';
 import makeSelectSignUpPage from './selectors';
-import { doSignup, doSendOTP, getSmsPrefix } from './actions';
+import {
+    doSignup,
+    doSendOTP,
+    getSmsPrefix,
+} from './actions';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
@@ -27,16 +46,20 @@ import styles from './materialStyle';
 export class SignUpPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
         super(props);
-
         this.state = {
-            smsPrefix: '',
-            smsNumber: '',
-            otpNumber: '',
-            signUpEmail: '',
-            signUpPassword: '',
-            confPassword: '',
+            sms_prefix: '+6010',
+            sms_number: '',
+            tac: '',
+            signupEmail: '',
+            signupPassword: '',
+            password_confirmation: '',
             showPassword: false,
             showConfPassword: false,
+            otpSent: false,
+            canResend: false,
+            timer: null,
+            sendClick: false,
+            sendSuccess: false,
         };
     }
 
@@ -44,24 +67,54 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
         this.props.dispatch(getSmsPrefix());
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.signUpPage.signupSuccess !== this.props.signUpPage.signupSuccess && nextProps.signUpPage.signupSuccess) {
+            window.location.href = globalScope.previousPage || window.location.pathname;
+            console.log(window.location.href);
+        }
+
+        if (nextProps.error !== this.props.error && nextProps.error) {
+            console.log(nextProps.error);
+        }
+        if (nextProps.signUpPage.sendOtpSuccess !== this.props.signUpPage.sendOtpSuccess && nextProps.signUpPage.sendOtpSuccess) {
+            this.setState({
+                otpSent: true,
+                canResend: false,
+                sendSuccess: true,
+                timer: nextProps.signUpPage.response.data.ttl,
+            });
+            if (this.state.sendClick) {
+                this.resendTimer(nextProps.signUpPage.response.data.ttl);
+            }
+        }
+    }
+
     handleChange = (event) => {
         this.setState({ [event.target.id]: event.target.value });
     };
-    handleClickShowPassword = () => {
-        this.setState((state) => ({ showPassword: !state.showPassword }));
-    }
-    handleClickShowConfPassword = () => {
-        this.setState((state) => ({ showConfPassword: !state.showConfPassword }));
+    handleChangeNumber = (event) => {
+        const onlyNums = event.target.value.replace(/[^0-9]/g, '');
+        if (onlyNums.length < 15) {
+            this.setState({ sms_number: onlyNums });
+        }
     }
     handleSubmit = (event) => {
-        this.props.dispatch(doSignup(this.state));
+        const signUpData = {
+            email: this.state.signupEmail,
+            password: this.state.signupPassword,
+            password_confirmation: this.state.password_confirmation,
+            sms_number: this.state.sms_number,
+            sms_prefix: this.state.sms_prefix,
+            tac: this.state.tac,
+        };
+        this.props.dispatch(doSignup(signUpData));
         event.preventDefault();
     }
     // add function to Send OTP
     handleSendOTP = () => {
-        alert('OTP SENT! ');
+        this.props.dispatch(doSendOTP(this.state.sms_prefix, this.state.sms_number));
+        this.setState({ sendClick: true });
     }
-
     cardHeader = () => (
         <div className="mt-2 pl-1">
             <Typography variant="h5" color="primary"><b>Sign Up Now!</b></Typography>
@@ -89,25 +142,30 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
         );
     }
 
-    smsPrefixList = () => {
-        let showPrefixList;
-        let findPrefixList;
-        if (this.props.signUpPage && this.props.signUpPage.data.mobile_prefix) {
-            const prefixCountry = Object.keys(this.props.signUpPage.data.mobile_prefix.items);
-            findPrefixList = prefixCountry.map((countryName) => {
-                showPrefixList = Object.entries(this.props.signUpPage.data.mobile_prefix.items[countryName]).map((prefixList) => (
-                    <option key={prefixList} value={prefixList[0]}>
-                        {prefixList[1]}
-                    </option>
-                ));
-                return (
-                    showPrefixList
-                );
-            });
-        }
-        return (
-            findPrefixList
-        );
+    smsPrefixList = () => dataChecking(this.props.signUpPage, 'common', 'mobile_prefix', 'items', 'length') &&
+        this.props.signUpPage.common.mobile_prefix.items.map((item, index) => (
+            <option key={index} value={item.value}>
+                {item.name}
+            </option>
+        ))
+
+    resendTimer = (RESEND_TIME) => {
+        const interval = setInterval(() => {
+            if (this.state.timer > 0) {
+                this.setState((prevState) => ({
+                    timer: prevState.timer - 1,
+                }));
+            } else {
+                clearInterval(interval);
+                this.setState(() => ({
+                    canResend: true,
+                    timer: RESEND_TIME,
+                    sendClick: false,
+                    sendSuccess: false,
+                }));
+            }
+        }, 1000);
+        return (interval);
     }
 
     formInput = () => (
@@ -118,12 +176,13 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
                     <FormControl variant="outlined">
                         <Select
                             native={true}
-                            id="smsPrefix"
-                            value={this.state.smsPrefix}
+                            id="sms_prefix"
+                            value={this.state.sms_prefix}
                             onChange={this.handleChange}
                             input={
                                 <OutlinedInput />
                             }
+                            required={true}
                         >
                             {this.smsPrefixList()}
                         </Select>
@@ -132,72 +191,81 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
                 <Grid item={true} xs={9}>
                     <FormControl>
                         <InputForm
-                            id="smsNumber"
-                            handleChange={this.handleChange}
-                            value={this.state.smsNumber}
+                            id="sms_number"
+                            handleChange={this.handleChangeNumber}
+                            value={this.state.sms_number}
                             placeholder="e.g. 7654321"
                             onClear={() => {
-                                this.setState({ smsNumber: '' });
+                                this.setState({ sms_number: '' });
                             }}
-                            onClick={() => this.props.dispatch(doSendOTP(this.state.smsPrefix, this.state.smsNumber))}
+                            onClick={this.handleSendOTP}
                             requestOTP={true}
+                            canResend={this.state.canResend}
+                            otpSent={this.state.otpSent}
+                            timer={this.state.timer}
                         />
                     </FormControl>
                 </Grid>
             </Grid>
+            {
+                this.state.sendSuccess ? <Typography variant="caption" className="text-success">{this.props.signUpPage.response.messages[0].text}</Typography> : null
+            }
             <FormControl fullWidth={true}>
                 <InputForm
                     label="OTP Number"
                     variant="outlined"
-                    id="otpNumber"
+                    id="tac"
+                    placeholder="e.g. 01234"
                     handleChange={this.handleChange}
-                    value={this.state.otpNumber}
+                    value={this.state.tac}
                     onClear={() => {
-                        this.setState({ otpNumber: '' });
+                        this.setState({ tac: '' });
                     }}
                 />
             </FormControl>
             <FormControl fullWidth={true}>
                 <InputForm
                     label="Email address"
-                    id="signUpEmail"
+                    id="signupEmail"
+                    type="email"
                     handleChange={this.handleChange}
-                    placeholder="abc"
-                    value={this.state.signUpEmail}
+                    value={this.state.signupEmail}
                     onClear={() => {
-                        this.setState({ signUpEmail: '' });
+                        this.setState({ signupEmail: '' });
                     }}
                 />
             </FormControl>
             <FormControl fullWidth={true}>
                 <InputForm
                     label="Create a password"
-                    id="signUpPassword"
+                    id="signupPassword"
                     type={this.state.showPassword ? 'text' : 'password'}
-                    value={this.state.signUpPassword}
-                    showPassword={this.state.showPassword}
+                    value={this.state.signupPassword}
+                    showPassword={this.state.signupPassword}
                     handleChange={this.handleChange}
-                    handleClickShowPassword={this.handleClickShowPassword}
+                    handleClickShowPassword={() => this.setState((state) => ({ showPassword: !state.showPassword }))}
                     onClear={() => {
-                        this.setState({ signUpPassword: '' });
+                        this.setState({ signupPassword: '' });
                     }}
                     togglePassword={true}
+                    autoComplete="off"
                 />
-                <Typography className="pb-half" variant="caption" color="textSecondary">Password should contain at least 8 characters.</Typography>
+                <FormHelperText className="pb-half" id="password-helper">Password should contain at least 8 characters.</FormHelperText>
             </FormControl>
             <FormControl fullWidth={true}>
                 <InputForm
                     label="Confirm your password"
-                    id="confPassword"
+                    id="password_confirmation"
                     type={this.state.showConfPassword ? 'text' : 'password'}
-                    value={this.state.confPassword}
+                    value={this.state.password_confirmation}
                     showPassword={this.state.showConfPassword}
                     handleChange={this.handleChange}
-                    handleClickShowPassword={this.handleClickShowConfPassword}
+                    handleClickShowPassword={() => this.setState((state) => ({ showConfPassword: !state.showConfPassword }))}
                     onClear={() => {
-                        this.setState({ confPassword: '' });
+                        this.setState({ password_confirmation: '' });
                     }}
                     togglePassword={true}
+                    autoComplete="off"
                 />
             </FormControl>
         </div>
@@ -205,11 +273,21 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
 
     formAction = () => (
         <FormControl fullWidth={true} className="text-xs-center">
-            <Button type="submit" variant="contained" color="primary">
+            <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+            >
                 <Typography>Sign Up</Typography>
             </Button>
-            <Typography className="text-xs-center mt-1" variant="h6">or<br /></Typography>
-            {/* Need to add login with FB  */}
+            <Typography className="text-xs-center my-half" variant="h6">or<br /></Typography>
+            <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+            >
+                <Typography>FACEBOOK</Typography>
+            </Button>
         </FormControl>
     )
 
@@ -221,12 +299,14 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
                         {this.cardHeader()}
                         {this.cardHeader2()}
                         <hr />
-                        {/* update onSubmit */}
                         <form onSubmit={this.handleSubmit}>
                             <CardContent>
                                 {this.formInput()}
                                 {/* Add reCAPTCHA*/}
                             </CardContent>
+                            {
+                                this.props.signUpPage.error && <ErrorMessage error={this.props.signUpPage.error} type="danger" />
+                            }
                             <CardActions>
                                 {this.formAction()}
                             </CardActions>

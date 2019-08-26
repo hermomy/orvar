@@ -5,8 +5,19 @@
 */
 
 import React from 'react';
-import { TextField, InputAdornment, FormControl, IconButton, Typography, Button } from '@material-ui/core';
-import { Visibility, VisibilityOff, Cancel } from '@material-ui/icons';
+import {
+    TextField,
+    InputAdornment,
+    FormControl,
+    IconButton,
+    Typography,
+    Button,
+} from '@material-ui/core';
+import {
+    Visibility,
+    VisibilityOff,
+    Cancel,
+} from '@material-ui/icons';
 
 // import styled from 'styled-components';
 
@@ -41,13 +52,33 @@ class InputForm extends React.PureComponent { // eslint-disable-line react/prefe
         </IconButton>
     )
 
-    showOTP = () => (
-        <Button onClick={() => { this.props.onClick(); }}>
-            <Typography color="secondary" noWrap={true} variant="body2">
-                <b>Send OTP</b>
-            </Typography>
-        </Button>
-    )
+    showOTP = () => {
+        if (this.props.otpSent) {
+            if (this.props.canResend) {
+                return (
+                    <Button onClick={() => { this.props.onClick(); }}>
+                        <Typography color="secondary" noWrap={true} variant="body2">
+                            <b>Resend</b>
+                        </Typography>
+                    </Button>
+                );
+            }
+            return (
+                <Button disabled={true}>
+                    <Typography noWrap={true} variant="body2">
+                        <b>Resend ({this.props.timer})</b>
+                    </Typography>
+                </Button>
+            );
+        }
+        return (
+            <Button onClick={() => { this.props.onClick(); }}>
+                <Typography color="secondary" noWrap={true} variant="body2">
+                    <b>Send OTP</b>
+                </Typography>
+            </Button>
+        );
+    };
 
     render() {
         return (
@@ -61,6 +92,7 @@ class InputForm extends React.PureComponent { // eslint-disable-line react/prefe
                     onChange={this.props.handleChange}
                     type={this.props.type}
                     placeholder={this.props.placeholder}
+                    required={this.props.required ? this.props.required : true}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">

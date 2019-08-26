@@ -1,13 +1,70 @@
-import { takeLatest } from 'redux-saga/effects';
-import { DEFAULT_ACTION } from './constants';
+import {
+    takeLatest,
+    call,
+    put,
+} from 'redux-saga/effects';
+import globalScope from 'globalScope';
+import {
+    AUTH_SIGNUP,
+    AUTH_SENDOTP,
+    GET_SMS_PREFIX,
+} from './constants';
+import { apiRequest, setCookie } from '../../globalUtils';
 
-export function* defaultWorker(action) {
-    console.log('default worker for signUpPageSaga', action);
-    // yield call, yield put and etc, whatever you like
-    yield true;
+import {
+    sendOTPSuccess,
+    sendOTPFailed,
+    getSmsPrefixSuccess,
+    getSmsPrefixFailed,
+    signupSuccess,
+    signupFailed,
+} from './actions';
+
+export function* smsPrefixQuery() {
+    const response = yield call(apiRequest, '/app/common', 'get');
+    if (response && response.ok) {
+        yield put(getSmsPrefixSuccess(response.data));
+    } else {
+        yield put(getSmsPrefixFailed(response.data));
+    }
+}
+
+export function* signupQuery(action) {
+    const payload = JSON.stringify({
+        email: action.signupData.email,
+        password: action.signupData.password,
+        tac: action.signupData.tac,
+        password_confirmation: action.signupData.password_confirmation,
+        sms_number: action.signupData.sms_number,
+        sms_prefix: action.signupData.sms_prefix,
+    });
+    const response = yield call(apiRequest, '/register', 'post', payload);
+    if (response && response.ok) {
+        globalScope.token = response.data.token;
+        globalScope.axios.setHeader('hertoken', globalScope.token);
+        setCookie(process.env.TOKEN_KEY, globalScope.token);
+        yield put(signupSuccess(response.data));
+    } else {
+        yield put(signupFailed(response.data));
+    }
+}
+
+export function* queryOTP(params) {
+    const payload = JSON.stringify({
+        sms_number: params.smsNumber,
+        sms_prefix: params.smsPrefix,
+    });
+    const response = yield call(apiRequest, '/auth/tac', 'post', payload);
+    if (response && response.ok) {
+        yield put(sendOTPSuccess(response.data));
+    } else {
+        yield put(sendOTPFailed(response.data));
+    }
 }
 
 // Individual exports for testing
 export default function* signUpPageSaga() {
-    yield takeLatest(DEFAULT_ACTION, defaultWorker);
+    yield takeLatest(AUTH_SIGNUP, signupQuery);
+    yield takeLatest(AUTH_SENDOTP, queryOTP);
+    yield takeLatest(GET_SMS_PREFIX, smsPrefixQuery);
 }
