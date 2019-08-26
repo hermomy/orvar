@@ -14,6 +14,9 @@ import {
     GET_SMS_PREFIX,
     GET_SMS_PREFIX_SUCCESS,
     GET_SMS_PREFIX_FAILED,
+    GET_IMAGE_LINK,
+    GET_IMAGE_LINK_SUCCESS,
+    GET_IMAGE_LINK_FAILED,
 } from './constants';
 
 export function doSignup(signupData) {
@@ -71,5 +74,21 @@ export function getSmsPrefixSuccess(smsPrefix) {
 export function getSmsPrefixFailed() {
     return {
         type: GET_SMS_PREFIX_FAILED,
+    };
+}
+export function getImageLink() {
+    return {
+        type: GET_IMAGE_LINK,
+    };
+}
+export function getImageLinkSuccess(imageLink) {
+    return {
+        type: GET_IMAGE_LINK_SUCCESS,
+        imageLink,
+    };
+}
+export function getImageLinkFailed() {
+    return {
+        type: GET_IMAGE_LINK_FAILED,
     };
 }

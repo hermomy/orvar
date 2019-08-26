@@ -8,6 +8,7 @@ import {
     AUTH_SIGNUP,
     AUTH_SENDOTP,
     GET_SMS_PREFIX,
+    GET_IMAGE_LINK,
 } from './constants';
 import { apiRequest, setCookie } from '../../globalUtils';
 
@@ -18,6 +19,8 @@ import {
     getSmsPrefixFailed,
     signupSuccess,
     signupFailed,
+    getImageLinkSuccess,
+    getImageLinkFailed,
 } from './actions';
 
 export function* smsPrefixQuery() {
@@ -26,6 +29,14 @@ export function* smsPrefixQuery() {
         yield put(getSmsPrefixSuccess(response.data));
     } else {
         yield put(getSmsPrefixFailed(response.data));
+    }
+}
+export function* imageLinkQuery() {
+    const response = yield call(apiRequest, '/image?code=hershop-signup', 'get');
+    if (response && response.ok) {
+        yield put(getImageLinkSuccess(response.data));
+    } else {
+        yield put(getImageLinkFailed(response.data));
     }
 }
 
@@ -67,4 +78,5 @@ export default function* signUpPageSaga() {
     yield takeLatest(AUTH_SIGNUP, signupQuery);
     yield takeLatest(AUTH_SENDOTP, queryOTP);
     yield takeLatest(GET_SMS_PREFIX, smsPrefixQuery);
+    yield takeLatest(GET_IMAGE_LINK, imageLinkQuery);
 }

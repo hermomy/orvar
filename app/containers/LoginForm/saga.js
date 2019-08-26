@@ -2,10 +2,15 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import { apiRequest, setCookie } from 'globalUtils';
 import globalScope from 'globalScope';
 
-import { AUTH_LOGIN } from './constants';
+import {
+    AUTH_LOGIN,
+    GET_IMAGE_LINK,
+} from './constants';
 import {
     loginSuccess,
     loginFailed,
+    getImageLinkSuccess,
+    getImageLinkFailed,
 } from './actions';
 
 export function* loginQuery(action) {
@@ -25,8 +30,16 @@ export function* loginQuery(action) {
         yield put(loginFailed(error));
     }
 }
-
+export function* imageLinkQuery() {
+    const response = yield call(apiRequest, '/image?code=hershop-login', 'get');
+    if (response && response.ok) {
+        yield put(getImageLinkSuccess(response.data));
+    } else {
+        yield put(getImageLinkFailed(response.data));
+    }
+}
 // Individual exports for testing
 export default function* loginFormSaga() {
     yield takeLatest(AUTH_LOGIN, loginQuery);
+    yield takeLatest(GET_IMAGE_LINK, imageLinkQuery);
 }

@@ -36,6 +36,7 @@ import {
     doSignup,
     doSendOTP,
     getSmsPrefix,
+    getImageLink,
 } from './actions';
 import reducer from './reducer';
 import saga from './saga';
@@ -65,6 +66,7 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
 
     componentDidMount() {
         this.props.dispatch(getSmsPrefix());
+        this.props.dispatch(getImageLink());
     }
 
     componentWillReceiveProps(nextProps) {
@@ -117,8 +119,12 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
     }
     cardHeader = () => (
         <div className="mt-2 pl-1">
-            <Typography variant="h5" color="primary"><b>Sign Up Now!</b></Typography>
-            <Typography variant="h6" color="textSecondary"><br />Get 2 FREE Masks with your first purchase.</Typography>
+            <Typography variant="h5" color="primary">
+                <b>{dataChecking(this.props.signUpPage, 'image', 'items') && this.props.signUpPage.image.items[0].title}</b>
+            </Typography>
+            <Typography variant="h6" color="textSecondary">
+                <br />{dataChecking(this.props.signUpPage, 'image', 'items') && this.props.signUpPage.image.items[0].brief}
+            </Typography>
         </div>
     )
 

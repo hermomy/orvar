@@ -15,6 +15,9 @@ import {
     GET_SMS_PREFIX,
     GET_SMS_PREFIX_SUCCESS,
     GET_SMS_PREFIX_FAILED,
+    GET_IMAGE_LINK,
+    GET_IMAGE_LINK_SUCCESS,
+    GET_IMAGE_LINK_FAILED,
 } from './constants';
 
 export const initialState = fromJS({
@@ -26,6 +29,7 @@ export const initialState = fromJS({
     common: null,
     data: {},
     response: null,
+    image: null,
 });
 
 function signUpPageReducer(state = initialState, action) {
@@ -86,6 +90,17 @@ function signUpPageReducer(state = initialState, action) {
                 .set('error', false)
                 .set('common', action.smsPrefix);
         case GET_SMS_PREFIX_FAILED:
+            return state;
+        case GET_IMAGE_LINK:
+            return state
+                .set('loading', true)
+                .set('error', false);
+        case GET_IMAGE_LINK_SUCCESS:
+            return state
+                .set('loading', false)
+                .set('error', false)
+                .set('image', action.imageLink);
+        case GET_IMAGE_LINK_FAILED:
             return state;
         default:
             return state;

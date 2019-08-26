@@ -25,13 +25,17 @@ import {
     Typography,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { dataChecking } from 'globalUtils';
 
 import ErrorMessage from 'components/ErrorMessage';
 import InputForm from 'components/InputForm';
 import makeSelectLoginForm from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { doLogin } from './actions';
+import {
+    doLogin,
+    getImageLink,
+} from './actions';
 import './style.scss';
 import styles from './materialStyle';
 
@@ -45,7 +49,9 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
             showPassword: false,
         };
     }
-
+    componentDidMount() {
+        this.props.dispatch(getImageLink());
+    }
     componentWillReceiveProps(nextProps) {
         if (nextProps.loginForm.loginSuccess !== this.props.loginSuccess && nextProps.loginForm.loginSuccess) {
             window.location.href = globalScope.previousPage || window.location.pathname;
@@ -67,8 +73,12 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
 
     cardHeader = () => (
         <div className=" mt-2 pl-1">
-            <Typography variant="h5" color="primary"><b>Welcome back!</b></Typography>
-            <Typography variant="h6" color="textSecondary"><br />Lets go shopping.</Typography>
+            <Typography variant="h5" color="primary">
+                <b>{dataChecking(this.props.loginForm, 'image', 'items') && this.props.loginForm.image.items[0].title}</b>
+            </Typography>
+            <Typography variant="h6" color="textSecondary">
+                <br />{dataChecking(this.props.loginForm, 'image', 'items') && this.props.loginForm.image.items[0].brief}
+            </Typography>
         </div>
     )
 
