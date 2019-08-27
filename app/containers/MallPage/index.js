@@ -243,6 +243,7 @@ export class MallPage extends React.PureComponent { // eslint-disable-line react
                     listViewMode={this.state.listView} // this.props.dispatch(postWishlist(item.id, this.props.mallPage.data.productData._links.self.href))}
                     allowWishlistButton={true}
                     addOrDeleteWishlist={() => { this.setState({ postWishlist: { URL: `/wishlist/${item.id}`, runpermit: false } }); }}
+                    disableElevation={true}
                 />
             </div>
         ))

@@ -1,81 +1,47 @@
 @import 'app/breakpoints';
+@import 'app/legacy-styling.scss';
 
 .item-card {
-    padding: 16px;
-    margin: 0 10px;
-    min-height: 280px;
+    padding: 1rem 1rem 0.5rem 1rem;
+    margin: 0.5rem;
+    min-height: 18rem;
+    background-color: #FFFFFF;
 
-    @include media-breakpoint-down(sm) {
-        min-height: 260px;
+    .item-image {
+        width: 7rem;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    @media only screen and (max-width: 320px) {
-        min-height: 230px;
-    }
+    .item-label-container {
+        min-height: 2rem;
 
-    .carousel-item-image-container {
-        padding: 20px;
-        text-align: center;
-
-        @media only screen and (max-width: 768px) {
-            padding: 10px;
-        }
-
-        @include media-breakpoint-down(sm) {
-            padding: 5px;
-        }
-
-        .carousel-item-image {
-            @include media-breakpoint-down(sm) {
-                width: 60% !important;
-            }
+        .item-label {
+            width: 7rem;
         }
     }
 
-    .empty-label {
-        height: 27px;
-
-        @include media-breakpoint-down(sm) {
-            padding: 0;
-        }
+    .item-price {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
 
-    .item-label {
-        width: 70% !important;
-
-        @include media-breakpoint-down(sm) {
-            width: 50% !important;
-        }
+    .item-brand {
+        @include line-elips(1rem, 1.3, 1);
     }
 
-    .brand-name {
-        font-weight: bold;
-        display: -webkit-box;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-    }
+    .item-description-container {
+        min-height: 3rem;
 
-    .item-name {
-        display: -webkit-box;
-        max-width: 250px;
-        min-height: 38px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-
-        @media only screen and (max-width: 768px) {
-            min-height: 44px;
-        }
-
-        @media only screen and (max-width: 414px) {
-            height: 32px;
-        }
-
-        @media only screen and (max-width: 320px) {
-            height: 28px;
+        .item-description {
+            @include line-elips(1rem, 1.3, 2);
         }
     }
+}
+
+.dialog-item-image {
+    width: 8rem;
+    margin-left: auto;
+    margin-right: auto;
 }

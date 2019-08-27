@@ -70,12 +70,12 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
     }
 
     renderDialogContent = () => (
-        <form style={{ padding: 20 }}>
-            <div style={{ textAlign: 'center', minHeight: '0 !important', padding: '0 20px 20px 20px' }}>
+        <form className="p-1">
+            <div className="dialog-item-image pb-2">
                 <img
                     src={dataChecking(this.state.product, 'image', 'small')}
-                    alt="product_image"
-                    style={{ width: '50%' }}
+                    alt="dialog_product_image"
+                    width="100%"
                 />
             </div>
             {
@@ -91,26 +91,36 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
         if (dataChecking(item, 'product', 'url') && (dataChecking(item, 'product', 'url') === '/sample')) {
             if (dataChecking(item, 'price', 'selling') && (dataChecking(item, 'price', 'selling') !== 0)) {
                 return (
-                    <div style={{ textAlign: 'center' }}>
-                        <img src={require('Resources/order/beauty_grab_label.png')} alt="beauty-grab-label" className="item-label" />
+                    <div className="item-label-container text-xs-center">
+                        <img
+                            src={require('Resources/order/beauty_grab_label.png')}
+                            alt="beauty-grab-label"
+                            width="100%"
+                            className="item-label"
+                        />
                     </div>
                 );
             }
             return (
-                <div style={{ textAlign: 'center' }}>
-                    <img src={require('Resources/order/free_item_label.png')} alt="free-item-label" className="item-label" />
+                <div className="item-label-container text-xs-center">
+                    <img
+                        src={require('Resources/order/free_item_label.png')}
+                        alt="free-item-label"
+                        width="100%"
+                        className="item-label"
+                    />
                 </div>
             );
         }
         return (
-            <div className="empty-label" />
+            <div className="item-label-container text-xs-center" />
         );
     }
 
     renderPrice = (order, item) => (
-        <div className="product-price" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingTop: 20 }}>
+        <div className="item-price pt-1">
             <div>
-                <Typography variant="h6" style={{ fontWeight: 'bold' }}>
+                <Typography style={{ fontWeight: 'bold' }}>
                     {order.currency.symbol}{item.price.selling.toFixed(2)}
                 </Typography>
             </div>
@@ -121,7 +131,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
     )
 
     renderBrand = (item) => (
-        <div className="brand-name">
+        <div className="item-brand pb-half">
             <NavLink to={dataChecking(item, 'product', 'brand', 'url')} style={{ textDecoration: 'none' }}>
                 <Typography
                     color="primary"
@@ -134,6 +144,12 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                     <KeyboardArrowRight color="primary" />
                 </IconButton>
             </NavLink>
+        </div>
+    )
+
+    renderDescription = (item) => (
+        <div className="item-description-container">
+            <Typography display="block" gutterBottom={true} className="item-description">{item.product.plain_name}</Typography>
         </div>
     )
 
@@ -219,7 +235,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                     navText: ['&lt;', '&gt;'],
                     responsive: {
                         320: {
-                            items: 1,
+                            items: 2,
                         },
                         700: {
                             items: 4,
@@ -240,15 +256,15 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                                 width="auto"
                                 style={{ backgroundColor: '#FFFFFF' }}
                             >
-                                <div className="carousel-item-image-container">
+                                <div className="item-image pb-1">
                                     <NavLink to={item.product.url}>
-                                        <img src={item.product.image.large} alt="product" className="carousel-item-image" />
+                                        <img src={item.product.image.large} alt="product_image" />
                                     </NavLink>
                                 </div>
                                 {this.renderLabel(item)}
                                 {this.renderPrice(order, item)}
                                 {this.renderBrand(item)}
-                                <Typography display="block" gutterBottom={true} className="item-name">{item.product.plain_name}</Typography>
+                                {this.renderDescription(item)}
                                 {
                                     item.items.length > 0 &&
                                         <Button

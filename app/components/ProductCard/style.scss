@@ -51,40 +51,29 @@
         min-height: 4rem;
 
         .feature-tag {
-            width: 2vw;
-            height: 2vw;
+            width: 3vw;
+            height: 3vw;
             border-radius: 50px;
 
-            @include media-breakpoint-down(md) {
-                width: 5vw;
-                height: 5vw;
-            }
-
             @include media-breakpoint-down(sm) {
-                width: 8vw;
-                height: 8vw;
+                width: 7vw;
+                height: 7vw;
             }
         }
 
         .discount-tag {
-            width: 2vw;
-            height: 2vw;
+            width: 3vw;
+            height: 3vw;
+            line-height: 3vw;
             border-radius: 50px;
             background-color: #FF0068;
             color: #FFFFFF;
-            line-height: 2vw;
             text-align: center;
 
-            @include media-breakpoint-down(md) {
-                width: 5vw;
-                height: 5vw;
-                line-height: 5vw;
-            }
-
             @include media-breakpoint-down(sm) {
-                width: 8vw;
-                height: 8vw;
-                line-height: 8vw;
+                width: 7vw;
+                height: 7vw;
+                line-height: 7vw;
             }
         }
     }
