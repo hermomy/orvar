@@ -26,7 +26,6 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
             }
             return null;
         });
-        this.setState({ value });
         this.props.renderTabID(value);
     };
     render() {
@@ -47,6 +46,7 @@ class NavigationTab extends React.PureComponent { // eslint-disable-line react/p
                                     {
                                         this.props.data.map((data) => (
                                             <Tab
+                                                className="text-capitalize"
                                                 key={data.title}
                                                 label={data.title}
                                                 onClick={() => {
