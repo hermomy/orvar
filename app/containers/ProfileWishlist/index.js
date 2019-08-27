@@ -154,6 +154,7 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                                 <ProductCard
                                     product={product}
                                     url={product.url}
+                                    disableElevation={true}
                                 />
                             </div>
                         </div>
@@ -269,7 +270,7 @@ export class ProfileWishlist extends React.PureComponent { // eslint-disable-lin
                                         image={true}
                                         feature={true}
                                         rating={true}
-                                        removeFromWishlist={() => {
+                                        allowDelete={() => {
                                             this.setState({ popup: !this.state.popup, orderID: item.id, dialogType: 'remove_item' });
                                         }}
                                         addToCart={() => {
