@@ -468,6 +468,7 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                                         image={true}
                                                         feature={true}
                                                         rating={true}
+                                                        disableElevation={true}
                                                     />
                                                 ))
                                             }
