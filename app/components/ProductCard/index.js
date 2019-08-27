@@ -8,7 +8,8 @@ import { dataChecking } from 'globalUtils';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
-import {
+import
+{
     Button,
     Card,
     CardContent,
@@ -17,7 +18,8 @@ import {
     IconButton,
     Typography,
 } from '@material-ui/core';
-import {
+import
+{
     AddShoppingCart,
     Cancel,
     KeyboardArrowRight,
@@ -30,12 +32,12 @@ import './style.scss';
 
 class ProductCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     renderImage = () => (
-        <div className="product-img" style={{ textAlign: 'center' }}>
+        <div className="product-img text-xs-center mb-1">
             <NavLink to={this.props.url}>
                 <img
                     src={dataChecking(this.props.product, 'image', 'small')}
                     alt="product_image"
-                    style={{ width: '50%' }}
+                    width="100%"
                 />
                 {
                     dataChecking(this.props.product, 'instock') ?
@@ -52,27 +54,26 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
     renderFeature = () => {
         const features = dataChecking(this.props.product, 'features');
         const discount = dataChecking(this.props.product, 'price', 'discount_text');
-        const isEmpty = features.length === 0 && discount === null;
 
         return (
-            <Grid container={true} justify="center" className={`${isEmpty ? 'empty-product-feature' : 'product-feature'}`}>
+            <Grid container={true} justify="center" className="product-feature">
                 {
                     features.length > 0 &&
-                        features.map((feature, key) => (
-                            <Grid item={true} key={`${this.props.product.id}-${key}`}>
-                                <img
-                                    src={feature.value}
-                                    alt="product_feature"
-                                    className="feature-tag"
-                                />
-                            </Grid>
-                        ))
+                    features.map((feature, key) => (
+                        <Grid item={true} key={`${this.props.product.id}-${key}`}>
+                            <img
+                                src={feature.value}
+                                alt="product_feature"
+                                className="feature-tag"
+                            />
+                        </Grid>
+                    ))
                 }
                 {
                     discount !== null &&
-                        <Grid item={true} className="discount-tag">
-                            <Typography variant="caption">{discount}</Typography>
-                        </Grid>
+                    <Grid item={true} className="discount-tag">
+                        <Typography variant="caption">{discount}</Typography>
+                    </Grid>
                 }
             </Grid>
         );
@@ -106,7 +107,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
     }
 
     renderBrand = () => (
-        <div className="product-brand">
+        <div className="product-brand pb-half">
             <NavLink to={dataChecking(this.props.product, 'brand', 'url')} style={{ textDecoration: 'none' }}>
                 <Typography
                     color="primary"
@@ -123,8 +124,8 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
     )
 
     renderDescription = () => (
-        <div className="product-description">
-            <Typography>{this.props.product.display_name}</Typography>
+        <div>
+            <Typography className="product-description mb-half">{this.props.product.display_name}</Typography>
         </div>
     )
 
@@ -158,13 +159,14 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
 
     render() {
         return (
-            <Card style={{ boxShadow: 'none' }} className="product-container">
-                {
-                    this.props.removeFromWishlist &&
+            <Card className={`product-container ${this.props.disableElevation ? 'no-box-shadow' : ''}`}>
+                <CardContent>
+                    {
+                        this.props.allowDelete &&
                         <CardHeader
                             action={
                                 <IconButton
-                                    onClick={() => this.props.removeFromWishlist()}
+                                    onClick={() => this.props.allowDelete()}
                                     style={{ float: 'right', padding: 0 }}
                                 >
                                     <Cancel />
@@ -172,8 +174,7 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                             }
                             style={{ display: 'block' }}
                         />
-                }
-                <CardContent className="product-content">
+                    }
                     {this.props.image && this.renderImage()}
                     {this.props.feature && this.renderFeature()}
                     {this.renderPrice()}
@@ -183,18 +184,18 @@ class ProductCard extends React.PureComponent { // eslint-disable-line react/pre
                 </CardContent>
                 {
                     this.props.addToCart &&
-                        <Button
-                            variant="contained"
-                            color={dataChecking(this.props.product, 'instock') ? 'secondary' : 'primary'}
-                            fullWidth={true}
-                            className="add-to-cart-button"
-                            onClick={dataChecking(this.props.product, 'instock') ? () => this.props.addToCart() : () => this.props.notifyMe()}
-                        >
-                            {dataChecking(this.props.product, 'instock') ? <AddShoppingCart /> : <NotificationImportant />}
-                            <Typography variant="overline" className="pl-1">
-                                {dataChecking(this.props.product, 'instock') ? 'Add to cart' : 'Notify Me'}
-                            </Typography>
-                        </Button>
+                    <Button
+                        variant="contained"
+                        color={dataChecking(this.props.product, 'instock') ? 'secondary' : 'primary'}
+                        fullWidth={true}
+                        className="add-to-cart-button"
+                        onClick={dataChecking(this.props.product, 'instock') ? () => this.props.addToCart() : () => this.props.notifyMe()}
+                    >
+                        {dataChecking(this.props.product, 'instock') ? <AddShoppingCart /> : <NotificationImportant />}
+                        <Typography variant="overline" className="pl-1">
+                            {dataChecking(this.props.product, 'instock') ? 'Add to cart' : 'Notify Me'}
+                        </Typography>
+                    </Button>
                 }
             </Card>
         );
