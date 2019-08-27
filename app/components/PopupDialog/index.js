@@ -7,7 +7,9 @@
 import React from 'react';
 
 import {
+    Button,
     Dialog,
+    DialogActions,
     DialogContent,
     DialogTitle,
     IconButton,
@@ -39,6 +41,20 @@ class PopupDialog extends React.PureComponent {
                     <DialogContent>
                         {this.props.children}
                     </DialogContent>
+                    <DialogActions>
+                        {
+                            this.props.onCancel &&
+                                <Button onClick={this.props.onCancel} color="primary">
+                                    Cancel
+                                </Button>
+                        }
+                        {
+                            this.props.onUpdate &&
+                                <Button onClick={this.props.onUpdate} color="primary">
+                                    Update
+                                </Button>
+                        }
+                    </DialogActions>
                 </Dialog>
             </div>
         );
