@@ -33,6 +33,8 @@ import ProfileWishlist from 'containers/ProfileWishlist';
 import ProfileReview from 'containers/ProfileReview';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
+import AuthPage from 'containers/AuthPage';
+import SignUp from 'containers/SignUpPage';
 import ProfileAddress from 'containers/ProfileAddress';
 
 import Header from 'containers/Header';
@@ -50,6 +52,8 @@ export default function App() {
                 <Switch>
                     <Route exact={true} path="/" component={HomePage} />
                     <PrivateRoute exact={true} path="/login" component={LogoutForm} />
+                    <Route exact={true} path="/auth" component={AuthPage} />
+                    <Route exact={true} path="/signup" component={SignUp} />
                     <PrivateRoute exact={true} path="/logout" component={LogoutForm} />
                     <PrivateRoute exact={true} path="/onboarding" component={OnboardingPage} />
 
