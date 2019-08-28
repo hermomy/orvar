@@ -19,9 +19,8 @@ import {
     Cancel,
 } from '@material-ui/icons';
 
-// import styled from 'styled-components';
 
-import './style.scss';
+// import './style.scss';
 
 class InputForm extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {

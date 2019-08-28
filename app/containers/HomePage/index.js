@@ -45,8 +45,8 @@ const a = [
     },
     {
         'title': 'Address',
-        'url': '/address'
-    }
+        'url': '/address',
+    },
 ];
 
 export default class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function

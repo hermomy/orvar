@@ -33,8 +33,6 @@ import ProfileWishlist from 'containers/ProfileWishlist';
 import ProfileReview from 'containers/ProfileReview';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
-import AuthPage from 'containers/AuthPage';
-import SignUp from 'containers/SignUpPage';
 import ProfileAddress from 'containers/ProfileAddress';
 
 import Header from 'containers/Header';
