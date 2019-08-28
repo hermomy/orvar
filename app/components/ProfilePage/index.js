@@ -245,7 +245,30 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
             </CardContent>
         </Card>
     )
-
+    renderRewards = () => (
+        <Card>
+            <CardHeader
+                title={<Typography variant="subtitle1">Rewards</Typography>}
+            />
+            <CardContent style={{ textAlign: 'left' }}>
+                <NavLink to={'/profile/rewards'}>
+                    <Typography variant="subtitle1" >More Rewards&gt;</Typography>
+                </NavLink>
+            </CardContent>
+        </Card>
+    )
+    renderReview = () => (
+        <Card>
+            <CardHeader
+                title={<Typography variant="subtitle1">Review</Typography>}
+            />
+            <CardContent style={{ textAlign: 'left' }}>
+                <NavLink to={'/profile/review'}>
+                    <Typography variant="subtitle1" >My Reviews &gt;</Typography>
+                </NavLink>
+            </CardContent>
+        </Card>
+    )
     renderAddress = () => (
         <Card>
             <CardHeader
@@ -519,6 +542,12 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                         </Grid>
                                         <Grid item={true} xs={12} sm={6} md={3}>
                                             {this.renderWallet(profiledata)}
+                                        </Grid>
+                                        <Grid item={true} xs={12} sm={6} md={3}>
+                                            {this.renderRewards()}
+                                        </Grid>
+                                        <Grid item={true} xs={12} sm={6} md={3}>
+                                            {this.renderReview()}
                                         </Grid>
                                         <Grid item={true} xs={12} sm={6} md={3}>
                                             {this.renderAddress()}

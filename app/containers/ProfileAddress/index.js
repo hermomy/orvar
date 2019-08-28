@@ -103,7 +103,7 @@ export class ProfileAddress extends React.PureComponent { // eslint-disable-line
     }
     addressList = () => dataChecking(this.props, 'profileAddress', 'list', 'items') &&
         this.props.profileAddress.list.items.map((item, index) => (
-            <Card id={item.id} key={index}>
+            <Card id={item.id} key={index} className="my-1">
                 <CardHeader
                     title={`Address ${index + 1}`}
                     action={
