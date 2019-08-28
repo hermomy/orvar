@@ -33,6 +33,9 @@ import ProfileWishlist from 'containers/ProfileWishlist';
 import ProfileReview from 'containers/ProfileReview';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
+import AuthPage from 'containers/AuthPage';
+import SignUp from 'containers/SignUpPage';
+import ProfileAddress from 'containers/ProfileAddress';
 
 import Header from 'containers/Header';
 import { ProfileWallet } from '../ProfileWallet';
@@ -88,6 +91,7 @@ export default function App() {
                     <PrivateRoute exact={true} path="/feedback" component={FeedbackPage} />
                     <PrivateRoute exact={true} path="/checkout" component={CheckoutPage} />
                     <PrivateRoute exact={true} path="/profile" component={ProfilePage} />
+                    <PrivateRoute exact={true} path="/profile/address" component={ProfileAddress} />
                     <PrivateRoute exact={true} path="/profile/wallet" component={ProfileWallet} />
                     <PrivateRoute exact={true} path="/profile/detail" component={ProfileEditInfo} />
                     <PrivateRoute exact={true} path="/profile/review" component={ProfileReview} />
