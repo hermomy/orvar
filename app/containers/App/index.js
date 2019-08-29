@@ -31,11 +31,11 @@ import ProfileOrderDetail from 'containers/ProfileOrderDetail';
 import ProfileEditInfo from 'containers/ProfileEditInfo';
 import ProfileWishlist from 'containers/ProfileWishlist';
 import ProfileReview from 'containers/ProfileReview';
+import ProfileWallet from 'containers/ProfileWallet';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
 
 import Header from 'containers/Header';
-import { ProfileWallet } from '../ProfileWallet';
 import './style.scss';
 
 export default function App() {

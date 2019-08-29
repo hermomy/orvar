@@ -1,0 +1,105 @@
+@import 'app/breakpoints';
+
+.voucher-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    @include media-breakpoint-down(sm) {
+        display: block;
+    }
+}
+
+.voucher-card {
+    .card-header {
+        height: 6rem;
+        background-image: linear-gradient(#000000, #660033);
+        color: #FFFFFF;
+    }
+
+    .card-content {
+        height: 6rem;
+        background-color: #FFFFFF;
+    }
+
+    .rounded-corner {
+        flex: 1;
+        align-self: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .corner-left {
+            margin-left: -1.5rem;
+            border-radius: 5.5rem;
+            align-self: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: #F3EFEE;
+        }
+
+        .corner-right {
+            margin-left: -1.5rem;
+            border-radius: 5.5rem;
+            align-self: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: #F3EFEE;
+        }
+    }
+}
+// .voucher-card {
+//     // margin-right: 0.1rem;
+//     margin-bottom: 1rem;
+//     position: relative;
+//     width: 25rem;
+
+//     .card-header {
+//         height: 5rem;
+//         width: 20rem;
+//         background-image: linear-gradient(#000000, #660033);
+//         color: #FFFFFF;
+//     }
+
+//     .card-content {
+//         height: 5rem;
+//         width: 20rem;
+//         background-color: #FFFFFF;
+//     }
+
+//     .rounded-corner {
+//         flex: 1;
+//         align-self: center;
+//         position: absolute;
+//         top: 0;
+//         left: 0;
+//         right: 0;
+//         bottom: 0;
+//         display: flex;
+//         flex-direction: row;
+//         justify-content: space-between;
+
+//         .corner-left {
+//             margin-left: -1.5rem;
+//             border-radius: 5.5rem;
+//             align-self: center;
+//             width: 2.5rem;
+//             height: 2.5rem;
+//             background-color: #F3EFEE;
+//         }
+
+//         .corner-right {
+//             margin-left: -1.5rem;
+//             border-radius: 5.5rem;
+//             align-self: center;
+//             width: 2.5rem;
+//             height: 2.5rem;
+//             background-color: #F3EFEE;
+//         }
+//     }
+// }

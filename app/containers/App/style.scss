@@ -1,6 +1,7 @@
 @import 'app/breakpoints';
 
 #hershop-content-container {
-    padding-top: 53px;
+    padding-top: 4.6rem;
+
     @include media-breakpoint-down(sm) { padding-top: 100px; }
 }
