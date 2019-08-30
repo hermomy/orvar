@@ -69,6 +69,14 @@ export class ProfileRewards extends React.PureComponent {
             </Grid>
         )
     )
+    renderAccountBalance = () => {
+        if (dataChecking(this.props, 'profileRewards', 'data', 'data', 'balance', 'amount')) {
+            return (
+                <Typography color="secondary">{this.props.profileRewards.data.data.balance.amount}</Typography>
+            );
+        }
+        return null;
+    }
     render() {
         return (
             <Container>
@@ -92,7 +100,7 @@ export class ProfileRewards extends React.PureComponent {
                 </Button>
                 <Paper className="p-1">
                     <Typography>Available credits: </Typography>
-                    <Typography color="secondary">{this.props.profileRewards.data.data.balance.amount}</Typography>
+                    {this.renderAccountBalance()}
                 </Paper>
                 <Grid container={true} spacing={1}>
                     {this.renderRewards()}

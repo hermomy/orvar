@@ -13,7 +13,6 @@ import {
 } from './actions';
 
 export function* getRewardsQuery(action) {
-    console.log('action.payload', action.payload);
     const response = yield call(apiRequest, '/services/gami/rewards', 'get', action.payload);
     if (response && response.ok) {
         yield put(getRewardsSuccess(response.data));
