@@ -57,7 +57,8 @@ function profileRewardsReducer(state = initialState, action) {
                 .setIn(['rewardsInfo', 'loading'], true)
                 .setIn(['rewardsInfo', 'success'], false)
                 .setIn(['rewardsInfo', 'data'], null)
-                .setIn(['rewardsInfo', 'error'], false);
+                .setIn(['rewardsInfo', 'error'], false)
+                .setIn(['redeemRewards', 'data'], null);
         case GET_REWARDS_INFO_SUCCESS:
             return state
                 .setIn(['rewardsInfo', 'loading'], false)

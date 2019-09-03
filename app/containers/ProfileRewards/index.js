@@ -140,22 +140,26 @@ export class ProfileRewards extends React.PureComponent {
                             :
                             <div>
                                 {
-                                    dataChecking(this.props, 'profileRewards', 'redeemRewards', 'data')
+                                    dataChecking(this.props, 'profileRewards', 'rewardsInfo', 'data', 'data', 'status')
                                     ?
-                                        <div>
-                                            <Typography variant="h5">{this.props.profileRewards.redeemRewards.data.data.message.title}</Typography>
-                                            <br />
-                                            <Typography>{this.props.profileRewards.redeemRewards.data.data.message.content}</Typography>
-                                        </div>
+                                        <Typography color="secondary" variant="h5">{this.props.profileRewards.rewardsInfo.data.data.status}</Typography>
                                     :
-                                        <Button
-                                            variant="outlined"
-                                            color="secondary"
-                                            fullWidth={true}
-                                            onClick={() => this.setState({ clickRedeem: true })}
-                                        >
-                                        Redeem Now
-                                        </Button>
+                                        dataChecking(this.props, 'profileRewards', 'redeemRewards', 'data')
+                                        ?
+                                            <div>
+                                                <Typography variant="h5">{this.props.profileRewards.redeemRewards.data.data.message.title}</Typography>
+                                                <br />
+                                                <Typography>{this.props.profileRewards.redeemRewards.data.data.message.content}</Typography>
+                                            </div>
+                                        :
+                                            <Button
+                                                variant="outlined"
+                                                color="secondary"
+                                                fullWidth={true}
+                                                onClick={() => this.setState({ clickRedeem: true })}
+                                            >
+                                            Redeem Now
+                                            </Button>
                                 }
                             </div>
                         }
@@ -211,7 +215,10 @@ export class ProfileRewards extends React.PureComponent {
                     display={this.state.popup}
                     title="Reward Details"
                     onClose={() => {
-                        this.setState({ popup: false });
+                        this.setState({
+                            popup: false,
+                            clickRedeem: false,
+                        });
                     }}
                 >
                     {this.renderDialogContent()}
