@@ -168,6 +168,8 @@ export class ProfileRewards extends React.PureComponent {
                         <Typography variant="h5">Terms and Conditions</Typography>
                         <br />
                         {parse(info.tnc)}
+                        {/* USE LINE BELOW TO USE REACT'S RENDER HTML FROM A STRING. ABOVE LINE USE HTML-REACT-PARSE PACKAGE */}
+                        {/* <div dangerouslySetInnerHTML={{ __html: info.tnc }} />  */}
                     </CardContent>
                     { info.partner.description ?
                         <CardContent>
