@@ -1,0 +1,128 @@
+.hidden { display: none !important }
+
+.text-xs-center { text-align: center; }
+.text-xs-right { text-align: right; }
+
+.text-uppercase { text-transform: uppercase; }
+.text-capitalize { text-transform: capitalize; }
+
+.color-transparent { color: transparent; }
+.disabled { color: lightgray }
+
+.text-success { color: rgb(67, 201, 67) }
+.text-danger { color: rgb(221, 41, 41) }
+
+
+// padding configs
+.p-quater { padding: 0.25rem !important; }
+.p-half { padding: 0.5rem !important; }
+.p-1 { padding: 1rem !important; }
+.p-2 { padding: 2rem !important; }
+.p-3 { padding: 3rem !important; }
+
+.px-quater { padding-left: 0.25rem !important; padding-right: 0.25rem !important; }
+.px-half { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+.px-1 { padding-left: 1rem !important; padding-right: 1rem !important; }
+.px-2 { padding-left: 2rem !important; padding-right: 2rem !important; }
+.px-3 { padding-left: 3rem !important; padding-right: 3rem !important; }
+
+.py-quater { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
+.py-half { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+.py-1 { padding-top: 1rem !important; padding-bottom: 1rem !important; }
+.py-2 { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+.py-3 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+
+.pt-quater { padding-top: 0.25rem !important; }
+.pt-half { padding-top: 0.5rem !important; }
+.pt-1 { padding-top: 1rem !important; }
+.pt-2 { padding-top: 2rem !important; }
+.pt-3 { padding-top: 3rem !important; }
+
+.pl-quater { padding-left: 0.25rem !important; }
+.pl-half { padding-left: 0.5rem !important; }
+.pl-1 { padding-left: 1rem !important; }
+.pl-2 { padding-left: 2rem !important; }
+.pl-3 { padding-left: 3rem !important; }
+
+.pr-quater { padding-right: 0.25rem !important; }
+.pr-half { padding-right: 0.5rem !important; }
+.pr-1 { padding-right: 1rem !important; }
+.pr-2 { padding-right: 2rem !important; }
+.pr-3 { padding-right: 3rem !important; }
+
+.pb-quater { padding-bottom: 0.25rem !important; }
+.pb-half { padding-bottom: 0.5rem !important; }
+.pb-1 { padding-bottom: 1rem !important; }
+.pb-2 { padding-bottom: 2rem !important; }
+.pb-3 { padding-bottom: 3rem !important; }
+
+
+// margin configs
+.m-quater { margin: 0.25rem !important; }
+.m-half { margin: 0.5rem !important; }
+.m-1 { margin: 1rem !important; }
+.m-2 { margin: 2rem !important; }
+.m-3 { margin: 3rem !important; }
+
+.mx-quater { margin-left: 0.25rem !important; margin-right: 0.25rem !important; }
+.mx-half { margin-left: 0.5rem !important; margin-right: 0.5rem !important; }
+.mx-1 { margin-left: 1rem !important; margin-right: 1rem !important; }
+.mx-2 { margin-left: 2rem !important; margin-right: 2rem !important; }
+.mx-3 { margin-left: 3rem !important; margin-right: 3rem !important; }
+
+.my-quater { margin-top: 0.25rem !important; margin-bottom: 0.25rem !important; }
+.my-half { margin-top: 0.5rem !important; margin-bottom: 0.5rem !important; }
+.my-1 { margin-top: 1rem !important; margin-bottom: 1rem !important; }
+.my-2 { margin-top: 2rem !important; margin-bottom: 2rem !important; }
+.my-3 { margin-top: 3rem !important; margin-bottom: 3rem !important; }
+
+.mt-quater { margin-top: 0.25rem !important; }
+.mt-half { margin-top: 0.5rem !important; }
+.mt-1 { margin-top: 1rem !important; }
+.mt-2 { margin-top: 2rem !important; }
+.mt-3 { margin-top: 3rem !important; }
+
+.ml-quater { margin-left: 0.25rem !important; }
+.ml-half { margin-left: 0.5rem !important; }
+.ml-1 { margin-left: 1rem !important; }
+.ml-2 { margin-left: 2rem !important; }
+.ml-3 { margin-left: 3rem !important; }
+
+.mr-quater { margin-right: 0.25rem !important; }
+.mr-half { margin-right: 0.5rem !important; }
+.mr-1 { margin-right: 1rem !important; }
+.mr-2 { margin-right: 2rem !important; }
+.mr-3 { margin-right: 3rem !important; }
+
+.mb-quater { margin-bottom: 0.25rem !important; }
+.mb-half { margin-bottom: 0.5rem !important; }
+.mb-1 { margin-bottom: 1rem !important; }
+.mb-2 { margin-bottom: 2rem !important; }
+.mb-3 { margin-bottom: 3rem !important; }
+
+
+// position configs
+.position-relative { position: relative; }
+.position-absolute { position: absolute; }
+
+
+// padding configs
+.container { margin: auto;}
+@media (min-width:544px) {.container{max-width:576px}}
+@media (min-width:768px) {.container{max-width:720px}}
+@media (min-width:992px) {.container{max-width:940px}}
+@media (min-width:1200px){.container{max-width:1140px}}
+
+//mixin
+@mixin line-elips($font-size, $line-height, $lines-to-show) {
+    display: block;
+    display: -webkit-box;
+    max-width: 400px;
+    max-height: $font-size*$line-height*$lines-to-show;
+    font-size: $font-size;
+    line-height: $line-height;
+    -webkit-line-clamp: $lines-to-show;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

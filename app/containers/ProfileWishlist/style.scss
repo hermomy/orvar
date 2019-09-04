@@ -1,18 +1,32 @@
 @import 'app/breakpoints';
 
-.grid-view {
+.wishlist-quantity {
+    background-color: #FF4081;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    text-align: center;
+    border-radius: 5px;
     display: flex;
-    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
 
-    .product-card-div {
-        width: 50%;
+.product-content {
+    min-height: 0 !important;
+}
 
-        @include media-breakpoint-up(md) {
-            width: 33%;
-        }
+.add-to-cart-content {
+    @include media-breakpoint-down(sm) {
+        padding: 8px 10px !important;
+    }
 
-        @include media-breakpoint-up(lg) {
-            width: 25%;
+    .add-to-cart-image {
+        width: 70%;
+
+        @include media-breakpoint-down(sm) {
+            width: 80%;
+            padding: 10px;
         }
     }
 }

@@ -6,34 +6,44 @@
 
 import {
     AUTH_LOGIN,
-    AUTH_LOGOUT,
     AUTH_LOGIN_SUCCESS,
     AUTH_LOGIN_FAILED,
+    GET_IMAGE_LINK,
+    GET_IMAGE_LINK_SUCCESS,
+    GET_IMAGE_LINK_FAILED,
 } from './constants';
 
-export function doLogin(userdata) {
+export function doLogin(loginData) {
     return {
         type: AUTH_LOGIN,
-        payload: userdata,
+        loginData,
     };
 }
-
-export function doLogout() {
-    return {
-        type: AUTH_LOGOUT,
-    };
-}
-
 export function loginSuccess(response) {
     return {
         type: AUTH_LOGIN_SUCCESS,
-        payload: response.token,
+        response,
     };
 }
-
 export function loginFailed(response) {
     return {
         type: AUTH_LOGIN_FAILED,
         payload: response,
+    };
+}
+export function getImageLink() {
+    return {
+        type: GET_IMAGE_LINK,
+    };
+}
+export function getImageLinkSuccess(imageLink) {
+    return {
+        type: GET_IMAGE_LINK_SUCCESS,
+        imageLink,
+    };
+}
+export function getImageLinkFailed() {
+    return {
+        type: GET_IMAGE_LINK_FAILED,
     };
 }

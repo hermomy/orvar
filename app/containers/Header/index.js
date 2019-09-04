@@ -48,7 +48,7 @@ import saga from './saga';
 import './style.scss';
 import styles from './materialStyle';
 
-export class Header extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class Header extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -535,8 +535,8 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             dataChecking(this.props.header, 'header', 'data') ?
                 <div>
                     <AppBar color="default" className={this.props.classes.header}>
-                        <Hidden xsDown={true}>
-                            <Container>
+                        <Hidden smDown={true}>
+                            <Container className="header-desktop">
                                 <Grid container={true} alignItems="center">
                                     {this.leftHeader()}
                                     {this.rightHeader()}
@@ -544,7 +544,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
                             </Container>
                         </Hidden>
                         <Hidden mdUp={true}>
-                            <div>
+                            <div className="header-mobile">
                                 <Grid container={true} justify="space-between" alignItems="center">
                                     <Grid item={true}>
                                         <Grid container={true} alignItems="center">

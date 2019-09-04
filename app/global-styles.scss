@@ -1,6 +1,18 @@
 @import 'custom-bootstrap-style';
+@import 'legacy-styling.scss';
+@import 'app/breakpoints';
 
-html { font-size: 13px; }
+html {
+    font-size: 1vw;
+
+    @include media-breakpoint-only(sm) {
+        font-size: 2vw;
+    }
+
+    @include media-breakpoint-down(xs) {
+        font-size: 3vw;
+    }
+}
 
 .hermo-red { color: #660033 !important; }
 .hermo-pink { color: #FF0068 !important; } //lighten($hermo-red, 40%);
