@@ -11,3 +11,6 @@ export const LAYOUT_TOP_NAV_FAIL = `${page}/LAYOUT_TOP_NAV_FAIL`;
 export const SEARCH_RESULT = `${page}/SEARCH_RESULT`;
 export const SEARCH_RESULT_SUCCESS = `${page}/SEARCH_RESULT_SUCCESS`;
 export const SEARCH_RESULT_FAIL = `${page}/SEARCH_RESULT_FAIL`;
+export const GET_IMG_LINK = `${page}/GET_IMG_LINK`;
+export const GET_IMG_LINK_SUCCESS = `${page}/GET_IMG_LINK_SUCCESS`;
+export const GET_IMG_LINK_FAILED = `${page}/GET_IMG_LINK_FAILED`;

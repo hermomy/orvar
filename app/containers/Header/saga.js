@@ -1,6 +1,17 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import { LAYOUT_TOP_NAV, SEARCH_RESULT } from './constants';
-import { layoutTopNavSuccess, layoutTopNavFail, searchResultSuccess, searchResultFail } from './actions';
+import {
+    LAYOUT_TOP_NAV,
+    SEARCH_RESULT,
+    GET_IMG_LINK,
+} from './constants';
+import {
+    layoutTopNavSuccess,
+    layoutTopNavFail,
+    searchResultSuccess,
+    searchResultFail,
+    getImgLinkSuccess,
+    getImgLinkFailed,
+} from './actions';
 import { apiRequest } from '../../globalUtils';
 
 export function* getTopNav() {
@@ -24,9 +35,18 @@ export function* querySearchResult(action) {
         yield put(searchResultFail(response.data));
     }
 }
+export function* imgLinkQuery() {
+    const response = yield call(apiRequest, '/image?code=hershop-signup', 'get');
+    if (response && response.ok) {
+        yield put(getImgLinkSuccess(response.data));
+    } else {
+        yield put(getImgLinkFailed(response.data));
+    }
+}
 
 // Individual exports for testing
 export default function* headerSaga() {
     yield takeLatest(LAYOUT_TOP_NAV, getTopNav);
     yield takeLatest(SEARCH_RESULT, querySearchResult);
+    yield takeLatest(GET_IMG_LINK, imgLinkQuery);
 }
