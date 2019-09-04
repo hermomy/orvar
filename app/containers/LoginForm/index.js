@@ -14,14 +14,28 @@ import injectReducer from 'utils/injectReducer';
 
 import globalScope from 'globalScope';
 
-import { TextField, Button, Card, CardContent, CardActions, Container, FormControl, Typography } from '@material-ui/core';
+import {
+    Button,
+    Card,
+    CardContent,
+    CardActions,
+    Container,
+    FormControl,
+    FormHelperText,
+    Typography,
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { dataChecking } from 'globalUtils';
 
 import ErrorMessage from 'components/ErrorMessage';
+import InputForm from 'components/InputForm';
 import makeSelectLoginForm from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { doLogin } from './actions';
+import {
+    doLogin,
+    getImageLink,
+} from './actions';
 import './style.scss';
 import styles from './materialStyle';
 
@@ -32,9 +46,12 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
         this.state = {
             email: '',
             password: '',
+            showPassword: false,
         };
     }
-
+    componentDidMount() {
+        this.props.dispatch(getImageLink());
+    }
     componentWillReceiveProps(nextProps) {
         if (nextProps.loginForm.loginSuccess !== this.props.loginSuccess && nextProps.loginForm.loginSuccess) {
             window.location.href = globalScope.previousPage || window.location.pathname;
@@ -49,47 +66,103 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
     handleChange = (event) => {
         this.setState({ [event.target.id]: event.target.value });
     };
+
+    handleClickShowPassword = () => {
+        this.setState((state) => ({ showPassword: !state.showPassword }));
+    }
+
+    cardHeader = () => (
+        <div className=" mt-2 pl-1">
+            <Typography variant="h5" color="primary">
+                <b>{dataChecking(this.props.loginForm, 'image', 'items') && this.props.loginForm.image.items[0].title}</b>
+            </Typography>
+            <Typography variant="h6" color="textSecondary">
+                <br />{dataChecking(this.props.loginForm, 'image', 'items') && this.props.loginForm.image.items[0].brief}
+            </Typography>
+        </div>
+    )
+
+    formInput = () => (
+        <div>
+            <FormControl fullWidth={true}>
+                <InputForm
+                    label="Email address"
+                    id="email"
+                    type="email"
+                    handleChange={this.handleChange}
+                    value={this.state.email}
+                    onClear={() => {
+                        this.setState({ email: '' });
+                    }}
+                />
+            </FormControl>
+            <FormControl fullWidth={true}>
+                <InputForm
+                    label="Password"
+                    id="password"
+                    type={this.state.showPassword ? 'text' : 'password'}
+                    value={this.state.password}
+                    showPassword={this.state.showPassword}
+                    handleChange={this.handleChange}
+                    handleClickShowPassword={this.handleClickShowPassword}
+                    onClear={() => {
+                        this.setState({ password: '' });
+                    }}
+                    autoComplete="off"
+                    togglePassword={true}
+                />
+                <FormHelperText id="password-helper">Password should contain at least 8 characters.</FormHelperText>
+            </FormControl>
+        </div>
+    )
+    // Need update on function
+    forgotPassword = () => (
+        <FormControl fullWidth={true}>
+            <Typography variant="caption" color="textSecondary"><u>Forgot Password?</u></Typography>
+        </FormControl>
+    )
+
+    formAction = () => (
+        <FormControl fullWidth={true} className="text-xs-center">
+            <Button type="submit" variant="contained" color="primary">
+                <Typography>Login</Typography>
+            </Button>
+            <Typography className="text-xs-center my-half" variant="h6">or<br /></Typography>
+            <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+            >
+                <Typography>FACEBOOK</Typography>
+            </Button>
+        </FormControl>
+    )
+
     render() {
         return (
             <Container className={this.props.classes.card}>
-                <div className="mb-1 text-xs-center">
-                    <Typography variant="h4">Welcome to Hermo</Typography>
-                </div>
                 <Card>
-                    <form onSubmit={() => { this.props.dispatch(doLogin(this.state)); event.preventDefault(); }}>
-                        <CardContent>
-                            <FormControl fullWidth={true}>
-                                <TextField
-                                    id="email"
-                                    label="Email"
-                                    value={this.state.email}
-                                    onChange={this.handleChange}
-                                    margin="normal"
-                                />
-                            </FormControl>
-                            <FormControl fullWidth={true}>
-                                <TextField
-                                    id="password"
-                                    label="Password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    margin="normal"
-                                    value={this.state.password}
-                                    onChange={this.handleChange}
-                                />
-                            </FormControl>
-                            {
-                                this.props.loginForm.error && <ErrorMessage error={this.props.loginForm.error} type="danger" />
-                            }
-                        </CardContent>
-                        <CardActions>
-                            <FormControl fullWidth={true} className="text-xs-center">
-                                <Button type="submit" variant="contained" color="primary">
-                                    Log In
-                                </Button>
-                            </FormControl>
-                        </CardActions>
-                    </form>
+                    <Container className="p-3">
+                        {this.cardHeader()}
+                        <form onSubmit={() => { this.props.dispatch(doLogin(this.state)); event.preventDefault(); }}>
+                            <CardContent>
+                                {this.formInput()}
+                                {this.forgotPassword()}
+                                {
+                                    this.props.loginForm.error && <ErrorMessage error={this.props.loginForm.error} type="danger" />
+                                }
+                            </CardContent>
+                            <CardActions>
+                                {this.formAction()}
+                            </CardActions>
+                        </form>
+                        <div className="text-xs-center">
+                            <Typography className="mt-1" variant="caption" color="textSecondary">
+                                By logging, you agree to our <br /><u>Terms Conditions</u> {/* Need to add Link for Terms and condition */}
+                            </Typography>
+                        </div>
+
+                    </Container>
                 </Card>
             </Container>
         );
@@ -121,3 +194,4 @@ export default compose(
     withStyles(styles),
     withConnect,
 )(LoginForm);
+
