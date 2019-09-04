@@ -19,9 +19,8 @@ import {
     Cancel,
 } from '@material-ui/icons';
 
-// import styled from 'styled-components';
 
-import './style.scss';
+// import './style.scss';
 
 class InputForm extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
@@ -33,12 +32,16 @@ class InputForm extends React.PureComponent { // eslint-disable-line react/prefe
 
     showCancelButton = () => (
         <IconButton
+            id={this.props.id}
             disableRipple={true}
             onClick={() => {
-                this.props.onClear();
+                this.props.onClear(event);
             }}
         >
-            <Cancel color="action" />
+            <Cancel
+                id={this.props.id}
+                color="action"
+            />
         </IconButton>
     )
 
@@ -92,7 +95,9 @@ class InputForm extends React.PureComponent { // eslint-disable-line react/prefe
                     onChange={this.props.handleChange}
                     type={this.props.type}
                     placeholder={this.props.placeholder}
-                    required={this.props.required ? this.props.required : true}
+                    // eslint-disable-next-line no-unneeded-ternary
+                    required={this.props.required ? false : true}
+                    defaultValue={this.props.defaultValue}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
