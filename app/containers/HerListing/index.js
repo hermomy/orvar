@@ -25,7 +25,6 @@ import saga from './saga';
 import './style.scss';
 import {
     getData,
-    postWishlist,
 } from './actions';
 
 const SORT_DEFAULT = 'sort=default';
@@ -185,13 +184,12 @@ export class HerListing extends React.PureComponent { // eslint-disable-line rea
             >
                 <ProductCard
                     product={product}
-                    review={product.review}
                     url={product.url}
-                    price={dataChecking(product, 'price')}
-                    allowDelete={false}
+                    image={true}
+                    feature={true}
+                    rating={true}
                     listViewMode={this.state.listView}
-                    allowWishlistButton={true}
-                    addOrDeleteWishlist={() => this.props.dispatch(postWishlist(product.id))}
+                    disableElevation={true}
                 />
             </div>
         ));

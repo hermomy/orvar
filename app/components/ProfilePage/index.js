@@ -469,11 +469,24 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                     return (
                                         <OwlCarousel
                                             options={{
-                                                items: 5,
                                                 loop: true,
                                                 nav: true,
                                                 dots: true,
                                                 navText: ['&lt;', '&gt;'],
+                                                responsive: {
+                                                    320: {
+                                                        items: 2,
+                                                    },
+                                                    700: {
+                                                        items: 3,
+                                                    },
+                                                    1024: {
+                                                        items: 4,
+                                                    },
+                                                    1280: {
+                                                        items: 5,
+                                                    },
+                                                },
                                             }}
                                             events={{
                                                 onDragged: (event) => console.log(event),
@@ -485,10 +498,11 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                                     <ProductCard
                                                         key={item.id}
                                                         product={item}
-                                                        review={item.review}
                                                         url={item.url}
-                                                        price={dataChecking(item, 'price')}
-                                                        allowWishlistButton={true}
+                                                        image={true}
+                                                        feature={true}
+                                                        rating={true}
+                                                        disableElevation={true}
                                                     />
                                                 ))
                                             }

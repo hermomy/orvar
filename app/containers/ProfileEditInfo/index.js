@@ -627,6 +627,7 @@ export class ProfileEditInfo extends React.PureComponent { // eslint-disable-lin
                 }
                 <PopupDialog
                     display={this.state.popup}
+                    fullWidth={true}
                     title={this.state.dialogTitle}
                     onClose={() => {
                         this.setState({ popup: false });

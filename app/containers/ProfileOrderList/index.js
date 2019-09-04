@@ -28,7 +28,6 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import {
     Button,
     Card,
-    Container,
     Grid,
     Hidden,
     IconButton,
@@ -530,9 +529,9 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
         console.log(this.state.orderStatusConfigs);
         console.log('Tab', this.state.currentConfig);
         return (
-            <Container>
+            <div>
                 {this.renderOrderListCard(this.state.currentConfig)}
-            </Container>
+            </div>
         );
     }
 

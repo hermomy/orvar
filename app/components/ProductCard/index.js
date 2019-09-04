@@ -3,137 +3,207 @@
 * ProductCard
 *
 */
-
-import { NavLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { dataChecking } from 'globalUtils';
-import Price from '../Price';
-import Rate from '../Rate';
+import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
+
+import
+{
+    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    Grid,
+    IconButton,
+    Typography,
+} from '@material-ui/core';
+import
+{
+    AddShoppingCart,
+    Cancel,
+    KeyboardArrowRight,
+    NotificationImportant,
+    Star,
+    StarBorder,
+} from '@material-ui/icons';
 
 import './style.scss';
 
 class ProductCard extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-    renderFeatures() {
-        const features = dataChecking(this.props, 'features');
-        const extra_features = dataChecking(this.props, 'extra_feature');
-        if (features || extra_features) {
-            return (
-                <div className="product-card-tag">
-                    {
-                        features.length > 0 && this.props.product.features.map((feature) => (
-                            <div className="img-tag-div" key={this.props.product.id}><img src={feature.value} alt="" /></div>
-                        ))
-                    }
-                    {
-                        extra_features.length > 0 && this.props.product.extra_features.map((extra_feature) => (
-                            <div className="img-tag-div" key={this.props.product.id}><img src={extra_feature.value} alt="" /></div>
-                        ))
-                    }
-                </div>
-            );
-        }
-        return null;
-    }
+    renderImage = () => (
+        <div className="product-img text-xs-center mb-1">
+            <NavLink to={this.props.url}>
+                <img
+                    src={dataChecking(this.props.product, 'image', 'small')}
+                    alt="product_image"
+                    width="100%"
+                />
+                {
+                    dataChecking(this.props.product, 'instock') ?
+                        ''
+                        :
+                        <div className="out-of-stock">
+                            <Typography variant="overline" className="oos-text">out of stock</Typography>
+                        </div>
+                }
+            </NavLink>
+        </div>
+    )
 
-    renderPrice = () => {
-        if (!dataChecking(this.props.product, 'currency') && !dataChecking(this.props.price)) {
-            return null;
-        }
+    renderFeature = () => {
+        const features = dataChecking(this.props.product, 'features');
+        const discount = dataChecking(this.props.product, 'price', 'discount_text');
+
         return (
-            <Price
-                currency={this.props.product.currency}
-                price={this.props.price}
-            />
+            <Grid container={true} justify="center" className="product-feature">
+                {
+                    features.length > 0 &&
+                    features.map((feature, key) => (
+                        <Grid item={true} key={`${this.props.product.id}-${key}`}>
+                            <img
+                                src={feature.value}
+                                alt="product_feature"
+                                className="feature-tag"
+                            />
+                        </Grid>
+                    ))
+                }
+                {
+                    discount !== null &&
+                    <Grid item={true} className="discount-tag">
+                        <Typography variant="caption">{discount}</Typography>
+                    </Grid>
+                }
+            </Grid>
         );
     }
 
-    renderCross = () => {
-        if (!this.props.allowDelete) {
+    renderPrice = () => {
+        const retailPrice = dataChecking(this.props.product, 'price', 'retail');
+        const sellingPrice = dataChecking(this.props.product, 'price', 'selling');
+        const discountText = dataChecking(this.props.product, 'price', 'discount_text');
+        const symbol = dataChecking(this.props.product, 'currency', 'symbol');
+
+        if (!retailPrice && !sellingPrice && !discountText) {
             return null;
         }
+
         return (
-            <div onClick={() => this.props.deleteFromWishlist()}>
-                <i className="fa fa-times cross-icon" aria-hidden="true"></i>
+            <div className="product-price">
+                <Typography variant="h6" style={{ paddingRight: `${discountText === null ? 0 : '10px'}`, fontWeight: 'bold' }}>
+                    {symbol}{sellingPrice.toFixed(2)}
+                </Typography>
+                {
+                    discountText === null ?
+                        ''
+                        :
+                        <Typography color="textSecondary" style={{ textDecoration: 'line-through' }}>
+                            {symbol}{retailPrice.toFixed(2)}
+                        </Typography>
+                }
+            </div>
+        );
+    }
+
+    renderBrand = () => (
+        <div className="product-brand pb-half">
+            <NavLink to={dataChecking(this.props.product, 'brand', 'url')} style={{ textDecoration: 'none' }}>
+                <Typography
+                    color="primary"
+                    variant="button"
+                    style={{ fontWeight: 'bold' }}
+                >
+                    {dataChecking(this.props.product, 'brand', 'name')}
+                </Typography>
+                <IconButton size="small" style={{ padding: '0 0 2px 3px' }}>
+                    <KeyboardArrowRight color="primary" />
+                </IconButton>
+            </NavLink>
+        </div>
+    )
+
+    renderDescription = () => (
+        <div>
+            <Typography className="product-description mb-half">{this.props.product.display_name}</Typography>
+        </div>
+    )
+
+    renderRating = () => {
+        const count = dataChecking(this.props.product, 'review', 'count');
+        const rating = dataChecking(this.props.product, 'review', 'rating');
+        const rate = Math.round(rating / 2);
+        const rateArr = [];
+
+        if (count < 0 && rating < 0) {
+            return null;
+        }
+
+        for (let i = 0; i < 5; i++) {
+            if ((i + 1) <= rate) {
+                rateArr.push(<Star key={`${this.props.product.id}-${i}`} style={{ color: '#FFD700' }} />);
+            } else {
+                rateArr.push(<StarBorder key={`${this.props.product.id}-${i}`} style={{ color: '#FFD700' }} />);
+            }
+        }
+
+        return (
+            <div style={{ display: 'flex', flexDirection: 'row' }} className="product-rating">
+                <div style={{ justifyContent: 'flex-start', display: 'flex', flexDirection: 'row' }}>
+                    {rateArr}
+                </div>
+                <Typography variant="overline" style={{ marginLeft: 5, alignSelf: 'center' }}> ({count})</Typography>
             </div>
         );
     }
 
     render() {
         return (
-            <div
-                className={`product-card ${this.props.listViewMode ? 'list-view-card' : 'grid-view-card'}`}
-                key={this.props.product.id}
-            >
-                <div className={`product-card-content ${!this.props.product.instock ? '' : 'OOS'}`}>
-                    <div className="product-card-images">
-                        {this.props.allowDelete &&
-                            <div onClick={() => this.props.deleteFromWishlist()}>
-                                <i className="fa fa-times cross-icon" aria-hidden="true"></i>
-                            </div>
-                        }
-                        {this.renderFeatures()}
-                        <NavLink to={this.props.url}>
-                            {
-                                !this.props.product.instock &&
-                                    <div>
-                                        <span className="OOS-word">Out Of Stock</span>
-                                    </div>
-                            }
-                            {
-                                dataChecking(this.props.product, 'image', 'medium') ?
-                                    <div className="product-card-img">
-                                        <img src={this.props.product.image.medium} alt="product.jpg" className="product-img" />
-                                    </div>
-                                    :
-                                    null
-                            }
-                        </NavLink>
-                    </div>
-                    <div className="product-card-info">
-                        <div className="product-card-wishlist posi-relative">
-                            {
-                                this.props.allowWishlistButton &&
-                                <i
-                                    className={`wishlist-btn fa fa-heart ${this.props.product._user.wishlisted ? 'wishlist-btn-clicked' : ''}`}
-                                    aria-hidden="true"
-                                    onClick={() => this.props.addOrDeleteWishlist()}
-                                ></i>
-                            }
-
-                        </div>
-                        <NavLink to={this.props.url}>
-                            {this.renderPrice()}
-                            <div className="product-card-name">
-                                {dataChecking(this.props.product, 'brand', 'name') ? <p className="product-name">{this.props.product.brand.name}</p> : null}
-                                {dataChecking(this.props.product, 'brand', 'plain_name') ? <p className="product-name">{this.props.product.plain_name}</p> : null}
-                            </div>
-                            <div>
-                                <Rate rating={dataChecking(this.props.review, 'count') || 0} />
-                                {
-                                    dataChecking(this.props.review, 'count') ?
-                                        <span className="product-review-count">({this.props.product.review.count})</span>
-                                        :
-                                        null
-                                }
-                            </div>
-                        </NavLink>
-                    </div>
+            <Card className={`product-container ${this.props.disableElevation ? 'no-box-shadow' : ''}`}>
+                <CardContent>
                     {
-                        this.props.listViewMode ?
-                            <div className="product-card-list-view-actions">special action only show in list view mode</div>
-                            :
-                            null
+                        this.props.allowDelete &&
+                        <CardHeader
+                            action={
+                                <IconButton
+                                    onClick={() => this.props.allowDelete()}
+                                    style={{ float: 'right', padding: 0 }}
+                                >
+                                    <Cancel />
+                                </IconButton>
+                            }
+                            style={{ display: 'block' }}
+                        />
                     }
-                </div>
-            </div>
+                    {this.props.image && this.renderImage()}
+                    {this.props.feature && this.renderFeature()}
+                    {this.renderPrice()}
+                    {this.renderBrand()}
+                    {this.renderDescription()}
+                    {this.props.rating && this.renderRating()}
+                </CardContent>
+                {
+                    this.props.addToCart &&
+                    <Button
+                        variant="contained"
+                        color={dataChecking(this.props.product, 'instock') ? 'secondary' : 'primary'}
+                        fullWidth={true}
+                        className="add-to-cart-button"
+                        onClick={dataChecking(this.props.product, 'instock') ? () => this.props.addToCart() : () => this.props.notifyMe()}
+                    >
+                        {dataChecking(this.props.product, 'instock') ? <AddShoppingCart /> : <NotificationImportant />}
+                        <Typography variant="overline" className="pl-1">
+                            {dataChecking(this.props.product, 'instock') ? 'Add to cart' : 'Notify Me'}
+                        </Typography>
+                    </Button>
+                }
+            </Card>
         );
     }
 }
 
 ProductCard.propTypes = {
     product: PropTypes.object.isRequired,
-    listViewMode: PropTypes.bool,
 };
 
 export default ProductCard;
