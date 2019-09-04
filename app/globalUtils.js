@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 import globalScope from 'globalScope';
 import Cookies from 'universal-cookie';
+import * as copy from 'copy-to-clipboard';
 
 export const apiRequest = (path, type = 'get', body, baseUrl, headerParams) => {
     globalScope.axios.setBaseURL(baseUrl || globalScope.api);
@@ -128,3 +129,10 @@ export const setCookie = (key, value, options) => {
 export const getCookie = (key, options) => cookies.get(key, options);
 
 export const removeCookie = (key, options) => cookies.remove(key, options);
+
+export const copyToClipboard = (text) => {
+    if (text) {
+        copy(text);
+    }
+};
+

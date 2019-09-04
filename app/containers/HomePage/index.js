@@ -44,6 +44,10 @@ const a = [
         'url': '/brand',
     },
     {
+        'title': 'Wallet Page',
+        'url': '/profile/wallet',
+    },
+    {
         'title': 'Logout',
         'url': '/logout',
     },
