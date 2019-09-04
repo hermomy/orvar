@@ -33,6 +33,10 @@ import ProfileWishlist from 'containers/ProfileWishlist';
 import ProfileReview from 'containers/ProfileReview';
 import AboutUs from 'containers/AboutUs';
 import FeedbackPage from 'containers/FeedbackPage';
+import AuthPage from 'containers/AuthPage';
+import SignUp from 'containers/SignUpPage';
+import ProfileAddress from 'containers/ProfileAddress';
+import ProfileRewards from 'containers/ProfileRewards';
 
 import Header from 'containers/Header';
 import { ProfileWallet } from '../ProfileWallet';
@@ -49,6 +53,8 @@ export default function App() {
                 <Switch>
                     <Route exact={true} path="/" component={HomePage} />
                     <PrivateRoute exact={true} path="/login" component={LogoutForm} />
+                    <Route exact={true} path="/auth" component={AuthPage} />
+                    <Route exact={true} path="/signup" component={SignUp} />
                     <PrivateRoute exact={true} path="/logout" component={LogoutForm} />
                     <PrivateRoute exact={true} path="/onboarding" component={OnboardingPage} />
 
@@ -88,8 +94,10 @@ export default function App() {
                     <PrivateRoute exact={true} path="/feedback" component={FeedbackPage} />
                     <PrivateRoute exact={true} path="/checkout" component={CheckoutPage} />
                     <PrivateRoute exact={true} path="/profile" component={ProfilePage} />
+                    <PrivateRoute exact={true} path="/profile/address" component={ProfileAddress} />
                     <PrivateRoute exact={true} path="/profile/wallet" component={ProfileWallet} />
                     <PrivateRoute exact={true} path="/profile/detail" component={ProfileEditInfo} />
+                    <PrivateRoute exact={true} path="/profile/rewards" component={ProfileRewards} />
                     <PrivateRoute exact={true} path="/profile/review" component={ProfileReview} />
                     <PrivateRoute exact={true} path="/profile/wishlist" component={ProfileWishlist} />
                     <PrivateRoute exact={true} path="/profile/order" component={ProfileOrderList} />
