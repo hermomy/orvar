@@ -12,6 +12,9 @@ import {
     SEARCH_RESULT,
     SEARCH_RESULT_SUCCESS,
     SEARCH_RESULT_FAIL,
+    GET_IMG_LINK,
+    GET_IMG_LINK_SUCCESS,
+    GET_IMG_LINK_FAILED,
 } from './constants';
 
 
@@ -22,6 +25,11 @@ export const initialState = fromJS({
         data: null,
     },
     suggestionData: {
+        loading: false,
+        error: false,
+        data: null,
+    },
+    imgLink: {
         loading: false,
         error: false,
         data: null,
@@ -60,6 +68,21 @@ function headerReducer(state = initialState, action) {
                 .setIn(['suggestionData', 'loading'], false)
                 .setIn(['suggestionData', 'error'], true)
                 .setIn(['suggestionData', 'data'], action.searchResultData);
+        case GET_IMG_LINK:
+            return state
+                .setIn(['imgLink', 'loading'], true)
+                .setIn(['imgLink', 'error'], false)
+                .setIn(['imgLink', 'data'], null);
+        case GET_IMG_LINK_SUCCESS:
+            return state
+                .setIn(['imgLink', 'loading'], false)
+                .setIn(['imgLink', 'error'], false)
+                .setIn(['imgLink', 'data'], action.imgLink);
+        case GET_IMG_LINK_FAILED:
+            return state
+                .setIn(['imgLink', 'loading'], false)
+                .setIn(['imgLink', 'error'], true)
+                .setIn(['imgLink', 'data'], action.imgLink);
         default:
             return state;
     }
