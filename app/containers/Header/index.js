@@ -322,13 +322,10 @@ export class Header extends React.PureComponent {
         console.log();
         return (
             <Grid item={true}>
-                <IconButton onClick={() => this.setState({ searchBar: !this.state.searchBar })}>
+                <IconButton onClick={this.state.searchBar ? () => this.setState({ searchBar: !this.state.searchBar, searchQuery: '' }) : () => this.setState({ searchBar: !this.state.searchBar })}>
                     {
                         this.state.searchBar ?
-                            <Close
-                                onClick={() => this.setState({ searchBar: !this.state.searchBar, searchQuery: '' })}
-                                className="animated rotateIn"
-                            />
+                            <Close className="animated rotateIn" />
                         :
                             <Search className="animated rotateIn" />
 
