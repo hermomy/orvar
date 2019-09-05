@@ -3,7 +3,11 @@
 @import 'app/breakpoints';
 
 html {
-    font-size: 1vw;
+    font-size: .7vw;
+
+    @include media-breakpoint-down(lg) {
+        font-size: 1vw;
+    }
 
     @include media-breakpoint-only(sm) {
         font-size: 2vw;
