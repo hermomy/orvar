@@ -69,6 +69,7 @@ export class Header extends React.PureComponent {
             childVal: null,
             anchorEl: null,
             userOpen: false,
+            arrowRef: null,
         };
         this.getSearchResult = this.getSearchResult.bind(this);
     }
@@ -318,7 +319,7 @@ export class Header extends React.PureComponent {
         console.log();
         return (
             <Grid item={true}>
-                <span className="mr-1" onClick={() => this.setState({ searchBar: !this.state.searchBar })}>
+                <IconButton onClick={() => this.setState({ searchBar: !this.state.searchBar })}>
                     {
                         this.state.searchBar ?
                             <Close
@@ -329,10 +330,9 @@ export class Header extends React.PureComponent {
                             <Search className="animated rotateIn" />
 
                     }
-                </span>
+                </IconButton>
                 <IconButton
                     id="profile"
-                    className="mr-1"
                     onMouseEnter={(evt) => this.setState({
                         anchorEl: evt.currentTarget,
                         userOpen: true,
@@ -341,7 +341,11 @@ export class Header extends React.PureComponent {
                 >
                     <Person />
                 </IconButton>
-                <ShoppingCart />
+                <IconButton
+                    className="right-header-cart"
+                >
+                    <ShoppingCart />
+                </IconButton>
             </Grid>
         );
     }
@@ -811,13 +815,21 @@ export class Header extends React.PureComponent {
                                 </Grid>
                             </Container>
                             <Popper
+                                className={this.props.classes.popper}
                                 style={{ zIndex: 1101, maxWidth: '20rem' }}
                                 open={this.state.userOpen}
-                                placement="bottom"
+                                placement="top"
                                 anchorEl={this.state.anchorEl}
                                 onMouseEnter={() => this.setState({ userOpen: true })}
                                 onMouseLeave={() => this.setState({ userOpen: false })}
+                                modifiers={{
+                                    arrow: {
+                                        enabled: true,
+                                        element: this.state.arrowRef,
+                                    },
+                                }}
                             >
+                                <span className={this.props.classes.arrow} ref={(node) => this.setState({ arrowRef: node })} />
                                 {this.renderUserSection()}
                             </Popper>
                         </Hidden>
@@ -856,7 +868,7 @@ export class Header extends React.PureComponent {
                                 {
                                     this.state.userOpen ?
                                         <div>
-                                            <span className={this.props.classes.arrow} />
+                                            <span className={this.props.classes.arrow} ref={(node) => this.setState({ arrowRef: node })} />
                                             {this.renderUserSection()}
                                         </div>
                                     :
