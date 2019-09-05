@@ -184,12 +184,12 @@ export class Header extends React.PureComponent {
                     right: 0,
                     zIndex: 2,
                 }}
-                onMouseEnter={() => this.setState({ megaMenuToggle: true })}
-                onMouseLeave={() => this.setState({ megaMenuToggle: false, anchorElID: null })}
             >
                 <Container>
                     <div
                         style={{ backgroundColor: 'white' }}
+                        onMouseEnter={() => this.setState({ megaMenuToggle: true })}
+                        onMouseLeave={() => this.setState({ megaMenuToggle: false, anchorElID: null })}
                     >
                         {content}
                     </div>
