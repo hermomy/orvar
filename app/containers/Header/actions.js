@@ -14,6 +14,9 @@ import {
     GET_IMG_LINK,
     GET_IMG_LINK_SUCCESS,
     GET_IMG_LINK_FAILED,
+    GET_USER_DATA,
+    GET_USER_DATA_SUCCESS,
+    GET_USER_DATA_FAILED,
 } from './constants';
 
 export function layoutTopNav() {
@@ -29,9 +32,10 @@ export function layoutTopNavSuccess(headerData) {
     };
 }
 
-export function layoutTopNavFail() {
+export function layoutTopNavFail(headerData) {
     return {
         type: LAYOUT_TOP_NAV_FAIL,
+        headerData,
     };
 }
 
@@ -66,8 +70,26 @@ export function getImgLinkSuccess(imgLink) {
         imgLink,
     };
 }
-export function getImgLinkFailed() {
+export function getImgLinkFailed(imgLink) {
     return {
         type: GET_IMG_LINK_FAILED,
+        imgLink,
+    };
+}
+export function getUserData() {
+    return {
+        type: GET_USER_DATA,
+    };
+}
+export function getUserDataSuccess(userData) {
+    return {
+        type: GET_USER_DATA_SUCCESS,
+        userData,
+    };
+}
+export function getUserDataFailed(userData) {
+    return {
+        type: GET_USER_DATA_FAILED,
+        userData,
     };
 }

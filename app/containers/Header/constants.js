@@ -14,3 +14,6 @@ export const SEARCH_RESULT_FAIL = `${page}/SEARCH_RESULT_FAIL`;
 export const GET_IMG_LINK = `${page}/GET_IMG_LINK`;
 export const GET_IMG_LINK_SUCCESS = `${page}/GET_IMG_LINK_SUCCESS`;
 export const GET_IMG_LINK_FAILED = `${page}/GET_IMG_LINK_FAILED`;
+export const GET_USER_DATA = `${page}/GET_USER_DATA`;
+export const GET_USER_DATA_SUCCESS = `${page}/GET_USER_DATA_SUCCESS`;
+export const GET_USER_DATA_FAILED = `${page}/GET_USER_DATA_FAILED`;

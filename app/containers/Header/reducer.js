@@ -15,6 +15,9 @@ import {
     GET_IMG_LINK,
     GET_IMG_LINK_SUCCESS,
     GET_IMG_LINK_FAILED,
+    GET_USER_DATA,
+    GET_USER_DATA_SUCCESS,
+    GET_USER_DATA_FAILED,
 } from './constants';
 
 
@@ -30,6 +33,11 @@ export const initialState = fromJS({
         data: null,
     },
     imgLink: {
+        loading: false,
+        error: false,
+        data: null,
+    },
+    user: {
         loading: false,
         error: false,
         data: null,
@@ -83,6 +91,21 @@ function headerReducer(state = initialState, action) {
                 .setIn(['imgLink', 'loading'], false)
                 .setIn(['imgLink', 'error'], true)
                 .setIn(['imgLink', 'data'], action.imgLink);
+        case GET_USER_DATA:
+            return state
+                .setIn(['user', 'loading'], true)
+                .setIn(['user', 'error'], false)
+                .setIn(['user', 'data'], null);
+        case GET_USER_DATA_SUCCESS:
+            return state
+                .setIn(['user', 'loading'], false)
+                .setIn(['user', 'error'], false)
+                .setIn(['user', 'data'], action.userData);
+        case GET_USER_DATA_FAILED:
+            return state
+                .setIn(['user', 'loading'], false)
+                .setIn(['user', 'error'], true)
+                .setIn(['user', 'data'], action.userData);
         default:
             return state;
     }

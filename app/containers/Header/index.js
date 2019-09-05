@@ -45,7 +45,7 @@ import {
     Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { layoutTopNav, searchResult, getImgLink } from './actions';
+import { layoutTopNav, searchResult, getImgLink, getUserData } from './actions';
 import makeSelectHeader from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -76,6 +76,9 @@ export class Header extends React.PureComponent {
     componentDidMount() {
         this.props.dispatch(layoutTopNav());
         this.props.dispatch(getImgLink());
+        if (globalScope.token) {
+            this.props.dispatch(getUserData());
+        }
     }
 
     getSearchResult = (e) => {
@@ -311,19 +314,6 @@ export class Header extends React.PureComponent {
         </Drawer>
     )
 
-    userBtn = () => (
-        <IconButton
-            id="profile"
-            className="mr-1"
-            onClick={(evt) => this.setState({
-                anchorEl: evt.currentTarget,
-                userOpen: !this.state.userOpen,
-            })}
-        >
-            <Person />
-        </IconButton>
-    )
-
     rightHeader = () => {
         console.log();
         return (
@@ -340,7 +330,17 @@ export class Header extends React.PureComponent {
 
                     }
                 </span>
-                {this.userBtn()}
+                <IconButton
+                    id="profile"
+                    className="mr-1"
+                    onMouseEnter={(evt) => this.setState({
+                        anchorEl: evt.currentTarget,
+                        userOpen: true,
+                    })}
+                    onMouseLeave={() => this.setState({ userOpen: false })}
+                >
+                    <Person />
+                </IconButton>
                 <ShoppingCart />
             </Grid>
         );
@@ -608,14 +608,22 @@ export class Header extends React.PureComponent {
                 globalScope.token ?
                     <div>
                         <Container
-                            className="py-half"
+                            className="py-1"
                             style={{
                                 backgroundColor: '#f2f2f2',
                             }}
                         >
-                            Hi
+                            <Typography variant="body1">
+                                Hi, {dataChecking(this.props.header, 'user', 'data', 'data') && this.props.header.user.data.data.name}
+                            </Typography>
                             <NavLink to="/logout" style={{ textDecoration: 'none' }}>
-                                <br /><Typography variant="body1" style={{ color: '#989898' }}><u>Log Out</u></Typography>
+                                <Typography
+                                    variant="body1"
+                                    style={{ color: '#989898' }}
+                                    onClick={() => this.setState({ userOpen: false })}
+                                >
+                                    <br /><u>Log Out</u>
+                                </Typography>
                             </NavLink>
                         </Container>
                         <Container>
@@ -807,6 +815,8 @@ export class Header extends React.PureComponent {
                                 open={this.state.userOpen}
                                 placement="bottom"
                                 anchorEl={this.state.anchorEl}
+                                onMouseEnter={() => this.setState({ userOpen: true })}
+                                onMouseLeave={() => this.setState({ userOpen: false })}
                             >
                                 {this.renderUserSection()}
                             </Popper>
@@ -831,12 +841,22 @@ export class Header extends React.PureComponent {
                                     </Grid>
                                     <Grid item={true}>
                                         <i className="fas fa-shopping-cart pr-1"></i>
-                                        {this.userBtn()}
+                                        <IconButton
+                                            id="profile"
+                                            className="mr-1"
+                                            onClick={(evt) => this.setState({
+                                                anchorEl: evt.currentTarget,
+                                                userOpen: !this.state.userOpen,
+                                            })}
+                                        >
+                                            <Person />
+                                        </IconButton>
                                     </Grid>
                                 </Grid>
                                 {
                                     this.state.userOpen ?
                                         <div>
+                                            <span className={this.props.classes.arrow} />
                                             {this.renderUserSection()}
                                         </div>
                                     :

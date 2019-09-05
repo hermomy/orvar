@@ -3,6 +3,7 @@ import {
     LAYOUT_TOP_NAV,
     SEARCH_RESULT,
     GET_IMG_LINK,
+    GET_USER_DATA,
 } from './constants';
 import {
     layoutTopNavSuccess,
@@ -11,8 +12,10 @@ import {
     searchResultFail,
     getImgLinkSuccess,
     getImgLinkFailed,
+    getUserDataSuccess,
+    getUserDataFailed,
 } from './actions';
-import { apiRequest } from '../../globalUtils';
+import { staticErrorResponse, apiRequest } from '../../globalUtils';
 
 export function* getTopNav() {
     const response = yield call(apiRequest, '/layout/top-nav', 'get');
@@ -43,10 +46,29 @@ export function* imgLinkQuery() {
         yield put(getImgLinkFailed(response.data));
     }
 }
+export function* getUserDataWorker() {
+    let err;
+
+    try { // Trying the HTTP Request
+        const response = yield call(apiRequest, '/profile');
+        if (response && response.ok !== false) {
+            yield put(getUserDataSuccess(response));
+        } else if (response && response.ok === false) {
+            yield put(getUserDataFailed(response));
+        } else {
+            err = staticErrorResponse({ text: 'No response from server' });
+            throw err;
+        }
+    } catch (e) {
+        console.log('error: ', e);
+        yield put(getUserDataFailed(e));
+    }
+}
 
 // Individual exports for testing
 export default function* headerSaga() {
     yield takeLatest(LAYOUT_TOP_NAV, getTopNav);
     yield takeLatest(SEARCH_RESULT, querySearchResult);
     yield takeLatest(GET_IMG_LINK, imgLinkQuery);
+    yield takeLatest(GET_USER_DATA, getUserDataWorker);
 }
