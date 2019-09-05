@@ -5,6 +5,10 @@ const styles = {
         textDecoration: 'none',
         '&:hover': { color: '#603' },
     },
+    icon: {
+        height: 23,
+        width: 23,
+    },
     header: {
         boxShadow: '0 4px 2px -2px #ccc',
         padding: '1rem',
@@ -64,25 +68,25 @@ const styles = {
             borderStyle: 'solid',
         },
     },
-    arrowDiv: {
-        position: 'absolute',
-        fontSize: 14,
-        width: '3em',
-        height: '3em',
-        top: 0,
-        left: 0,
-        marginTop: '-0.9em',
-        '&::before': {
-            content: '""',
-            margin: 'auto',
-            display: 'block',
-            width: 0,
-            height: 0,
-            borderWidth: '0 1em 1em 1em',
-            borderColor: 'transparent transparent #F2F2F2 transparent',
-            borderStyle: 'solid',
-        },
-    },
+    // arrowDiv: {
+    //     position: 'absolute',
+    //     fontSize: 14,
+    //     width: '3em',
+    //     height: '3em',
+    //     top: 0,
+    //     left: 0,
+    //     marginTop: '-0.9em',
+    //     '&::before': {
+    //         content: '""',
+    //         margin: 'auto',
+    //         display: 'block',
+    //         width: 0,
+    //         height: 0,
+    //         borderWidth: '0 1em 1em 1em',
+    //         borderColor: 'transparent transparent #F2F2F2 transparent',
+    //         borderStyle: 'solid',
+    //     },
+    // },
 };
 
 export default styles;

@@ -44,9 +44,10 @@ import {
     IconButton,
     Card,
     Box,
+    Badge,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { layoutTopNav, searchResult, getImgLink, getUserData } from './actions';
+import { layoutTopNav, searchResult, getImgLink, getUserData, getCartData } from './actions';
 import makeSelectHeader from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -80,6 +81,7 @@ export class Header extends React.PureComponent {
         this.props.dispatch(getImgLink());
         if (globalScope.token) {
             this.props.dispatch(getUserData());
+            this.props.dispatch(getCartData());
         }
     }
 
@@ -346,7 +348,13 @@ export class Header extends React.PureComponent {
                 <IconButton
                     className="right-header-cart"
                 >
-                    <ShoppingCart />
+                    <Badge
+                        color="secondary"
+                        badgeContent={dataChecking(this.props.header, 'cart', 'data', 'data', 'summary', 'cart_qty') && this.props.header.cart.data.data.summary.cart_qty}
+                        invisible={dataChecking(this.props.header, 'cart', 'data', 'data') && this.props.header.cart.data.data.attribute.is_empty}
+                    >
+                        <ShoppingCart />
+                    </Badge>
                 </IconButton>
             </Grid>
         );
@@ -880,10 +888,18 @@ export class Header extends React.PureComponent {
                                                 userOpen: !this.state.userOpen,
                                             })}
                                         >
-                                            <Person />
+                                            <Person className={this.props.classes.icon} />
                                         </IconButton>
-                                        <IconButton>
-                                            <ShoppingCart />
+                                        <IconButton
+                                            className="mobile-cart"
+                                        >
+                                            <Badge
+                                                color="secondary"
+                                                badgeContent={dataChecking(this.props.header, 'cart', 'data', 'data', 'summary', 'cart_qty') && this.props.header.cart.data.data.summary.cart_qty}
+                                                invisible={dataChecking(this.props.header, 'cart', 'data', 'data') && this.props.header.cart.data.data.attribute.is_empty}
+                                            >
+                                                <ShoppingCart className={this.props.classes.icon} />
+                                            </Badge>
                                         </IconButton>
                                     </Grid>
                                 </Grid>

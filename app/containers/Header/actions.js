@@ -17,6 +17,9 @@ import {
     GET_USER_DATA,
     GET_USER_DATA_SUCCESS,
     GET_USER_DATA_FAILED,
+    GET_CART_DATA,
+    GET_CART_DATA_SUCCESS,
+    GET_CART_DATA_FAILED,
 } from './constants';
 
 export function layoutTopNav() {
@@ -93,3 +96,21 @@ export function getUserDataFailed(userData) {
         userData,
     };
 }
+export function getCartData() {
+    return {
+        type: GET_CART_DATA,
+    };
+}
+export function getCartDataSuccess(cartData) {
+    return {
+        type: GET_CART_DATA_SUCCESS,
+        cartData,
+    };
+}
+export function getCartDataFailed(cartData) {
+    return {
+        type: GET_CART_DATA_FAILED,
+        cartData,
+    };
+}
+

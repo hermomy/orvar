@@ -4,6 +4,7 @@ import {
     SEARCH_RESULT,
     GET_IMG_LINK,
     GET_USER_DATA,
+    GET_CART_DATA,
 } from './constants';
 import {
     layoutTopNavSuccess,
@@ -14,6 +15,8 @@ import {
     getImgLinkFailed,
     getUserDataSuccess,
     getUserDataFailed,
+    getCartDataSuccess,
+    getCartDataFailed,
 } from './actions';
 import { staticErrorResponse, apiRequest } from '../../globalUtils';
 
@@ -64,6 +67,24 @@ export function* getUserDataWorker() {
         yield put(getUserDataFailed(e));
     }
 }
+export function* getCartDataWorker() {
+    let err;
+
+    try { // Trying the HTTP Request
+        const response = yield call(apiRequest, '/cart');
+        if (response && response.ok !== false) {
+            yield put(getCartDataSuccess(response));
+        } else if (response && response.ok === false) {
+            yield put(getCartDataFailed(response));
+        } else {
+            err = staticErrorResponse({ text: 'No response from server' });
+            throw err;
+        }
+    } catch (e) {
+        console.log('error: ', e);
+        yield put(getCartDataFailed(e));
+    }
+}
 
 // Individual exports for testing
 export default function* headerSaga() {
@@ -71,4 +92,5 @@ export default function* headerSaga() {
     yield takeLatest(SEARCH_RESULT, querySearchResult);
     yield takeLatest(GET_IMG_LINK, imgLinkQuery);
     yield takeLatest(GET_USER_DATA, getUserDataWorker);
+    yield takeLatest(GET_CART_DATA, getCartDataWorker);
 }

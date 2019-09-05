@@ -17,3 +17,6 @@ export const GET_IMG_LINK_FAILED = `${page}/GET_IMG_LINK_FAILED`;
 export const GET_USER_DATA = `${page}/GET_USER_DATA`;
 export const GET_USER_DATA_SUCCESS = `${page}/GET_USER_DATA_SUCCESS`;
 export const GET_USER_DATA_FAILED = `${page}/GET_USER_DATA_FAILED`;
+export const GET_CART_DATA = `${page}/GET_CART_DATA`;
+export const GET_CART_DATA_SUCCESS = `${page}/GET_CART_DATA_SUCCESS`;
+export const GET_CART_DATA_FAILED = `${page}/GET_CART_DATA_FAILED`;

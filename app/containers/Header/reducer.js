@@ -18,6 +18,9 @@ import {
     GET_USER_DATA,
     GET_USER_DATA_SUCCESS,
     GET_USER_DATA_FAILED,
+    GET_CART_DATA,
+    GET_CART_DATA_SUCCESS,
+    GET_CART_DATA_FAILED,
 } from './constants';
 
 
@@ -38,6 +41,11 @@ export const initialState = fromJS({
         data: null,
     },
     user: {
+        loading: false,
+        error: false,
+        data: null,
+    },
+    cart: {
         loading: false,
         error: false,
         data: null,
@@ -106,6 +114,21 @@ function headerReducer(state = initialState, action) {
                 .setIn(['user', 'loading'], false)
                 .setIn(['user', 'error'], true)
                 .setIn(['user', 'data'], action.userData);
+        case GET_CART_DATA:
+            return state
+                .setIn(['cart', 'loading'], true)
+                .setIn(['cart', 'error'], false)
+                .setIn(['cart', 'data'], null);
+        case GET_CART_DATA_SUCCESS:
+            return state
+                .setIn(['cart', 'loading'], false)
+                .setIn(['cart', 'error'], false)
+                .setIn(['cart', 'data'], action.cartData);
+        case GET_CART_DATA_FAILED:
+            return state
+                .setIn(['cart', 'loading'], false)
+                .setIn(['cart', 'error'], true)
+                .setIn(['cart', 'data'], action.cartData);
         default:
             return state;
     }
