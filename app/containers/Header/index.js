@@ -203,7 +203,7 @@ export class Header extends React.PureComponent {
         this.props.header.header.data.map((data) => {
             if (data.code === 'category-directory') {
                 content = data.items.map((item) => (
-                    <div key={item.code}>
+                    <div key={item.url}>
                         {
                             item.categories ?
                                 <div>
