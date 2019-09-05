@@ -403,7 +403,7 @@ export class Header extends React.PureComponent {
         };
         return (
             <Grid container={true} className="py-1">
-                <Grid item={true} xs={12}>
+                <Grid item={true} xs={12} className="py-half">
                     <NavLink to="/profile" style={{ textDecoration: 'none' }}>
                         <Box
                             align="left"
@@ -426,9 +426,9 @@ export class Header extends React.PureComponent {
                             </Grid>
                         </Box>
                     </NavLink>
-                    <hr />
+                    <Divider />
                 </Grid>
-                <Grid item={true} xs={12}>
+                <Grid item={true} xs={12} className="py-half">
                     <NavLink to="/profile/order" style={{ textDecoration: 'none' }}>
                         <Box
                             align="left"
@@ -451,9 +451,9 @@ export class Header extends React.PureComponent {
                             </Grid>
                         </Box>
                     </NavLink>
-                    <hr />
+                    <Divider />
                 </Grid>
-                <Grid item={true} xs={12}>
+                <Grid item={true} xs={12} className="py-half">
                     <NavLink to="/profile/rewards" style={{ textDecoration: 'none' }}>
                         <Box
                             align="left"
@@ -476,9 +476,9 @@ export class Header extends React.PureComponent {
                             </Grid>
                         </Box>
                     </NavLink>
-                    <hr />
+                    <Divider />
                 </Grid>
-                <Grid item={true} xs={12}>
+                <Grid item={true} xs={12} className="py-half">
                     <NavLink to="/profile/wallet" style={{ textDecoration: 'none' }}>
                         <Box
                             style={{
@@ -501,9 +501,9 @@ export class Header extends React.PureComponent {
                             </Grid>
                         </Box>
                     </NavLink>
-                    <hr />
+                    <Divider />
                 </Grid>
-                <Grid item={true} xs={12}>
+                <Grid item={true} xs={12} className="py-half">
                     <NavLink to="/profile/wishlist" style={{ textDecoration: 'none' }}>
                         <Box
                             align="left"
@@ -526,9 +526,9 @@ export class Header extends React.PureComponent {
                             </Grid>
                         </Box>
                     </NavLink>
-                    <hr />
+                    <Divider />
                 </Grid>
-                <Grid item={true} xs={12}>
+                <Grid item={true} xs={12} className="py-half">
                     <NavLink to="/profile/" style={{ textDecoration: 'none' }}>
                         <Box
                             align="left"
