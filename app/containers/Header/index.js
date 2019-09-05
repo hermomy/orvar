@@ -24,6 +24,7 @@ import {
     Search,
     ShoppingCart,
     Close,
+    Remove,
 } from '@material-ui/icons';
 import {
     Typography,
@@ -338,6 +339,7 @@ export class Header extends React.PureComponent {
                         userOpen: true,
                     })}
                     onMouseLeave={() => this.setState({ userOpen: false })}
+                    onClick={() => this.setState({ userOpen: !this.state.userOpen })}
                 >
                     <Person />
                 </IconButton>
@@ -395,209 +397,157 @@ export class Header extends React.PureComponent {
             height: 18,
         };
         return (
-            <div>
-                {
-                    globalScope.token ?
-                        <Grid container={true} className="py-1">
-                            <Grid item={true} xs={12}>
-                                <NavLink to="/profile" style={{ textDecoration: 'none' }}>
-                                    <Box
-                                        align="left"
-                                        style={{
-                                            color: '#000',
-                                        }}
-                                        onClick={() => this.setState({ userOpen: false })}
+            <Grid container={true} className="py-1">
+                <Grid item={true} xs={12}>
+                    <NavLink to="/profile" style={{ textDecoration: 'none' }}>
+                        <Box
+                            align="left"
+                            style={{
+                                color: '#000',
+                            }}
+                            onClick={() => this.setState({ userOpen: false })}
+                        >
+                            <Grid container={true}>
+                                <Grid item={true} xs={2}>
+                                    <img src={require('Resources/header/profile-icon.png')} alt="profile-icon" style={imgStyle} />
+                                </Grid>
+                                <Grid item={true} xs={10}>
+                                    <Typography
+                                        variant="body1"
                                     >
-                                        <Grid container={true}>
-                                            <Grid item={true} xs={2}>
-                                                <img src={require('Resources/header/profile-icon.png')} alt="profile-icon" style={imgStyle} />
-                                            </Grid>
-                                            <Grid item={true} xs={10}>
-                                                <Typography
-                                                    variant="body1"
-                                                >
-                                                    My Profile
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </Box>
-                                </NavLink>
-                                <hr />
+                                        My Profile
+                                    </Typography>
+                                </Grid>
                             </Grid>
-                            <Grid item={true} xs={12}>
-                                <NavLink to="/profile/order" style={{ textDecoration: 'none' }}>
-                                    <Box
-                                        align="left"
-                                        style={{
-                                            color: '#000',
-                                        }}
-                                        onClick={() => this.setState({ userOpen: false })}
+                        </Box>
+                    </NavLink>
+                    <hr />
+                </Grid>
+                <Grid item={true} xs={12}>
+                    <NavLink to="/profile/order" style={{ textDecoration: 'none' }}>
+                        <Box
+                            align="left"
+                            style={{
+                                color: '#000',
+                            }}
+                            onClick={() => this.setState({ userOpen: false })}
+                        >
+                            <Grid container={true}>
+                                <Grid item={true} xs={2}>
+                                    <img src={require('Resources/header/order-icon.png')} alt="order-icon" style={imgStyle} />
+                                </Grid>
+                                <Grid item={true} xs={10}>
+                                    <Typography
+                                        variant="body1"
                                     >
-                                        <Grid container={true}>
-                                            <Grid item={true} xs={2}>
-                                                <img src={require('Resources/header/order-icon.png')} alt="order-icon" style={imgStyle} />
-                                            </Grid>
-                                            <Grid item={true} xs={10}>
-                                                <Typography
-                                                    variant="body1"
-                                                >
-                                                    My Order
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </Box>
-                                </NavLink>
-                                <hr />
+                                        My Order
+                                    </Typography>
+                                </Grid>
                             </Grid>
-                            <Grid item={true} xs={12}>
-                                <NavLink to="/profile/rewards" style={{ textDecoration: 'none' }}>
-                                    <Box
-                                        align="left"
-                                        style={{
-                                            color: '#000',
-                                        }}
-                                        onClick={() => this.setState({ userOpen: false })}
+                        </Box>
+                    </NavLink>
+                    <hr />
+                </Grid>
+                <Grid item={true} xs={12}>
+                    <NavLink to="/profile/rewards" style={{ textDecoration: 'none' }}>
+                        <Box
+                            align="left"
+                            style={{
+                                color: '#000',
+                            }}
+                            onClick={() => this.setState({ userOpen: false })}
+                        >
+                            <Grid container={true}>
+                                <Grid item={true} xs={2}>
+                                    <img src={require('Resources/header/rewards-icon.png')} alt="rewards-icon" style={imgStyle} />
+                                </Grid>
+                                <Grid item={true} xs={10}>
+                                    <Typography
+                                        variant="body1"
                                     >
-                                        <Grid container={true}>
-                                            <Grid item={true} xs={2}>
-                                                <img src={require('Resources/header/rewards-icon.png')} alt="rewards-icon" style={imgStyle} />
-                                            </Grid>
-                                            <Grid item={true} xs={10}>
-                                                <Typography
-                                                    variant="body1"
-                                                >
-                                                    Rewards
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </Box>
-                                </NavLink>
-                                <hr />
+                                        Rewards
+                                    </Typography>
+                                </Grid>
                             </Grid>
-                            <Grid item={true} xs={12}>
-                                <NavLink to="/profile/wallet" style={{ textDecoration: 'none' }}>
-                                    <Box
-                                        style={{
-                                            color: '#000',
-                                        }}
-                                        onClick={() => this.setState({ userOpen: false })}
-                                        align="left"
+                        </Box>
+                    </NavLink>
+                    <hr />
+                </Grid>
+                <Grid item={true} xs={12}>
+                    <NavLink to="/profile/wallet" style={{ textDecoration: 'none' }}>
+                        <Box
+                            style={{
+                                color: '#000',
+                            }}
+                            onClick={() => this.setState({ userOpen: false })}
+                            align="left"
+                        >
+                            <Grid container={true}>
+                                <Grid item={true} xs={2}>
+                                    <img src={require('Resources/header/wallet-icon.png')} alt="wallet-icon" style={imgStyle} />
+                                </Grid>
+                                <Grid item={true} xs={10}>
+                                    <Typography
+                                        variant="body1"
                                     >
-                                        <Grid container={true}>
-                                            <Grid item={true} xs={2}>
-                                                <img src={require('Resources/header/wallet-icon.png')} alt="wallet-icon" style={imgStyle} />
-                                            </Grid>
-                                            <Grid item={true} xs={10}>
-                                                <Typography
-                                                    variant="body1"
-                                                >
-                                                    My Wallet
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </Box>
-                                </NavLink>
-                                <hr />
+                                        My Wallet
+                                    </Typography>
+                                </Grid>
                             </Grid>
-                            <Grid item={true} xs={12}>
-                                <NavLink to="/profile/wishlist" style={{ textDecoration: 'none' }}>
-                                    <Box
-                                        align="left"
-                                        style={{
-                                            color: '#000',
-                                        }}
-                                        onClick={() => this.setState({ userOpen: false })}
+                        </Box>
+                    </NavLink>
+                    <hr />
+                </Grid>
+                <Grid item={true} xs={12}>
+                    <NavLink to="/profile/wishlist" style={{ textDecoration: 'none' }}>
+                        <Box
+                            align="left"
+                            style={{
+                                color: '#000',
+                            }}
+                            onClick={() => this.setState({ userOpen: false })}
+                        >
+                            <Grid container={true}>
+                                <Grid item={true} xs={2}>
+                                    <img src={require('Resources/header/wishlist-icon.png')} alt="wishlist-icon" style={imgStyle} />
+                                </Grid>
+                                <Grid item={true} xs={10}>
+                                    <Typography
+                                        variant="body1"
                                     >
-                                        <Grid container={true}>
-                                            <Grid item={true} xs={2}>
-                                                <img src={require('Resources/header/wishlist-icon.png')} alt="wishlist-icon" style={imgStyle} />
-                                            </Grid>
-                                            <Grid item={true} xs={10}>
-                                                <Typography
-                                                    variant="body1"
-                                                >
-                                                    My Wishlist
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </Box>
-                                </NavLink>
-                                <hr />
+                                        My Wishlist
+                                    </Typography>
+                                </Grid>
                             </Grid>
-                            <Grid item={true} xs={12}>
-                                <NavLink to="/profile/" style={{ textDecoration: 'none' }}>
-                                    <Box
-                                        align="left"
-                                        style={{
-                                            color: '#000',
-                                        }}
-                                        onClick={() => this.setState({ userOpen: false })}
+                        </Box>
+                    </NavLink>
+                    <hr />
+                </Grid>
+                <Grid item={true} xs={12}>
+                    <NavLink to="/profile/" style={{ textDecoration: 'none' }}>
+                        <Box
+                            align="left"
+                            style={{
+                                color: '#000',
+                            }}
+                            onClick={() => this.setState({ userOpen: false })}
+                        >
+                            <Grid container={true}>
+                                <Grid item={true} xs={2}>
+                                    <img src={require('Resources/header/settings-icon.png')} alt="settings-icon" style={imgStyle} />
+                                </Grid>
+                                <Grid item={true} xs={10}>
+                                    <Typography
+                                        variant="body1"
                                     >
-                                        <Grid container={true}>
-                                            <Grid item={true} xs={2}>
-                                                <img src={require('Resources/header/settings-icon.png')} alt="settings-icon" style={imgStyle} />
-                                            </Grid>
-                                            <Grid item={true} xs={10}>
-                                                <Typography
-                                                    variant="body1"
-                                                >
-                                                    Settings
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </Box>
-                                </NavLink>
+                                        Settings
+                                    </Typography>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    :
-                        <Grid container={true}>
-                            <Grid item={true} xs={12}>
-                                <NavLink to="/login" style={{ textDecoration: 'none' }}>
-                                    <Box
-                                        className="p-1"
-                                        align="left"
-                                        style={{
-                                            backgroundColor: '#f2f2f2',
-                                        }}
-                                        onClick={() => this.setState({ userOpen: false })}
-                                    >
-                                        <Typography
-                                            variant="body1"
-                                            style={{ color: '#000' }}
-                                        >
-                                            Log in
-                                        </Typography>
-                                    </Box>
-                                </NavLink>
-                            </Grid>
-                            <Grid item={true} xs={12}>
-                                <NavLink to="/signup" style={{ textDecoration: 'none' }}>
-                                    <Box
-                                        className="p-1"
-                                        align="left"
-                                        style={{
-                                            backgroundColor: '#603',
-                                        }}
-                                        onClick={() => this.setState({ userOpen: false })}
-                                    >
-                                        <Typography
-                                            variant="body1"
-                                            style={{ color: '#fff' }}
-                                        >
-                                            <u>{dataChecking(this.props.header, 'imgLink', 'data', 'items') && this.props.header.imgLink.data.items[0].title}</u>
-                                        </Typography>
-                                        <Typography
-                                            variant="body2"
-                                            style={{ color: '#fff' }}
-                                        >
-                                            <br />{dataChecking(this.props.header, 'imgLink', 'data', 'items') && this.props.header.imgLink.data.items[0].brief}
-                                        </Typography>
-                                    </Box>
-                                </NavLink>
-                            </Grid>
-                        </Grid>
-                }
-            </div>
+                        </Box>
+                    </NavLink>
+                </Grid>
+            </Grid>
         );
     }
 
@@ -617,25 +567,96 @@ export class Header extends React.PureComponent {
                                 backgroundColor: '#f2f2f2',
                             }}
                         >
-                            <Typography variant="body1">
-                                Hi, {dataChecking(this.props.header, 'user', 'data', 'data') && this.props.header.user.data.data.name}
-                            </Typography>
-                            <NavLink to="/logout" style={{ textDecoration: 'none' }}>
-                                <Typography
-                                    variant="body1"
-                                    style={{ color: '#989898' }}
-                                    onClick={() => this.setState({ userOpen: false })}
-                                >
-                                    <br /><u>Log Out</u>
-                                </Typography>
-                            </NavLink>
+                            <Grid container={true}>
+                                <Grid item={true} xs={11}>
+                                    <Typography variant="body1">
+                                        Hi, {dataChecking(this.props.header, 'user', 'data', 'data') && this.props.header.user.data.data.name}
+                                    </Typography>
+                                    <NavLink to="/logout" style={{ textDecoration: 'none' }}>
+                                        <Typography
+                                            variant="body1"
+                                            style={{ color: '#989898' }}
+                                            onClick={() => this.setState({ userOpen: false })}
+                                        >
+                                            <br /><u>Log Out</u>
+                                        </Typography>
+                                    </NavLink>
+                                </Grid>
+                                <Hidden mdUp={true}>
+                                    <Grid item={true} xs={1}>
+                                        <Remove onClick={() => this.setState({ userOpen: false })} />
+                                    </Grid>
+                                </Hidden>
+                            </Grid>
                         </Container>
                         <Container>
                             {this.state.userOpen && this.renderUserNavLink()}
                         </Container>
                     </div>
                 :
-                    (this.state.userOpen && this.renderUserNavLink())
+                    (this.state.userOpen
+                    &&
+                    <Grid container={true}>
+                        <Grid item={true} xs={12}>
+                            <Box
+                                className="p-1"
+                                align="left"
+                                style={{
+                                    backgroundColor: '#f2f2f2',
+                                }}
+                            >
+                                <Grid container={true}>
+                                    <Grid item={true} xs={11} md={12}>
+                                        <NavLink
+                                            to="/login"
+                                            style={{ textDecoration: 'none' }}
+                                            onClick={() => this.setState({ userOpen: false })}
+                                        >
+                                            <div>
+                                                <Typography
+                                                    variant="body1"
+                                                    style={{ color: '#000' }}
+                                                >
+                                                    Log in
+                                                </Typography>
+                                            </div>
+                                        </NavLink>
+                                    </Grid>
+                                    <Hidden mdUp={true}>
+                                        <Grid item={true} xs={1}>
+                                            <Remove onClick={() => this.setState({ userOpen: false })} />
+                                        </Grid>
+                                    </Hidden>
+                                </Grid>
+                            </Box>
+                        </Grid>
+                        <Grid item={true} xs={12}>
+                            <NavLink to="/signup" style={{ textDecoration: 'none' }}>
+                                <Box
+                                    className="p-1"
+                                    align="left"
+                                    style={{
+                                        backgroundColor: '#603',
+                                    }}
+                                    onClick={() => this.setState({ userOpen: false })}
+                                >
+                                    <Typography
+                                        variant="body1"
+                                        style={{ color: '#fff' }}
+                                    >
+                                        <u>{dataChecking(this.props.header, 'imgLink', 'data', 'items') && this.props.header.imgLink.data.items[0].title}</u>
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        style={{ color: '#fff' }}
+                                    >
+                                        <br />{dataChecking(this.props.header, 'imgLink', 'data', 'items') && this.props.header.imgLink.data.items[0].brief}
+                                    </Typography>
+                                </Box>
+                            </NavLink>
+                        </Grid>
+                    </Grid>
+                    )
             }
         </Card>
     )
@@ -852,10 +873,8 @@ export class Header extends React.PureComponent {
                                         </Grid>
                                     </Grid>
                                     <Grid item={true}>
-                                        <i className="fas fa-shopping-cart pr-1"></i>
                                         <IconButton
                                             id="profile"
-                                            className="mr-1"
                                             onClick={(evt) => this.setState({
                                                 anchorEl: evt.currentTarget,
                                                 userOpen: !this.state.userOpen,
@@ -863,12 +882,14 @@ export class Header extends React.PureComponent {
                                         >
                                             <Person />
                                         </IconButton>
+                                        <IconButton>
+                                            <ShoppingCart />
+                                        </IconButton>
                                     </Grid>
                                 </Grid>
                                 {
                                     this.state.userOpen ?
                                         <div>
-                                            <span className={this.props.classes.arrow} ref={(node) => this.setState({ arrowRef: node })} />
                                             {this.renderUserSection()}
                                         </div>
                                     :
