@@ -25,6 +25,9 @@ import {
     ShoppingCart,
     Close,
     Remove,
+    Menu,
+    ChevronRight,
+    ChevronLeft,
 } from '@material-ui/icons';
 import {
     Typography,
@@ -256,11 +259,13 @@ export class Header extends React.PureComponent {
                         <div>
                             <div>
                                 <Grid className="p-1" container={true}>
-                                    <Grid item={true}>
-                                        <i className="fas fa-bars pr-1"></i>
+                                    <Grid item={true} xs={4}>
+                                        <IconButton onClick={this.toggleDrawer}>
+                                            <Menu color="primary" className={this.props.classes.icon} />
+                                        </IconButton>
                                     </Grid>
-                                    <Grid item={true}>
-                                        <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100px" />
+                                    <Grid item={true} xs={8}>
+                                        <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100px" className="p-1" />
                                     </Grid>
                                 </Grid>
                                 <Divider />
@@ -272,23 +277,26 @@ export class Header extends React.PureComponent {
                                             <div className="p-1">
                                                 {
                                                     data.type !== 'hot-link' ?
-                                                        <Typography
+                                                        <Box
                                                             onClick={() => this.setState({
                                                                 toggleChildDrawer: !this.state.toggleChildDrawer,
                                                                 code: data.code,
                                                             })}
                                                         >
-                                                            {data.text}
-                                                            <i
-                                                                className="fas fa-angle-right"
-                                                                style={{ float: 'right' }}
-                                                            ></i>
-                                                        </Typography>
+                                                            <Typography>
+                                                                {data.text}
+                                                                <ChevronRight style={{ float: 'right' }} />
+                                                            </Typography>
+                                                        </Box>
                                                     :
-                                                        <Typography>
-                                                            {data.text}
-                                                        </Typography>
-
+                                                        <NavLink
+                                                            className={this.props.classes.navLink}
+                                                            to={data.url}
+                                                        >
+                                                            <Typography>
+                                                                {data.text}
+                                                            </Typography>
+                                                        </NavLink>
                                                 }
                                             </div>
                                             <Divider />
@@ -302,11 +310,12 @@ export class Header extends React.PureComponent {
                         <div>
                             <div
                                 className="p-1"
+                                onClick={() => this.setState({ toggleChildDrawer: !this.state.toggleChildDrawer })}
                             >
+                                <ChevronLeft style={{ float: 'left' }} />
                                 <Typography
                                     onClick={() => this.setState({ toggleChildDrawer: !this.state.toggleChildDrawer })}
                                 >
-                                    <i className="fas fa-angle-left pr-1"></i>
                                     Back
                                 </Typography>
                             </div>
@@ -865,10 +874,9 @@ export class Header extends React.PureComponent {
                                     <Grid item={true}>
                                         <Grid container={true} alignItems="center">
                                             <Grid item={true}>
-                                                <i
-                                                    className="fas fa-bars pr-1"
-                                                    onClick={this.toggleDrawer}
-                                                ></i>
+                                                <IconButton onClick={this.toggleDrawer}>
+                                                    <Menu color="primary" className={this.props.classes.icon} />
+                                                </IconButton>
                                             </Grid>
                                             <Grid item={true}>
                                                 <NavLink to="/">
