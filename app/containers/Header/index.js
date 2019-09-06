@@ -219,17 +219,31 @@ export class Header extends React.PureComponent {
                                                 childVal: item.code,
                                             })}
                                         />
-                                        {this.state.open && this.state.childVal === item.code ? <ExpandLess /> : <ExpandMore />}
+                                        {this.state.open && this.state.childVal === item.code ?
+                                            <ExpandLess
+                                                onClick={() => this.setState({
+                                                    open: !this.state.open,
+                                                    childVal: item.code,
+                                                })}
+                                            />
+                                            :
+                                            <ExpandMore
+                                                onClick={() => this.setState({
+                                                    open: !this.state.open,
+                                                    childVal: item.code,
+                                                })}
+                                            />
+                                        }
                                     </ListItem>
                                     <Collapse in={this.state.open && this.state.childVal === item.code} timeout="auto" unmountOnExit={true}>
                                         <List component="div" disablePadding={true}>
                                             {
                                                 item.categories.map((category) => (
-                                                    <div key={category.url}>
-                                                        <ListItem className={this.props.classes.childDrawer} component={NavLink} divider={true} to={category.url}>
+                                                    <NavLink key={category.url} to={category.url} style={{ textDecoration: 'none' }}>
+                                                        <ListItem className={this.props.classes.childDrawer} divider={true} >
                                                             <ListItemText primary={category.text} />
                                                         </ListItem>
-                                                    </div>
+                                                    </NavLink>
                                                 ))
                                             }
                                         </List>
@@ -247,6 +261,9 @@ export class Header extends React.PureComponent {
         });
         return (
             <List component="div">
+                <ListItem divider={true}>
+                    <ListItemText primary="CATEGORIES" />
+                </ListItem>
                 {content}
             </List>
         );
@@ -277,7 +294,7 @@ export class Header extends React.PureComponent {
                                         <div key={data.code}>
                                             <div className="p-1">
                                                 {
-                                                    data.type !== 'hot-link' ?
+                                                    data.type === 'category-directory' ?
                                                         <Box
                                                             onClick={() => this.setState({
                                                                 toggleChildDrawer: !this.state.toggleChildDrawer,

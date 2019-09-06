@@ -35,6 +35,7 @@ const styles = {
     childDrawer: {
         paddingLeft: '2rem',
         backgroundColor: '#ccc',
+        color: '#000',
     },
     mobileSearch: {
         width: '100%',
