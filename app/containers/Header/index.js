@@ -28,6 +28,8 @@ import {
     Menu,
     ChevronRight,
     ChevronLeft,
+    ExpandMore,
+    ExpandLess,
 } from '@material-ui/icons';
 import {
     Typography,
@@ -200,7 +202,6 @@ export class Header extends React.PureComponent {
             </div>
         );
     }
-
     childDrawer = () => {
         let content;
         this.props.header.header.data.map((data) => {
@@ -218,14 +219,14 @@ export class Header extends React.PureComponent {
                                                 childVal: item.code,
                                             })}
                                         />
-                                        {this.state.open && this.state.childVal === item.code ? <i className="fas fa-angle-up"></i> : <i className="fas fa-angle-down"></i>}
+                                        {this.state.open && this.state.childVal === item.code ? <ExpandLess /> : <ExpandMore />}
                                     </ListItem>
                                     <Collapse in={this.state.open && this.state.childVal === item.code} timeout="auto" unmountOnExit={true}>
                                         <List component="div" disablePadding={true}>
                                             {
                                                 item.categories.map((category) => (
                                                     <div key={category.url}>
-                                                        <ListItem className={this.props.classes.childDrawer} component={NavLink} button={true} divider={true} to={category.url}>
+                                                        <ListItem className={this.props.classes.childDrawer} component={NavLink} divider={true} to={category.url}>
                                                             <ListItemText primary={category.text} />
                                                         </ListItem>
                                                     </div>
@@ -235,7 +236,7 @@ export class Header extends React.PureComponent {
                                     </Collapse>
                                 </div>
                             :
-                                <ListItem button={true}>
+                                <ListItem button={true} divider={true}>
                                     <ListItemText primary={item.text} />
                                 </ListItem>
                         }
@@ -688,12 +689,32 @@ export class Header extends React.PureComponent {
      * top nav section with data came from api /layout/top-nav
      */
     renderTopCategory = () => (
-        <div className={`top-nav ${!this.state.hideSearchBar ? 'show' : ''}`}>
+        <Grid container={true} className={`top-nav ${!this.state.hideSearchBar ? 'show' : ''}`}>
             {
                 dataChecking(this.props.header, 'header', 'data').map((val) => (
-                    <span className="ml-3 category" key={val.code}>
+                    <Grid item={true} className="ml-3 category" key={val.code}>
                         {
-                            val.type === 'hot-link' ?
+                            val.type === 'category-directory' ?
+                                <div>
+                                    <Typography
+                                        id={val.code}
+                                        onMouseEnter={(event) => this.setState({ megaMenuToggle: true, anchorElID: event.target.id })}
+                                    >
+                                        {val.text}
+                                    </Typography>
+                                    {this.state.megaMenuToggle ?
+                                        <ExpandLess
+                                            style={{ float: 'right' }}
+                                            onClick={() => this.setState({ megaMenuToggle: false, anchorElID: null })}
+                                        />
+                                        :
+                                        <ExpandMore
+                                            style={{ float: 'right' }}
+                                            onClick={() => this.setState({ megaMenuToggle: true, anchorElID: val.code })}
+                                        />
+                                    }
+                                </div>
+                            :
                                 <NavLink
                                     className={this.props.classes.navLink}
                                     to={val.url}
@@ -702,19 +723,11 @@ export class Header extends React.PureComponent {
                                         {val.text}
                                     </Typography>
                                 </NavLink>
-                            :
-                                <Typography
-                                    id={val.code}
-                                    onMouseEnter={(event) => this.setState({ megaMenuToggle: true, anchorElID: event.target.id })}
-                                >
-                                    {val.text}
-                                    <i className="fas fa-angle-down ml-quater"></i>
-                                </Typography>
                         }
-                    </span>
+                    </Grid>
                 ))
             }
-        </div>
+        </Grid>
     )
 
     /**
