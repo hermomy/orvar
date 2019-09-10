@@ -871,36 +871,38 @@ export class Header extends React.PureComponent {
         return (
             dataChecking(this.props.header, 'header', 'data') ?
                 <div>
-                    <AppBar color="default" className={this.props.classes.header}>
+                    <AppBar color="default">
                         <Hidden smDown={true}>
-                            <Container className="header-desktop">
-                                <Grid container={true} alignItems="center">
-                                    {this.leftHeader()}
-                                    {this.rightHeader()}
-                                </Grid>
-                            </Container>
-                            <Popper
-                                className={this.props.classes.popper}
-                                style={{ zIndex: 1101, maxWidth: '20rem' }}
-                                open={this.state.userOpen}
-                                placement="top"
-                                anchorEl={this.state.anchorEl}
-                                onMouseEnter={() => this.setState({ userOpen: true })}
-                                onMouseLeave={() => this.setState({ userOpen: false })}
-                                modifiers={{
-                                    arrow: {
-                                        enabled: true,
-                                        element: this.state.arrowRef,
-                                    },
-                                }}
-                            >
-                                <span className={this.props.classes.arrow} ref={(node) => this.setState({ arrowRef: node })} />
-                                {this.renderUserSection()}
-                            </Popper>
+                            <div className={this.props.classes.header}>
+                                <Container className="header-desktop">
+                                    <Grid container={true} alignItems="center">
+                                        {this.leftHeader()}
+                                        {this.rightHeader()}
+                                    </Grid>
+                                </Container>
+                                <Popper
+                                    className={this.props.classes.popper}
+                                    style={{ zIndex: 1101, maxWidth: '20rem' }}
+                                    open={this.state.userOpen}
+                                    placement="top"
+                                    anchorEl={this.state.anchorEl}
+                                    onMouseEnter={() => this.setState({ userOpen: true })}
+                                    onMouseLeave={() => this.setState({ userOpen: false })}
+                                    modifiers={{
+                                        arrow: {
+                                            enabled: true,
+                                            element: this.state.arrowRef,
+                                        },
+                                    }}
+                                >
+                                    <span className={this.props.classes.arrow} ref={(node) => this.setState({ arrowRef: node })} />
+                                    {this.renderUserSection()}
+                                </Popper>
+                            </div>
                         </Hidden>
                         <Hidden mdUp={true}>
-                            <div className="header-mobile">
-                                <Grid container={true} justify="space-between" alignItems="center">
+                            <div className={this.props.classes.headerMobile}>
+                                <Grid container={true} justify="space-between" alignItems="center" style={{ padding: '1rem 1rem 0 1rem' }}>
                                     <Grid item={true}>
                                         <Grid container={true} alignItems="center">
                                             <Grid item={true}>
@@ -946,24 +948,25 @@ export class Header extends React.PureComponent {
                                     :
                                         null
                                 }
-                                <TextField
-                                    className={this.props.classes.mobileSearch}
-                                    autoFocus={true}
-                                    value={this.state.searchQuery}
-                                    onChange={this.getSearchResult}
-                                    variant="outlined"
-                                    autoComplete="off"
-                                    margin="dense"
-                                    placeholder="Search for Products, Brands, etc.."
-                                    style={{ width: '100%' }}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <Search />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
+                                <div style={{ padding: '0 1rem 1rem 1rem' }}>
+                                    <TextField
+                                        className={this.props.classes.mobileSearch}
+                                        autoFocus={true}
+                                        value={this.state.searchQuery}
+                                        onChange={this.getSearchResult}
+                                        variant="outlined"
+                                        autoComplete="off"
+                                        margin="dense"
+                                        placeholder="Search for Products, Brands, etc.."
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <Search />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                </div>
                             </div>
                             {this.hamburger()}
                         </Hidden>

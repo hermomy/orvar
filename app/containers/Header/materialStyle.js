@@ -14,6 +14,10 @@ const styles = {
         padding: '1rem',
         backgroundColor: 'white',
     },
+    headerMobile: {
+        boxShadow: '0 4px 2px -2px #ccc',
+        backgroundColor: 'white',
+    },
     leadTitle: { fontWeight: 600 },
     normalFont: { color: '#969696' },
     leftMegaMenu: {
