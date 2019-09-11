@@ -5,13 +5,13 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-// import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import OwlCarousel from 'react-owl-carousel2';
 import 'assets/react-owl-carousel2.style.scss';
 import { withStyles } from '@material-ui/core/styles';
@@ -36,8 +36,11 @@ import {
     Favorite,
 } from '@material-ui/icons';
 
-// import { dataChecking } from 'globalUtils';
-
+import { dataChecking } from 'globalUtils';
+import {
+    getHomeBanner,
+    getFlagship,
+} from './actions';
 import makeSelectHomePage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -52,20 +55,24 @@ export class HomePage extends React.PureComponent {
             a: true,
         };
     }
+    componentDidMount() {
+        this.props.dispatch(getHomeBanner());
+        this.props.dispatch(getFlagship());
+    }
 
     /**
      * Slider component
      */
     slider = () => {}
 
-    displayTitle = (title1, title2) => (
-        <Container style={{ textAlign: 'center' }}>
+    sectionHeader = (title, description) => (
+        <Container className="container section-header"style={{ textAlign: 'center' }}>
             <Box className="text-uppercase">
                 <Typography variant="h5">
-                    {title1}
+                    {title}
                 </Typography><br />
                 <Typography variant="subtitle1">
-                    {title2}
+                    {description}
                 </Typography>
             </Box>
         </Container>
@@ -73,64 +80,96 @@ export class HomePage extends React.PureComponent {
     /**
      * Display slider of images
      */
-    renderHomeBanner = () => {
-        console.log();
-        return (
-            <div className="carousel-banner">
-                <OwlCarousel
-                    options={{
-                        items: 1,
-                        loop: true,
-                        nav: true,
-                        navText: ['&lt;', '&gt;'],
-                        autoplay: true,
-                        autoplayHoverPause: true,
-                    }}
-                >
-                    <img src={require('images/profile-top-banner-bg.png')} alt="banner" />
-                    <img src={require('images/hermo-logo-image.png')} alt="logo" />
-                </OwlCarousel>
-            </div>
-        );
-    }
+    renderHomeBanner = () => (
+        <div className="div home-top-banner">
+            {
+                dataChecking(this.props.homePage, 'banner', 'data', 'data', 'result', 'items') &&
+                    <div>
+                        <Hidden className=" carousel home-banner-desktop" smDown={true}>
+                            <OwlCarousel
+                                options={{
+                                    items: 1,
+                                    loop: true,
+                                    nav: true,
+                                    dots: true,
+                                    navText: ['&lt;', '&gt;'],
+                                    autoplay: true,
+                                    autoplayHoverPause: true,
+                                    center: true,
+                                }}
+                            >
+                                {
+                                    dataChecking(this.props.homePage, 'banner', 'data', 'data', 'result', 'items').map((banner) => (
+                                        (banner.visibility.desktop) &&
+                                            <NavLink key={banner.id} to={banner.url}>
+                                                <img src={banner.image.desktop} alt={`banner ${banner.caption}`} />
+                                            </NavLink>
+                                    ))
+                                }
+                            </OwlCarousel>
+                        </Hidden>
+                        <Hidden className="carousel home-banner-mobile" mdUp={true}>
+                            <OwlCarousel
+                                options={{
+                                    items: 1,
+                                    loop: true,
+                                    autoplay: true,
+                                    dots: true,
+                                    autoplayHoverPause: true,
+                                }}
+                            >
+                                {
+                                    dataChecking(this.props.homePage, 'banner', 'data', 'data', 'result', 'items').map((banner) => (
+                                        (banner.visibility.mobile) &&
+                                            <NavLink key={banner.id} to={banner.url}>
+                                                <img src={banner.image.mobile} alt={`banner ${banner.caption}`} />
+                                            </NavLink>
+                                    ))
+                                }
+                            </OwlCarousel>
+                        </Hidden>
+                    </div>
+            }
+        </div>
+    )
 
     /**
      * Display flagship store (images) with button
      */
     renderFlagship = () => (
-        <Container className="carousel-flagship p-1"style={{ textAlign: 'center' }}>
-            {this.displayTitle('official flagships stores', 'authorised & authentic')}
-            <OwlCarousel
-                options={{
-                    items: 3,
-                    loop: true,
-                    nav: true,
-                    navText: ['&lt;', '&gt;'],
-                    stagePadding: 50,
-                    responsive: {
-                        320: {
+        <Container className="container home-flagship py-1"style={{ textAlign: 'center' }}>
+            {this.sectionHeader('official flagships stores', 'authorised & authentic')}
+            {dataChecking(this.props.homePage, 'flagship', 'data', 'data', 'items') &&
+                <div>
+                    <OwlCarousel
+                        options={{
                             items: 2,
-                        },
-                        700: {
-                            items: 3,
-                        },
-                        1024: {
-                            items: 4,
-                        },
-                        1280: {
-                            items: 5,
-                        },
-                    },
-                }}
-            >
-                <img src={require('images/toPay-icon.png')} alt="banner" />
-                <img src={require('images/toReview-icon.png')} alt="logo" />
-                <img src={require('images/toShip-icon.png')} alt="logo" />
-                <img src={require('images/hermo.png')} alt="logo" />
-            </OwlCarousel>
-            <Button variant="contained">
-                View All Flagships
-            </Button>
+                            loop: true,
+                            center: true,
+                            navText: ['&lt;', '&gt;'],
+                            stagePadding: 50,
+                            responsive: {
+                                700: {
+                                    items: 6,
+                                    nav: true,
+                                },
+                            },
+                        }}
+                    >
+                        {
+                            dataChecking(this.props.homePage, 'flagship', 'data', 'data', 'items').map((flagship) => (
+                                <NavLink key={flagship.id} to={flagship.url}>
+                                    <img src={flagship.brand.logo} alt={`flagship brand ${flagship.brand.name} logo`} />
+                                </NavLink>
+                            ))
+                        }
+                    </OwlCarousel>
+                    {/* BUTTON NAVLINK TO FLAGSHIP PAGE */}
+                    <Button variant="contained">
+                        View All Flagships
+                    </Button>
+                </div>
+            }
         </Container>
     )
 
@@ -140,7 +179,7 @@ export class HomePage extends React.PureComponent {
     renderTwoh = () => (
         <div className="twoh p-1">
             <Grid container={true}>
-                {this.displayTitle('this week on hermo')}
+                {this.sectionHeader('this week on hermo')}
                 <Grid item={true} xs={6}>
                     <Card className={this.props.classes.card}>
                         <CardActionArea>
@@ -165,7 +204,7 @@ export class HomePage extends React.PureComponent {
      */
     renderNewArrivals = () => (
         <div className="carousel-newArrival py-1">
-            {this.displayTitle('new arrivals', 'checkout the latest and hottest')}
+            {this.sectionHeader('new arrivals', 'checkout the latest and hottest')}
             <OwlCarousel
                 options={{
                     items: 3,
@@ -204,7 +243,7 @@ export class HomePage extends React.PureComponent {
      */
     renderBackInStock = () => (
         <Card className={this.props.classes.card1}>
-            {this.displayTitle('back in stock', 'we just cant get enough!')}
+            {this.sectionHeader('back in stock', 'we just cant get enough!')}
             <Divider />
             <CardContent>
                 <OwlCarousel
@@ -235,7 +274,7 @@ export class HomePage extends React.PureComponent {
     renderFeaturedBrand = () => (
         <div className="my-2">
             <Container style={{ textAlign: 'center' }}>
-                {this.displayTitle('featured brands')}
+                {this.sectionHeader('featured brands')}
                 <Paper className="py-1 my-1">
                     <OwlCarousel
                         options={{
@@ -271,7 +310,7 @@ export class HomePage extends React.PureComponent {
      */
     renderRecommend = () => (
         <div>
-            {this.displayTitle('recommend for you')}
+            {this.sectionHeader('recommend for you')}
             <OwlCarousel
                 options={{
                     items: 3,
@@ -294,7 +333,7 @@ export class HomePage extends React.PureComponent {
      */
     renderReview = () => (
         <div style={{ textAlign: 'center' }}>
-            {this.displayTitle('beauty reviews', 'share your beauty stories')}
+            {this.sectionHeader('beauty reviews', 'share your beauty stories')}
             <OwlCarousel
                 options={{
                     items: 3,
@@ -340,9 +379,9 @@ export class HomePage extends React.PureComponent {
 
     render() {
         return (
-            <div className="py-1">
+            <div>
                 {this.renderHomeBanner()}
-                <Hidden mdUp={true}>
+                {/* <Hidden mdUp={true}>
                     <Container>
                         <Grid container={true}>
                             <Grid item={true} xs={3}>
@@ -367,9 +406,9 @@ export class HomePage extends React.PureComponent {
                             </Grid>
                         </Grid>
                     </Container>
-                </Hidden>
+                </Hidden> */}
                 {this.renderFlagship()}
-                {this.renderTwoh()}
+                {/* {this.renderTwoh()}
                 {this.renderNewArrivals()}
                 {this.renderEventView()}
                 <Grid container={true}>
@@ -382,15 +421,15 @@ export class HomePage extends React.PureComponent {
                 </Grid>
                 {this.renderFeaturedBrand()}
                 {this.renderRecommend()}
-                {this.renderReview()}
+                {this.renderReview()} */}
             </div>
         );
     }
 }
 
-// HomePage.propTypes = {
-//     dispatch: PropTypes.func.isRequired,
-// };
+HomePage.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = createStructuredSelector({
     homePage: makeSelectHomePage(),
