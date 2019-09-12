@@ -15,7 +15,7 @@ import { NavLink } from 'react-router-dom';
 import OwlCarousel from 'react-owl-carousel2';
 import 'assets/react-owl-carousel2.style.scss';
 import { withStyles } from '@material-ui/core/styles';
-// import ProductCard from 'components/ProductCard';
+import ProductCard from 'components/ProductCard';
 
 import {
     Avatar,
@@ -41,6 +41,7 @@ import {
     getHomeBanner,
     getFlagship,
     getTwoh,
+    getNewArrival,
 } from './actions';
 import makeSelectHomePage from './selectors';
 import reducer from './reducer';
@@ -60,6 +61,7 @@ export class HomePage extends React.PureComponent {
         this.props.dispatch(getHomeBanner());
         this.props.dispatch(getFlagship());
         this.props.dispatch(getTwoh());
+        this.props.dispatch(getNewArrival());
     }
 
     /**
@@ -184,7 +186,7 @@ export class HomePage extends React.PureComponent {
      * THIS WEEK ON HERMO - cards of products
      */
     renderTwoh = () => {
-        const twoh = this.props.homePage.twoh.success && this.props.homePage.twoh;
+        const twoh = dataChecking(this.props.homePage, 'twoh', 'success') && this.props.homePage.twoh;
         let twohBanner;
         if (twoh && twoh.data) {
             const section = Object.keys(dataChecking(twoh, 'data', 'result'));
@@ -242,7 +244,7 @@ export class HomePage extends React.PureComponent {
                 }
                 <div className="div home-twoh-header">
                     {
-                        dataChecking(twoh, 'data') && this.sectionHeader(twoh.data.title, twoh.data.description)
+                        this.sectionHeader(dataChecking(twoh, 'data', 'title') || 'this week on hermo', dataChecking(twoh, 'data', 'description') || '')
                     }
                 </div>
                 <Grid container={true}>
@@ -255,25 +257,50 @@ export class HomePage extends React.PureComponent {
     /**
      * Display slider of new arrival product cards
      */
-    renderNewArrivals = () => (
-        <div className="carousel-newArrival py-1">
-            {this.sectionHeader('new arrivals', 'checkout the latest and hottest')}
-            <OwlCarousel
-                options={{
-                    items: 3,
-                    loop: true,
-                    nav: true,
-                    navText: ['&lt;', '&gt;'],
-                    stagePadding: 50,
-                }}
-            >
+    renderNewArrivals = () => {
+        const newArrival = dataChecking(this.props.homePage, 'newArrival', 'success') && this.props.homePage.newArrival;
+        let latestTrends;
+        if (newArrival && newArrival.data) {
+            latestTrends = newArrival.data.latest_trends.items.map((product) => (
+                <ProductCard
+                    key={product.id}
+                    product={product}
+                    url={product.url}
+                    image={true}
+                />
+            ));
+        }
+        return (
+            <Container className="container home-new-arrival py-1">
                 {
-                    /* Product Card here */
+                    dataChecking(this.props.homePage, 'newArrival', 'success') &&
+                    <div>
+                        {this.sectionHeader(dataChecking(newArrival, 'data', 'title') || 'New Arrivals', 'checkout the latest and hottest')}
+                        {
+                            dataChecking(newArrival, 'data', 'latest_trends', 'items') &&
+                                <OwlCarousel
+                                    options={{
+                                        items: 2,
+                                        dotsEach: true,
+                                        center: true,
+                                        responsive: {
+                                            700: {
+                                                items: 5,
+                                                nav: true,
+                                                navText: ['&lt;', '&gt;'],
+                                                startPosition: 3,
+                                            },
+                                        },
+                                    }}
+                                >
+                                    {latestTrends}
+                                </OwlCarousel>
+                        }
+                    </div>
                 }
-                UNAVAILABLE
-            </OwlCarousel>
-        </div>
-    )
+            </Container>
+        );
+    }
 
     /**
      * Display images of event
@@ -462,7 +489,7 @@ export class HomePage extends React.PureComponent {
                 </Hidden> */}
                 {this.renderFlagship()}
                 {/* {this.renderTwoh()} */}
-                {/* {this.renderNewArrivals()} */}
+                {this.renderNewArrivals()}
                 {/* {this.renderEventView()} */}
                 {/* <Grid container={true}>
                     <Grid item={true} xs={12} md={6}>
