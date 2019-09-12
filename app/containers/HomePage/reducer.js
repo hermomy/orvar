@@ -18,6 +18,12 @@ import {
     GET_NEW_ARRIVAL,
     GET_NEW_ARRIVAL_SUCCESS,
     GET_NEW_ARRIVAL_FAILED,
+    GET_EXTENSION,
+    GET_EXTENSION_SUCCESS,
+    GET_EXTENSION_FAILED,
+    GET_TRENDING,
+    GET_TRENDING_SUCCESS,
+    GET_TRENDING_FAILED,
 } from './constants';
 
 export const initialState = fromJS({
@@ -29,12 +35,21 @@ export const initialState = fromJS({
         loading: false,
         error: false,
     },
+    extension: {
+        loading: false,
+        error: false,
+    },
     twoh: {
         loading: false,
         error: false,
         success: false,
     },
     newArrival: {
+        loading: false,
+        error: false,
+        success: false,
+    },
+    trending: {
         loading: false,
         error: false,
         success: false,
@@ -71,6 +86,20 @@ function homePageReducer(state = initialState, action) {
                 .setIn(['flagship', 'loading'], false)
                 .setIn(['flagship', 'error'], true)
                 .setIn(['flagship', 'data'], action.flagshipData);
+        case GET_EXTENSION:
+            return state
+                .setIn(['extension', 'loading'], true)
+                .setIn(['extension', 'error'], false);
+        case GET_EXTENSION_SUCCESS:
+            return state
+                .setIn(['extension', 'loading'], false)
+                .setIn(['extension', 'error'], false)
+                .setIn(['extension', 'data'], action.extensionData);
+        case GET_EXTENSION_FAILED:
+            return state
+                .setIn(['extension', 'loading'], false)
+                .setIn(['extension', 'error'], true)
+                .setIn(['extension', 'data'], action.extensionData);
         case GET_TWOH:
             return state
                 .setIn(['twoh', 'loading'], true)
@@ -101,6 +130,21 @@ function homePageReducer(state = initialState, action) {
                 .setIn(['newArrival', 'loading'], false)
                 .setIn(['newArrival', 'error'], true)
                 .setIn(['newArrival', 'data'], action.newArrivalData);
+        case GET_TRENDING:
+            return state
+                .setIn(['trending', 'loading'], true)
+                .setIn(['trending', 'error'], false);
+        case GET_TRENDING_SUCCESS:
+            return state
+                .setIn(['trending', 'success'], true)
+                .setIn(['trending', 'loading'], false)
+                .setIn(['trending', 'error'], false)
+                .setIn(['trending', 'data'], action.trendingData);
+        case GET_TRENDING_FAILED:
+            return state
+                .setIn(['trending', 'loading'], false)
+                .setIn(['trending', 'error'], true)
+                .setIn(['trending', 'data'], action.trendingData);
         default:
             return state;
     }

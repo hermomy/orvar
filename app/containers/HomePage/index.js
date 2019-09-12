@@ -42,6 +42,8 @@ import {
     getFlagship,
     getTwoh,
     getNewArrival,
+    getExtension,
+    getTrending,
 } from './actions';
 import makeSelectHomePage from './selectors';
 import reducer from './reducer';
@@ -62,12 +64,9 @@ export class HomePage extends React.PureComponent {
         this.props.dispatch(getFlagship());
         this.props.dispatch(getTwoh());
         this.props.dispatch(getNewArrival());
+        this.props.dispatch(getExtension());
+        this.props.dispatch(getTrending());
     }
-
-    /**
-     * Slider component
-     */
-    slider = () => {}
 
     sectionHeader = (title, description) => (
         <Container className="container section-header py-half" style={{ textAlign: 'center' }}>
@@ -81,6 +80,38 @@ export class HomePage extends React.PureComponent {
             </Box>
         </Container>
     )
+
+    /**
+     * HOT STUFF - display slider of product cards for BACK IN STOCK AND HIGHLY RATED
+     */
+    sectionHotStuff = (title, description, products) => (
+        <Card>
+            {this.sectionHeader(title, description)}
+            <Divider />
+            <CardContent>
+                <OwlCarousel
+                    options={{
+                        items: 2,
+                        loop: true,
+                        nav: true,
+                        navText: ['&lt;', '&gt;'],
+                    }}
+                >
+                    {
+                        products.map((product) => (
+                            <ProductCard
+                                key={product.id}
+                                product={product}
+                                url={product.url}
+                                image={true}
+                            />
+                        ))
+                    }
+                </OwlCarousel>
+            </CardContent>
+        </Card>
+    )
+
     /**
      *  HOME BANNER - slider of banner
      */
@@ -140,8 +171,33 @@ export class HomePage extends React.PureComponent {
     /**
      *  MOBILE SHORTCUT - list of buttons
      */
-    renderMobileShortcuts = () => {
-    }
+    renderMobileShortcuts = () => (
+        <Container>
+            <Grid container={true}>
+                <Grid item={true} xs={3}>
+                    <Button>
+                        Attendance
+                    </Button>
+                </Grid>
+                <Grid item={true} xs={3}>
+                    <Button>
+                        Flagship Stores
+                    </Button>
+                </Grid>
+                <Grid item={true} xs={3}>
+                    <Button>
+                        Hermo Global
+                    </Button>
+                </Grid>
+                <Grid item={true} xs={3}>
+                    <Button>
+                        Mask box
+                    </Button>
+                </Grid>
+            </Grid>
+        </Container>
+    )
+
     /**
      *  FLAGSHIP - slider of flagship brands logo
      */
@@ -183,7 +239,7 @@ export class HomePage extends React.PureComponent {
     )
 
     /**
-     * THIS WEEK ON HERMO - cards of products
+     * THIS WEEK ON HERMO - cards of featured banner
      */
     renderTwoh = () => {
         const twoh = dataChecking(this.props.homePage, 'twoh', 'success') && this.props.homePage.twoh;
@@ -255,7 +311,8 @@ export class HomePage extends React.PureComponent {
     }
 
     /**
-     * Display slider of new arrival product cards
+     * NEW ARRIVALS - cards of new arrival products
+     * #need update on product cards
      */
     renderNewArrivals = () => {
         const newArrival = dataChecking(this.props.homePage, 'newArrival', 'success') && this.props.homePage.newArrival;
@@ -281,7 +338,6 @@ export class HomePage extends React.PureComponent {
                                 <OwlCarousel
                                     options={{
                                         items: 2,
-                                        dotsEach: true,
                                         center: true,
                                         responsive: {
                                             700: {
@@ -303,50 +359,69 @@ export class HomePage extends React.PureComponent {
     }
 
     /**
-     * Display images of event
+     * EXTENSION ZONE - campaign viewer
+     * #need campaign viewer component
      */
-    renderEventView= () => (
-        <div className="banner-event p-1">
-            <Grid container={true}>
-                <Grid item={true} xs={12} md={6}>
-                    <img src={require('images/profile-top-banner-bg.png')} alt="banner" />
+    renderExtensionZone = () => (
+        <Container className=" container home-extension p-1">
+            {
+                dataChecking(this.props.homePage, 'extension', 'data') &&
+                <Grid container={true}>
+                    {
+                        console.log(this.props.homePage.extension.data.items[0].banner)
+                    }
+                    {/* <Grid item={true} xs={12} md={6}>
+                        <Hidden className="banner home-extension-desktop" smDown={true}>
+                            <img src={this.props.homePage.extension.data.items.banner} alt="banner" />
+                        </Hidden>
+                    </Grid>
+                    <Grid item={true} xs={12} md={6}>
+                        <Hidden>
+                            <img src={require('images/hermo-logo-image.png')} alt="logo" />
+                        </Hidden>
+                    </Grid> */}
                 </Grid>
-                <Grid item={true} xs={12} md={6}>
-                    <img src={require('images/hermo-logo-image.png')} alt="logo" />
-                </Grid>
-            </Grid>
-        </div>
+            }
+        </Container>
     )
 
     /**
-     * Display slider of back in stock
+     * MOBILE QUICK LINK - currently disabled
+     *
+     */
+    renderMobileQuickLink = () => {}
+
+    /**
+     * Display slider of highly rated
      */
     renderBackInStock = () => (
-        <Card className={this.props.classes.card1}>
-            {this.sectionHeader('back in stock', 'we just cant get enough!')}
-            <Divider />
-            <CardContent>
-                <OwlCarousel
-                    options={{
-                        items: 2,
-                        loop: true,
-                        nav: true,
-                        navText: ['&lt;', '&gt;'],
-                    }}
-                >
-                    {
-                        /* Product Card here */
-                    }
-                    UNAVAILABLE
-                </OwlCarousel>
-            </CardContent>
-        </Card>
+        <div>
+            {
+                this.props.homePage.newArrival.success &&
+                this.sectionHotStuff(
+                    'Back In Stock',
+                    'We just cant get enough!',
+                    dataChecking(this.props.homePage, 'newArrival', 'data', 'just_restocked', 'items')
+                )
+            }
+        </div>
     )
 
     /**
      * Display slider of highly rated
      */
-    renderHighlyRated = () => {}
+    renderHighlyRated = () => (
+        <div>
+            {
+                this.props.homePage.trending.success &&
+                this.sectionHotStuff(
+                    'Highly Rated',
+                    'Popular beauty must-haves',
+                    dataChecking(this.props.homePage, 'trending', 'data', 'items')
+                )
+            }
+        </div>
+    )
 
     /**
      * Display featured brands
@@ -462,43 +537,25 @@ export class HomePage extends React.PureComponent {
             <div>
                 {this.renderHomeBanner()}
                 {/* <Hidden mdUp={true}>
-                    <Container>
-                        <Grid container={true}>
-                            <Grid item={true} xs={3}>
-                                <Button>
-                                    Attendance
-                                </Button>
-                            </Grid>
-                            <Grid item={true} xs={3}>
-                                <Button>
-                                    Flagship Stores
-                                </Button>
-                            </Grid>
-                            <Grid item={true} xs={3}>
-                                <Button>
-                                    Hermo Global
-                                </Button>
-                            </Grid>
-                            <Grid item={true} xs={3}>
-                                <Button>
-                                    Mask box
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Container>
+                    {this.renderMobileShortcuts()}
                 </Hidden> */}
                 {this.renderFlagship()}
                 {/* {this.renderTwoh()} */}
                 {this.renderNewArrivals()}
-                {/* {this.renderEventView()} */}
-                {/* <Grid container={true}>
-                    <Grid item={true} xs={12} md={6}>
-                        {this.renderBackInStock()}
-                    </Grid>
-                    <Grid item={true} xs={12} md={6}>
-                        {this.renderBackInStock()}
-                    </Grid>
-                </Grid> */}
+                {/* {this.renderExtensionZone()} */}
+                {/* <Hidden mdUp={true}>
+                    {this.renderMobileQuickLink()}
+                </Hidden> */}
+                <Grid container={true}>
+                    <Container>
+                        <Grid item={true} xs={12} md={6}>
+                            {this.renderBackInStock()}
+                        </Grid>
+                        <Grid item={true} xs={12} md={6}>
+                            {this.renderHighlyRated()}
+                        </Grid>
+                    </Container>
+                </Grid>
                 {/* {this.renderFeaturedBrand()} */}
                 {/* {this.renderRecommend()} */}
                 {/* {this.renderReview()} */}

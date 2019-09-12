@@ -17,6 +17,12 @@ import {
     GET_NEW_ARRIVAL,
     GET_NEW_ARRIVAL_SUCCESS,
     GET_NEW_ARRIVAL_FAILED,
+    GET_EXTENSION,
+    GET_EXTENSION_SUCCESS,
+    GET_EXTENSION_FAILED,
+    GET_TRENDING,
+    GET_TRENDING_SUCCESS,
+    GET_TRENDING_FAILED,
 } from './constants';
 
 export function getHomeBanner() {
@@ -91,6 +97,42 @@ export function getNewArrivalFailed(newArrivalData) {
     return {
         type: GET_NEW_ARRIVAL_FAILED,
         newArrivalData,
+    };
+}
+export function getExtension() {
+    return {
+        type: GET_EXTENSION,
+    };
+}
+
+export function getExtensionSuccess(extensionData) {
+    return {
+        type: GET_EXTENSION_SUCCESS,
+        extensionData,
+    };
+}
+export function getExtensionFailed(extensionData) {
+    return {
+        type: GET_EXTENSION_FAILED,
+        extensionData,
+    };
+}
+export function getTrending() {
+    return {
+        type: GET_TRENDING,
+    };
+}
+
+export function getTrendingSuccess(trendingData) {
+    return {
+        type: GET_TRENDING_SUCCESS,
+        trendingData,
+    };
+}
+export function getTrendingFailed(trendingData) {
+    return {
+        type: GET_TRENDING_FAILED,
+        trendingData,
     };
 }
 
