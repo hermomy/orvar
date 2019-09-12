@@ -11,6 +11,12 @@ import {
     GET_FLAGSHIP,
     GET_FLAGSHIP_SUCCESS,
     GET_FLAGSHIP_FAILED,
+    GET_TWOH,
+    GET_TWOH_SUCCESS,
+    GET_TWOH_FAILED,
+    GET_NEW_ARRIVAL,
+    GET_NEW_ARRIVAL_SUCCESS,
+    GET_NEW_ARRIVAL_FAILED,
 } from './constants';
 
 export function getHomeBanner() {
@@ -51,3 +57,40 @@ export function getFlagshipFailed(flagshipData) {
         flagshipData,
     };
 }
+export function getTwoh() {
+    return {
+        type: GET_TWOH,
+    };
+}
+
+export function getTwohSuccess(twohData) {
+    return {
+        type: GET_TWOH_SUCCESS,
+        twohData,
+    };
+}
+export function getTwohFailed(twohData) {
+    return {
+        type: GET_TWOH_FAILED,
+        twohData,
+    };
+}
+export function getNewArrival() {
+    return {
+        type: GET_NEW_ARRIVAL,
+    };
+}
+
+export function getNewArrivalSuccess(newArrivalData) {
+    return {
+        type: GET_NEW_ARRIVAL_SUCCESS,
+        newArrivalData,
+    };
+}
+export function getNewArrivalFailed(newArrivalData) {
+    return {
+        type: GET_NEW_ARRIVAL_FAILED,
+        newArrivalData,
+    };
+}
+

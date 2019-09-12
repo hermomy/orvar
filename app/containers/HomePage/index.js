@@ -40,6 +40,7 @@ import { dataChecking } from 'globalUtils';
 import {
     getHomeBanner,
     getFlagship,
+    getTwoh,
 } from './actions';
 import makeSelectHomePage from './selectors';
 import reducer from './reducer';
@@ -58,6 +59,7 @@ export class HomePage extends React.PureComponent {
     componentDidMount() {
         this.props.dispatch(getHomeBanner());
         this.props.dispatch(getFlagship());
+        this.props.dispatch(getTwoh());
     }
 
     /**
@@ -66,7 +68,7 @@ export class HomePage extends React.PureComponent {
     slider = () => {}
 
     sectionHeader = (title, description) => (
-        <Container className="container section-header"style={{ textAlign: 'center' }}>
+        <Container className="container section-header py-half" style={{ textAlign: 'center' }}>
             <Box className="text-uppercase">
                 <Typography variant="h5">
                     {title}
@@ -78,7 +80,7 @@ export class HomePage extends React.PureComponent {
         </Container>
     )
     /**
-     * Display slider of images
+     *  HOME BANNER - slider of banner
      */
     renderHomeBanner = () => (
         <div className="div home-top-banner">
@@ -134,7 +136,12 @@ export class HomePage extends React.PureComponent {
     )
 
     /**
-     * Display flagship store (images) with button
+     *  MOBILE SHORTCUT - list of buttons
+     */
+    renderMobileShortcuts = () => {
+    }
+    /**
+     *  FLAGSHIP - slider of flagship brands logo
      */
     renderFlagship = () => (
         <Container className="container home-flagship py-1"style={{ textAlign: 'center' }}>
@@ -174,30 +181,76 @@ export class HomePage extends React.PureComponent {
     )
 
     /**
-     * Display cards of images and text
+     * THIS WEEK ON HERMO - cards of products
      */
-    renderTwoh = () => (
-        <div className="twoh p-1">
-            <Grid container={true}>
-                {this.sectionHeader('this week on hermo')}
-                <Grid item={true} xs={6}>
-                    <Card className={this.props.classes.card}>
-                        <CardActionArea>
-                            <img src={require('images/hermo.png')} alt="logo" />
-                            <CardContent>
-                                <Typography className="text-uppercase" variant="body2">
-                                    gift with purchase
-                                </Typography><br />
-                                <Typography className="text-uppercase" variant="caption">
-                                    Lorem ipsum dolor sit amet
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
+    renderTwoh = () => {
+        const twoh = this.props.homePage.twoh.success && this.props.homePage.twoh;
+        let twohBanner;
+        if (twoh && twoh.data) {
+            const section = Object.keys(dataChecking(twoh, 'data', 'result'));
+            twohBanner = section.map((container) => (
+                <Grid key={container} item={true} xs={6}>
+                    {
+                        <Grid container={true}>
+                            <Grid item={true}>
+                                {
+                                    dataChecking(twoh, 'data', 'result') && twoh.data.result[container].primary.items.map((banner) => (
+                                        <Card key={banner.id}>
+                                            <CardActionArea>
+                                                <img src={banner.image.desktop} alt={`${banner.name} feature banner`} />
+                                            </CardActionArea>
+                                            <CardContent>
+                                                <Typography className="text-uppercase" variant="body2">
+                                                    {banner.title}
+                                                </Typography><br />
+                                                <Typography className="text-uppercase" variant="caption">
+                                                    {banner.brief}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    ))
+                                }
+                            </Grid>
+                            {
+                                dataChecking(twoh, 'data', 'result') && twoh.data.result[container].secondary.items.map((banner) => (
+                                    <Grid key={banner.id} item={true}>
+                                        <Card>
+                                            <CardActionArea>
+                                                <img src={banner.image.desktop} alt={`${banner.name} feature banner`} />
+                                            </CardActionArea>
+                                            <CardContent>
+                                                <Typography className="text-uppercase" variant="body2">
+                                                    {banner.title}
+                                                </Typography><br />
+                                                <Typography className="text-uppercase" variant="caption">
+                                                    {banner.brief}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                ))
+                            }
+                        </Grid>
+                    }
                 </Grid>
-            </Grid>
-        </div>
-    )
+            ));
+        }
+        return (
+            <Container className="container home-twoh py-1">
+                {
+                    console.log(twoh)
+                }
+                <div className="div home-twoh-header">
+                    {
+                        dataChecking(twoh, 'data') && this.sectionHeader(twoh.data.title, twoh.data.description)
+                    }
+                </div>
+                <Grid container={true}>
+                    {twohBanner}
+                </Grid>
+            </Container>
+        );
+    }
 
     /**
      * Display slider of new arrival product cards
@@ -408,20 +461,20 @@ export class HomePage extends React.PureComponent {
                     </Container>
                 </Hidden> */}
                 {this.renderFlagship()}
-                {/* {this.renderTwoh()}
-                {this.renderNewArrivals()}
-                {this.renderEventView()}
-                <Grid container={true}>
+                {/* {this.renderTwoh()} */}
+                {/* {this.renderNewArrivals()} */}
+                {/* {this.renderEventView()} */}
+                {/* <Grid container={true}>
                     <Grid item={true} xs={12} md={6}>
                         {this.renderBackInStock()}
                     </Grid>
                     <Grid item={true} xs={12} md={6}>
                         {this.renderBackInStock()}
                     </Grid>
-                </Grid>
-                {this.renderFeaturedBrand()}
-                {this.renderRecommend()}
-                {this.renderReview()} */}
+                </Grid> */}
+                {/* {this.renderFeaturedBrand()} */}
+                {/* {this.renderRecommend()} */}
+                {/* {this.renderReview()} */}
             </div>
         );
     }
