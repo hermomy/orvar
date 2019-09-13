@@ -12,6 +12,15 @@ import {
     SEARCH_RESULT,
     SEARCH_RESULT_SUCCESS,
     SEARCH_RESULT_FAIL,
+    GET_IMG_LINK,
+    GET_IMG_LINK_SUCCESS,
+    GET_IMG_LINK_FAILED,
+    GET_USER_DATA,
+    GET_USER_DATA_SUCCESS,
+    GET_USER_DATA_FAILED,
+    GET_CART_DATA,
+    GET_CART_DATA_SUCCESS,
+    GET_CART_DATA_FAILED,
 } from './constants';
 
 
@@ -22,6 +31,21 @@ export const initialState = fromJS({
         data: null,
     },
     suggestionData: {
+        loading: false,
+        error: false,
+        data: null,
+    },
+    imgLink: {
+        loading: false,
+        error: false,
+        data: null,
+    },
+    user: {
+        loading: false,
+        error: false,
+        data: null,
+    },
+    cart: {
         loading: false,
         error: false,
         data: null,
@@ -60,6 +84,51 @@ function headerReducer(state = initialState, action) {
                 .setIn(['suggestionData', 'loading'], false)
                 .setIn(['suggestionData', 'error'], true)
                 .setIn(['suggestionData', 'data'], action.searchResultData);
+        case GET_IMG_LINK:
+            return state
+                .setIn(['imgLink', 'loading'], true)
+                .setIn(['imgLink', 'error'], false)
+                .setIn(['imgLink', 'data'], null);
+        case GET_IMG_LINK_SUCCESS:
+            return state
+                .setIn(['imgLink', 'loading'], false)
+                .setIn(['imgLink', 'error'], false)
+                .setIn(['imgLink', 'data'], action.imgLink);
+        case GET_IMG_LINK_FAILED:
+            return state
+                .setIn(['imgLink', 'loading'], false)
+                .setIn(['imgLink', 'error'], true)
+                .setIn(['imgLink', 'data'], action.imgLink);
+        case GET_USER_DATA:
+            return state
+                .setIn(['user', 'loading'], true)
+                .setIn(['user', 'error'], false)
+                .setIn(['user', 'data'], null);
+        case GET_USER_DATA_SUCCESS:
+            return state
+                .setIn(['user', 'loading'], false)
+                .setIn(['user', 'error'], false)
+                .setIn(['user', 'data'], action.userData);
+        case GET_USER_DATA_FAILED:
+            return state
+                .setIn(['user', 'loading'], false)
+                .setIn(['user', 'error'], true)
+                .setIn(['user', 'data'], action.userData);
+        case GET_CART_DATA:
+            return state
+                .setIn(['cart', 'loading'], true)
+                .setIn(['cart', 'error'], false)
+                .setIn(['cart', 'data'], null);
+        case GET_CART_DATA_SUCCESS:
+            return state
+                .setIn(['cart', 'loading'], false)
+                .setIn(['cart', 'error'], false)
+                .setIn(['cart', 'data'], action.cartData);
+        case GET_CART_DATA_FAILED:
+            return state
+                .setIn(['cart', 'loading'], false)
+                .setIn(['cart', 'error'], true)
+                .setIn(['cart', 'data'], action.cartData);
         default:
             return state;
     }
