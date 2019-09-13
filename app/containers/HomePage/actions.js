@@ -29,6 +29,9 @@ import {
     GET_REVIEW,
     GET_REVIEW_SUCCESS,
     GET_REVIEW_FAILED,
+    GET_STORE,
+    GET_STORE_SUCCESS,
+    GET_STORE_FAILED,
 } from './constants';
 
 export function getHomeBanner() {
@@ -175,5 +178,23 @@ export function getReviewFailed(reviewData) {
     return {
         type: GET_REVIEW_FAILED,
         reviewData,
+    };
+}
+export function getStore() {
+    return {
+        type: GET_STORE,
+    };
+}
+
+export function getStoreSuccess(storeData) {
+    return {
+        type: GET_STORE_SUCCESS,
+        storeData,
+    };
+}
+export function getStoreFailed(storeData) {
+    return {
+        type: GET_STORE_FAILED,
+        storeData,
     };
 }

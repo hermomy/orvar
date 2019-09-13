@@ -29,3 +29,7 @@ export const GET_SPONSORED_FAILED = `${page}/GET_SPONSORED_FAILED`;
 export const GET_REVIEW = `${page}/GET_REVIEW`;
 export const GET_REVIEW_SUCCESS = `${page}/GET_REVIEW_SUCCESS`;
 export const GET_REVIEW_FAILED = `${page}/GET_REVIEW_FAILED`;
+export const GET_STORE = `${page}/GET_STORE`;
+export const GET_STORE_SUCCESS = `${page}/GET_STORE_SUCCESS`;
+export const GET_STORE_FAILED = `${page}/GET_STORE_FAILED`;
+

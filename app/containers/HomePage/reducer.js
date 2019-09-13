@@ -30,6 +30,9 @@ import {
     GET_REVIEW,
     GET_REVIEW_SUCCESS,
     GET_REVIEW_FAILED,
+    GET_STORE,
+    GET_STORE_SUCCESS,
+    GET_STORE_FAILED,
 } from './constants';
 
 export const initialState = fromJS({
@@ -66,6 +69,11 @@ export const initialState = fromJS({
         success: false,
     },
     review: {
+        loading: false,
+        error: false,
+        success: false,
+    },
+    store: {
         loading: false,
         error: false,
         success: false,
@@ -191,6 +199,21 @@ function homePageReducer(state = initialState, action) {
                 .setIn(['review', 'loading'], false)
                 .setIn(['review', 'error'], true)
                 .setIn(['review', 'data'], action.reviewData);
+        case GET_STORE:
+            return state
+                .setIn(['store', 'loading'], true)
+                .setIn(['store', 'error'], false);
+        case GET_STORE_SUCCESS:
+            return state
+                .setIn(['store', 'success'], true)
+                .setIn(['store', 'loading'], false)
+                .setIn(['store', 'error'], false)
+                .setIn(['store', 'data'], action.storeData);
+        case GET_STORE_FAILED:
+            return state
+                .setIn(['store', 'loading'], false)
+                .setIn(['store', 'error'], true)
+                .setIn(['store', 'data'], action.storeData);
         default:
             return state;
     }

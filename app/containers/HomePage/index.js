@@ -46,6 +46,7 @@ import {
     getTrending,
     getSponsored,
     getReview,
+    getStore,
 } from './actions';
 import makeSelectHomePage from './selectors';
 import reducer from './reducer';
@@ -70,6 +71,7 @@ export class HomePage extends React.PureComponent {
         this.props.dispatch(getTrending());
         this.props.dispatch(getSponsored());
         this.props.dispatch(getReview());
+        this.props.dispatch(getStore());
     }
 
     sectionHeader = (title, description) => (
@@ -175,32 +177,38 @@ export class HomePage extends React.PureComponent {
     /**
      *  MOBILE SHORTCUT - list of buttons
      */
-    renderMobileShortcuts = () => (
-        <Container>
-            <Grid container={true}>
-                <Grid item={true} xs={3}>
-                    <Button>
-                        Attendance
-                    </Button>
+    renderMobileShortcuts = () => {
+        const buttonlink = dataChecking(this.props.homePage, 'store', 'success') && this.props.homePage.store.data.button_link;
+        let buttonLinks;
+        if (this.props.homePage.store.success && buttonlink.items) {
+            const buttonIndex = Object.keys(buttonlink.items);
+            buttonLinks = buttonIndex.map((index) => (
+                <Grid key={buttonlink.items[index].id}item={true} xs={3}>
+                    {
+                        buttonlink.items[index].id === 4987 ?
+                            <div style={{ textAlign: 'center' }}>
+                                <img src={buttonlink.items[index].image.app} alt={`${buttonlink.items[index].name} button`} />
+                                <Typography>{buttonlink.items[index].title}</Typography>
+                            </div>
+                        :
+                            <NavLink to={buttonlink.items[index].url}>
+                                <div style={{ textAlign: 'center' }}>
+                                    <img src={buttonlink.items[index].image.app} alt={`${buttonlink.items[index].name} button`} />
+                                    <Typography>{buttonlink.items[index].title}</Typography>
+                                </div>
+                            </NavLink>
+                    }
                 </Grid>
-                <Grid item={true} xs={3}>
-                    <Button>
-                        Flagship Stores
-                    </Button>
+            ));
+        }
+        return (
+            <Container>
+                <Grid container={true}>
+                    {buttonLinks}
                 </Grid>
-                <Grid item={true} xs={3}>
-                    <Button>
-                        Hermo Global
-                    </Button>
-                </Grid>
-                <Grid item={true} xs={3}>
-                    <Button>
-                        Mask box
-                    </Button>
-                </Grid>
-            </Grid>
-        </Container>
-    )
+            </Container>
+        );
+    }
 
     /**
      *  FLAGSHIP - slider of flagship brands logo
@@ -393,7 +401,7 @@ export class HomePage extends React.PureComponent {
     renderMobileQuickLink = () => {}
 
     /**
-     * Display slider of highly rated
+     * BACK IN STOCK - slider of restoked product cards
      */
     renderBackInStock = () => (
         <div>
@@ -409,7 +417,7 @@ export class HomePage extends React.PureComponent {
     )
 
     /**
-     * Display slider of highly rated
+     * HIGHLY RATED - slider of trending product cards
      */
     renderHighlyRated = () => (
         <div>
@@ -425,7 +433,7 @@ export class HomePage extends React.PureComponent {
     )
 
     /**
-     * Display featured brands
+     * FEATURED - sponsored products
      */
     renderFeaturedBrand = () => {
         const sponsored = dataChecking(this.props.homePage, 'sponsored', 'success') && this.props.homePage.sponsored;
@@ -500,7 +508,7 @@ export class HomePage extends React.PureComponent {
     }
 
     /**
-     * Display slider of recommended product
+     * RECOMMENDED FOR YOU - slider of recommended product cards
      */
     renderRecommend = () => (
         <div>
@@ -525,7 +533,7 @@ export class HomePage extends React.PureComponent {
     )
 
     /**
-     * Display slider of reviews
+     * REVIEW - slider of review cards
      */
     renderReview = () => {
         const review = dataChecking(this.props.homePage, 'review', 'success') && this.props.homePage.review;
@@ -595,18 +603,35 @@ export class HomePage extends React.PureComponent {
     }
 
     /**
-     * Display slider of reviews
+     * HOME FOOTER - footer about us and partners
      */
     renderHomeFooter = () => {
+        console.log();
+        return (
+            <Hidden smDown={true}>
+                <div style={{ backgroundColor: '#000' }}>
+                    <Container>
+                        <Grid container={true}>
+                            <Grid item={true} md={8}>
+                            </Grid>
+                            <Divider orientation="vertical" />
+                            <Grid item={true} md={4}>
+
+                            </Grid>
+                        </Grid>
+                    </Container>
+                </div>
+            </Hidden>
+        );
     }
 
     render() {
         return (
             <div>
                 {this.renderHomeBanner()}
-                {/* <Hidden mdUp={true}>
+                <Hidden mdUp={true}>
                     {this.renderMobileShortcuts()}
-                </Hidden> */}
+                </Hidden>
                 {this.renderFlagship()}
                 {this.renderTwoh()}
                 {this.renderNewArrivals()}
@@ -627,6 +652,7 @@ export class HomePage extends React.PureComponent {
                 {this.props.homePage.sponsored.success && this.renderFeaturedBrand()}
                 {this.renderRecommend()}
                 {this.renderReview()}
+                {this.renderHomeFooter()}
             </div>
         );
     }

@@ -8,6 +8,7 @@ import {
     GET_TRENDING,
     GET_SPONSORED,
     GET_REVIEW,
+    GET_STORE,
 } from './constants';
 import {
     getHomeBannerSuccess,
@@ -26,6 +27,8 @@ import {
     getSponsoredFailed,
     getReviewSuccess,
     getReviewFailed,
+    getStoreSuccess,
+    getStoreFailed,
 } from './actions';
 import { staticErrorResponse, apiRequest } from '../../globalUtils';
 
@@ -174,6 +177,24 @@ export function* getReviewWorker() {
         yield put(getReviewFailed(e));
     }
 }
+export function* getStoreWorker() {
+    let err;
+
+    try { // Trying the HTTP Request
+        const response = yield call(apiRequest, '/store');
+        if (response && response.ok !== false) {
+            yield put(getStoreSuccess(response.data));
+        } else if (response && response.ok === false) {
+            yield put(getStoreFailed(response.data));
+        } else {
+            err = staticErrorResponse({ text: 'No response from server' });
+            throw err;
+        }
+    } catch (e) {
+        console.log('error: ', e);
+        yield put(getStoreFailed(e));
+    }
+}
 // Individual exports for testing
 export default function* homePageSaga() {
     yield takeLatest(GET_HOME_BANNER, getFlagshipWorker);
@@ -184,4 +205,5 @@ export default function* homePageSaga() {
     yield takeLatest(GET_TRENDING, getTrendingWorker);
     yield takeLatest(GET_SPONSORED, getSponsoredWorker);
     yield takeLatest(GET_REVIEW, getReviewWorker);
+    yield takeLatest(GET_STORE, getStoreWorker);
 }
