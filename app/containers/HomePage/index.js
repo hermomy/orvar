@@ -16,6 +16,7 @@ import OwlCarousel from 'react-owl-carousel2';
 import 'assets/react-owl-carousel2.style.scss';
 import { withStyles } from '@material-ui/core/styles';
 import ProductCard from 'components/ProductCard';
+import parse from 'html-react-parser';
 
 import {
     Avatar,
@@ -47,6 +48,9 @@ import {
     getSponsored,
     getReview,
     getStore,
+    getLayoutFooter,
+    getImageFooter,
+    getPartnerFooter,
 } from './actions';
 import makeSelectHomePage from './selectors';
 import reducer from './reducer';
@@ -72,6 +76,9 @@ export class HomePage extends React.PureComponent {
         this.props.dispatch(getSponsored());
         this.props.dispatch(getReview());
         this.props.dispatch(getStore());
+        this.props.dispatch(getLayoutFooter());
+        this.props.dispatch(getImageFooter());
+        this.props.dispatch(getPartnerFooter());
     }
 
     sectionHeader = (title, description) => (
@@ -606,21 +613,56 @@ export class HomePage extends React.PureComponent {
      * HOME FOOTER - footer about us and partners
      */
     renderHomeFooter = () => {
-        console.log();
+        const partnerFooter = dataChecking(this.props.homePage, 'partnerFooter', 'success') && this.props.homePage.partnerFooter;
+        let partnerLogos;
+        if (partnerFooter.success && partnerFooter.data.items) {
+            const partnerObject = Object.keys(dataChecking(partnerFooter, 'data', 'items'));
+            partnerLogos = partnerObject.map((index) => (
+                <Grid key={partnerFooter.data.items[index].id} item={true}>
+                    <Avatar src={partnerFooter.data.items[index].image.desktop} alt={partnerFooter.data.items[index].name} />
+                </Grid>
+            ));
+        }
         return (
             <Hidden smDown={true}>
-                <div style={{ backgroundColor: '#000' }}>
-                    <Container>
-                        <Grid container={true}>
-                            <Grid item={true} md={8}>
+                {
+                    this.props.homePage.layoutFooter.success && this.props.homePage.imageFooter.success && this.props.homePage.partnerFooter &&
+                    <div style={{ backgroundColor: '#000' }}>
+                        <Container className="p-3">
+                            <Grid container={true}>
+                                <Grid item={true} md={8}>
+                                    <Container style={{ color: '#FFF' }}>
+                                        <img src={this.props.homePage.imageFooter.data.items[0].image.desktop || null} alt={this.props.homePage.imageFooter.data.items[0].name} />
+                                        <Box>
+                                            <Typography style={{ color: '#FFF' }}>
+                                                {parse(this.props.homePage.layoutFooter.data.modules[0].result.text)}
+                                            </Typography>
+                                        </Box>
+                                    </Container>
+                                </Grid>
+                                <Divider orientation="vertical" style={{ color: '#FFF' }} />
+                                <Grid item={true} md={4}>
+                                    <Container style={{ color: '#FFF' }}>
+                                        <Typography variant="h4">{this.props.homePage.layoutFooter.data.modules[1].result.title}</Typography>
+                                        <div className="my-3">
+                                            <Typography className="my-2" variant="body1">{this.props.homePage.layoutFooter.data.modules[1].result.text}</Typography>
+                                        </div>
+                                        <Grid container={true} justify="space-evenly" alignItems="center">
+                                            {
+                                                partnerLogos
+                                            }
+                                        </Grid>
+                                        <div className="my-1" style={{ textAlign: 'center' }}>
+                                            <Button variant="contained">
+                                                View All Partners
+                                            </Button>
+                                        </div>
+                                    </Container>
+                                </Grid>
                             </Grid>
-                            <Divider orientation="vertical" />
-                            <Grid item={true} md={4}>
-
-                            </Grid>
-                        </Grid>
-                    </Container>
-                </div>
+                        </Container>
+                    </div>
+                }
             </Hidden>
         );
     }

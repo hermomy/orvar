@@ -33,6 +33,15 @@ import {
     GET_STORE,
     GET_STORE_SUCCESS,
     GET_STORE_FAILED,
+    GET_LAYOUT_FOOTER,
+    GET_LAYOUT_FOOTER_SUCCESS,
+    GET_LAYOUT_FOOTER_FAILED,
+    GET_IMAGE_FOOTER,
+    GET_IMAGE_FOOTER_SUCCESS,
+    GET_IMAGE_FOOTER_FAILED,
+    GET_PARTNER_FOOTER,
+    GET_PARTNER_FOOTER_SUCCESS,
+    GET_PARTNER_FOOTER_FAILED,
 } from './constants';
 
 export const initialState = fromJS({
@@ -74,6 +83,21 @@ export const initialState = fromJS({
         success: false,
     },
     store: {
+        loading: false,
+        error: false,
+        success: false,
+    },
+    layoutFooter: {
+        loading: false,
+        error: false,
+        success: false,
+    },
+    imageFooter: {
+        loading: false,
+        error: false,
+        success: false,
+    },
+    partnerFooter: {
         loading: false,
         error: false,
         success: false,
@@ -214,6 +238,51 @@ function homePageReducer(state = initialState, action) {
                 .setIn(['store', 'loading'], false)
                 .setIn(['store', 'error'], true)
                 .setIn(['store', 'data'], action.storeData);
+        case GET_LAYOUT_FOOTER:
+            return state
+                .setIn(['layoutFooter', 'loading'], true)
+                .setIn(['layoutFooter', 'error'], false);
+        case GET_LAYOUT_FOOTER_SUCCESS:
+            return state
+                .setIn(['layoutFooter', 'success'], true)
+                .setIn(['layoutFooter', 'loading'], false)
+                .setIn(['layoutFooter', 'error'], false)
+                .setIn(['layoutFooter', 'data'], action.layoutFooterData);
+        case GET_LAYOUT_FOOTER_FAILED:
+            return state
+                .setIn(['layoutFooter', 'loading'], false)
+                .setIn(['layoutFooter', 'error'], true)
+                .setIn(['layoutFooter', 'data'], action.layoutFooterData);
+        case GET_IMAGE_FOOTER:
+            return state
+                .setIn(['imageFooter', 'loading'], true)
+                .setIn(['imageFooter', 'error'], false);
+        case GET_IMAGE_FOOTER_SUCCESS:
+            return state
+                .setIn(['imageFooter', 'success'], true)
+                .setIn(['imageFooter', 'loading'], false)
+                .setIn(['imageFooter', 'error'], false)
+                .setIn(['imageFooter', 'data'], action.imageFooterData);
+        case GET_IMAGE_FOOTER_FAILED:
+            return state
+                .setIn(['imageFooter', 'loading'], false)
+                .setIn(['imageFooter', 'error'], true)
+                .setIn(['imageFooter', 'data'], action.imageFooterData);
+        case GET_PARTNER_FOOTER:
+            return state
+                .setIn(['partnerFooter', 'loading'], true)
+                .setIn(['partnerFooter', 'error'], false);
+        case GET_PARTNER_FOOTER_SUCCESS:
+            return state
+                .setIn(['partnerFooter', 'success'], true)
+                .setIn(['partnerFooter', 'loading'], false)
+                .setIn(['partnerFooter', 'error'], false)
+                .setIn(['partnerFooter', 'data'], action.partnerFooterData);
+        case GET_PARTNER_FOOTER_FAILED:
+            return state
+                .setIn(['partnerFooter', 'loading'], false)
+                .setIn(['partnerFooter', 'error'], true)
+                .setIn(['partnerFooter', 'data'], action.partnerFooterData);
         default:
             return state;
     }

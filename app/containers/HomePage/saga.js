@@ -9,6 +9,9 @@ import {
     GET_SPONSORED,
     GET_REVIEW,
     GET_STORE,
+    GET_LAYOUT_FOOTER,
+    GET_IMAGE_FOOTER,
+    GET_PARTNER_FOOTER,
 } from './constants';
 import {
     getHomeBannerSuccess,
@@ -29,6 +32,12 @@ import {
     getReviewFailed,
     getStoreSuccess,
     getStoreFailed,
+    getLayoutFooterSuccess,
+    getLayoutFooterFailed,
+    getImageFooterSuccess,
+    getImageFooterFailed,
+    getPartnerFooterSuccess,
+    getPartnerFooterFailed,
 } from './actions';
 import { staticErrorResponse, apiRequest } from '../../globalUtils';
 
@@ -195,6 +204,60 @@ export function* getStoreWorker() {
         yield put(getStoreFailed(e));
     }
 }
+export function* getLayoutFooterWorker() {
+    let err;
+
+    try { // Trying the HTTP Request
+        const response = yield call(apiRequest, '/layout/footer');
+        if (response && response.ok !== false) {
+            yield put(getLayoutFooterSuccess(response.data));
+        } else if (response && response.ok === false) {
+            yield put(getLayoutFooterFailed(response.data));
+        } else {
+            err = staticErrorResponse({ text: 'No response from server' });
+            throw err;
+        }
+    } catch (e) {
+        console.log('error: ', e);
+        yield put(getLayoutFooterFailed(e));
+    }
+}
+export function* getImageFooterWorker() {
+    let err;
+
+    try { // Trying the HTTP Request
+        const response = yield call(apiRequest, '/image?code=hershop-footer');
+        if (response && response.ok !== false) {
+            yield put(getImageFooterSuccess(response.data));
+        } else if (response && response.ok === false) {
+            yield put(getImageFooterFailed(response.data));
+        } else {
+            err = staticErrorResponse({ text: 'No response from server' });
+            throw err;
+        }
+    } catch (e) {
+        console.log('error: ', e);
+        yield put(getImageFooterFailed(e));
+    }
+}
+export function* getPartnerFooterWorker() {
+    let err;
+
+    try { // Trying the HTTP Request
+        const response = yield call(apiRequest, '/image?code=footer-partner-logo');
+        if (response && response.ok !== false) {
+            yield put(getPartnerFooterSuccess(response.data));
+        } else if (response && response.ok === false) {
+            yield put(getPartnerFooterFailed(response.data));
+        } else {
+            err = staticErrorResponse({ text: 'No response from server' });
+            throw err;
+        }
+    } catch (e) {
+        console.log('error: ', e);
+        yield put(getPartnerFooterFailed(e));
+    }
+}
 // Individual exports for testing
 export default function* homePageSaga() {
     yield takeLatest(GET_HOME_BANNER, getFlagshipWorker);
@@ -206,4 +269,7 @@ export default function* homePageSaga() {
     yield takeLatest(GET_SPONSORED, getSponsoredWorker);
     yield takeLatest(GET_REVIEW, getReviewWorker);
     yield takeLatest(GET_STORE, getStoreWorker);
+    yield takeLatest(GET_LAYOUT_FOOTER, getLayoutFooterWorker);
+    yield takeLatest(GET_IMAGE_FOOTER, getImageFooterWorker);
+    yield takeLatest(GET_PARTNER_FOOTER, getPartnerFooterWorker);
 }

@@ -32,6 +32,15 @@ import {
     GET_STORE,
     GET_STORE_SUCCESS,
     GET_STORE_FAILED,
+    GET_LAYOUT_FOOTER,
+    GET_LAYOUT_FOOTER_SUCCESS,
+    GET_LAYOUT_FOOTER_FAILED,
+    GET_IMAGE_FOOTER,
+    GET_IMAGE_FOOTER_SUCCESS,
+    GET_IMAGE_FOOTER_FAILED,
+    GET_PARTNER_FOOTER,
+    GET_PARTNER_FOOTER_SUCCESS,
+    GET_PARTNER_FOOTER_FAILED,
 } from './constants';
 
 export function getHomeBanner() {
@@ -196,5 +205,59 @@ export function getStoreFailed(storeData) {
     return {
         type: GET_STORE_FAILED,
         storeData,
+    };
+}
+export function getLayoutFooter() {
+    return {
+        type: GET_LAYOUT_FOOTER,
+    };
+}
+
+export function getLayoutFooterSuccess(layoutFooterData) {
+    return {
+        type: GET_LAYOUT_FOOTER_SUCCESS,
+        layoutFooterData,
+    };
+}
+export function getLayoutFooterFailed(layoutFooterData) {
+    return {
+        type: GET_LAYOUT_FOOTER_FAILED,
+        layoutFooterData,
+    };
+}
+export function getImageFooter() {
+    return {
+        type: GET_IMAGE_FOOTER,
+    };
+}
+
+export function getImageFooterSuccess(imageFooterData) {
+    return {
+        type: GET_IMAGE_FOOTER_SUCCESS,
+        imageFooterData,
+    };
+}
+export function getImageFooterFailed(imageFooterData) {
+    return {
+        type: GET_IMAGE_FOOTER_FAILED,
+        imageFooterData,
+    };
+}
+export function getPartnerFooter() {
+    return {
+        type: GET_PARTNER_FOOTER,
+    };
+}
+
+export function getPartnerFooterSuccess(partnerFooterData) {
+    return {
+        type: GET_PARTNER_FOOTER_SUCCESS,
+        partnerFooterData,
+    };
+}
+export function getPartnerFooterFailed(partnerFooterData) {
+    return {
+        type: GET_PARTNER_FOOTER_FAILED,
+        partnerFooterData,
     };
 }
