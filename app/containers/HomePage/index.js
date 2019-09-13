@@ -45,6 +45,7 @@ import {
     getExtension,
     getTrending,
     getSponsored,
+    getReview,
 } from './actions';
 import makeSelectHomePage from './selectors';
 import reducer from './reducer';
@@ -68,6 +69,7 @@ export class HomePage extends React.PureComponent {
         this.props.dispatch(getExtension());
         this.props.dispatch(getTrending());
         this.props.dispatch(getSponsored());
+        this.props.dispatch(getReview());
     }
 
     sectionHeader = (title, description) => (
@@ -255,7 +257,7 @@ export class HomePage extends React.PureComponent {
                             <Grid item={true}>
                                 {
                                     dataChecking(twoh, 'data', 'result') && twoh.data.result[container].primary.items.map((banner) => (
-                                        <Card key={banner.id}>
+                                        <Card key={banner.id} className={this.props.classes.card}>
                                             <CardActionArea>
                                                 <img src={banner.image.desktop} alt={`${banner.name} feature banner`} />
                                             </CardActionArea>
@@ -274,7 +276,7 @@ export class HomePage extends React.PureComponent {
                             {
                                 dataChecking(twoh, 'data', 'result') && twoh.data.result[container].secondary.items.map((banner) => (
                                     <Grid key={banner.id} item={true}>
-                                        <Card>
+                                        <Card className={this.props.classes.card2}>
                                             <CardActionArea>
                                                 <img src={banner.image.desktop} alt={`${banner.name} feature banner`} />
                                             </CardActionArea>
@@ -297,9 +299,6 @@ export class HomePage extends React.PureComponent {
         }
         return (
             <Container className="container home-twoh py-1">
-                {
-                    console.log(twoh)
-                }
                 <div className="div home-twoh-header">
                     {
                         this.sectionHeader(dataChecking(twoh, 'data', 'title') || 'this week on hermo', dataChecking(twoh, 'data', 'description') || '')
@@ -459,6 +458,7 @@ export class HomePage extends React.PureComponent {
                             >
                                 {
                                     indexs.map((index) => (
+                                        // NEED TO CHANGE TO <Card>, depends on wireframe later
                                         <ProductCard
                                             key={product[index].id}
                                             product={product[index]}
@@ -479,7 +479,7 @@ export class HomePage extends React.PureComponent {
                 return (
                     <div className="div home-sponsored-item" key={sponsored.data.result.items[sponsor].id}>
                         <Hidden smDown={true}>
-                            <div style={{ backgroundImage: `url(${sponsored.data.result.items[sponsor].image.desktop})` }}>
+                            <div className="p-3" style={{ backgroundImage: `url(${sponsored.data.result.items[sponsor].image.desktop})` }}>
                                 { sponsoredContainer }
                             </div>
                         </Hidden>
@@ -504,72 +504,101 @@ export class HomePage extends React.PureComponent {
      */
     renderRecommend = () => (
         <div>
-            {this.sectionHeader('recommend for you')}
-            <OwlCarousel
-                options={{
-                    items: 3,
-                    loop: true,
-                    nav: true,
-                    navText: ['&lt;', '&gt;'],
-                    stagePadding: 50,
-                }}
-            >
-                {
-                    /* Product Card here */
-                }
-                UNAVAILABLE
-            </OwlCarousel>
+            <Container>
+                {this.sectionHeader('recommend for you')}
+                {/* <OwlCarousel
+                    options={{
+                        items: 3,
+                        loop: true,
+                        nav: true,
+                        navText: ['&lt;', '&gt;'],
+                        stagePadding: 50,
+                    }}
+                >
+                    {
+                        // Product Card here
+                    } */}
+                    UNAVAILABLE
+                {/* </OwlCarousel> */}
+            </Container>
         </div>
     )
 
     /**
      * Display slider of reviews
      */
-    renderReview = () => (
-        <div style={{ textAlign: 'center' }}>
-            {this.sectionHeader('beauty reviews', 'share your beauty stories')}
-            <OwlCarousel
-                options={{
-                    items: 3,
-                    loop: true,
-                    nav: true,
-                    navText: ['&lt;', '&gt;'],
-                    stagePadding: 50,
-                }}
-            >
-                <Card>
+    renderReview = () => {
+        const review = dataChecking(this.props.homePage, 'review', 'success') && this.props.homePage.review;
+        let reviewCards;
+        if (review.success && review.data.result.items) {
+            const items = dataChecking(review, 'data', 'result', 'items');
+            const reviewObject = Object.keys(dataChecking(review, 'data', 'result', 'items'));
+            reviewCards = reviewObject.map((index) => (
+                <Card key={items[index].id} className={this.props.classes.cardReview}>
                     <CardHeader
-                        avatar={
-                            <Avatar>
-                                R
-                            </Avatar>
-                        }
-                        title="maimunah"
-                        subheader="3 hours ago"
+                        avatar={<Avatar src={items[index].avatar} alt={`${items[index].username} avatar`} />}
+                        title={items[index].username}
+                        subheader={items[index].created_text}
                         action={
-                            <Favorite />
+                            <div>
+                                <Favorite />
+                                <Typography>{items[index].like_count}</Typography>
+                            </div>
                         }
                     />
                     <Divider />
                     <CardContent>
                         <Grid container={true}>
                             <Grid item={true} xs={3}>
-                                <img src={require('images/hermo.png')} alt="logo" />
+                                <img src={items[index].image.square || require('images/hermo.png')} alt="review product" />
                             </Grid>
                             <Grid item={true} xs={9}>
                                 <Typography>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis omnis vel, tenetur nesciunt laudantium incidunt in veniam! Vitae expedita beatae voluptates facere, quo reprehenderit laudantium consectetur harum aspernatur dolores ad!
+                                    {items[index].comment}
                                 </Typography>
                             </Grid>
                         </Grid>
                     </CardContent>
                 </Card>
-            </OwlCarousel>
-            <Button variant="contained">
-                see all reviews
-            </Button>
-        </div>
-    )
+            ));
+        }
+        return (
+            <div className="my-3" style={{ textAlign: 'center' }}>
+                {
+                    review.success && this.sectionHeader(dataChecking(review, 'data', 'title') || 'beauty reviews', dataChecking(review, 'data', 'description') || 'share your beauty stories') &&
+                        <Container>
+                            <OwlCarousel
+                                options={{
+                                    items: 1.3,
+                                    loop: true,
+                                    stagePadding: 50,
+                                    responsive: {
+                                        700: {
+                                            items: 3,
+                                            nav: true,
+                                            navText: ['&lt;', '&gt;'],
+                                        },
+                                    },
+                                }}
+                            >
+                                {reviewCards}
+                            </OwlCarousel>
+                            <NavLink to={review.data.url}>
+                                <Button variant="contained">
+                                    see all reviews
+                                </Button>
+                            </NavLink>
+                        </Container>
+                }
+            </div>
+        );
+    }
+
+    /**
+     * Display slider of reviews
+     */
+    renderHomeFooter = () => {
+    }
 
     render() {
         return (
@@ -579,7 +608,7 @@ export class HomePage extends React.PureComponent {
                     {this.renderMobileShortcuts()}
                 </Hidden> */}
                 {this.renderFlagship()}
-                {/* {this.renderTwoh()} */}
+                {this.renderTwoh()}
                 {this.renderNewArrivals()}
                 {/* {this.renderExtensionZone()} */}
                 {/* <Hidden mdUp={true}>
@@ -596,8 +625,8 @@ export class HomePage extends React.PureComponent {
                     </Grid>
                 </Container>
                 {this.props.homePage.sponsored.success && this.renderFeaturedBrand()}
-                {/* {this.renderRecommend()} */}
-                {/* {this.renderReview()} */}
+                {this.renderRecommend()}
+                {this.renderReview()}
             </div>
         );
     }

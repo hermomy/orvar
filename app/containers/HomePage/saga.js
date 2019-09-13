@@ -7,6 +7,7 @@ import {
     GET_EXTENSION,
     GET_TRENDING,
     GET_SPONSORED,
+    GET_REVIEW,
 } from './constants';
 import {
     getHomeBannerSuccess,
@@ -23,6 +24,8 @@ import {
     getTrendingFailed,
     getSponsoredSuccess,
     getSponsoredFailed,
+    getReviewSuccess,
+    getReviewFailed,
 } from './actions';
 import { staticErrorResponse, apiRequest } from '../../globalUtils';
 
@@ -153,6 +156,24 @@ export function* getSponsoredWorker() {
         yield put(getSponsoredFailed(e));
     }
 }
+export function* getReviewWorker() {
+    let err;
+
+    try { // Trying the HTTP Request
+        const response = yield call(apiRequest, '/home/beauty-wall');
+        if (response && response.ok !== false) {
+            yield put(getReviewSuccess(response.data));
+        } else if (response && response.ok === false) {
+            yield put(getReviewFailed(response.data));
+        } else {
+            err = staticErrorResponse({ text: 'No response from server' });
+            throw err;
+        }
+    } catch (e) {
+        console.log('error: ', e);
+        yield put(getReviewFailed(e));
+    }
+}
 // Individual exports for testing
 export default function* homePageSaga() {
     yield takeLatest(GET_HOME_BANNER, getFlagshipWorker);
@@ -162,4 +183,5 @@ export default function* homePageSaga() {
     yield takeLatest(GET_EXTENSION, getExtensionWorker);
     yield takeLatest(GET_TRENDING, getTrendingWorker);
     yield takeLatest(GET_SPONSORED, getSponsoredWorker);
+    yield takeLatest(GET_REVIEW, getReviewWorker);
 }

@@ -27,6 +27,9 @@ import {
     GET_SPONSORED,
     GET_SPONSORED_SUCCESS,
     GET_SPONSORED_FAILED,
+    GET_REVIEW,
+    GET_REVIEW_SUCCESS,
+    GET_REVIEW_FAILED,
 } from './constants';
 
 export const initialState = fromJS({
@@ -58,6 +61,11 @@ export const initialState = fromJS({
         success: false,
     },
     sponsored: {
+        loading: false,
+        error: false,
+        success: false,
+    },
+    review: {
         loading: false,
         error: false,
         success: false,
@@ -168,6 +176,21 @@ function homePageReducer(state = initialState, action) {
                 .setIn(['sponsored', 'loading'], false)
                 .setIn(['sponsored', 'error'], true)
                 .setIn(['sponsored', 'data'], action.sponsoredData);
+        case GET_REVIEW:
+            return state
+                .setIn(['review', 'loading'], true)
+                .setIn(['review', 'error'], false);
+        case GET_REVIEW_SUCCESS:
+            return state
+                .setIn(['review', 'success'], true)
+                .setIn(['review', 'loading'], false)
+                .setIn(['review', 'error'], false)
+                .setIn(['review', 'data'], action.reviewData);
+        case GET_REVIEW_FAILED:
+            return state
+                .setIn(['review', 'loading'], false)
+                .setIn(['review', 'error'], true)
+                .setIn(['review', 'data'], action.reviewData);
         default:
             return state;
     }

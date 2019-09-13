@@ -26,4 +26,6 @@ export const GET_TRENDING_FAILED = `${page}/GET_TRENDING_FAILED`;
 export const GET_SPONSORED = `${page}/GET_SPONSORED`;
 export const GET_SPONSORED_SUCCESS = `${page}/GET_SPONSORED_SUCCESS`;
 export const GET_SPONSORED_FAILED = `${page}/GET_SPONSORED_FAILED`;
-
+export const GET_REVIEW = `${page}/GET_REVIEW`;
+export const GET_REVIEW_SUCCESS = `${page}/GET_REVIEW_SUCCESS`;
+export const GET_REVIEW_FAILED = `${page}/GET_REVIEW_FAILED`;

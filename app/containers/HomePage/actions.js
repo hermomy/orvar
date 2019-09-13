@@ -26,6 +26,9 @@ import {
     GET_SPONSORED,
     GET_SPONSORED_SUCCESS,
     GET_SPONSORED_FAILED,
+    GET_REVIEW,
+    GET_REVIEW_SUCCESS,
+    GET_REVIEW_FAILED,
 } from './constants';
 
 export function getHomeBanner() {
@@ -156,4 +159,21 @@ export function getSponsoredFailed(sponsoredData) {
         sponsoredData,
     };
 }
+export function getReview() {
+    return {
+        type: GET_REVIEW,
+    };
+}
 
+export function getReviewSuccess(reviewData) {
+    return {
+        type: GET_REVIEW_SUCCESS,
+        reviewData,
+    };
+}
+export function getReviewFailed(reviewData) {
+    return {
+        type: GET_REVIEW_FAILED,
+        reviewData,
+    };
+}
