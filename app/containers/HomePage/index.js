@@ -87,7 +87,7 @@ export class HomePage extends React.PureComponent {
      * HOT STUFF - display slider of product cards for BACK IN STOCK AND HIGHLY RATED
      */
     sectionHotStuff = (title, description, products) => (
-        <Card className="m-half">
+        <Card className={this.props.classes.card}>
             {this.sectionHeader(title, description)}
             <Divider />
             <CardContent>
@@ -430,59 +430,71 @@ export class HomePage extends React.PureComponent {
      */
     renderFeaturedBrand = () => {
         const sponsored = dataChecking(this.props.homePage, 'sponsored', 'success') && this.props.homePage.sponsored;
-        let sponsoredProducts;
+        let sponsoredBrands;
+        let sponsoredContainer;
         if (sponsored.success && sponsored.data.result.items) {
             const sponsors = Object.keys(dataChecking(sponsored, 'data', 'result', 'items'));
-            sponsoredProducts = sponsors.map((sponsor) => {
+
+            sponsoredBrands = sponsors.map((sponsor) => {
                 const indexs = Object.keys(sponsored.data.result.items[sponsor]._product.items);
                 const product = sponsored.data.result.items[sponsor]._product.items;
+                sponsoredContainer = (
+                    <Container style={{ textAlign: 'center' }}>
+                        {this.sectionHeader('featured brands')}
+                        <Paper className="py-1 my-1">
+                            <OwlCarousel
+                                options={{
+                                    items: 1,
+                                    responsive: {
+                                        320: {
+                                            items: 1,
+                                        },
+                                        700: {
+                                            items: 3,
+                                            nav: true,
+                                            navText: ['&lt;', '&gt;'],
+                                        },
+                                    },
+                                }}
+                            >
+                                {
+                                    indexs.map((index) => (
+                                        <ProductCard
+                                            key={product[index].id}
+                                            product={product[index]}
+                                            url={product[index].url}
+                                            image={true}
+                                        />
+                                    ))
+                                }
+                            </OwlCarousel>
+                        </Paper>
+                        <NavLink to={sponsored.data.result.items[sponsor].url}>
+                            <Button variant="contained">
+                                shop now
+                            </Button>
+                        </NavLink>
+                    </Container>
+                );
                 return (
-                    indexs.map((index) => (
-                        <ProductCard
-                            key={product[index].id}
-                            product={product[index]}
-                            url={product[index].url}
-                            image={true}
-                        />
-                    ))
+                    <div className="div home-sponsored-item" key={sponsored.data.result.items[sponsor].id}>
+                        <Hidden smDown={true}>
+                            <div style={{ backgroundImage: `url(${sponsored.data.result.items[sponsor].image.desktop})` }}>
+                                { sponsoredContainer }
+                            </div>
+                        </Hidden>
+                        <Hidden mdUp={true}>
+                            <div style={{ backgroundImage: `url(${sponsored.data.result.items[sponsor].image.mobile})` }}>
+                                { sponsoredContainer }
+                            </div>
+                        </Hidden>
+                    </div>
                 );
             });
         }
         return (
             <div className="div home-sponsored my-2">
-                {
-                    <Container style={{ textAlign: 'center' }}>
-                        {this.sectionHeader('featured brands')}
-                        {
-                            dataChecking(sponsored, 'data', 'result', 'items') &&
-                                <Paper className="py-1 my-1">
-                                    <OwlCarousel
-                                        options={{
-                                            items: 3,
-                                            loop: true,
-                                            nav: true,
-                                            navText: ['&lt;', '&gt;'],
-                                            responsive: {
-                                                320: {
-                                                    items: 1,
-                                                },
-                                                700: {
-                                                    items: 3,
-                                                },
-                                            },
-                                        }}
-                                    >
-                                        {sponsoredProducts}
-                                    </OwlCarousel>
-                                </Paper>
-                        }
-                        {/* <NavLink to={sponsored.data.r}>  */}
-                        <Button variant="contained">
-                            shop now
-                        </Button>
-                        {/* </NavLink> */}
-                    </Container>
-                }
+                {sponsoredBrands}
             </div>
         );
     }
@@ -573,16 +585,16 @@ export class HomePage extends React.PureComponent {
                 {/* <Hidden mdUp={true}>
                     {this.renderMobileQuickLink()}
                 </Hidden> */}
-                <Grid container={true}>
-                    <Container>
+                <Container>
+                    <Grid container={true}>
                         <Grid item={true} xs={12} md={6}>
                             {this.renderBackInStock()}
                         </Grid>
                         <Grid item={true} xs={12} md={6}>
                             {this.renderHighlyRated()}
                         </Grid>
-                    </Container>
-                </Grid>
+                    </Grid>
+                </Container>
                 {this.props.homePage.sponsored.success && this.renderFeaturedBrand()}
                 {/* {this.renderRecommend()} */}
                 {/* {this.renderReview()} */}

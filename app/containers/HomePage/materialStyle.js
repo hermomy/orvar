@@ -1,6 +1,8 @@
 const styles = {
-    card1: {
-        maxWidth: '90%',
+    card: {
+        maxWidth: '43rem',
+        marginTop: '5%',
+        marginBottom: '5%',
     },
 };
 
