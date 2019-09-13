@@ -44,6 +44,7 @@ import {
     getNewArrival,
     getExtension,
     getTrending,
+    getSponsored,
 } from './actions';
 import makeSelectHomePage from './selectors';
 import reducer from './reducer';
@@ -66,6 +67,7 @@ export class HomePage extends React.PureComponent {
         this.props.dispatch(getNewArrival());
         this.props.dispatch(getExtension());
         this.props.dispatch(getTrending());
+        this.props.dispatch(getSponsored());
     }
 
     sectionHeader = (title, description) => (
@@ -85,7 +87,7 @@ export class HomePage extends React.PureComponent {
      * HOT STUFF - display slider of product cards for BACK IN STOCK AND HIGHLY RATED
      */
     sectionHotStuff = (title, description, products) => (
-        <Card>
+        <Card className="m-half">
             {this.sectionHeader(title, description)}
             <Divider />
             <CardContent>
@@ -426,39 +428,64 @@ export class HomePage extends React.PureComponent {
     /**
      * Display featured brands
      */
-    renderFeaturedBrand = () => (
-        <div className="my-2">
-            <Container style={{ textAlign: 'center' }}>
-                {this.sectionHeader('featured brands')}
-                <Paper className="py-1 my-1">
-                    <OwlCarousel
-                        options={{
-                            items: 3,
-                            loop: true,
-                            nav: true,
-                            navText: ['&lt;', '&gt;'],
-                            responsive: {
-                                320: {
-                                    items: 1,
-                                },
-                                700: {
-                                    items: 3,
-                                },
-                            },
-                        }}
-                    >
+    renderFeaturedBrand = () => {
+        const sponsored = dataChecking(this.props.homePage, 'sponsored', 'success') && this.props.homePage.sponsored;
+        let sponsoredProducts;
+        if (sponsored.success && sponsored.data.result.items) {
+            const sponsors = Object.keys(dataChecking(sponsored, 'data', 'result', 'items'));
+            sponsoredProducts = sponsors.map((sponsor) => {
+                const indexs = Object.keys(sponsored.data.result.items[sponsor]._product.items);
+                const product = sponsored.data.result.items[sponsor]._product.items;
+                return (
+                    indexs.map((index) => (
+                        <ProductCard
+                            key={product[index].id}
+                            product={product[index]}
+                            url={product[index].url}
+                            image={true}
+                        />
+                    ))
+                );
+            });
+        }
+        return (
+            <div className="div home-sponsored my-2">
+                {
+                    <Container style={{ textAlign: 'center' }}>
+                        {this.sectionHeader('featured brands')}
                         {
-                            /* Product Card here */
+                            dataChecking(sponsored, 'data', 'result', 'items') &&
+                                <Paper className="py-1 my-1">
+                                    <OwlCarousel
+                                        options={{
+                                            items: 3,
+                                            loop: true,
+                                            nav: true,
+                                            navText: ['&lt;', '&gt;'],
+                                            responsive: {
+                                                320: {
+                                                    items: 1,
+                                                },
+                                                700: {
+                                                    items: 3,
+                                                },
+                                            },
+                                        }}
+                                    >
+                                        {sponsoredProducts}
+                                    </OwlCarousel>
+                                </Paper>
                         }
-                        UNAVAILABLE
-                    </OwlCarousel>
-                </Paper>
-                <Button variant="contained">
-                    shop now
-                </Button>
-            </Container>
-        </div>
-    )
+                        {/* <NavLink to={sponsored.data.r}>  */}
+                        <Button variant="contained">
+                            shop now
+                        </Button>
+                        {/* </NavLink> */}
+                    </Container>
+                }
+            </div>
+        );
+    }
 
     /**
      * Display slider of recommended product
@@ -556,7 +583,7 @@ export class HomePage extends React.PureComponent {
                         </Grid>
                     </Container>
                 </Grid>
-                {/* {this.renderFeaturedBrand()} */}
+                {this.props.homePage.sponsored.success && this.renderFeaturedBrand()}
                 {/* {this.renderRecommend()} */}
                 {/* {this.renderReview()} */}
             </div>

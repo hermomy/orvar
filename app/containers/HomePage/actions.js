@@ -23,6 +23,9 @@ import {
     GET_TRENDING,
     GET_TRENDING_SUCCESS,
     GET_TRENDING_FAILED,
+    GET_SPONSORED,
+    GET_SPONSORED_SUCCESS,
+    GET_SPONSORED_FAILED,
 } from './constants';
 
 export function getHomeBanner() {
@@ -133,6 +136,24 @@ export function getTrendingFailed(trendingData) {
     return {
         type: GET_TRENDING_FAILED,
         trendingData,
+    };
+}
+export function getSponsored() {
+    return {
+        type: GET_SPONSORED,
+    };
+}
+
+export function getSponsoredSuccess(sponsoredData) {
+    return {
+        type: GET_SPONSORED_SUCCESS,
+        sponsoredData,
+    };
+}
+export function getSponsoredFailed(sponsoredData) {
+    return {
+        type: GET_SPONSORED_FAILED,
+        sponsoredData,
     };
 }
 

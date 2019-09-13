@@ -23,4 +23,7 @@ export const GET_EXTENSION_FAILED = `${page}/GET_EXTENSION_FAILED`;
 export const GET_TRENDING = `${page}/GET_TRENDING`;
 export const GET_TRENDING_SUCCESS = `${page}/GET_TRENDING_SUCCESS`;
 export const GET_TRENDING_FAILED = `${page}/GET_TRENDING_FAILED`;
+export const GET_SPONSORED = `${page}/GET_SPONSORED`;
+export const GET_SPONSORED_SUCCESS = `${page}/GET_SPONSORED_SUCCESS`;
+export const GET_SPONSORED_FAILED = `${page}/GET_SPONSORED_FAILED`;
 

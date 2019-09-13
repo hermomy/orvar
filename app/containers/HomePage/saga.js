@@ -6,6 +6,7 @@ import {
     GET_NEW_ARRIVAL,
     GET_EXTENSION,
     GET_TRENDING,
+    GET_SPONSORED,
 } from './constants';
 import {
     getHomeBannerSuccess,
@@ -20,6 +21,8 @@ import {
     getExtensionFailed,
     getTrendingSuccess,
     getTrendingFailed,
+    getSponsoredSuccess,
+    getSponsoredFailed,
 } from './actions';
 import { staticErrorResponse, apiRequest } from '../../globalUtils';
 
@@ -132,6 +135,24 @@ export function* getTrendingWorker() {
         yield put(getTrendingFailed(e));
     }
 }
+export function* getSponsoredWorker() {
+    let err;
+
+    try { // Trying the HTTP Request
+        const response = yield call(apiRequest, '/home/sponsored');
+        if (response && response.ok !== false) {
+            yield put(getSponsoredSuccess(response.data));
+        } else if (response && response.ok === false) {
+            yield put(getSponsoredFailed(response.data));
+        } else {
+            err = staticErrorResponse({ text: 'No response from server' });
+            throw err;
+        }
+    } catch (e) {
+        console.log('error: ', e);
+        yield put(getSponsoredFailed(e));
+    }
+}
 // Individual exports for testing
 export default function* homePageSaga() {
     yield takeLatest(GET_HOME_BANNER, getFlagshipWorker);
@@ -140,4 +161,5 @@ export default function* homePageSaga() {
     yield takeLatest(GET_NEW_ARRIVAL, getNewArrivalWorker);
     yield takeLatest(GET_EXTENSION, getExtensionWorker);
     yield takeLatest(GET_TRENDING, getTrendingWorker);
+    yield takeLatest(GET_SPONSORED, getSponsoredWorker);
 }

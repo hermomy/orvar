@@ -24,6 +24,9 @@ import {
     GET_TRENDING,
     GET_TRENDING_SUCCESS,
     GET_TRENDING_FAILED,
+    GET_SPONSORED,
+    GET_SPONSORED_SUCCESS,
+    GET_SPONSORED_FAILED,
 } from './constants';
 
 export const initialState = fromJS({
@@ -50,6 +53,11 @@ export const initialState = fromJS({
         success: false,
     },
     trending: {
+        loading: false,
+        error: false,
+        success: false,
+    },
+    sponsored: {
         loading: false,
         error: false,
         success: false,
@@ -145,6 +153,21 @@ function homePageReducer(state = initialState, action) {
                 .setIn(['trending', 'loading'], false)
                 .setIn(['trending', 'error'], true)
                 .setIn(['trending', 'data'], action.trendingData);
+        case GET_SPONSORED:
+            return state
+                .setIn(['sponsored', 'loading'], true)
+                .setIn(['sponsored', 'error'], false);
+        case GET_SPONSORED_SUCCESS:
+            return state
+                .setIn(['sponsored', 'success'], true)
+                .setIn(['sponsored', 'loading'], false)
+                .setIn(['sponsored', 'error'], false)
+                .setIn(['sponsored', 'data'], action.sponsoredData);
+        case GET_SPONSORED_FAILED:
+            return state
+                .setIn(['sponsored', 'loading'], false)
+                .setIn(['sponsored', 'error'], true)
+                .setIn(['sponsored', 'data'], action.sponsoredData);
         default:
             return state;
     }
