@@ -53,6 +53,7 @@ import {
     Button,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import CartList from 'components/CartList';
 import { layoutTopNav, searchResult, getImgLink, getUserData, getCartData } from './actions';
 import makeSelectHeader from './selectors';
 import reducer from './reducer';
@@ -71,6 +72,7 @@ export class Header extends React.PureComponent {
             childVal: null,
             anchorEl: null,
             arrowRef: null,
+            cart: null,
             showCartPopout: false,
             searchBar: false,
             megaMenuToggle: false,
@@ -91,6 +93,11 @@ export class Header extends React.PureComponent {
             this.props.dispatch(getCartData());
         }
     }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.header.cart.data !== this.props.header.cart.data) {
+            this.setState({ cart: nextProps.header.cart.data });
+        }
+    }
 
     getSearchResult = (e) => {
         this.setState({ searchQuery: event.target.value });
@@ -98,6 +105,10 @@ export class Header extends React.PureComponent {
             this.props.dispatch(searchResult(this.state.searchQuery));
         }
     }
+
+    // deleteCart = (id) => {
+    //     // this.props.dispatch(removeItemInCart(id));
+    // }
 
     toggleDrawer = (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -722,7 +733,15 @@ export class Header extends React.PureComponent {
                     overflow: 'auto',
                 }}
             >
-
+                {
+                    dataChecking(this.state, 'data', 'merchants').map((merchant) => (
+                        <CartList
+                            merchant={merchant}
+                            deleteCart={this.deleteCart}
+                            key={merchant.id}
+                        />
+                    ))
+                }
             </div>
             <Button variant="contained">Checkout now</Button>
         </Card>
