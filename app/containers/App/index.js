@@ -23,7 +23,7 @@ import BrandPage from 'containers/BrandPage';
 import NotFoundPage from 'containers/NotFoundPage';
 import OnboardingPage from 'containers/OnboardingPage';
 import ProfilePage from 'components/ProfilePage';
-// import Cart from 'containers/CartPage';
+import CartPage from 'containers/CartPage';
 import PrivateRoute from 'containers/App/PrivateRoute';
 import CheckoutPage from 'containers/CheckoutPage';
 import ProfileOrderList from 'containers/ProfileOrderList';
@@ -92,6 +92,7 @@ export default function App() {
                         component={AboutUs}
                     />
                     <PrivateRoute exact={true} path="/feedback" component={FeedbackPage} />
+                    <PrivateRoute exact={true} path="/cart" component={CartPage} />
                     <PrivateRoute exact={true} path="/checkout" component={CheckoutPage} />
                     <PrivateRoute exact={true} path="/profile" component={ProfilePage} />
                     <PrivateRoute exact={true} path="/profile/address" component={ProfileAddress} />
