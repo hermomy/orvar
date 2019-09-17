@@ -50,6 +50,7 @@ import {
     Card,
     Box,
     Badge,
+    Button,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { layoutTopNav, searchResult, getImgLink, getUserData, getCartData } from './actions';
@@ -64,19 +65,20 @@ export class Header extends React.PureComponent {
         super(props);
 
         this.state = {
-            showCartPopout: false,
-            searchBar: false,
             searchQuery: '',
-            anchorElID: null,
             tabVal: 'skin-care',
-            megaMenuToggle: false,
-            left: false,
-            toggleChildDrawer: false,
-            open: false,
+            anchorElID: null,
             childVal: null,
             anchorEl: null,
-            userOpen: false,
             arrowRef: null,
+            showCartPopout: false,
+            searchBar: false,
+            megaMenuToggle: false,
+            open: false,
+            left: false,
+            toggleChildDrawer: false,
+            userOpen: false,
+            cartOpen: false,
         };
         this.getSearchResult = this.getSearchResult.bind(this);
     }
@@ -370,7 +372,14 @@ export class Header extends React.PureComponent {
                     <Person />
                 </IconButton>
                 <IconButton
+                    id="cart"
                     className="right-header-cart"
+                    onMouseEnter={(evt) => this.setState({
+                        anchorEl: evt.currentTarget,
+                        cartOpen: true,
+                    })}
+                    onMouseLeave={() => this.setState({ cartOpen: false })}
+                    onClick={() => this.setState({ cartOpen: !this.state.cartOpen })}
                 >
                     <Badge
                         color="secondary"
@@ -692,10 +701,32 @@ export class Header extends React.PureComponent {
             }
         </Card>
     )
+
+    renderCartTimer = () => {}
     /**
      * User cart dropdown
      */
-    renderCartSection = () => {}
+    renderCartSection = () => (
+        <Card
+            style={{
+                backgroundColor: '#fff',
+            }}
+        >
+            <div>
+                {this.renderCartTimer()}
+                <Typography>SUBTOTAL</Typography>
+            </div>
+            <Divider />
+            <div
+                style={{
+                    overflow: 'auto',
+                }}
+            >
+
+            </div>
+            <Button variant="contained">Checkout now</Button>
+        </Card>
+    )
 
     /**
      * quicklink section which is right side of the header
@@ -897,6 +928,24 @@ export class Header extends React.PureComponent {
                                 >
                                     <span className={this.props.classes.arrow} ref={(node) => this.setState({ arrowRef: node })} />
                                     {this.renderUserSection()}
+                                </Popper>
+                                <Popper
+                                    className={this.props.classes.popper}
+                                    style={{ zIndex: 1101, maxWidth: '20rem' }}
+                                    open={this.state.cartOpen}
+                                    placement="top"
+                                    anchorEl={this.state.anchorEl}
+                                    onMouseEnter={() => this.setState({ cartOpen: true })}
+                                    onMouseLeave={() => this.setState({ cartOpen: false })}
+                                    modifiers={{
+                                        arrow: {
+                                            enabled: true,
+                                            element: this.state.arrowRef,
+                                        },
+                                    }}
+                                >
+                                    <span className={this.props.classes.arrow} ref={(node) => this.setState({ arrowRef: node })} />
+                                    {this.renderCartSection()}
                                 </Popper>
                             </div>
                         </Hidden>
