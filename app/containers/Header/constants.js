@@ -20,3 +20,6 @@ export const GET_USER_DATA_FAILED = `${page}/GET_USER_DATA_FAILED`;
 export const GET_CART_DATA = `${page}/GET_CART_DATA`;
 export const GET_CART_DATA_SUCCESS = `${page}/GET_CART_DATA_SUCCESS`;
 export const GET_CART_DATA_FAILED = `${page}/GET_CART_DATA_FAILED`;
+export const ITEM_DELETE = `${page}/ITEM_DELETE`;
+export const ITEM_DELETE_SUCCESS = `${page}/ITEM_DELETE_SUCCESS`;
+export const ITEM_DELETE_FAIL = `${page}/ITEM_DELETE_FAIL`;

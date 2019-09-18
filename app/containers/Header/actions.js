@@ -20,6 +20,9 @@ import {
     GET_CART_DATA,
     GET_CART_DATA_SUCCESS,
     GET_CART_DATA_FAILED,
+    ITEM_DELETE,
+    ITEM_DELETE_SUCCESS,
+    ITEM_DELETE_FAIL,
 } from './constants';
 
 export function layoutTopNav() {
@@ -114,3 +117,21 @@ export function getCartDataFailed(cartData) {
     };
 }
 
+export function removeItemInCart(id) {
+    return {
+        type: ITEM_DELETE,
+        id,
+    };
+}
+export function removeItemInCartSuccess(itemUpdate) {
+    return {
+        type: ITEM_DELETE_SUCCESS,
+        itemUpdate,
+    };
+}
+export function removeItemInCartFail(itemUpdate) {
+    return {
+        type: ITEM_DELETE_FAIL,
+        itemUpdate,
+    };
+}
