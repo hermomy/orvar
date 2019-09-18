@@ -54,7 +54,14 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import CartList from 'components/CartList';
-import { layoutTopNav, searchResult, getImgLink, getUserData, getCartData } from './actions';
+import {
+    layoutTopNav,
+    searchResult,
+    getImgLink,
+    getUserData,
+    getCartData,
+    removeItemInCart,
+} from './actions';
 import makeSelectHeader from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -106,9 +113,9 @@ export class Header extends React.PureComponent {
         }
     }
 
-    // deleteCart = (id) => {
-    //     // this.props.dispatch(removeItemInCart(id));
-    // }
+    deleteCart = (id) => {
+        this.props.dispatch(removeItemInCart(id));
+    }
 
     toggleDrawer = (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -358,30 +365,30 @@ export class Header extends React.PureComponent {
         </Drawer>
     )
 
-    rightHeader = () => {
-        console.log();
-        return (
-            <Grid item={true}>
-                <IconButton onClick={this.state.searchBar ? () => this.setState({ searchBar: !this.state.searchBar, searchQuery: '' }) : () => this.setState({ searchBar: !this.state.searchBar })}>
-                    {
-                        this.state.searchBar ?
-                            <Close className="animated rotateIn" />
-                        :
-                            <Search className="animated rotateIn" />
+    rightHeader = () => (
+        <Grid item={true}>
+            <IconButton onClick={this.state.searchBar ? () => this.setState({ searchBar: !this.state.searchBar, searchQuery: '' }) : () => this.setState({ searchBar: !this.state.searchBar })}>
+                {
+                    this.state.searchBar ?
+                        <Close className="animated rotateIn" />
+                    :
+                        <Search className="animated rotateIn" />
 
-                    }
-                </IconButton>
-                <IconButton
-                    id="profile"
-                    onMouseEnter={(evt) => this.setState({
-                        anchorEl: evt.currentTarget,
-                        userOpen: true,
-                    })}
-                    onMouseLeave={() => this.setState({ userOpen: false })}
-                    onClick={() => this.setState({ userOpen: !this.state.userOpen })}
-                >
-                    <Person />
-                </IconButton>
+                }
+            </IconButton>
+            <IconButton
+                id="profile"
+                onMouseEnter={(evt) => this.setState({
+                    anchorEl: evt.currentTarget,
+                    userOpen: true,
+                })}
+                onMouseLeave={() => this.setState({ userOpen: false })}
+                onClick={() => this.setState({ userOpen: !this.state.userOpen })}
+            >
+                <Person />
+            </IconButton>
+            {
+                globalScope.token &&
                 <IconButton
                     id="cart"
                     className="right-header-cart"
@@ -400,10 +407,9 @@ export class Header extends React.PureComponent {
                         <ShoppingCart />
                     </Badge>
                 </IconButton>
-            </Grid>
-        );
-    }
-
+            }
+        </Grid>
+    )
     leftHeader = () => (
         <Grid item={true} style={{ flex: 1 }}>
             {
@@ -718,33 +724,52 @@ export class Header extends React.PureComponent {
      * User cart dropdown
      */
     renderCartSection = () => (
-        <Card
-            style={{
-                backgroundColor: '#fff',
-            }}
-        >
-            <div>
-                {this.renderCartTimer()}
-                <Typography>SUBTOTAL</Typography>
-            </div>
-            <Divider />
-            <div
+        <div>
+            <Card
+                className={this.props.classes.cardCart}
                 style={{
-                    overflow: 'auto',
+                    backgroundColor: '#fff',
                 }}
             >
                 {
-                    dataChecking(this.state, 'data', 'merchants').map((merchant) => (
-                        <CartList
-                            merchant={merchant}
-                            deleteCart={this.deleteCart}
-                            key={merchant.id}
-                        />
-                    ))
+                    dataChecking(this.state, 'cart', 'data', 'attribute', 'is_empty') ?
+                        <div>
+                            <Typography>Your cart is empty.</Typography>
+                            <NavLink to="/mall">
+                                <Button>Go shopping</Button>
+                            </NavLink>
+                        </div>
+                    :
+                        <div>
+                            <div>
+                                {this.renderCartTimer()}
+                                <Typography>SUBTOTAL</Typography>
+                            </div>
+                            <Divider />
+                            <div
+                                style={{
+                                    overflow: 'auto',
+                                    height: '40rem',
+                                }}
+                            >
+                                {
+                                    dataChecking(this.state, 'cart', 'data', 'merchants') && this.state.cart.data.merchants.map((merchant) => (
+                                        <CartList
+                                            merchant={merchant}
+                                            deleteCart={this.deleteCart}
+                                            key={merchant.id}
+                                            noEditQuantity={true}
+                                        />
+                                    ))
+                                }
+                            </div>
+                            <div style={{ float: 'right' }}>
+                                <Button variant="contained">Checkout now</Button>
+                            </div>
+                        </div>
                 }
-            </div>
-            <Button variant="contained">Checkout now</Button>
-        </Card>
+            </Card>
+        </div>
     )
 
     /**
@@ -948,24 +973,29 @@ export class Header extends React.PureComponent {
                                     <span className={this.props.classes.arrow} ref={(node) => this.setState({ arrowRef: node })} />
                                     {this.renderUserSection()}
                                 </Popper>
-                                <Popper
-                                    className={this.props.classes.popper}
-                                    style={{ zIndex: 1101, maxWidth: '20rem' }}
-                                    open={this.state.cartOpen}
-                                    placement="top"
-                                    anchorEl={this.state.anchorEl}
-                                    onMouseEnter={() => this.setState({ cartOpen: true })}
-                                    onMouseLeave={() => this.setState({ cartOpen: false })}
-                                    modifiers={{
-                                        arrow: {
-                                            enabled: true,
-                                            element: this.state.arrowRef,
-                                        },
-                                    }}
-                                >
-                                    <span className={this.props.classes.arrow} ref={(node) => this.setState({ arrowRef: node })} />
-                                    {this.renderCartSection()}
-                                </Popper>
+                                {
+                                    globalScope.token &&
+                                        <Container>
+                                            <Popper
+                                                className={this.props.classes.popper}
+                                                style={{ zIndex: 1101, maxWidth: '20rem' }}
+                                                open={this.state.cartOpen}
+                                                placement="top"
+                                                anchorEl={this.state.anchorEl}
+                                                onMouseEnter={() => this.setState({ cartOpen: true })}
+                                                onMouseLeave={() => this.setState({ cartOpen: false })}
+                                                modifiers={{
+                                                    arrow: {
+                                                        enabled: true,
+                                                        element: this.state.arrowRef,
+                                                    },
+                                                }}
+                                            >
+                                                <span className={this.props.classes.arrow} ref={(node) => this.setState({ arrowRef: node })} />
+                                                {this.state.cartOpen && this.renderCartSection()}
+                                            </Popper>
+                                        </Container>
+                                }
                             </div>
                         </Hidden>
                         <Hidden mdUp={true}>

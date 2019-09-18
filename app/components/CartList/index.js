@@ -10,13 +10,8 @@ import React from 'react';
 import './style.scss';
 
 class CartList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
-    renderQuantityEditor = (item) => {
-        if (item.attribute.is_qty_adjustable) {
+    renderQuantity = (item) => {
+        if (item.attribute.is_qty_adjustable && !this.props.noEditQuantity) {
             return (
                 <div className="text-xs-center" style={{ width: '100px' }}>
                     <span
@@ -88,12 +83,12 @@ class CartList extends React.PureComponent { // eslint-disable-line react/prefer
                             </div>
                             <div className="line-elips" style={{ width: '300px' }}>{item.product.name}</div>
                             <div className="text-xs-center" style={{ width: '100px' }}>RM {item.price.selling}</div>
-                            {this.renderQuantityEditor(item)}
+                            {this.renderQuantity(item)}
                             <div className="text-xs-center" style={{ width: '100px' }}>RM {item.total.selling}</div>
                             <div className="text-xs-center" style={{ width: '100px' }}>
                                 <span
                                     className="px-quater"
-                                    onClick={() => this.props.deleteCart}
+                                    onClick={() => this.props.deleteCart(item.id)}
                                     style={{ cursor: 'pointer' }}
                                 >
                                     <i className="far fa-times-circle"></i>
