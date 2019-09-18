@@ -6,7 +6,11 @@
 
 import React from 'react';
 // import styled from 'styled-components';
-
+import {
+    Typography,
+    Grid,
+    Divider,
+} from '@material-ui/core';
 import './style.scss';
 
 class CartList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -43,10 +47,40 @@ class CartList extends React.PureComponent { // eslint-disable-line react/prefer
         );
     }
 
-    render() {
-        const merchant = this.props.merchant;
+    renderSummary = () => {
+        const summary = this.props.merchant.summary;
+        const cart = this.props.cart;
         return (
             <div>
+                {console.log(cart)}
+                {
+                    <Grid
+                        container={true}
+                        direction="column"
+                        justify="flex-start"
+                    >
+                        <Grid item={true}>
+                            <Typography>Subtotal</Typography>
+                            <Typography>{cart.currency.symbol}{Number(summary.subtotal).toFixed(2)}</Typography>
+                        </Grid>
+                        <Grid item={true}>
+                            <Typography>{summary.shipping.label}</Typography>
+                            <Typography>{cart.currency.symbol}{Number(summary.shipping.value).toFixed(2)}</Typography>
+                        </Grid>
+                        <Grid item={true}>
+                            <Typography><b>Total</b></Typography>
+                            <Typography>{cart.currency.symbol}{Number(summary.merchant_total).toFixed(2)}</Typography>
+                        </Grid>
+                    </Grid>
+                }
+            </div>
+        );
+    }
+    render() {
+        const merchant = this.props.merchant;
+        const cart = this.props.cart;
+        return (
+            <div className="my-1">
                 <div
                     className="p-half"
                     style={{
@@ -82,9 +116,9 @@ class CartList extends React.PureComponent { // eslint-disable-line react/prefer
                                 <img src={item.product.image.small} alt="prod img"width="80px" />
                             </div>
                             <div className="line-elips" style={{ width: '300px' }}>{item.product.name}</div>
-                            <div className="text-xs-center" style={{ width: '100px' }}>RM {item.price.selling}</div>
+                            <div className="text-xs-center" style={{ width: '100px' }}>{cart.currency.symbol}{Number(item.price.selling).toFixed(2)}</div>
                             {this.renderQuantity(item)}
-                            <div className="text-xs-center" style={{ width: '100px' }}>RM {item.total.selling}</div>
+                            <div className="text-xs-center" style={{ width: '100px' }}>{cart.currency.symbol}{Number(item.total.selling).toFixed(2)}</div>
                             <div className="text-xs-center" style={{ width: '100px' }}>
                                 <span
                                     className="px-quater"
@@ -97,6 +131,8 @@ class CartList extends React.PureComponent { // eslint-disable-line react/prefer
                         </div>
                     ))
                 }
+                <Divider />
+                {!this.props.noSummary && this.renderSummary()}
             </div>
         );
     }

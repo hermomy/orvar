@@ -53,6 +53,7 @@ export class CartPage extends React.PureComponent { // eslint-disable-line react
             {
                 dataChecking(this.state, 'data', 'merchants').map((merchant) => (
                     <CartList
+                        cart={this.state.data}
                         merchant={merchant}
                         changeQuantity={this.changeQuantity}
                         deleteCart={this.deleteCart}

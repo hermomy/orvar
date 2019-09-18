@@ -756,10 +756,12 @@ export class Header extends React.PureComponent {
                                 {
                                     dataChecking(this.state, 'cart', 'merchants') && this.state.cart.merchants.map((merchant) => (
                                         <CartList
+                                            cart={this.state.cart}
                                             merchant={merchant}
                                             deleteCart={this.deleteCart}
                                             key={merchant.id}
                                             noEditQuantity={true}
+                                            noSummary={true}
                                         />
                                     ))
                                 }
