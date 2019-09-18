@@ -49,6 +49,7 @@ import {
     Clear,
     KeyboardArrowLeft,
 } from '@material-ui/icons';
+import { notifySuccess, notifyError } from 'containers/Notify';
 import withWidth from '@material-ui/core/withWidth';
 import ProductCard from 'components/ProductCard';
 
@@ -88,10 +89,16 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
         ];
     }
 
-    // postAttendance = async() => {
-    //     const a =  await apiRequest('/attendance', 'post');
-    //     console.log(a);
-    // }
+    postAttendance = async () => {
+        const res = await apiRequest('/attendance', 'post');
+        if (dataChecking(res, 'data', 'messages')) {
+            if (res.data.messages[0].type === 'error') {
+                notifyError(res.data.messages[0].text);
+            } else {
+                notifySuccess(res.data.messages[0].text);
+            }
+        }
+    }
 
     renderProfileCard = (data) => {
         let concernString = '';
@@ -128,7 +135,7 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                     </Grid>
                                     <Grid item={true} xs={9} style={{ textAlign: 'left' }}>
                                         <Typography align="left" variant="body1" gutterBottom={true}>Update Your attendance here today !</Typography><br />
-                                        <Typography variant="body1" color="secondary">{data.data.attendance.current}/10 Yes!I&#183;m Here</Typography>
+                                        <Typography variant="body1" color="secondary">{data.data.attendance.current}/10 Yes! I&#183;m Here</Typography>
                                     </Grid>
                                 </Button>
                             </Grid>
@@ -238,7 +245,30 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
             </CardContent>
         </Card>
     )
-
+    renderRewards = () => (
+        <Card>
+            <CardHeader
+                title={<Typography variant="subtitle1">Rewards</Typography>}
+            />
+            <CardContent style={{ textAlign: 'left' }}>
+                <NavLink to={'/profile/rewards'}>
+                    <Typography variant="subtitle1" >More Rewards&gt;</Typography>
+                </NavLink>
+            </CardContent>
+        </Card>
+    )
+    renderReview = () => (
+        <Card>
+            <CardHeader
+                title={<Typography variant="subtitle1">Review</Typography>}
+            />
+            <CardContent style={{ textAlign: 'left' }}>
+                <NavLink to={'/profile/review'}>
+                    <Typography variant="subtitle1" >My Reviews &gt;</Typography>
+                </NavLink>
+            </CardContent>
+        </Card>
+    )
     renderAddress = () => (
         <Card>
             <CardHeader
@@ -247,7 +277,11 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                 }
                 title={<Typography variant="subtitle1">My Address</Typography>}
                 action={
-                    <Create style={{ color: '#808080' }} />
+                    <NavLink to={'/profile/address'}>
+                        <IconButton>
+                            <Create style={{ color: '#808080' }} />
+                        </IconButton>
+                    </NavLink>
                   }
             />
             <CardContent style={{ textAlign: 'left' }}>
@@ -436,11 +470,24 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                         <OwlCarousel
                                             ref={(ref) => this.setState({ owlCarouselInstance: ref })}
                                             options={{
-                                                items: 5,
                                                 loop: true,
                                                 nav: true,
                                                 dots: true,
                                                 navText: ['&lt;', '&gt;'],
+                                                responsive: {
+                                                    320: {
+                                                        items: 2,
+                                                    },
+                                                    700: {
+                                                        items: 3,
+                                                    },
+                                                    1024: {
+                                                        items: 4,
+                                                    },
+                                                    1280: {
+                                                        items: 5,
+                                                    },
+                                                },
                                             }}
                                             // events={{
                                             //     onDragged: (event) => console.log(event),
@@ -452,10 +499,11 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                                     <ProductCard
                                                         key={item.id}
                                                         product={item}
-                                                        review={item.review}
                                                         url={item.url}
-                                                        price={dataChecking(item, 'price')}
-                                                        allowWishlistButton={true}
+                                                        image={true}
+                                                        feature={true}
+                                                        rating={true}
+                                                        disableElevation={true}
                                                     />
                                                 ))
                                             }
@@ -509,6 +557,12 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                         </Grid>
                                         <Grid item={true} xs={12} sm={6} md={3}>
                                             {this.renderWallet(profiledata)}
+                                        </Grid>
+                                        <Grid item={true} xs={12} sm={6} md={3}>
+                                            {this.renderRewards()}
+                                        </Grid>
+                                        <Grid item={true} xs={12} sm={6} md={3}>
+                                            {this.renderReview()}
                                         </Grid>
                                         <Grid item={true} xs={12} sm={6} md={3}>
                                             {this.renderAddress()}

@@ -1,19 +1,31 @@
 @import 'custom-bootstrap-style';
+@import 'legacy-styling.scss';
+@import 'app/breakpoints';
 
-html { font-size: 13px; }
+html {
+    font-size: .7vw;
+
+    @include media-breakpoint-down(lg) {
+        font-size: 1vw;
+    }
+
+    @include media-breakpoint-only(sm) {
+        font-size: 2vw;
+    }
+
+    @include media-breakpoint-down(xs) {
+        font-size: 3vw;
+    }
+}
 
 .hermo-red { color: #660033 !important; }
 .hermo-pink { color: #FF0068 !important; } //lighten($hermo-red, 40%);
-
-a {outline : none !important;}
 
 ::placeholder {
     color: rgb(196, 187, 201);
     font-weight: 300;
     font-size: 80%;
 }
-
-ol, ul { margin: 0; padding-left: 2rem; }
 
 .bigger { font-size: 130%; }
 
@@ -69,31 +81,13 @@ ol, ul { margin: 0; padding-left: 2rem; }
 
 .posi-relative { position: relative; }
 
-html,
 body {
-    height: 100%;
-    width: 100%;
+    font-family: "Poppins", sans-serif;
+    background-color: #F3EFEE;
     margin: 0;
 }
 
-body { font-family: "Poppins", sans-serif; }
-
-#app {
-    // background-color: #fafafa;
-    background-color: #F3EFEE;
-    min-height: 100%;
-    min-width: 100%;
-}
-
-p,
-label {
-    font-family: Georgia, Times, 'Times New Roman', serif;
-    line-height: 1.5em;
-}
-
-.text-white {
-    color: white;
-}
+.text-white { color: white; }
 
 .text-hover-hermo-pink:hover,
 .text-hover-hermo-pink:focus {

@@ -100,30 +100,36 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
             this.setState({ delay: 16 * TIME_UNIT });
         }, 16 * TIME_UNIT);
         setTimeout(() => {
-            this.setState({ delay: 18 * TIME_UNIT });
+            this.setState({ delay: 18 * TIME_UNIT, countingDown: Date.now() + 30000 });
         }, 18 * TIME_UNIT);
     }
 
     renderGame = () => (
         <div>
             <div>
-                <Countdown
-                    date={Date.now() + 30000}
-                    renderer={({ seconds, completed }) => {
-                        if (completed) {
-                            this.setState({
-                                complete: 'lose',
-                            });
-                        }
-                        return <span className="countdown-timer">{seconds}s</span>;
-                    }}
-                />
+                {
+                    this.state.countingDown ?
+                        <Countdown
+                            date={this.state.countingDown}
+                            renderer={({ seconds, completed }) => {
+                                if (completed) {
+                                    this.setState({
+                                        complete: 'lose',
+                                    });
+                                }
+                                return <span className="countdown-timer">{seconds}s</span>;
+                            }}
+                        />
+                        :
+                        null
+                }
             </div>
             <div>tips</div>
             <div className="card-field">
                 {
                     arrayOfRandomCard.map((brandImage, index) => (
                         <span
+                            key={index}
                             onClick={() => {
                                 if (this.state[`flicked_${index}`] || this.state.disableFlick) {
                                     return null;
@@ -208,6 +214,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                         {
                             BRANDS.map((brandImage, index) => (
                                 <img
+                                    key={index}
                                     width="100%"
                                     src={brandImage}
                                     alt="game card"

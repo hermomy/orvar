@@ -400,13 +400,12 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
                                 Profile Info
                             </Typography>
                         </div>
-                        <div style={{ display: 'inline' }}>>
+                        <div style={{ display: 'inline' }}>
                             <Typography inline={true} style={{ borderBottom: `${!this.state.page1 ? '4px #ff4081 solid' : ''}`, paddingBottom: '8px' }} className={this.props.classes.AppBarSection} onClick={() => this.setState({ page1: false })}>
                                 Skin Details
                             </Typography>
                         </div>
                     </div>
-                    {/* why can't float :( */}
                     <IconButton style={{ position: 'absolute', right: '8px' }}>
                     </IconButton>
                 </Toolbar>
@@ -436,12 +435,12 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
                     title={
                         <div>
                             <Typography variant="subtitle1" className={this.props.classes.cardTtitle}>Profile Info</Typography>
-                            <Typography variant="body1" style={{ color: '#808080' }}>Your personal details only for Hermo product services. It won't reaveal to public or other hermo users.</Typography>
+                            <Typography variant="body1" style={{ color: '#808080' }}>Your personal details are only for Hermo product services, it won't reaveal to public or other hermo users.</Typography>
                         </div>
                     }
                     className={this.props.classes.cardHeader}
                 />
-                <CardContent className={this.props.classes.profileInfoCard} style={{ padding: '0px' }}>
+                <CardContent className={this.props.classes.profileInfoCard} style={{ paddingBottom: '0px' }}>
                     {this.renderCardContents(infos, 'flex-end')}
                 </CardContent>
             </Card>
@@ -559,7 +558,6 @@ export class ProfileEditInform extends React.PureComponent { // eslint-disable-l
         // const choice = this.props.profileEditInform.data.InformChoiceData;
         return (
             <div>
-                {/* {console.log(user)} */}
                 <div className="container" style={{ paddingTop: '0px' }}>
                     {this.renderTopBar()}
                     {

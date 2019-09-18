@@ -1,0 +1,47 @@
+@import 'app/breakpoints';
+@import 'app/legacy-styling.scss';
+
+.item-card {
+    padding: 1rem 1rem 0.5rem 1rem;
+    margin: 0.5rem;
+    min-height: 18rem;
+    background-color: #FFFFFF;
+
+    .item-image {
+        width: 7rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .item-label-container {
+        min-height: 2rem;
+
+        .item-label {
+            width: 7rem;
+        }
+    }
+
+    .item-price {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .item-brand {
+        @include line-elips(1rem, 1.3, 1);
+    }
+
+    .item-description-container {
+        min-height: 3rem;
+
+        .item-description {
+            @include line-elips(1rem, 1.3, 2);
+        }
+    }
+}
+
+.dialog-item-image {
+    width: 8rem;
+    margin-left: auto;
+    margin-right: auto;
+}
