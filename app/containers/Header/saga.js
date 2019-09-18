@@ -77,9 +77,9 @@ export function* getCartDataWorker() {
     try { // Trying the HTTP Request
         const response = yield call(apiRequest, '/cart');
         if (response && response.ok !== false) {
-            yield put(getCartDataSuccess(response));
+            yield put(getCartDataSuccess(response.data));
         } else if (response && response.ok === false) {
-            yield put(getCartDataFailed(response));
+            yield put(getCartDataFailed(response.data));
         } else {
             err = staticErrorResponse({ text: 'No response from server' });
             throw err;
@@ -92,10 +92,10 @@ export function* getCartDataWorker() {
 export function* deleteItemInCart(action) {
     const response = yield call(apiRequest, `/cart/${action.id}`, 'delete');
     if (response && response.ok) {
-        yield put(removeItemInCartSuccess(response));
+        yield put(removeItemInCartSuccess(response.data));
         notifySuccess(response.data.messages[0].text);
     } else {
-        yield put(removeItemInCartFail(response));
+        yield put(removeItemInCartFail(response.data));
         notifyError(response.data.messages[0].text);
     }
 }

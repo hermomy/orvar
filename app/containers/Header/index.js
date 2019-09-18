@@ -115,6 +115,7 @@ export class Header extends React.PureComponent {
 
     deleteCart = (id) => {
         this.props.dispatch(removeItemInCart(id));
+        this.setState({ cartOpen: false });
     }
 
     toggleDrawer = (event) => {
@@ -388,7 +389,7 @@ export class Header extends React.PureComponent {
                 <Person />
             </IconButton>
             {
-                globalScope.token &&
+                globalScope.token && this.props.header.cart.success &&
                 <IconButton
                     id="cart"
                     className="right-header-cart"
@@ -401,8 +402,8 @@ export class Header extends React.PureComponent {
                 >
                     <Badge
                         color="secondary"
-                        badgeContent={dataChecking(this.props.header, 'cart', 'data', 'data', 'summary', 'cart_qty') && this.props.header.cart.data.data.summary.cart_qty}
-                        invisible={dataChecking(this.props.header, 'cart', 'data', 'data') && this.props.header.cart.data.data.attribute.is_empty}
+                        badgeContent={dataChecking(this.state, 'cart', 'summary', 'cart_qty')}
+                        invisible={dataChecking(this.state, 'cart', 'attribute', 'is_empty')}
                     >
                         <ShoppingCart />
                     </Badge>
@@ -732,7 +733,7 @@ export class Header extends React.PureComponent {
                 }}
             >
                 {
-                    dataChecking(this.state, 'cart', 'data', 'attribute', 'is_empty') ?
+                    dataChecking(this.state, 'cart', 'attribute', 'is_empty') ?
                         <div>
                             <Typography>Your cart is empty.</Typography>
                             <NavLink to="/mall">
@@ -749,11 +750,11 @@ export class Header extends React.PureComponent {
                             <div
                                 style={{
                                     overflow: 'auto',
-                                    height: '40rem',
+                                    maxHeight: '40rem',
                                 }}
                             >
                                 {
-                                    dataChecking(this.state, 'cart', 'data', 'merchants') && this.state.cart.data.merchants.map((merchant) => (
+                                    dataChecking(this.state, 'cart', 'merchants') && this.state.cart.merchants.map((merchant) => (
                                         <CartList
                                             merchant={merchant}
                                             deleteCart={this.deleteCart}
@@ -763,6 +764,7 @@ export class Header extends React.PureComponent {
                                     ))
                                 }
                             </div>
+                            <Divider />
                             <div style={{ float: 'right' }}>
                                 <Button variant="contained">Checkout now</Button>
                             </div>
@@ -1030,8 +1032,8 @@ export class Header extends React.PureComponent {
                                         >
                                             <Badge
                                                 color="secondary"
-                                                badgeContent={dataChecking(this.props.header, 'cart', 'data', 'data', 'summary', 'cart_qty') && this.props.header.cart.data.data.summary.cart_qty}
-                                                invisible={dataChecking(this.props.header, 'cart', 'data', 'data') && this.props.header.cart.data.data.attribute.is_empty}
+                                                badgeContent={dataChecking(this.state, 'cart', 'summary', 'cart_qty')}
+                                                invisible={dataChecking(this.state, 'cart', 'attribute', 'is_empty')}
                                             >
                                                 <ShoppingCart className={this.props.classes.icon} />
                                             </Badge>

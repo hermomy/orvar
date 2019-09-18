@@ -5,7 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
-import { dataChecking } from 'globalUtils';
+// import { dataChecking } from 'globalUtils';
 import {
     LAYOUT_TOP_NAV,
     LAYOUT_TOP_NAV_SUCCESS,
@@ -152,13 +152,13 @@ function headerReducer(state = initialState, action) {
                 .setIn(['delete', 'loading'], false)
                 .setIn(['delete', 'error'], false)
                 .setIn(['cart', 'success'], true)
-                .setIn(['cart', 'data'], dataChecking(action, 'itemUpdate'));
+                .setIn(['cart', 'data'], action.itemUpdate.cart);
         case ITEM_DELETE_FAIL:
             return state
                 .setIn(['delete', 'loading'], false)
                 .setIn(['delete', 'error'], true)
                 .setIn(['cart', 'success'], false)
-                .setIn(['cart', 'data'], dataChecking(action, 'itemUpdate'));
+                .setIn(['cart', 'data'], action.itemUpdate.cart);
         default:
             return state;
     }
