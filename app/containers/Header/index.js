@@ -35,6 +35,7 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
             showCartPopout: false,
             hideSearchBar: true,
             searchQuery: '',
+            hideHeader: false,
         };
         this.getSearchResult = this.getSearchResult.bind(this);
     }
@@ -271,6 +272,10 @@ export class Header extends React.PureComponent { // eslint-disable-line react/p
      * - Component will consists of hermo logo, top nav and quicklinks
      */
     render() {
+        if (this.state.hideHeader) {
+            return null;
+        }
+
         return (
             dataChecking(this.props.header, 'header', 'data') ?
                 <div id="header">

@@ -434,6 +434,7 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                 if (dataChecking(personalizationdata, 'data', 'data', 'product', 'items', 'length')) {
                                     return (
                                         <OwlCarousel
+                                            ref={(ref) => this.setState({ owlCarouselInstance: ref })}
                                             options={{
                                                 items: 5,
                                                 loop: true,
@@ -441,10 +442,10 @@ class ProfilePage extends React.PureComponent { // eslint-disable-line react/pre
                                                 dots: true,
                                                 navText: ['&lt;', '&gt;'],
                                             }}
-                                            events={{
-                                                onDragged: (event) => console.log(event),
-                                                onChanged: (event) => console.log(event),
-                                            }}
+                                            // events={{
+                                            //     onDragged: (event) => console.log(event),
+                                            //     onChanged: (event) => console.log(event),
+                                            // }}
                                         >
                                             {
                                                 personalizationdata.data.data.product.items.map((item) => (

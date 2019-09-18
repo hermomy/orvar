@@ -152,3 +152,12 @@ label {
         }
     }
 }
+
+.opacity-zero {
+    opacity: 0;
+}
+
+// fixes for carousel slider issue
+.carousel.carousel-slider .slider {
+    overflow: initial;
+}
