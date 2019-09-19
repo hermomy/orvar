@@ -38,8 +38,10 @@
         border-radius: 15px;
         padding: 0.15rem 0.65rem;
         text-decoration: none;
+        transition: transform .215s;
 
         &:hover {
+            transform: scale(1.05);
             background-color: #FF0066;
         }
     }

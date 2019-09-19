@@ -251,7 +251,7 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                 return (
                     <Grid container={true} style={{ textAlign: 'center' }} spacing={2} className="mb-1">
                         <Grid item={true} lg={12} md={12} xs={12}>
-                            <img src={require('Resources/order/order_to_be_confirm.png')} alt="confirm receipt img" />
+                            <img src={require('resources/order/order_to_be_confirm.png')} alt="confirm receipt img" />
                         </Grid>
                         <Grid item={true} lg={12} md={12} xs={12}>
                             <Typography variant="h6" display="block" gutterBottom={true}>Are you sure to confirm your receipt of order?</Typography>
@@ -292,7 +292,7 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                 return (
                     <Grid container={true} style={{ textAlign: 'center' }} spacing={2} className="mb-1">
                         <Grid item={true} lg={12} md={12} xs={12}>
-                            <img src={require('Resources/order/confirm_order.png')} alt="confirmed receive img" />
+                            <img src={require('resources/order/confirm_order.png')} alt="confirmed receive img" />
                         </Grid>
                         <Grid item={true} lg={12} md={12} xs={12}>
                             <Typography variant="h6" display="block" gutterBottom={true}>Thank you for confirming the receipt of order.</Typography>
@@ -318,7 +318,7 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                             <Link href={'#'} color="secondary">LEARN MORE</Link>
                         </Grid>
                         <Grid item={true} lg={12} md={12} xs={12} style={{ textAlign: 'center' }}>
-                            <img src={require('Resources/order/review.png')} alt="review img" />
+                            <img src={require('resources/order/review.png')} alt="review img" />
                         </Grid>
                         <Grid item={true} lg={12} md={12} xs={12}>
                             {this.renderStepper()}
@@ -329,7 +329,7 @@ export class ProfileOrderList extends React.PureComponent { // eslint-disable-li
                 return (
                     <Grid container={true} style={{ textAlign: 'center' }} spacing={2} className="mb-1">
                         <Grid item={true} lg={12} md={12} xs={12}>
-                            <img src={require('Resources/order/thank_you.png')} alt="confirm review img" />
+                            <img src={require('resources/order/thank_you.png')} alt="confirm review img" />
                         </Grid>
                         <Grid item={true} lg={12} md={12} xs={12}>
                             <Typography fontWeight="fontWeightBold" display="block" gutterBottom={true}>Thank you very much for your Beauty review,</Typography>

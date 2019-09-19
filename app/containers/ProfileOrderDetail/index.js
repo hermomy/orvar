@@ -93,7 +93,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
                 return (
                     <div className="item-label-container text-xs-center">
                         <img
-                            src={require('Resources/order/beauty_grab_label.png')}
+                            src={require('resources/order/beauty_grab_label.png')}
                             alt="beauty-grab-label"
                             width="100%"
                             className="item-label"
@@ -104,7 +104,7 @@ export class ProfileOrderDetail extends React.PureComponent { // eslint-disable-
             return (
                 <div className="item-label-container text-xs-center">
                     <img
-                        src={require('Resources/order/free_item_label.png')}
+                        src={require('resources/order/free_item_label.png')}
                         alt="free-item-label"
                         width="100%"
                         className="item-label"
