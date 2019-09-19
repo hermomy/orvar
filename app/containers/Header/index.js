@@ -15,7 +15,7 @@ import injectReducer from 'utils/injectReducer';
 
 import { NavLink, withRouter } from 'react-router-dom';
 // import CartPage from 'containers/CartPage';
-import { dataChecking } from 'globalUtils';
+import { dataChecking, Events } from 'globalUtils';
 import Highlighter from 'react-highlight-words';
 import globalScope from 'globalScope';
 
@@ -80,6 +80,10 @@ export class Header extends React.PureComponent {
             arrowRef: null,
         };
         this.getSearchResult = this.getSearchResult.bind(this);
+
+        Events.listen('hideHeader', 123456, () => {
+            this.setState({ hideHeader: true });
+        });
     }
 
     componentDidMount() {
@@ -115,7 +119,7 @@ export class Header extends React.PureComponent {
 
     megaMenu = () => {
         let content;
-        dataChecking(this.props.header, 'header', 'data').map((data) => {
+        this.props.header.header.data.map((data) => {
             if (this.state.anchorElID === 'category-directory') {
                 if (data.code === 'category-directory') {
                     content = (
@@ -283,7 +287,7 @@ export class Header extends React.PureComponent {
                                             <Menu color="primary" className={this.props.classes.icon} />
                                         </IconButton>
                                     </Grid>
-                                    <Grid item={true} xs={8}>
+                                    <Grid item={true} xs={8} className="header-home-logo-hamburger">
                                         <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100px" className="p-1" />
                                     </Grid>
                                 </Grid>
@@ -349,7 +353,7 @@ export class Header extends React.PureComponent {
     rightHeader = () => {
         console.log();
         return (
-            <Grid item={true}>
+            <Grid item={true} className="right-header">
                 <IconButton onClick={this.state.searchBar ? () => this.setState({ searchBar: !this.state.searchBar, searchQuery: '' }) : () => this.setState({ searchBar: !this.state.searchBar })}>
                     {
                         this.state.searchBar ?
@@ -386,10 +390,10 @@ export class Header extends React.PureComponent {
     }
 
     leftHeader = () => (
-        <Grid item={true} style={{ flex: 1 }}>
+        <Grid item={true} style={{ flex: 1 }} className="left-header">
             {
                 this.state.searchBar ?
-                    <div className="animated fadeInLeft">
+                    <div className="animated fadeIn">
                         <TextField
                             autoFocus={true}
                             value={this.state.searchQuery}
@@ -406,9 +410,9 @@ export class Header extends React.PureComponent {
                             }}
                         />
                     </div>
-                :
-                    <Grid className="animated fadeInLeft" container={true} spacing={2} alignItems="center">
-                        <Grid item={true}>
+                    :
+                    <Grid className="animated fadeIn" container={true} spacing={2} alignItems="center">
+                        <Grid item={true} className="header-home-logo-desktop">
                             <NavLink to="/">
                                 <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" style={{ width: '100px' }} />
                             </NavLink>
@@ -707,10 +711,17 @@ export class Header extends React.PureComponent {
      * top nav section with data came from api /layout/top-nav
      */
     renderTopCategory = () => (
-        <Grid container={true} className={`top-nav ${!this.state.hideSearchBar ? 'show' : ''}`}>
+        <Grid
+            container={true}
+            className={`
+                top-nav
+                ${!this.state.hideSearchBar ? 'show' : ''}
+                ${this.props.header.header.data ? '' : 'opacity-zero'}
+            `}
+        >
             {
-                dataChecking(this.props.header, 'header', 'data').map((val) => (
-                    <Grid item={true} className="ml-3 category" key={val.code}>
+                this.props.header.header.data && this.props.header.header.data.map((val) => (
+                    <Grid item={true} className="ml-3 category animated fadeIn" key={val.code}>
                         {
                             val.type === 'category-directory' ?
                                 <div>
@@ -755,7 +766,7 @@ export class Header extends React.PureComponent {
     renderSearchResult = (type) => {
         let searchQueryResult;
         if (!this.props.header.suggestionData.error) {
-            dataChecking(this.props.header, 'suggestionData', 'data').map((data) => {
+            this.props.header.suggestionData.data.map((data) => {
                 if (data.type === type) {
                     searchQueryResult = data.items.map((item, key) => (
                         <div className="mb-1" key={key}>
@@ -874,113 +885,110 @@ export class Header extends React.PureComponent {
         }
 
         return (
-            dataChecking(this.props.header, 'header', 'data') ?
-                <div>
-                    <AppBar color="default">
-                        <Hidden smDown={true}>
-                            <div className={this.props.classes.header}>
-                                <Container className="header-desktop">
+            <div className="header-wrapper">
+                <AppBar color="default">
+                    <Hidden smDown={true}>
+                        <div className={`header-desktop ${this.props.classes.header}`}>
+                            <Container className="header-desktop-container">
+                                <Grid container={true} alignItems="center">
+                                    {this.leftHeader()}
+                                    {this.rightHeader()}
+                                </Grid>
+                            </Container>
+                            <Popper
+                                className={this.props.classes.popper}
+                                style={{ zIndex: 1101, maxWidth: '20rem' }}
+                                open={this.state.userOpen}
+                                placement="top"
+                                anchorEl={this.state.anchorEl}
+                                onMouseEnter={() => this.setState({ userOpen: true })}
+                                onMouseLeave={() => this.setState({ userOpen: false })}
+                                modifiers={{
+                                    arrow: {
+                                        enabled: true,
+                                        element: this.state.arrowRef,
+                                    },
+                                }}
+                            >
+                                <span className={this.props.classes.arrow} ref={(node) => this.setState({ arrowRef: node })} />
+                                {this.renderUserSection()}
+                            </Popper>
+                        </div>
+                    </Hidden>
+                    <Hidden mdUp={true}>
+                        <div className={this.props.classes.headerMobile}>
+                            <Grid container={true} justify="space-between" alignItems="center" style={{ padding: '1rem 1rem 0 1rem' }}>
+                                <Grid item={true}>
                                     <Grid container={true} alignItems="center">
-                                        {this.leftHeader()}
-                                        {this.rightHeader()}
-                                    </Grid>
-                                </Container>
-                                <Popper
-                                    className={this.props.classes.popper}
-                                    style={{ zIndex: 1101, maxWidth: '20rem' }}
-                                    open={this.state.userOpen}
-                                    placement="top"
-                                    anchorEl={this.state.anchorEl}
-                                    onMouseEnter={() => this.setState({ userOpen: true })}
-                                    onMouseLeave={() => this.setState({ userOpen: false })}
-                                    modifiers={{
-                                        arrow: {
-                                            enabled: true,
-                                            element: this.state.arrowRef,
-                                        },
-                                    }}
-                                >
-                                    <span className={this.props.classes.arrow} ref={(node) => this.setState({ arrowRef: node })} />
-                                    {this.renderUserSection()}
-                                </Popper>
-                            </div>
-                        </Hidden>
-                        <Hidden mdUp={true}>
-                            <div className={this.props.classes.headerMobile}>
-                                <Grid container={true} justify="space-between" alignItems="center" style={{ padding: '1rem 1rem 0 1rem' }}>
-                                    <Grid item={true}>
-                                        <Grid container={true} alignItems="center">
-                                            <Grid item={true}>
-                                                <IconButton onClick={this.toggleDrawer}>
-                                                    <Menu color="primary" className={this.props.classes.icon} />
-                                                </IconButton>
-                                            </Grid>
-                                            <Grid item={true}>
-                                                <NavLink to="/">
-                                                    <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100px" />
-                                                </NavLink>
-                                            </Grid>
+                                        <Grid item={true}>
+                                            <IconButton onClick={this.toggleDrawer}>
+                                                <Menu color="primary" className={this.props.classes.icon} />
+                                            </IconButton>
+                                        </Grid>
+                                        <Grid item={true} className="header-home-logo-mobile">
+                                            <NavLink to="/">
+                                                <img src={require('images/hermo-logo-image.png')} alt="Hermo Logo" width="100px" />
+                                            </NavLink>
                                         </Grid>
                                     </Grid>
-                                    <Grid item={true}>
-                                        <IconButton
-                                            id="profile"
-                                            onClick={(evt) => this.setState({
-                                                anchorEl: evt.currentTarget,
-                                                userOpen: !this.state.userOpen,
-                                            })}
-                                        >
-                                            <Person className={this.props.classes.icon} />
-                                        </IconButton>
-                                        <IconButton
-                                            className="mobile-cart"
-                                        >
-                                            <Badge
-                                                color="secondary"
-                                                badgeContent={dataChecking(this.props.header, 'cart', 'data', 'data', 'summary', 'cart_qty') && this.props.header.cart.data.data.summary.cart_qty}
-                                                invisible={dataChecking(this.props.header, 'cart', 'data', 'data') && this.props.header.cart.data.data.attribute.is_empty}
-                                            >
-                                                <ShoppingCart className={this.props.classes.icon} />
-                                            </Badge>
-                                        </IconButton>
-                                    </Grid>
                                 </Grid>
-                                {
-                                    this.state.userOpen ?
-                                        <div>
-                                            {this.renderUserSection()}
-                                        </div>
-                                    :
-                                        null
-                                }
-                                <div style={{ padding: '0 1rem 1rem 1rem' }}>
-                                    <TextField
-                                        className={this.props.classes.mobileSearch}
-                                        autoFocus={true}
-                                        value={this.state.searchQuery}
-                                        onChange={this.getSearchResult}
-                                        variant="outlined"
-                                        autoComplete="off"
-                                        margin="dense"
-                                        placeholder="Search for Products, Brands, etc.."
-                                        InputProps={{
-                                            startAdornment: (
-                                                <InputAdornment position="start">
-                                                    <Search />
-                                                </InputAdornment>
-                                            ),
-                                        }}
-                                    />
-                                </div>
+                                <Grid item={true}>
+                                    <IconButton
+                                        id="profile"
+                                        onClick={(evt) => this.setState({
+                                            anchorEl: evt.currentTarget,
+                                            userOpen: !this.state.userOpen,
+                                        })}
+                                    >
+                                        <Person className={this.props.classes.icon} />
+                                    </IconButton>
+                                    <IconButton
+                                        className="mobile-cart"
+                                    >
+                                        <Badge
+                                            color="secondary"
+                                            badgeContent={dataChecking(this.props.header, 'cart', 'data', 'data', 'summary', 'cart_qty') && this.props.header.cart.data.data.summary.cart_qty}
+                                            invisible={dataChecking(this.props.header, 'cart', 'data', 'data') && this.props.header.cart.data.data.attribute.is_empty}
+                                        >
+                                            <ShoppingCart className={this.props.classes.icon} />
+                                        </Badge>
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
+                            {
+                                this.state.userOpen ?
+                                    <div>
+                                        {this.renderUserSection()}
+                                    </div>
+                                :
+                                    null
+                            }
+                            <div style={{ padding: '0 1rem 1rem 1rem' }}>
+                                <TextField
+                                    className={this.props.classes.mobileSearch}
+                                    autoFocus={true}
+                                    value={this.state.searchQuery}
+                                    onChange={this.getSearchResult}
+                                    variant="outlined"
+                                    autoComplete="off"
+                                    margin="dense"
+                                    placeholder="Search for Products, Brands, etc.."
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <Search />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
                             </div>
-                            {this.hamburger()}
-                        </Hidden>
-                    </AppBar>
-                    {this.state.anchorElID && this.megaMenu()}
-                    {this.renderSearchSection()}
-                </div>
-            :
-            null
+                        </div>
+                        {this.hamburger()}
+                    </Hidden>
+                </AppBar>
+                {this.state.anchorElID && this.megaMenu()}
+                {this.renderSearchSection()}
+            </div>
         );
     }
 }
