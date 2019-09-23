@@ -21,16 +21,24 @@ import {
     CardHeader,
     Container,
     Divider,
+    FormControl,
     Grid,
     Hidden,
     IconButton,
+    InputLabel,
+    OutlinedInput,
+    Select,
+    TextField,
     Typography,
 } from '@material-ui/core';
 import {
     Favorite,
 } from '@material-ui/icons';
+import { NavLink } from 'react-router-dom';
+import PopupDialog from 'components/PopupDialog';
 import {
     getReview,
+    getOrder,
 } from './actions';
 import makeSelectBeautyWall from './selectors';
 import reducer from './reducer';
@@ -41,14 +49,17 @@ export class BeautyWall extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            hasMoreItems: true,
             reviews: [],
             nextHref: null,
+            hasMoreItems: true,
+            popup: false,
         };
     }
     componentDidMount() {
         this.props.dispatch(getReview());
+        this.props.dispatch(getOrder());
     }
+
     componentWillReceiveProps(nextProps) {
         if (dataChecking(nextProps, 'beautyWall', 'data', 'items') && nextProps.beautyWall.data !== this.props.beautyWall.data) {
             const reviews = [...this.state.reviews];
@@ -63,7 +74,32 @@ export class BeautyWall extends React.PureComponent {
             }
         }
     }
-
+    /**
+     *  onClick action to handle popup
+     */
+    onActionButtonClick = (type) => {
+        let dialogTitle = null;
+        switch (type) {
+            case 'show_off':
+                dialogTitle = 'Show Off Your Purchase!';
+                this.setState({ popup: !this.state.popup });
+                break;
+            default:
+                break;
+        }
+        this.setState({
+            dialogTitle,
+            dialogType: type,
+        });
+    }
+    onClose = () => {
+        this.setState({
+            popup: false,
+        });
+    }
+    /**
+     *  fetch api for infinite loop
+     */
     loadItems = () => {
         let url = '/beauty-wall';
         if (this.state.nextHref) {
@@ -73,9 +109,53 @@ export class BeautyWall extends React.PureComponent {
         this.setState({ hasMoreItems: false });
     }
     /**
-     *  POPUP SHOW OFF YOUR PURCHASE - form for submit review
+     *  POPUP
      */
-    renderPopup = () => {}
+    renderDialogContent = () => {
+        switch (this.state.dialogType) {
+            case 'show_off':
+                return (
+                    <div>
+                        <Typography variant="caption">At least one order must be created before writing a review.</Typography>
+                        <InputLabel className="text-capitalize pb-half">Choose an order to show off. <NavLink to="/profile/order">See All Orders</NavLink></InputLabel>
+                        <FormControl variant="outlined" fullWidth={true}>
+                            <Select
+                                native={true}
+                                id="order"
+                                value={this.state.order}
+                                onChange={this.handleChange}
+                                input={
+                                    <OutlinedInput />
+                                }
+                                required={true}
+                            >
+                                {/* {this.orders()} */}
+                            </Select>
+                        </FormControl>
+                        <InputLabel className="text-capitalize pb-half">Upload an image of the package we sent.</InputLabel>
+                        <FormControl fullWidth={true}>
+                            {/* UPLOAD */}
+                        </FormControl>
+                        <InputLabel className="text-capitalize pb-half">What do you think of the package?</InputLabel>
+                        <FormControl fullWidth={true}>
+                            <TextField type="text" multiline={true}></TextField>
+                        </FormControl>
+                        <FormControl fullWidth={true} className="py-1">
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                            >
+                                Submit My Review
+                            </Button>
+                        </FormControl>
+                    </div>
+                );
+            default:
+                break;
+        }
+        return null;
+    }
 
     /**
      *  BEAUTYWALL BANNER - display image banner
@@ -92,14 +172,14 @@ export class BeautyWall extends React.PureComponent {
                         <img src={this.props.beautyWall.data.banner.image.desktop} alt={this.props.beautyWall.data.banner.name} />
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                        <Button>Show off your purchase!</Button>
+                        <Button onClick={() => this.onActionButtonClick('show_off')}>Show off your purchase!</Button>
                     </div>
                 </Hidden>
                 <Hidden className="wall-beauty-banner-mobile" mdUp={true}>
                     <div className="img-banner-mobile">
                         <img src={this.props.beautyWall.data.banner.image.mobile} alt={this.props.beautyWall.data.banner.name} />
                     </div>
-                    <Button>Show off your purchase!</Button>
+                    <Button onClick={() => this.onActionButtonClick('show_off')}>Show off your purchase!</Button>
                 </Hidden>
             </div>
         );
@@ -163,6 +243,13 @@ export class BeautyWall extends React.PureComponent {
                                     {this.renderBeautyWall()}
                                 </div>
                             </InfiniteScroll>
+                            <PopupDialog
+                                display={this.state.popup}
+                                title={this.state.dialogTitle}
+                                onClose={() => this.onClose()}
+                            >
+                                {this.renderDialogContent()}
+                            </PopupDialog>
                         </Container>
                     </div>
                 }
