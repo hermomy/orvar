@@ -38,6 +38,7 @@ import { NavLink } from 'react-router-dom';
 import PopupDialog from 'components/PopupDialog';
 import {
     getReview,
+    getReviewDetails,
     getOrder,
 } from './actions';
 import makeSelectBeautyWall from './selectors';
@@ -82,6 +83,10 @@ export class BeautyWall extends React.PureComponent {
         switch (type) {
             case 'show_off':
                 dialogTitle = 'Show Off Your Purchase!';
+                this.setState({ popup: !this.state.popup });
+                break;
+            case 'review':
+                dialogTitle = '';
                 this.setState({ popup: !this.state.popup });
                 break;
             default:
@@ -151,6 +156,39 @@ export class BeautyWall extends React.PureComponent {
                         </FormControl>
                     </div>
                 );
+            case 'review':
+                if (dataChecking(this.props, 'beautyWall', 'reviewDetails', 'data')) {
+                    const reviewDetails = dataChecking(this.props, 'beautyWall', 'reviewDetails', 'data');
+                    return (
+                        <div>
+                            <img src={dataChecking(reviewDetails, 'image', 'square')} alt="product review" />
+                            <Typography>{reviewDetails.username}</Typography>
+                            <IconButton style={{ alignItem: 'right' }}>
+                                <Favorite />
+                            </IconButton>
+                            <Typography>{reviewDetails.created_at}</Typography>
+                            <Typography>{reviewDetails.created_text}</Typography>
+                            <Typography>{reviewDetails.comment}</Typography>
+                            <Divider />
+                            <Typography>{reviewDetails.username} has bought these products:</Typography>
+                            {
+                                reviewDetails.products.map((product) => (
+                                    <NavLink key={product.id} to={product.url}>
+                                        <img src={dataChecking(product, 'image', 'small')} alt="product" />
+                                    </NavLink>
+                                ))
+                            }
+                            {
+                                reviewDetails.hashtags.map((hashtag) => (
+                                    <NavLink key={hashtag.id} to={hashtag.url}>
+                                        <Typography>#{hashtag.name}</Typography>
+                                    </NavLink>
+                                ))
+                            }
+                        </div>
+                    );
+                }
+                break;
             default:
                 break;
         }
@@ -193,7 +231,7 @@ export class BeautyWall extends React.PureComponent {
                 this.state.reviews.map((review, index) => (
                     <Grid key={index} item={true} xs={12} md={3}>
                         <Card>
-                            <CardActionArea>
+                            <CardActionArea onClick={() => { this.onActionButtonClick('review'); this.props.dispatch(getReviewDetails(review.id)); }}>
                                 <img src={dataChecking(review, 'image', 'square')} alt="product review" />
                             </CardActionArea>
                             <CardHeader

@@ -8,6 +8,9 @@ import {
     GET_REVIEW,
     GET_REVIEW_SUCCESS,
     GET_REVIEW_FAILED,
+    GET_REVIEW_DETAILS,
+    GET_REVIEW_DETAILS_SUCCESS,
+    GET_REVIEW_DETAILS_FAILED,
     GET_ORDER,
     GET_ORDER_SUCCESS,
     GET_ORDER_FAILED,
@@ -30,6 +33,25 @@ export function getReviewFailed(reviewData) {
     return {
         type: GET_REVIEW_FAILED,
         reviewData,
+    };
+}
+export function getReviewDetails(id) {
+    return {
+        type: GET_REVIEW_DETAILS,
+        id,
+    };
+}
+
+export function getReviewDetailsSuccess(reviewDetailsData) {
+    return {
+        type: GET_REVIEW_DETAILS_SUCCESS,
+        reviewDetailsData,
+    };
+}
+export function getReviewDetailsFailed(reviewDetailsData) {
+    return {
+        type: GET_REVIEW_DETAILS_FAILED,
+        reviewDetailsData,
     };
 }
 export function getOrder(url) {

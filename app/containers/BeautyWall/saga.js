@@ -2,12 +2,15 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import {
     GET_REVIEW,
     GET_ORDER,
+    GET_REVIEW_DETAILS,
 } from './constants';
 import {
     getReviewSuccess,
     getReviewFailed,
     getOrderSuccess,
     getOrderFailed,
+    getReviewDetailsSuccess,
+    getReviewDetailsFailed,
 } from './actions';
 import { staticErrorResponse, apiRequest } from '../../globalUtils';
 
@@ -27,6 +30,24 @@ export function* getReviewWorker(action) {
     } catch (e) {
         console.log('error: ', e);
         yield put(getReviewFailed(e));
+    }
+}
+export function* getReviewDetailsWorker(action) {
+    let err;
+
+    try { // Trying the HTTP Request
+        const response = yield call(apiRequest, `/beauty-wall/${action.id}`);
+        if (response && response.ok !== false) {
+            yield put(getReviewDetailsSuccess(response.data));
+        } else if (response && response.ok === false) {
+            yield put(getReviewDetailsFailed(response.data));
+        } else {
+            err = staticErrorResponse({ text: 'No response from server' });
+            throw err;
+        }
+    } catch (e) {
+        console.log('error: ', e);
+        yield put(getReviewDetailsFailed(e));
     }
 }
 export function* getOrderWorker() {
@@ -50,5 +71,6 @@ export function* getOrderWorker() {
 // Individual exports for testing
 export default function* beautyWallSaga() {
     yield takeLatest(GET_REVIEW, getReviewWorker);
+    yield takeLatest(GET_REVIEW_DETAILS, getReviewDetailsWorker);
     yield takeLatest(GET_ORDER, getOrderWorker);
 }

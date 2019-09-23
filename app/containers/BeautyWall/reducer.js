@@ -9,6 +9,9 @@ import {
     GET_REVIEW,
     GET_REVIEW_SUCCESS,
     GET_REVIEW_FAILED,
+    GET_REVIEW_DETAILS,
+    GET_REVIEW_DETAILS_SUCCESS,
+    GET_REVIEW_DETAILS_FAILED,
     GET_ORDER,
     GET_ORDER_SUCCESS,
     GET_ORDER_FAILED,
@@ -22,6 +25,11 @@ export const initialState = fromJS({
         success: false,
     },
     order: {
+        loading: false,
+        error: false,
+        success: false,
+    },
+    reviewDetails: {
         loading: false,
         error: false,
         success: false,
@@ -46,6 +54,22 @@ function beautyWallReducer(state = initialState, action) {
                 .setIn(['review', 'loading'], false)
                 .setIn(['review', 'error'], true)
                 .set('data', null);
+        case GET_REVIEW_DETAILS:
+            return state
+                .setIn(['reviewDetails', 'loading'], true)
+                .setIn(['reviewDetails', 'error'], false)
+                .setIn(['reviewDetails', 'data'], null);
+        case GET_REVIEW_DETAILS_SUCCESS:
+            return state
+                .setIn(['reviewDetails', 'success'], true)
+                .setIn(['reviewDetails', 'loading'], false)
+                .setIn(['reviewDetails', 'error'], false)
+                .setIn(['reviewDetails', 'data'], action.reviewDetailsData);
+        case GET_REVIEW_DETAILS_FAILED:
+            return state
+                .setIn(['reviewDetails', 'loading'], false)
+                .setIn(['reviewDetails', 'error'], true)
+                .setIn(['reviewDetails', 'data'], action.reviewDetailsData);
         case GET_ORDER:
             return state
                 .setIn(['order', 'loading'], true)
