@@ -40,6 +40,7 @@ import {
     getReview,
     getReviewDetails,
     getOrder,
+    postLike,
 } from './actions';
 import makeSelectBeautyWall from './selectors';
 import reducer from './reducer';
@@ -163,7 +164,7 @@ export class BeautyWall extends React.PureComponent {
                         <div>
                             <img src={dataChecking(reviewDetails, 'image', 'square')} alt="product review" />
                             <Typography>{reviewDetails.username}</Typography>
-                            <IconButton style={{ alignItem: 'right' }}>
+                            <IconButton style={{ alignItem: 'right' }} onClick={() => this.props.dispatch(postLike(reviewDetails.id))}>
                                 <Favorite />
                             </IconButton>
                             <Typography>{reviewDetails.created_at}</Typography>
@@ -239,7 +240,7 @@ export class BeautyWall extends React.PureComponent {
                                 subheader={<div>{review.created_at}<br />{review.created_text}</div>}
                                 action={
                                     <div>
-                                        <IconButton>
+                                        <IconButton onClick={() => this.props.dispatch(postLike(review.id))}>
                                             <Favorite />
                                         </IconButton>
                                     </div>
@@ -248,7 +249,7 @@ export class BeautyWall extends React.PureComponent {
                             <CardContent>
                                 <Typography>{review.comment}</Typography>
                             </CardContent>
-                            <CardActionArea>
+                            <CardActionArea onClick={() => { this.onActionButtonClick('review'); this.props.dispatch(getReviewDetails(review.id)); }}>
                                 <Typography className="action view-more p-half"style={{ float: 'right' }}>View More</Typography>
                             </CardActionArea>
                         </Card>

@@ -14,6 +14,9 @@ import {
     GET_ORDER,
     GET_ORDER_SUCCESS,
     GET_ORDER_FAILED,
+    POST_LIKE,
+    POST_LIKE_SUCCESS,
+    POST_LIKE_FAILED,
 } from './constants';
 
 export function getReview(url) {
@@ -73,3 +76,23 @@ export function getOrderFailed(orderData) {
         orderData,
     };
 }
+export function postLike(id) {
+    return {
+        type: POST_LIKE,
+        id,
+    };
+}
+
+export function postLikeSuccess(likeData) {
+    return {
+        type: POST_LIKE_SUCCESS,
+        likeData,
+    };
+}
+export function postLikeFailed(likeData) {
+    return {
+        type: POST_LIKE_FAILED,
+        likeData,
+    };
+}
+

@@ -1,8 +1,10 @@
+import { notifySuccess, notifyError } from 'containers/Notify';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import {
     GET_REVIEW,
     GET_ORDER,
     GET_REVIEW_DETAILS,
+    POST_LIKE,
 } from './constants';
 import {
     getReviewSuccess,
@@ -11,6 +13,8 @@ import {
     getOrderFailed,
     getReviewDetailsSuccess,
     getReviewDetailsFailed,
+    postLikeSuccess,
+    postLikeFailed,
 } from './actions';
 import { staticErrorResponse, apiRequest } from '../../globalUtils';
 
@@ -68,9 +72,30 @@ export function* getOrderWorker() {
         yield put(getOrderFailed(e));
     }
 }
+export function* postLikeWorker(action) {
+    let err;
+
+    try { // Trying the HTTP Request
+        const response = yield call(apiRequest, `/beauty-wall/${action.id}`, 'post');
+        if (response && response.ok !== false) {
+            yield put(postLikeSuccess(response.data));
+            notifySuccess(response.data.messages[0].text);
+        } else if (response && response.ok === false) {
+            yield put(postLikeFailed(response.data));
+            notifyError(response.data.messages[0].text);
+        } else {
+            err = staticErrorResponse({ text: 'No response from server' });
+            throw err;
+        }
+    } catch (e) {
+        console.log('error: ', e);
+        yield put(postLikeFailed(e));
+    }
+}
 // Individual exports for testing
 export default function* beautyWallSaga() {
     yield takeLatest(GET_REVIEW, getReviewWorker);
     yield takeLatest(GET_REVIEW_DETAILS, getReviewDetailsWorker);
     yield takeLatest(GET_ORDER, getOrderWorker);
+    yield takeLatest(POST_LIKE, postLikeWorker);
 }

@@ -15,6 +15,9 @@ import {
     GET_ORDER,
     GET_ORDER_SUCCESS,
     GET_ORDER_FAILED,
+    POST_LIKE,
+    POST_LIKE_SUCCESS,
+    POST_LIKE_FAILED,
 } from './constants';
 
 export const initialState = fromJS({
@@ -30,6 +33,11 @@ export const initialState = fromJS({
         success: false,
     },
     reviewDetails: {
+        loading: false,
+        error: false,
+        success: false,
+    },
+    like: {
         loading: false,
         error: false,
         success: false,
@@ -86,6 +94,22 @@ function beautyWallReducer(state = initialState, action) {
                 .setIn(['order', 'loading'], false)
                 .setIn(['order', 'error'], true)
                 .setIn(['order', 'data'], action.orderData);
+        case POST_LIKE:
+            return state
+                .setIn(['like', 'loading'], true)
+                .setIn(['like', 'error'], false)
+                .setIn(['like', 'data'], null);
+        case POST_LIKE_SUCCESS:
+            return state
+                .setIn(['like', 'success'], true)
+                .setIn(['like', 'loading'], false)
+                .setIn(['like', 'error'], false)
+                .setIn(['like', 'data'], action.likeData);
+        case POST_LIKE_FAILED:
+            return state
+                .setIn(['like', 'loading'], false)
+                .setIn(['like', 'error'], true)
+                .setIn(['like', 'data'], action.likeData);
         default:
             return state;
     }
