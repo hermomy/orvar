@@ -28,19 +28,20 @@ import {
     InputLabel,
     OutlinedInput,
     Select,
-    TextField,
     Typography,
 } from '@material-ui/core';
 import {
     Favorite,
 } from '@material-ui/icons';
 import { NavLink } from 'react-router-dom';
+import InputForm from 'components/InputForm';
 import PopupDialog from 'components/PopupDialog';
 import {
     getReview,
     getReviewDetails,
     getOrder,
     postLike,
+    postShowOff,
 } from './actions';
 import makeSelectBeautyWall from './selectors';
 import reducer from './reducer';
@@ -52,6 +53,9 @@ export class BeautyWall extends React.PureComponent {
         super(props);
         this.state = {
             reviews: [],
+            comment: '',
+            order_id: '',
+            image: null,
             nextHref: null,
             hasMoreItems: true,
             popup: false,
@@ -74,6 +78,15 @@ export class BeautyWall extends React.PureComponent {
             } else {
                 this.setState({ reviews });
             }
+        }
+        if (dataChecking(nextProps, 'beautyWall', 'order', 'data') && nextProps.beautyWall.order.data !== this.props.beautyWall.order.data) {
+            if (nextProps.beautyWall.order.data.items.length !== 0) {
+                this.setState({ order_id: nextProps.beautyWall.order.data.items[0].id });
+            }
+        }
+        if (nextProps.beautyWall.showOff.success !== this.props.beautyWall.showOff.success) {
+            this.props.dispatch(getOrder());
+            this.onClose();
         }
     }
     /**
@@ -101,11 +114,23 @@ export class BeautyWall extends React.PureComponent {
     onClose = () => {
         this.setState({
             popup: false,
+            comment: '',
+            order_id: '',
+            image: '',
         });
     }
     handleChange = (event) => {
         this.setState({ [event.target.id]: event.target.value });
     };
+    handleSubmit = (event) => {
+        const showOffData = {
+            comment: this.state.comment,
+            order_id: this.state.order_id,
+            image: this.state.image,
+        };
+        this.props.dispatch(postShowOff(showOffData));
+        event.preventDefault();
+    }
     /**
      *  fetch api for infinite loop
      */
@@ -117,6 +142,84 @@ export class BeautyWall extends React.PureComponent {
         this.props.dispatch(getReview(url));
         this.setState({ hasMoreItems: false });
     }
+
+    renderShowOff = () => {
+        const order = dataChecking(this.props, 'beautyWall', 'order', 'success') && this.props.beautyWall.order;
+        const orderList = dataChecking(this.props, 'beautyWall', 'order', 'success') && dataChecking(order, 'data', 'items').map((item) => (
+            <option key={item.id} value={item.id}>
+                {item.number}
+            </option>
+        ));
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <Typography variant="caption">At least one order must be created before writing a review.</Typography>
+                <InputLabel className="text-capitalize pb-half">Choose an order to show off. <NavLink to="/profile/order">See All Orders</NavLink></InputLabel>
+                <FormControl variant="outlined" fullWidth={true}>
+                    <Select
+                        native={true}
+                        id="order_id"
+                        value={this.state.order_id}
+                        onChange={this.handleChange}
+                        input={
+                            <OutlinedInput />
+                        }
+                        required={true}
+                    >
+                        {orderList}
+                    </Select>
+                </FormControl>
+                <InputLabel className="text-capitalize pb-half">Upload an image of the package we sent.</InputLabel>
+                <FormControl fullWidth={true}>
+                    <div className="image-review-uploader files">
+                        <input
+                            id="image"
+                            accept="image/*"
+                            type="file"
+                            required={true}
+                            className="form-control"
+                            onChange={(event) => {
+                                const file = event.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.readAsDataURL(file);
+                                    reader.onload = () => {
+                                        const result = reader.result;
+                                        const fileString = (result.split(';base64,')[1]) || null;
+                                        this.setState({ image: fileString });
+                                    };
+                                    reader.onerror = (error) => {
+                                        console.log('Error: ', error);
+                                    };
+                                }
+                            }}
+                        />
+                    </div>
+                </FormControl>
+                <InputLabel className="text-capitalize pb-half">What do you think of the package?</InputLabel>
+                <FormControl fullWidth={true}>
+                    <InputForm
+                        id="comment"
+                        type="text"
+                        multiline={true}
+                        onClear={() => {
+                            this.setState({ comment: '' });
+                        }}
+                        value={this.state.comment}
+                        handleChange={this.handleChange}
+                    />
+                </FormControl>
+                <FormControl fullWidth={true} className="py-1">
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                    >
+                        Submit My Review
+                    </Button>
+                </FormControl>
+            </form>
+        );
+    }
     /**
      *  POPUP
      *  NEED EDIT ON DATA HANDLING AND SUBMISSION
@@ -126,58 +229,7 @@ export class BeautyWall extends React.PureComponent {
             case 'show_off':
                 return (
                     <div>
-                        <Typography variant="caption">At least one order must be created before writing a review.</Typography>
-                        <InputLabel className="text-capitalize pb-half">Choose an order to show off. <NavLink to="/profile/order">See All Orders</NavLink></InputLabel>
-                        <FormControl variant="outlined" fullWidth={true}>
-                            <Select
-                                native={true}
-                                id="order"
-                                value={this.state.order}
-                                onChange={this.handleChange}
-                                input={
-                                    <OutlinedInput />
-                                }
-                                required={true}
-                            >
-                                {/* {this.orders()} */}
-                            </Select>
-                        </FormControl>
-                        <InputLabel className="text-capitalize pb-half">Upload an image of the package we sent.</InputLabel>
-                        <FormControl fullWidth={true}>
-                            <input
-                                id="image-uploader"
-                                accept="image/*"
-                                type="file"
-                                style={{ display: 'none' }}
-                                /* onChange={(event) => {
-                                    const file = dataChecking(event, 'target', 'files', 0);
-                                    if (file) {
-                                        const reader = new FileReader();
-                                        reader.readAsDataURL(file);
-                                        reader.onload = () => {
-                                            const result = reader.result;
-                                            const fileString = (result.split(';base64')[1]) || null;
-                                        };
-                                        reader.onerror = (error) => {
-                                            console.log('Error: ', error);
-                                        };
-                                    }
-                                }} */
-                            />
-                        </FormControl>
-                        <InputLabel className="text-capitalize pb-half">What do you think of the package?</InputLabel>
-                        <FormControl fullWidth={true}>
-                            <TextField type="text" multiline={true}></TextField>
-                        </FormControl>
-                        <FormControl fullWidth={true} className="py-1">
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                            >
-                                Submit My Review
-                            </Button>
-                        </FormControl>
+                        {dataChecking(this.props, 'beautyWall', 'order', 'success') && dataChecking(this.props, 'beautyWall', 'order', 'data', 'items') && this.renderShowOff()}
                     </div>
                 );
             case 'review':
@@ -234,7 +286,7 @@ export class BeautyWall extends React.PureComponent {
                         <img src={dataChecking(this.props.beautyWall, 'data', 'banner', 'image', 'desktop') || null} alt={this.props.beautyWall.data.banner.name} />
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                        <Button onClick={() => this.onActionButtonClick('show_off')}>Show off your purchase!</Button>
+                        <Button variant="contained" color="primary" onClick={() => this.onActionButtonClick('show_off')}>Show off your purchase!</Button>
                     </div>
                 </Hidden>
                 <Hidden className="wall-beauty-banner-mobile" mdUp={true}>

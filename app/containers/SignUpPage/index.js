@@ -93,6 +93,7 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
 
     handleChange = (event) => {
         this.setState({ [event.target.id]: event.target.value });
+        console.log(event.target.id);
     };
     handleChangeNumber = (event) => {
         const onlyNums = event.target.value.replace(/[^0-9]/g, '');

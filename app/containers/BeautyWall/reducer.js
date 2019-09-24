@@ -18,6 +18,9 @@ import {
     POST_LIKE,
     POST_LIKE_SUCCESS,
     POST_LIKE_FAILED,
+    POST_SHOWOFF,
+    POST_SHOWOFF_SUCCESS,
+    POST_SHOWOFF_FAILED,
 } from './constants';
 
 export const initialState = fromJS({
@@ -38,6 +41,11 @@ export const initialState = fromJS({
         success: false,
     },
     like: {
+        loading: false,
+        error: false,
+        success: false,
+    },
+    showOff: {
         loading: false,
         error: false,
         success: false,
@@ -110,6 +118,23 @@ function beautyWallReducer(state = initialState, action) {
                 .setIn(['like', 'loading'], false)
                 .setIn(['like', 'error'], true)
                 .setIn(['like', 'data'], action.likeData);
+        case POST_SHOWOFF:
+            return state
+                .setIn(['showOff', 'loading'], true)
+                .setIn(['showOff', 'success'], false)
+                .setIn(['showOff', 'error'], false)
+                .setIn(['showOff', 'data'], null);
+        case POST_SHOWOFF_SUCCESS:
+            return state
+                .setIn(['showOff', 'success'], true)
+                .setIn(['showOff', 'loading'], false)
+                .setIn(['showOff', 'error'], false)
+                .setIn(['showOff', 'data'], action.showOffData);
+        case POST_SHOWOFF_FAILED:
+            return state
+                .setIn(['showOff', 'loading'], false)
+                .setIn(['showOff', 'error'], true)
+                .setIn(['showOff', 'data'], action.showOffData);
         default:
             return state;
     }

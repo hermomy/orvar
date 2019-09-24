@@ -17,6 +17,9 @@ import {
     POST_LIKE,
     POST_LIKE_SUCCESS,
     POST_LIKE_FAILED,
+    POST_SHOWOFF,
+    POST_SHOWOFF_SUCCESS,
+    POST_SHOWOFF_FAILED,
 } from './constants';
 
 export function getReview(url) {
@@ -93,6 +96,25 @@ export function postLikeFailed(likeData) {
     return {
         type: POST_LIKE_FAILED,
         likeData,
+    };
+}
+export function postShowOff(data) {
+    return {
+        type: POST_SHOWOFF,
+        data,
+    };
+}
+
+export function postShowOffSuccess(showOffData) {
+    return {
+        type: POST_SHOWOFF_SUCCESS,
+        showOffData,
+    };
+}
+export function postShowOffFailed(showOffData) {
+    return {
+        type: POST_SHOWOFF_FAILED,
+        showOffData,
     };
 }
 

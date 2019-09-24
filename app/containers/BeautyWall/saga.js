@@ -5,6 +5,7 @@ import {
     GET_ORDER,
     GET_REVIEW_DETAILS,
     POST_LIKE,
+    POST_SHOWOFF,
 } from './constants';
 import {
     getReviewSuccess,
@@ -15,6 +16,8 @@ import {
     getReviewDetailsFailed,
     postLikeSuccess,
     postLikeFailed,
+    postShowOffSuccess,
+    postShowOffFailed,
 } from './actions';
 import { staticErrorResponse, apiRequest } from '../../globalUtils';
 
@@ -92,10 +95,31 @@ export function* postLikeWorker(action) {
         yield put(postLikeFailed(e));
     }
 }
+export function* postShowOffWorker(action) {
+    let err;
+
+    try { // Trying the HTTP Request
+        const response = yield call(apiRequest, '/beauty-wall', 'post', action.data);
+        if (response && response.ok !== false) {
+            yield put(postShowOffSuccess(response.data));
+            notifySuccess(response.data.messages[0].text);
+        } else if (response && response.ok === false) {
+            yield put(postShowOffFailed(response.data));
+            notifyError(response.data.messages[0].text);
+        } else {
+            err = staticErrorResponse({ text: 'No response from server' });
+            throw err;
+        }
+    } catch (e) {
+        console.log('error: ', e);
+        yield put(postShowOffFailed(e));
+    }
+}
 // Individual exports for testing
 export default function* beautyWallSaga() {
     yield takeLatest(GET_REVIEW, getReviewWorker);
     yield takeLatest(GET_REVIEW_DETAILS, getReviewDetailsWorker);
     yield takeLatest(GET_ORDER, getOrderWorker);
     yield takeLatest(POST_LIKE, postLikeWorker);
+    yield takeLatest(POST_SHOWOFF, postShowOffWorker);
 }

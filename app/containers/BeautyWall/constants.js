@@ -17,3 +17,6 @@ export const GET_ORDER_FAILED = `${page}/GET_ORDER_FAILED`;
 export const POST_LIKE = `${page}/POST_LIKE`;
 export const POST_LIKE_SUCCESS = `${page}/POST_LIKE_SUCCESS`;
 export const POST_LIKE_FAILED = `${page}/POST_LIKE_FAILED`;
+export const POST_SHOWOFF = `${page}/POST_SHOWOFF`;
+export const POST_SHOWOFF_SUCCESS = `${page}/POST_SHOWOFF_SUCCESS`;
+export const POST_SHOWOFF_FAILED = `${page}/POST_SHOWOFF_FAILED`;
