@@ -103,6 +103,9 @@ export class BeautyWall extends React.PureComponent {
             popup: false,
         });
     }
+    handleChange = (event) => {
+        this.setState({ [event.target.id]: event.target.value });
+    };
     /**
      *  fetch api for infinite loop
      */
@@ -116,6 +119,7 @@ export class BeautyWall extends React.PureComponent {
     }
     /**
      *  POPUP
+     *  NEED EDIT ON DATA HANDLING AND SUBMISSION
      */
     renderDialogContent = () => {
         switch (this.state.dialogType) {
@@ -140,7 +144,26 @@ export class BeautyWall extends React.PureComponent {
                         </FormControl>
                         <InputLabel className="text-capitalize pb-half">Upload an image of the package we sent.</InputLabel>
                         <FormControl fullWidth={true}>
-                            {/* UPLOAD */}
+                            <input
+                                id="image-uploader"
+                                accept="image/*"
+                                type="file"
+                                style={{ display: 'none' }}
+                                /* onChange={(event) => {
+                                    const file = dataChecking(event, 'target', 'files', 0);
+                                    if (file) {
+                                        const reader = new FileReader();
+                                        reader.readAsDataURL(file);
+                                        reader.onload = () => {
+                                            const result = reader.result;
+                                            const fileString = (result.split(';base64')[1]) || null;
+                                        };
+                                        reader.onerror = (error) => {
+                                            console.log('Error: ', error);
+                                        };
+                                    }
+                                }} */
+                            />
                         </FormControl>
                         <InputLabel className="text-capitalize pb-half">What do you think of the package?</InputLabel>
                         <FormControl fullWidth={true}>
@@ -162,7 +185,7 @@ export class BeautyWall extends React.PureComponent {
                     const reviewDetails = dataChecking(this.props, 'beautyWall', 'reviewDetails', 'data');
                     return (
                         <div>
-                            <img src={dataChecking(reviewDetails, 'image', 'square')} alt="product review" />
+                            <img src={dataChecking(reviewDetails, 'image', 'square') || null} alt="product review" />
                             <Typography>{reviewDetails.username}</Typography>
                             <IconButton style={{ alignItem: 'right' }} onClick={() => this.props.dispatch(postLike(reviewDetails.id))}>
                                 <Favorite />
@@ -175,7 +198,7 @@ export class BeautyWall extends React.PureComponent {
                             {
                                 reviewDetails.products.map((product) => (
                                     <NavLink key={product.id} to={product.url}>
-                                        <img src={dataChecking(product, 'image', 'small')} alt="product" />
+                                        <img src={dataChecking(product, 'image', 'small') || null} alt="product" />
                                     </NavLink>
                                 ))
                             }
@@ -208,7 +231,7 @@ export class BeautyWall extends React.PureComponent {
             <div className="div wall-beauty-top-banner">
                 <Hidden className="wall-beauty-banner-desktop" smDown={true}>
                     <div className="img-banner-desktop">
-                        <img src={this.props.beautyWall.data.banner.image.desktop} alt={this.props.beautyWall.data.banner.name} />
+                        <img src={dataChecking(this.props.beautyWall, 'data', 'banner', 'image', 'desktop') || null} alt={this.props.beautyWall.data.banner.name} />
                     </div>
                     <div style={{ textAlign: 'center' }}>
                         <Button onClick={() => this.onActionButtonClick('show_off')}>Show off your purchase!</Button>
@@ -216,7 +239,7 @@ export class BeautyWall extends React.PureComponent {
                 </Hidden>
                 <Hidden className="wall-beauty-banner-mobile" mdUp={true}>
                     <div className="img-banner-mobile">
-                        <img src={this.props.beautyWall.data.banner.image.mobile} alt={this.props.beautyWall.data.banner.name} />
+                        <img src={dataChecking(this.props.beautyWall, 'data', 'banner', 'image', 'mobile') || null} alt={this.props.beautyWall.data.banner.name} />
                     </div>
                     <Button onClick={() => this.onActionButtonClick('show_off')}>Show off your purchase!</Button>
                 </Hidden>
@@ -233,7 +256,7 @@ export class BeautyWall extends React.PureComponent {
                     <Grid key={index} item={true} xs={12} md={3}>
                         <Card>
                             <CardActionArea onClick={() => { this.onActionButtonClick('review'); this.props.dispatch(getReviewDetails(review.id)); }}>
-                                <img src={dataChecking(review, 'image', 'square')} alt="product review" />
+                                <img src={dataChecking(review, 'image', 'square') || null} alt="product review" />
                             </CardActionArea>
                             <CardHeader
                                 title={review.username}
@@ -260,7 +283,7 @@ export class BeautyWall extends React.PureComponent {
     )
 
     render() {
-        const loader = <div className="loader">Loading ....</div>;
+        const loader = <div className="loader" key={0}>Loading ....</div>;
         return (
             <div>
                 {
