@@ -43,6 +43,7 @@ import BeautyWall from 'containers/BeautyWall';
 import GamesPage from 'containers/GamesPage';
 
 import Header from 'containers/Header';
+import Footer from 'containers/Footer';
 import { ProfileWallet } from '../ProfileWallet';
 import './style.scss';
 
@@ -114,6 +115,7 @@ export default function App() {
                     <Route component={NotFoundPage} />
                 </Switch>
             </div>
+            <Footer />
         </section>
     );
 }
