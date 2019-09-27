@@ -468,7 +468,7 @@ export class Header extends React.PureComponent {
                         >
                             <Grid container={true}>
                                 <Grid item={true} xs={2}>
-                                    <img src={require('Resources/header/profile-icon.png')} alt="profile-icon" style={imgStyle} />
+                                    <img src={require('resources/header/profile-icon.png')} alt="profile-icon" style={imgStyle} />
                                 </Grid>
                                 <Grid item={true} xs={10}>
                                     <Typography
@@ -493,7 +493,7 @@ export class Header extends React.PureComponent {
                         >
                             <Grid container={true}>
                                 <Grid item={true} xs={2}>
-                                    <img src={require('Resources/header/order-icon.png')} alt="order-icon" style={imgStyle} />
+                                    <img src={require('resources/header/order-icon.png')} alt="order-icon" style={imgStyle} />
                                 </Grid>
                                 <Grid item={true} xs={10}>
                                     <Typography
@@ -518,7 +518,7 @@ export class Header extends React.PureComponent {
                         >
                             <Grid container={true}>
                                 <Grid item={true} xs={2}>
-                                    <img src={require('Resources/header/rewards-icon.png')} alt="rewards-icon" style={imgStyle} />
+                                    <img src={require('resources/header/rewards-icon.png')} alt="rewards-icon" style={imgStyle} />
                                 </Grid>
                                 <Grid item={true} xs={10}>
                                     <Typography
@@ -543,7 +543,7 @@ export class Header extends React.PureComponent {
                         >
                             <Grid container={true}>
                                 <Grid item={true} xs={2}>
-                                    <img src={require('Resources/header/wallet-icon.png')} alt="wallet-icon" style={imgStyle} />
+                                    <img src={require('resources/header/wallet-icon.png')} alt="wallet-icon" style={imgStyle} />
                                 </Grid>
                                 <Grid item={true} xs={10}>
                                     <Typography
@@ -568,7 +568,7 @@ export class Header extends React.PureComponent {
                         >
                             <Grid container={true}>
                                 <Grid item={true} xs={2}>
-                                    <img src={require('Resources/header/wishlist-icon.png')} alt="wishlist-icon" style={imgStyle} />
+                                    <img src={require('resources/header/wishlist-icon.png')} alt="wishlist-icon" style={imgStyle} />
                                 </Grid>
                                 <Grid item={true} xs={10}>
                                     <Typography
@@ -593,7 +593,7 @@ export class Header extends React.PureComponent {
                         >
                             <Grid container={true}>
                                 <Grid item={true} xs={2}>
-                                    <img src={require('Resources/header/settings-icon.png')} alt="settings-icon" style={imgStyle} />
+                                    <img src={require('resources/header/settings-icon.png')} alt="settings-icon" style={imgStyle} />
                                 </Grid>
                                 <Grid item={true} xs={10}>
                                     <Typography
