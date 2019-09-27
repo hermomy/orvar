@@ -33,6 +33,7 @@ import {
 import {
     Favorite,
 } from '@material-ui/icons';
+import globalScope from 'globalScope';
 import { NavLink } from 'react-router-dom';
 import InputForm from 'components/InputForm';
 import PopupDialog from 'components/PopupDialog';
@@ -79,7 +80,7 @@ export class BeautyWall extends React.PureComponent {
                 this.setState({ reviews });
             }
         }
-        if (dataChecking(nextProps, 'beautyWall', 'order', 'data') && nextProps.beautyWall.order.data !== this.props.beautyWall.order.data) {
+        if (globalScope.token && dataChecking(nextProps, 'beautyWall', 'order', 'data') && nextProps.beautyWall.order.data !== this.props.beautyWall.order.data) {
             if (nextProps.beautyWall.order.data.items.length !== 0) {
                 this.setState({ order_id: nextProps.beautyWall.order.data.items[0].id });
             }
@@ -150,75 +151,78 @@ export class BeautyWall extends React.PureComponent {
                 {item.number}
             </option>
         ));
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <Typography variant="caption">At least one order must be created before writing a review.</Typography>
-                <InputLabel className="text-capitalize pb-half">Choose an order to show off. <NavLink to="/profile/order">See All Orders</NavLink></InputLabel>
-                <FormControl variant="outlined" fullWidth={true}>
-                    <Select
-                        native={true}
-                        id="order_id"
-                        value={this.state.order_id}
-                        onChange={this.handleChange}
-                        input={
-                            <OutlinedInput />
-                        }
-                        required={true}
-                    >
-                        {orderList}
-                    </Select>
-                </FormControl>
-                <InputLabel className="text-capitalize pb-half">Upload an image of the package we sent.</InputLabel>
-                <FormControl fullWidth={true}>
-                    <div className="image-review-uploader files">
-                        <input
-                            id="image"
-                            accept="image/*"
-                            type="file"
+        if (globalScope.token) {
+            return (
+                <form onSubmit={this.handleSubmit}>
+                    <Typography variant="caption">At least one order must be created before writing a review.</Typography>
+                    <InputLabel className="text-capitalize pb-half">Choose an order to show off. <NavLink to="/profile/order">See All Orders</NavLink></InputLabel>
+                    <FormControl variant="outlined" fullWidth={true}>
+                        <Select
+                            native={true}
+                            id="order_id"
+                            value={this.state.order_id}
+                            onChange={this.handleChange}
+                            input={
+                                <OutlinedInput />
+                            }
                             required={true}
-                            className="form-control"
-                            onChange={(event) => {
-                                const file = event.target.files[0];
-                                if (file) {
-                                    const reader = new FileReader();
-                                    reader.readAsDataURL(file);
-                                    reader.onload = () => {
-                                        const result = reader.result;
-                                        const fileString = (result.split(';base64,')[1]) || null;
-                                        this.setState({ image: fileString });
-                                    };
-                                    reader.onerror = (error) => {
-                                        console.log('Error: ', error);
-                                    };
-                                }
+                        >
+                            {orderList}
+                        </Select>
+                    </FormControl>
+                    <InputLabel className="text-capitalize pb-half">Upload an image of the package we sent.</InputLabel>
+                    <FormControl fullWidth={true}>
+                        <div className="image-review-uploader files">
+                            <input
+                                id="image"
+                                accept="image/*"
+                                type="file"
+                                required={true}
+                                className="form-control"
+                                onChange={(event) => {
+                                    const file = event.target.files[0];
+                                    if (file) {
+                                        const reader = new FileReader();
+                                        reader.readAsDataURL(file);
+                                        reader.onload = () => {
+                                            const result = reader.result;
+                                            const fileString = (result.split(';base64,')[1]) || null;
+                                            this.setState({ image: fileString });
+                                        };
+                                        reader.onerror = (error) => {
+                                            console.log('Error: ', error);
+                                        };
+                                    }
+                                }}
+                            />
+                        </div>
+                    </FormControl>
+                    <InputLabel className="text-capitalize pb-half">What do you think of the package?</InputLabel>
+                    <FormControl fullWidth={true}>
+                        <InputForm
+                            id="comment"
+                            type="text"
+                            multiline={true}
+                            onClear={() => {
+                                this.setState({ comment: '' });
                             }}
+                            value={this.state.comment}
+                            handleChange={this.handleChange}
                         />
-                    </div>
-                </FormControl>
-                <InputLabel className="text-capitalize pb-half">What do you think of the package?</InputLabel>
-                <FormControl fullWidth={true}>
-                    <InputForm
-                        id="comment"
-                        type="text"
-                        multiline={true}
-                        onClear={() => {
-                            this.setState({ comment: '' });
-                        }}
-                        value={this.state.comment}
-                        handleChange={this.handleChange}
-                    />
-                </FormControl>
-                <FormControl fullWidth={true} className="py-1">
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                    >
-                        Submit My Review
-                    </Button>
-                </FormControl>
-            </form>
-        );
+                    </FormControl>
+                    <FormControl fullWidth={true} className="py-1">
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                        >
+                            Submit My Review
+                        </Button>
+                    </FormControl>
+                </form>
+            );
+        }
+        return null;
     }
     /**
      *  POPUP
@@ -282,15 +286,18 @@ export class BeautyWall extends React.PureComponent {
         return (
             <div className="div wall-beauty-top-banner">
                 <Hidden className="wall-beauty-banner-desktop" smDown={true}>
-                    <div className="img-banner-desktop">
+                    <div className="img-banner-desktop" style={{ width: '100%' }}>
                         <img src={dataChecking(this.props.beautyWall, 'data', 'banner', 'image', 'desktop') || null} alt={this.props.beautyWall.data.banner.name} />
                     </div>
-                    <div style={{ textAlign: 'center' }}>
-                        <Button variant="contained" color="primary" onClick={() => this.onActionButtonClick('show_off')}>Show off your purchase!</Button>
-                    </div>
+                    {
+                        globalScope.token &&
+                        <div style={{ textAlign: 'center' }}>
+                            <Button variant="contained" color="primary" onClick={() => this.onActionButtonClick('show_off')}>Show off your purchase!</Button>
+                        </div>
+                    }
                 </Hidden>
                 <Hidden className="wall-beauty-banner-mobile" mdUp={true}>
-                    <div className="img-banner-mobile">
+                    <div className="img-banner-mobile" style={{ width: '100%' }}>
                         <img src={dataChecking(this.props.beautyWall, 'data', 'banner', 'image', 'mobile') || null} alt={this.props.beautyWall.data.banner.name} />
                     </div>
                     <Button onClick={() => this.onActionButtonClick('show_off')}>Show off your purchase!</Button>
