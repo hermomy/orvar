@@ -1,6 +1,14 @@
 @import 'app/breakpoints';
 
-#header {    
+.header-wrapper {
+    padding-top: 5.4rem;
+
+    .header-desktop {
+        min-height: 3rem;
+    }
+}
+
+#header {
     display: flex;
     align-items: center;
     height: 80px;
@@ -48,7 +56,7 @@
                 left: 0;
                 bottom: 0;
                 right: 0;
-            } 
+            }
             .search-icon { display: none; }
 
             input { width: 72vw; }

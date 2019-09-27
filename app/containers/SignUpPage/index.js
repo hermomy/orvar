@@ -93,6 +93,7 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
 
     handleChange = (event) => {
         this.setState({ [event.target.id]: event.target.value });
+        console.log(event.target.id);
     };
     handleChangeNumber = (event) => {
         const onlyNums = event.target.value.replace(/[^0-9]/g, '');
@@ -136,13 +137,13 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
         return (
             <Grid container={true} className="py-1" justify="space-around" alignItems="center" direction="row">
                 <Grid item={true} className="p-quater" align="center" xs={4}>
-                    <img src={require('Resources/authPage/signup-wishlist.png')} alt="Wishlist" style={imgStyle} />
+                    <img src={require('resources/authPage/signup-wishlist.png')} alt="Wishlist" style={imgStyle} />
                 </Grid>
                 <Grid item={true} className="p-quater" align="center" xs={4}>
-                    <img src={require('Resources/authPage/signup-order.png')} alt="Order" style={imgStyle} />
+                    <img src={require('resources/authPage/signup-order.png')} alt="Order" style={imgStyle} />
                 </Grid>
                 <Grid item={true} className="p-quater" align="center" xs={4}>
-                    <img src={require('Resources/authPage/signup-birthday-rewards.png')} alt="rewards" style={imgStyle} />
+                    <img src={require('resources/authPage/signup-birthday-rewards.png')} alt="rewards" style={imgStyle} />
                 </Grid>
             </Grid>
         );
