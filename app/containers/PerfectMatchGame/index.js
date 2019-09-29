@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
@@ -386,7 +386,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
 }
 
 PerfectMatchGame.propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    // dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

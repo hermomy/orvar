@@ -1,6 +1,28 @@
 @import 'app/breakpoints';
 
-#header {    
+.header-wrapper {
+    @include media-breakpoint-only(lg) {
+        padding-top: 5.3rem;
+    }
+
+    @include media-breakpoint-only(sm) {
+        padding-top: 5.3rem;
+    }
+
+    @include media-breakpoint-only(sm) {
+        padding-top: 8.7rem;
+    }
+
+    @include media-breakpoint-down(xs) {
+        padding-top: 12rem;
+    }
+
+    .header-desktop {
+        min-height: 3rem;
+    }
+}
+
+#header {
     display: flex;
     align-items: center;
     height: 80px;
@@ -48,7 +70,7 @@
                 left: 0;
                 bottom: 0;
                 right: 0;
-            } 
+            }
             .search-icon { display: none; }
 
             input { width: 72vw; }
