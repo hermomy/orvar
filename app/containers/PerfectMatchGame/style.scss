@@ -1,30 +1,64 @@
 .perfect-match-game-page {
     position: relative;
 
+    div, img {
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+    }
+
+    .page-buttons {
+        color: black;
+        position: absolute;
+        top: 2%;
+        left: 0;
+        right: 0;
+        width: 94%;
+        z-index: 5000;
+        margin: auto;
+
+        .page-button-item {
+            width: 10%;
+            display: inline-block;
+
+            &.to-left { float: left; }
+            &.to-right { float: right; }
+        }
+    }
+
     .idle-screen, .game-screen, .result-screen {
         text-align: center;
         position: absolute;
-        top: 5rem;
+        top: 0;
         left: 0;
         right: 0;
         bottom: 0;
 
-        .game-card-images {
-            text-align: center;
-
-            .game-card-image {
-                width: 37%;
-            }
+        .game-panel {
+            padding-top: 10%;
         }
+
+        // .game-card-image {
+        //     // &.correct-match { background-color: lightseagreen; }
+        //     // &.wrong-match { background-color: red; }
+        // }
 
         .ready-go-container {
             font-size: 15rem;
             position: absolute;
-            top: 7rem;
-            left: 2rem;
-            right: 2rem;
-            background-color: #FFF6;
-            border-radius: 15px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #EEE9;
+            // border-radius: 15px;
+            z-index: 8000;
+
+            .ready-go {
+                display: inline-block;
+            }
         }
 
         .countdown-timer {
@@ -38,7 +72,17 @@
 
             .flickable-card {
                 width: 30%;
-                // display: inline-block;
+
+                .react-card-front,
+                .react-card-back {
+                    display: flex;
+                }
+                // margin: 0 0.35rem;
+
+                .react-card-back {
+                    position: absolute;
+                    z-index: 2;
+                }
             }
         }
     }

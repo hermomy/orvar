@@ -73,6 +73,9 @@ const styles = {
             borderStyle: 'solid',
         },
     },
+    cardCart: {
+        width: '35rem',
+    },
     // arrowDiv: {
     //     position: 'absolute',
     //     fontSize: 14,

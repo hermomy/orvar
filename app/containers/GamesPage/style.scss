@@ -1,24 +1,86 @@
-.game-page { overflow: hidden; }
+.games-login-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background-color: #0008;
+}
 
-.game-container {
+.games-page {
     min-height: 300px;
-    max-width: 600px;
+    max-height: 100vh;
+    margin: auto;
+    overflow: hidden;
     display: flex;
     flex: 1;
-    margin: auto;
+    justify-content: center;
+
+    img {
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+        // pointer-events: none;
+    }
+}
+
+.game-container {
     position: relative;
-    overflow: hidden;
+    height: 100%;
+    max-height: 100vh;
+    max-width: 100%;
+
+    .main-menu-wrapper {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+        .main-menu-container {
+            position: relative;
+        }
+    }
+
+    .page-buttons {
+        color: black;
+        position: absolute;
+        top: 2%;
+        left: 0;
+        right: 0;
+        width: 94%;
+        z-index: 5000;
+        margin: auto;
+
+        .page-button-item {
+            width: 10%;
+            display: inline-block;
+
+            &.to-left { float: left; }
+            &.to-right { float: right; }
+        }
+    }
+
+    .main-menu-bg {
+        max-width: 100vw;
+        max-height: 100vh;
+    }
 
     .main-menu-buttons {
         position: absolute;
         z-index: 10;
         margin: auto;
-        width: 300px;
-        bottom: 180px;
+        bottom: 10%;
         left: 0;
         right: 0;
+        text-align: center;
 
         .main-menu-button-item {
+            width: 50%;
+            max-width: 300px;
             cursor: pointer;
             background-color: #AAA0;
             transition: transform .5s, background-color.5s;
@@ -42,15 +104,5 @@
 
     .modal-inner-div {
         position: relative;
-
-        .modal-close-button {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 7%;
-            z-index: 9999;
-
-            .close-button-icon { width: 100%; }
-        }
     }
 }

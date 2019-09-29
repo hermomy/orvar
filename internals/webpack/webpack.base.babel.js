@@ -29,6 +29,14 @@ module.exports = (options) => ({
                 },
             },
             {
+                // Preprocess our music files
+                // This is the place to add your own loaders (e.g. mp3 etc.)
+                // for a list of loaders, see https://webpack.js.org/loaders/#styling
+                test: /\.(mp3$|wav)$/,
+                exclude: /node_modules/,
+                loader: 'file-loader',
+            },
+            {
                 // Preprocess our own .css files
                 // This is the place to add your own loaders (e.g. sass/less etc.)
                 // for a list of loaders, see https://webpack.js.org/loaders/#styling
