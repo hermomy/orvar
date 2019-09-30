@@ -97,6 +97,7 @@ export default function App() {
                         component={AboutUs}
                     />
                     <PrivateRoute exact={true} path="/feedback" component={FeedbackPage} />
+                    <PrivateRoute exact={true} path="/cart" component={CartPage} />
                     <PrivateRoute exact={true} path="/checkout" component={CheckoutPage} />
                     <PrivateRoute exact={true} path="/profile" component={ProfilePage} />
                     <PrivateRoute exact={true} path="/profile/address" component={ProfileAddress} />

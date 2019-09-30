@@ -1,10 +1,12 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
+import { notifySuccess, notifyError } from 'containers/Notify';
 import {
     LAYOUT_TOP_NAV,
     SEARCH_RESULT,
     GET_IMG_LINK,
     GET_USER_DATA,
     GET_CART_DATA,
+    ITEM_DELETE,
 } from './constants';
 import {
     layoutTopNavSuccess,
@@ -17,6 +19,8 @@ import {
     getUserDataFailed,
     getCartDataSuccess,
     getCartDataFailed,
+    removeItemInCartSuccess,
+    removeItemInCartFail,
 } from './actions';
 import { staticErrorResponse, apiRequest } from '../../globalUtils';
 
@@ -73,9 +77,9 @@ export function* getCartDataWorker() {
     try { // Trying the HTTP Request
         const response = yield call(apiRequest, '/cart');
         if (response && response.ok !== false) {
-            yield put(getCartDataSuccess(response));
+            yield put(getCartDataSuccess(response.data));
         } else if (response && response.ok === false) {
-            yield put(getCartDataFailed(response));
+            yield put(getCartDataFailed(response.data));
         } else {
             err = staticErrorResponse({ text: 'No response from server' });
             throw err;
@@ -85,7 +89,16 @@ export function* getCartDataWorker() {
         yield put(getCartDataFailed(e));
     }
 }
-
+export function* deleteItemInCart(action) {
+    const response = yield call(apiRequest, `/cart/${action.id}`, 'delete');
+    if (response && response.ok) {
+        yield put(removeItemInCartSuccess(response.data));
+        notifySuccess(response.data.messages[0].text);
+    } else {
+        yield put(removeItemInCartFail(response.data));
+        notifyError(response.data.messages[0].text);
+    }
+}
 // Individual exports for testing
 export default function* headerSaga() {
     yield takeLatest(LAYOUT_TOP_NAV, getTopNav);
@@ -93,4 +106,5 @@ export default function* headerSaga() {
     yield takeLatest(GET_IMG_LINK, imgLinkQuery);
     yield takeLatest(GET_USER_DATA, getUserDataWorker);
     yield takeLatest(GET_CART_DATA, getCartDataWorker);
+    yield takeLatest(ITEM_DELETE, deleteItemInCart);
 }

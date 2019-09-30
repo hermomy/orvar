@@ -5,6 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
+// import { dataChecking } from 'globalUtils';
 import {
     LAYOUT_TOP_NAV,
     LAYOUT_TOP_NAV_SUCCESS,
@@ -21,6 +22,9 @@ import {
     GET_CART_DATA,
     GET_CART_DATA_SUCCESS,
     GET_CART_DATA_FAILED,
+    ITEM_DELETE,
+    ITEM_DELETE_SUCCESS,
+    ITEM_DELETE_FAIL,
 } from './constants';
 
 
@@ -46,6 +50,11 @@ export const initialState = fromJS({
         data: null,
     },
     cart: {
+        loading: false,
+        error: false,
+        data: null,
+    },
+    delete: {
         loading: false,
         error: false,
         data: null,
@@ -118,17 +127,38 @@ function headerReducer(state = initialState, action) {
             return state
                 .setIn(['cart', 'loading'], true)
                 .setIn(['cart', 'error'], false)
+                .setIn(['cart', 'success'], false)
                 .setIn(['cart', 'data'], null);
         case GET_CART_DATA_SUCCESS:
             return state
                 .setIn(['cart', 'loading'], false)
                 .setIn(['cart', 'error'], false)
+                .setIn(['cart', 'success'], true)
                 .setIn(['cart', 'data'], action.cartData);
         case GET_CART_DATA_FAILED:
             return state
                 .setIn(['cart', 'loading'], false)
                 .setIn(['cart', 'error'], true)
+                .setIn(['cart', 'success'], false)
                 .setIn(['cart', 'data'], action.cartData);
+        case ITEM_DELETE:
+            return state
+                .setIn(['delete', 'loading'], true)
+                .setIn(['delete', 'error'], false)
+                .setIn(['cart', 'success'], false)
+                .setIn(['cart', 'data'], null);
+        case ITEM_DELETE_SUCCESS:
+            return state
+                .setIn(['delete', 'loading'], false)
+                .setIn(['delete', 'error'], false)
+                .setIn(['cart', 'success'], true)
+                .setIn(['cart', 'data'], action.itemUpdate.cart);
+        case ITEM_DELETE_FAIL:
+            return state
+                .setIn(['delete', 'loading'], false)
+                .setIn(['delete', 'error'], true)
+                .setIn(['cart', 'success'], false)
+                .setIn(['cart', 'data'], action.itemUpdate.cart);
         default:
             return state;
     }
