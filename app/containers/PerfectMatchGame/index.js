@@ -150,10 +150,23 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
     }
 
     shuffleArray = (array) => {
-        const newArr = [];
-        array.forEach((item) => {
-            newArr[Math.floor(Math.random() * 2) ? 'push' : 'unshift'](item);
-        });
+        // const newArr = [];
+        // array.forEach((item) => {
+        //     newArr[Math.floor(Math.random() * 2) ? 'push' : 'unshift'](item);
+        // });
+        // return newArr;
+
+        let index = null;
+        let temp = null;
+        const newArr = [...array];
+        let counter = newArr.length - 1;
+        while (counter > 0) {
+            index = Math.floor(Math.random() * counter);
+            temp = newArr[counter];
+            newArr[counter] = newArr[index];
+            newArr[index] = temp;
+            counter--;
+        }
 
         return newArr;
     }

@@ -12,7 +12,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { Events } from 'globalUtils';
+import { dataChecking, Events } from 'globalUtils';
 import globalScope from 'globalScope';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -76,6 +76,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             playMusic: false,
             showLogin: false,
             requestToken: false,
+            hideLoginModal: false,
         };
     }
 
@@ -92,6 +93,14 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             } else {
                 this.setState({ requestToken: true });
             }
+        }
+    }
+
+    componentWillReceiveProps = (nextProps) => {
+        if (dataChecking(nextProps, 'gamesPage', 'login', 'success') !== dataChecking(this.props, 'gamesPage', 'login', 'success') && nextProps.gamesPage.login.success) {
+            setTimeout(() => {
+                this.setState({ hideLoginModal: true });
+            }, 1000);
         }
     }
 
@@ -134,7 +143,12 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                 </div>
                 <div>
                     <Button variant="contained" color="primary" type="submit" style={{ width: '100%' }}>
-                        Login
+                        {
+                            dataChecking(this.props, 'gamesPage', 'login', 'loading') || dataChecking(this.props, 'gamesPage', 'login', 'success') ?
+                                'Loading...'
+                                :
+                                'Login'
+                        }
                     </Button>
                 </div>
             </form>
@@ -182,120 +196,119 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
     render() {
         return (
             <div className="games-page">
-                {
-                    this.state.requestToken ?
-                        <span className="games-login-modal">
-                            {this.renderLogin()}
-                        </span>
-                        :
-                        null
-                }
                 <div className="game-container">
-                    <div className="main-menu-wrapper">
-                        <div className="main-menu-content">
-                            {/* <div
-                                className="back-button gotoshop"
-                                onClick={() => {
-                                    console.log('gotoshop', window.goToShop);
+                    {
+                        this.state.requestToken && !this.state.hideLoginModal ?
+                            <span className="games-login-modal animated fa">
+                                {this.renderLogin()}
+                            </span>
+                            :
+                            <div className="main-menu-wrapper">
+                                <div className="main-menu-content">
+                                    {/* <div
+                                        className="back-button gotoshop"
+                                        onClick={() => {
+                                            console.log('gotoshop', window.goToShop);
 
-                                    if (window.goToShop) {
-                                        window.goToShop();
-                                    }
-                                }}
-                            >
-                                <i className="fas fa-store-alt"></i>
-                            </div> */}
-                            <div className="page-buttons">
-                                {
-                                    this.state.showModal ?
+                                            if (window.goToShop) {
+                                                window.goToShop();
+                                            }
+                                        }}
+                                    >
+                                        <i className="fas fa-store-alt"></i>
+                                    </div> */}
+                                    <div className="page-buttons">
+                                        {
+                                            this.state.showModal ?
+                                                <div
+                                                    className="toggle-back page-button-item"
+                                                    onClick={() => {
+                                                        this.setState({ showModal: null });
+                                                        if (this.state.playMusic && this.state.showModal === 'showPlay') {
+                                                            idleMusic.currentTime = 0;
+                                                            idleMusic.play();
+                                                        }
+                                                    }}
+                                                >
+                                                    <img
+                                                        draggable="false"
+                                                        width="100%"
+                                                        src={require('./rsc/icons8-left-3-96.png')}
+                                                        alt="play"
+                                                        className="main-menu-button-item animated zoomIn"
+                                                    />
+                                                </div>
+                                                :
+                                                null
+                                        }
                                         <div
-                                            className="toggle-back page-button-item"
+                                            className="toggle-music page-button-item to-right"
                                             onClick={() => {
-                                                this.setState({ showModal: null });
-                                                if (this.state.playMusic && this.state.showModal === 'showPlay') {
-                                                    idleMusic.currentTime = 0;
-                                                    idleMusic.play();
-                                                }
+                                                this.setState({ playMusic: !this.state.playMusic });
+                                                idleMusic[!this.state.playMusic ? 'play' : 'pause']();
                                             }}
+                                        >
+                                            {
+                                                this.state.playMusic ?
+                                                    <img
+                                                        draggable="false"
+                                                        width="100%"
+                                                        src={require('./rsc/icons8-sound-100.png')}
+                                                        alt="play"
+                                                        className="main-menu-button-item animated zoomIn"
+                                                    />
+                                                    :
+                                                    <img
+                                                        draggable="false"
+                                                        width="100%"
+                                                        src={require('./rsc/icons8-mute-100.png')}
+                                                        alt="play"
+                                                        className="main-menu-button-item animated zoomIn"
+                                                    />
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className="main-menu-buttons animated slideInDown fadeIn">
+                                        <div
+                                            onClick={
+                                                () => {
+                                                    if (this.state.playMusic) {
+                                                        const startSound = new Audio(require('./rsc/sound/Start_button.wav'));
+                                                        startSound.play();
+                                                    }
+                                                    setTimeout(() => {
+                                                        this.setState({ showModal: 'showPlay', gameId: 1 });
+                                                    }, 0);
+                                                }
+                                            }
                                         >
                                             <img
                                                 draggable="false"
-                                                width="100%"
-                                                src={require('./rsc/icons8-left-3-96.png')}
+                                                src={require('./rsc/button_play.png')}
                                                 alt="play"
-                                                className="main-menu-button-item animated zoomIn"
+                                                className="main-menu-button-item animated slideInRight"
                                             />
                                         </div>
-                                        :
-                                        null
-                                }
-                                <div
-                                    className="toggle-music page-button-item to-right"
-                                    onClick={() => {
-                                        this.setState({ playMusic: !this.state.playMusic });
-                                        idleMusic[!this.state.playMusic ? 'play' : 'pause']();
-                                    }}
-                                >
-                                    {
-                                        this.state.playMusic ?
+                                        <div onClick={() => this.setState({ showModal: 'slideShow', slideArray: prizeSlide })}>
                                             <img
                                                 draggable="false"
-                                                width="100%"
-                                                src={require('./rsc/icons8-sound-100.png')}
-                                                alt="play"
-                                                className="main-menu-button-item animated zoomIn"
+                                                src={require('./rsc/button_prizes.png')}
+                                                alt="prizes"
+                                                className="main-menu-button-item animated slideInLeft"
                                             />
-                                            :
+                                        </div>
+                                        <div onClick={() => this.setState({ showModal: 'slideShow', slideArray: howToSlide })}>
                                             <img
                                                 draggable="false"
-                                                width="100%"
-                                                src={require('./rsc/icons8-mute-100.png')}
-                                                alt="play"
-                                                className="main-menu-button-item animated zoomIn"
+                                                src={require('./rsc/button_how.png')}
+                                                alt="how to play"
+                                                className="main-menu-button-item animated slideInRight"
                                             />
-                                    }
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="main-menu-buttons animated slideInDown fadeIn">
-                                <div
-                                    onClick={
-                                        () => {
-                                            if (this.state.playMusic) {
-                                                const startSound = new Audio(require('./rsc/sound/Start_button.wav'));
-                                                startSound.play();
-                                            }
-                                            setTimeout(() => {
-                                                this.setState({ showModal: 'showPlay', gameId: 1 });
-                                            }, 0);
-                                        }
-                                    }
-                                >
-                                    <img
-                                        draggable="false"
-                                        src={require('./rsc/button_play.png')}
-                                        alt="play"
-                                        className="main-menu-button-item animated slideInRight"
-                                    />
-                                </div>
-                                <div onClick={() => this.setState({ showModal: 'slideShow', slideArray: prizeSlide })}>
-                                    <img
-                                        draggable="false"
-                                        src={require('./rsc/button_prizes.png')}
-                                        alt="prizes"
-                                        className="main-menu-button-item animated slideInLeft"
-                                    />
-                                </div>
-                                <div onClick={() => this.setState({ showModal: 'slideShow', slideArray: howToSlide })}>
-                                    <img
-                                        draggable="false"
-                                        src={require('./rsc/button_how.png')}
-                                        alt="how to play"
-                                        className="main-menu-button-item animated slideInRight"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    }
                     <img
                         draggable="false"
                         src={require('./rsc/main_menu.jpg')}
