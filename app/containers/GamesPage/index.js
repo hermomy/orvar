@@ -12,16 +12,19 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-
 import { Events } from 'globalUtils';
 import globalScope from 'globalScope';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import 'assets/animate.min.scss';
-
-import LoginForm from 'containers/LoginForm';
+import {
+    Button,
+} from '@material-ui/core';
+import InputForm from 'components/InputForm';
 import PerfectMatchGame from '../PerfectMatchGame';
-
+import {
+    doLogin,
+} from './actions';
 import makeSelectGamesPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -62,6 +65,9 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         super(props);
 
         this.state = {
+            email: '',
+            password: '',
+            showPassword: false,
             showModal: null,
             slideArray: null,
             gameId: null,
@@ -89,6 +95,51 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         }
     }
 
+    handleChange = (event) => {
+        this.setState({ [event.target.id]: event.target.value });
+    };
+
+    renderLogin = () => (
+        <div className="login-container">
+            <form onSubmit={() => { this.props.dispatch(doLogin(this.state)); event.preventDefault(); console.log(this.state.password, this.state.email); }}>
+                <div>
+                    <InputForm
+                        label="Email address"
+                        id="email"
+                        type="email"
+                        handleChange={this.handleChange}
+                        value={this.state.email}
+                        onClear={() => {
+                            this.setState({ email: '' });
+                        }}
+                    />
+                </div>
+                <div>
+                    <InputForm
+                        label="Password"
+                        id="password"
+                        type={this.state.showPassword ? 'text' : 'password'}
+                        value={this.state.password}
+                        showPassword={this.state.showPassword}
+                        handleChange={this.handleChange}
+                        handleClickShowPassword={() => {
+                            this.setState((state) => ({ showPassword: !state.showPassword }));
+                        }}
+                        onClear={() => {
+                            this.setState({ password: '' });
+                        }}
+                        autoComplete="off"
+                        togglePassword={true}
+                    />
+                </div>
+                <div>
+                    <Button variant="contained" color="primary" type="submit" style={{ width: '100%' }}>
+                        Login
+                    </Button>
+                </div>
+            </form>
+        </div>
+    )
     renderModalContent = () => {
         const { showModal, slideArray, gameId } = this.state;
 
@@ -133,9 +184,9 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             <div className="games-page">
                 {
                     this.state.requestToken ?
-                        <div className="games-login-modal">
-                            <LoginForm />
-                        </div>
+                        <span className="games-login-modal">
+                            {this.renderLogin()}
+                        </span>
                         :
                         null
                 }
@@ -161,7 +212,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                             className="toggle-back page-button-item"
                                             onClick={() => {
                                                 this.setState({ showModal: null });
-                                                if (this.state.playMusic) {
+                                                if (this.state.playMusic && this.state.showModal === 'showPlay') {
                                                     idleMusic.currentTime = 0;
                                                     idleMusic.play();
                                                 }

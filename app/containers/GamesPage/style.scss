@@ -6,7 +6,16 @@
     bottom: 0;
     z-index: 9999;
     background-color: #0008;
+
+    .login-container {
+        margin: auto;
+        padding: 1rem;
+        width: 30%;
+        border-radius: 5px;
+        background-color: white;
+    }
 }
+
 
 .games-page {
     min-height: 300px;

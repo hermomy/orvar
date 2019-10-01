@@ -8,7 +8,6 @@ import React from 'react';
 import {
     TextField,
     InputAdornment,
-    FormControl,
     IconButton,
     Typography,
     Button,
@@ -32,6 +31,7 @@ class InputForm extends React.PureComponent { // eslint-disable-line react/prefe
 
     showCancelButton = () => (
         <IconButton
+            size="small"
             id={this.props.id}
             disableRipple={true}
             onClick={() => {
@@ -47,6 +47,7 @@ class InputForm extends React.PureComponent { // eslint-disable-line react/prefe
 
     showVisibilty = () => (
         <IconButton
+            size="small"
             aria-label="Toggle password visibility"
             onClick={this.props.handleClickShowPassword}
             disableFocusRipple={true}
@@ -85,30 +86,29 @@ class InputForm extends React.PureComponent { // eslint-disable-line react/prefe
 
     render() {
         return (
-            <FormControl fullWidth={true}>
-                <TextField
-                    className="pb-1"
-                    id={this.props.id}
-                    label={this.props.label}
-                    variant="outlined"
-                    value={this.props.value}
-                    onChange={this.props.handleChange}
-                    type={this.props.type}
-                    placeholder={this.props.placeholder}
-                    // eslint-disable-next-line no-unneeded-ternary
-                    required={this.props.required ? false : true}
-                    defaultValue={this.props.defaultValue}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                {this.props.value ? this.showCancelButton() : null}
-                                {this.props.togglePassword ? this.showVisibilty() : null}
-                                {this.props.requestOTP ? this.showOTP() : null}
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-            </FormControl>
+            <TextField
+                className="pb-1"
+                id={this.props.id}
+                label={this.props.label}
+                variant="outlined"
+                value={this.props.value}
+                onChange={this.props.handleChange}
+                type={this.props.type}
+                placeholder={this.props.placeholder}
+                // eslint-disable-next-line no-unneeded-ternary
+                required={this.props.required ? false : true}
+                defaultValue={this.props.defaultValue}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            {this.props.value ? this.showCancelButton() : null}
+                            {this.props.togglePassword ? this.showVisibilty() : null}
+                            {this.props.requestOTP ? this.showOTP() : null}
+                        </InputAdornment>
+                    ),
+                }}
+                style={{ width: '100%' }}
+            />
         );
     }
 }
