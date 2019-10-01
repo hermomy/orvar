@@ -70,18 +70,12 @@
             flex-wrap: wrap;
             justify-content: center;
 
-            .flickable-card {
+            .flipable-card {
                 width: 30%;
 
                 .react-card-front,
                 .react-card-back {
                     display: flex;
-                }
-                // margin: 0 0.35rem;
-
-                .react-card-back {
-                    position: absolute;
-                    z-index: 2;
                 }
             }
         }
