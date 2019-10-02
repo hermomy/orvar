@@ -79,6 +79,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             showLogin: false,
             requestToken: false,
             hideLoginModal: false,
+            availableChance: null,
         };
     }
 
@@ -96,11 +97,25 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                 this.setState({ requestToken: true });
             }
         }
-        console.log('globalScope', globalScope);
-        console.log('globalScope.username', globalScope.username);
 
-        // if (globalScope.username) {
-        //     this.setState({ showUsername: true });
+        // dispatch action, POST https://api.hermo.my/xmas/game, they return gameAccessToken, set in state
+        // set reducer gameAccessToken
+        // (if have) set reducer availableChance
+    }
+
+    componentWillReceiveProps = (nextProps) => {
+        if (dataChecking(nextProps, 'gamesPage', 'login', 'success') !== dataChecking(this.props, 'gamesPage', 'login', 'success') && nextProps.gamesPage.login.success) {
+            setTimeout(() => {
+                this.setState({ hideLoginModal: true });
+            }, 1000);
+        }
+
+        // if (gameAccessToken !== gameAccessToken) {
+        //     // setState gameAccessToken
+        // }
+
+        // if (availableChance !== availableChance) {
+        //     // setState availableChance
         // }
     }
 
@@ -112,12 +127,11 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         }
     }
 
-    componentWillReceiveProps = (nextProps) => {
-        if (dataChecking(nextProps, 'gamesPage', 'login', 'success') !== dataChecking(this.props, 'gamesPage', 'login', 'success') && nextProps.gamesPage.login.success) {
-            setTimeout(() => {
-                this.setState({ hideLoginModal: true });
-            }, 1000);
-        }
+    onGameComplete = (result) => {
+        alert(JSON.stringify(result));
+
+        // dispatch action(this.state.gameAccessToken, 'success' || 'lose'), PUI https://api.hermo.my/xmas/game, they will return imagelink, show the imagelink
+        // set reducer gameResultImagelink
     }
 
     handleChange = (event) => {
@@ -181,6 +195,10 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                     <PerfectMatchGame
                         props={{ smth: true }}
                         playMusic={this.state.playMusic}
+                        onGameStart={() => alert('gamestart')}
+                        onGameWin={(result) => this.onGameComplete(result)}
+                        onGameLose={(result) => this.onGameComplete(result)}
+                        gameResultImagelink={this.state.gameResultImagelink}
                     />
                 );
             }
@@ -214,6 +232,57 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         return (
             <div className="games-page">
                 <div className="game-container">
+                    <div className="page-buttons">
+                        {
+                            this.state.showModal ?
+                                <div
+                                    className="toggle-back page-button-item"
+                                    onClick={() => {
+                                        this.setState({ showModal: null });
+                                        if (this.state.playMusic && this.state.showModal === 'showPlay') {
+                                            idleMusic.currentTime = 0;
+                                            idleMusic.play();
+                                        }
+                                    }}
+                                >
+                                    <img
+                                        draggable="false"
+                                        width="100%"
+                                        src={require('./rsc/icons8-left-3-96.png')}
+                                        alt="play"
+                                        className="main-menu-button-item animated zoomIn"
+                                    />
+                                </div>
+                                :
+                                null
+                        }
+                        <div
+                            className="toggle-music page-button-item to-right"
+                            onClick={() => {
+                                this.setState({ playMusic: !this.state.playMusic });
+                                idleMusic[!this.state.playMusic ? 'play' : 'pause']();
+                            }}
+                        >
+                            {
+                                this.state.playMusic ?
+                                    <img
+                                        draggable="false"
+                                        width="100%"
+                                        src={require('./rsc/icons8-sound-100.png')}
+                                        alt="play"
+                                        className="main-menu-button-item animated zoomIn"
+                                    />
+                                    :
+                                    <img
+                                        draggable="false"
+                                        width="100%"
+                                        src={require('./rsc/icons8-mute-100.png')}
+                                        alt="play"
+                                        className="main-menu-button-item animated zoomIn"
+                                    />
+                            }
+                        </div>
+                    </div>
                     {
                         this.state.requestToken && !this.state.hideLoginModal ?
                             <span className="games-login-modal animated fa">
@@ -234,67 +303,32 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                     >
                                         <i className="fas fa-store-alt"></i>
                                     </div> */}
-                                    <div className="page-buttons">
-                                        {
-                                            this.state.showModal ?
-                                                <div
-                                                    className="toggle-back page-button-item"
-                                                    onClick={() => {
-                                                        this.setState({ showModal: null });
-                                                        if (this.state.playMusic && this.state.showModal === 'showPlay') {
-                                                            idleMusic.currentTime = 0;
-                                                            idleMusic.play();
-                                                        }
-                                                    }}
-                                                >
-                                                    <img
-                                                        draggable="false"
-                                                        width="100%"
-                                                        src={require('./rsc/icons8-left-3-96.png')}
-                                                        alt="play"
-                                                        className="main-menu-button-item animated zoomIn"
-                                                    />
-                                                </div>
-                                                :
-                                                null
-                                        }
-                                        <div
-                                            className="toggle-music page-button-item to-right"
-                                            onClick={() => {
-                                                this.setState({ playMusic: !this.state.playMusic });
-                                                idleMusic[!this.state.playMusic ? 'play' : 'pause']();
-                                            }}
-                                        >
+                                    <div className="main-menu-bottom-content animated slideInDown fadeIn">
+                                        <div className="game-info pb-1">
                                             {
-                                                this.state.playMusic ?
-                                                    <img
-                                                        draggable="false"
-                                                        width="100%"
-                                                        src={require('./rsc/icons8-sound-100.png')}
-                                                        alt="play"
-                                                        className="main-menu-button-item animated zoomIn"
-                                                    />
+                                                dataChecking(globalScope, 'username') &&
+                                                    <div className="main-menu-username animated fadeIn">
+                                                        <Typography variant="h5">Welcome, {globalScope.username}!</Typography>
+                                                    </div>
+                                            }
+                                            {
+                                                this.state.availableChance !== null ?
+                                                    <div className="main-menu-username animated fadeIn">
+                                                        <Typography variant="h4">You have {this.state.availableChance || 0} token</Typography>
+                                                    </div>
                                                     :
-                                                    <img
-                                                        draggable="false"
-                                                        width="100%"
-                                                        src={require('./rsc/icons8-mute-100.png')}
-                                                        alt="play"
-                                                        className="main-menu-button-item animated zoomIn"
-                                                    />
+                                                    null
+
                                             }
                                         </div>
-                                    </div>
-                                    {
-                                        dataChecking(globalScope, 'username') &&
-                                            <div className="main-menu-username animated fadeIn">
-                                                <Typography variant="h5">Welcome, {globalScope.username}!</Typography>
-                                            </div>
-                                    }
-                                    <div className="main-menu-buttons animated slideInDown fadeIn">
                                         <div
                                             onClick={
                                                 () => {
+                                                    if (!this.state.gameAccessToken) {
+                                                        alert('Please wait while the game loading');
+                                                        return null;
+                                                    }
+
                                                     if (this.state.playMusic) {
                                                         const startSound = new Audio(require('./rsc/sound/Start_button.wav'));
                                                         startSound.play();
@@ -302,6 +336,8 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                                     setTimeout(() => {
                                                         this.setState({ showModal: 'showPlay', gameId: 1 });
                                                     }, 0);
+
+                                                    return true;
                                                 }
                                             }
                                         >

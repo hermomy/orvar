@@ -211,6 +211,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     this.setState({
                                         complete: 'lose',
                                     });
+                                    // this.props.onGameLose({ status: 'lose' });
                                 }
                                 return <span className="countdown-timer">{seconds}s</span>;
                             }}
@@ -303,6 +304,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                             onHand2: null,
                                             complete: result || this.state.complete,
                                         });
+                                        // this.props.onGameWin({ status: 'win' });
                                     }, 2 * TIME_UNIT);
                                 }
 
@@ -348,6 +350,21 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
 
     renderResult = () => (
         <div>
+            {/* {
+                this.props.gameResultImagelink ?
+                    <div className="prize-inner-section animated zoomIn">
+                        <img
+                            draggable="false"
+                            key={1}
+                            width="100%"
+                            src={this.props.gameResultImagelink}
+                            alt="carousel slide show"
+                            className="slideshow-image"
+                        />
+                    </div>
+                    :
+                    null
+            } */}
             {
                 this.state.complete === 'win' ?
                     <div className="prize-inner-section animated zoomIn">
