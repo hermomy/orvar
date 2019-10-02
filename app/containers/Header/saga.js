@@ -1,5 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { notifySuccess, notifyError } from 'containers/Notify';
+import globalScope from 'globalScope';
 import {
     LAYOUT_TOP_NAV,
     SEARCH_RESULT,
@@ -60,6 +61,7 @@ export function* getUserDataWorker() {
         const response = yield call(apiRequest, '/profile');
         if (response && response.ok !== false) {
             yield put(getUserDataSuccess(response));
+            globalScope.username = response.data.username;
         } else if (response && response.ok === false) {
             yield put(getUserDataFailed(response));
         } else {

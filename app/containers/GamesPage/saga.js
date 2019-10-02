@@ -16,7 +16,11 @@ export function* loginQuery(action) {
             globalScope.token = response.data.token;
             globalScope.axios.setHeader('hertoken', globalScope.token);
             setCookie(process.env.TOKEN_KEY, globalScope.token);
-            yield put(loginSuccess(response.data));
+            const response2 = yield call(apiRequest, '/profile');
+            if (response2 && response2.ok) {
+                globalScope.username = response2.data.username;
+                yield put(loginSuccess(response.data));
+            }
         } else {
             yield put(loginFailed(response.data));
         }

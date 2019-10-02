@@ -81,6 +81,16 @@
         max-height: 100vh;
     }
 
+    .main-menu-username {
+        position: absolute;
+        z-index: 10;
+        margin: auto;
+        bottom: 35%;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+
     .main-menu-buttons {
         position: absolute;
         z-index: 10;
