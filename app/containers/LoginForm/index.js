@@ -21,7 +21,6 @@ import {
     CardActions,
     Container,
     FormControl,
-    FormHelperText,
     Typography,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -111,7 +110,6 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                     autoComplete="off"
                     togglePassword={true}
                 />
-                <FormHelperText id="password-helper">Password should contain at least 8 characters.</FormHelperText>
             </FormControl>
         </div>
     )
@@ -131,9 +129,9 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
             <Button
                 type="submit"
                 variant="contained"
-                color="secondary"
+                style={{ backgroundColor: '#3b5998', color: 'white' }}
             >
-                <Typography>FACEBOOK</Typography>
+                <Typography>LOGIN WITH FACEBOOK</Typography>
             </Button>
         </FormControl>
     )

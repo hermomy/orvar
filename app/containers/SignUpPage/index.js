@@ -72,7 +72,6 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
     componentWillReceiveProps(nextProps) {
         if (nextProps.signUpPage.signupSuccess !== this.props.signUpPage.signupSuccess && nextProps.signUpPage.signupSuccess) {
             window.location.href = globalScope.previousPage || window.location.pathname;
-            console.log(window.location.href);
         }
 
         if (nextProps.error !== this.props.error && nextProps.error) {
@@ -93,7 +92,6 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
 
     handleChange = (event) => {
         this.setState({ [event.target.id]: event.target.value });
-        console.log(event.target.id);
     };
     handleChangeNumber = (event) => {
         const onlyNums = event.target.value.replace(/[^0-9]/g, '');
@@ -292,8 +290,9 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
                 type="submit"
                 variant="contained"
                 color="secondary"
+                style={{ backgroundColor: '#3b5998', color: 'white' }}
             >
-                <Typography>FACEBOOK</Typography>
+                <Typography>LOGIN WITH FACEBOOK</Typography>
             </Button>
         </FormControl>
     )
