@@ -53,7 +53,7 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.loginForm.loginSuccess !== this.props.loginSuccess && nextProps.loginForm.loginSuccess) {
-            window.location.href = globalScope.previousPage || window.location.pathname;
+            window.location.href = globalScope.previousPage || '/';
             console.log(window.location.href);
         }
 

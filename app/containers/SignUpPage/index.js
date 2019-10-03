@@ -71,7 +71,7 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.signUpPage.signupSuccess !== this.props.signUpPage.signupSuccess && nextProps.signUpPage.signupSuccess) {
-            window.location.href = globalScope.previousPage || window.location.pathname;
+            window.location.href = globalScope.previousPage || '/';
         }
 
         if (nextProps.error !== this.props.error && nextProps.error) {

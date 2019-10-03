@@ -676,7 +676,7 @@ export class Header extends React.PureComponent {
                                                     variant="body1"
                                                     style={{ color: '#000' }}
                                                 >
-                                                    Log in /{dataChecking(this.props.header, 'imgLink', 'data', 'items') && this.props.header.imgLink.data.items[0].title}
+                                                    Log in / {dataChecking(this.props.header, 'imgLink', 'data', 'items') && this.props.header.imgLink.data.items[0].title}
                                                 </Typography>
                                             </div>
                                         </NavLink>
