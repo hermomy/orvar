@@ -1,8 +1,8 @@
-# Clone
+# Developing
 
-```
-git clone --single-branch --branch windows https://github.com/Oskang09/orvar.git
-```
+- Fork this repo
+- Clone it with `git clone git@github.com:<your_github_username>/orvar`
+- Start developing
 
 # Readme
 
