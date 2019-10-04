@@ -207,7 +207,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         if (showModal === 'slideShow' && slideArray) {
             return (
                 <div className="prize-inner-section">
-                    <Carousel showThumbs={false} showStatus={false} showIndicators={false} emulateTouch={true}>
+                    <Carousel showThumbs={false} showStatus={false} showIndicators={true} emulateTouch={true}>
                         {
                             slideArray.map((item, index) => (
                                 <img

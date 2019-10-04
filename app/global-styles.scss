@@ -152,6 +152,29 @@ body {
 }
 
 // fixes for carousel slider issue
-.carousel.carousel-slider .slider {
-    overflow: initial;
+.carousel.carousel-slider {
+    .control-arrow {
+        position: absolute;
+        top: 40%;
+        height: 100px;
+        width: 7%;
+        border-radius: 10%;
+        background: rgba(0,0,0,.2);
+
+        &.control-prev { left: 3%; }
+        &.control-next { right: 3%; }
+    }
+
+    .control-dots .dot {
+        background: rgba(0, 0, 0, 0.5);
+        border: 2px solid white;
+        width: 12px;
+        height: 12px;
+        padding: 0;
+        box-shadow: none;
+    }
+
+    .slider {
+        overflow: initial;
+    }
 }
