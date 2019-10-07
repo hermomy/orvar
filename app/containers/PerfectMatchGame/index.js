@@ -25,12 +25,12 @@ import './style.scss';
 const TIME_UNIT = 330;
 
 const BRANDS = [
-    require('./rsc/brands/brand_one.png'),
-    require('./rsc/brands/brand_two.png'),
-    require('./rsc/brands/brand_three.png'),
-    require('./rsc/brands/brand_four.png'),
-    require('./rsc/brands/brand_five.png'),
-    require('./rsc/brands/brand_six.png'),
+    require('./rsc/brands/D11-Brand_Image_Au-Fairy_300x300.jpg'),
+    require('./rsc/brands/D11-Brand_Image_COSRX_300x300.jpg'),
+    require('./rsc/brands/D11-Brand_Image_Eucerin_300x300.jpg'),
+    require('./rsc/brands/D11-Brand_Image_innisfree_300x300.jpg'),
+    require('./rsc/brands/D11-Brand_Image_Laneige_300x300.jpg'),
+    require('./rsc/brands/D11-Brand_Image_Loreal_300x300.jpg'),
 ];
 
 const gameMusic = new Audio(require('./rsc/sound/Prizefighter.mp3'));
@@ -112,7 +112,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
         setTimeout(() => {
             this.setState({
                 delay: 24 * TIME_UNIT,
-                countingDown: Date.now() + 30400,
+                countingDown: Date.now() + 300400,
                 fliped_0: true,
                 fliped_1: true,
                 fliped_2: true,
@@ -318,7 +318,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     key="back"
                                     width="100%"
                                     height="100%"
-                                    src={require('./rsc/brand_cover.png')}
+                                    src={require('./rsc/D11-Brand_Cover-Image_300x300.jpg')}
                                     // src={brandImage}
                                     alt="game card"
                                     className={`
@@ -365,7 +365,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                     :
                     null
             } */}
-            {
+            {/* {
                 this.state.complete === 'win' ?
                     <div className="prize-inner-section animated zoomIn">
                         <img
@@ -388,7 +388,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                             className="slideshow-image"
                         />
                     </div>
-            }
+            } */}
         </div>
     )
 
@@ -398,7 +398,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                 <img
                     draggable="false"
                     width="100%"
-                    src={require('./rsc/game_background.jpg')}
+                    src={require('./rsc/D11-Game-background.jpg')}
                     alt="game background"
                     className="game-background"
                 />

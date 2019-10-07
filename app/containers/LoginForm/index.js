@@ -12,6 +12,8 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+
 import globalScope from 'globalScope';
 
 import {
@@ -128,13 +130,20 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                 <Typography>Login</Typography>
             </Button>
             <Typography className="text-xs-center my-half" variant="h6">or<br /></Typography>
-            <Button
-                type="submit"
-                variant="contained"
-                color="secondary"
-            >
-                <Typography>FACEBOOK</Typography>
-            </Button>
+            <FacebookLogin
+                appId={process.env.FACEBOOK_APP_ID}
+                autoLoad={true}
+                // callback={responseFacebook}
+                render={() => (
+                    <Button
+                        type="button"
+                        variant="contained"
+                        color="secondary"
+                    >
+                        <Typography>FACEBOOK</Typography>
+                    </Button>
+                )}
+            />
         </FormControl>
     )
 

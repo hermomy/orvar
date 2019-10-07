@@ -35,25 +35,26 @@ import './style.scss';
 const prizeSlide = [
     {
         key: 'prize1',
-        image: require('./rsc/prize_one.png'),
-        next: 'prize2',
-        prev: null,
-    }, {
-        key: 'prize2',
-        image: require('./rsc/prize_two.jpg'),
-        next: 'prize3',
-        prev: 'prize1',
-    }, {
-        key: 'prize3',
-        image: require('./rsc/prize_three.jpg'),
+        image: require('./rsc/D11-prize-image.jpg'),
         next: null,
-        prev: 'prize2',
+        prev: null,
+    // }, {
+    //     key: 'prize2',
+    //     image: require('./rsc/prize_two.jpg'),
+    //     next: 'prize3',
+    //     prev: 'prize1',
+    // }, {
+    //     key: 'prize3',
+    //     key: 'prize3',
+    //     image: require('./rsc/prize_three.jpg'),
+    //     next: null,
+    //     prev: 'prize2',
     },
 ];
 const howToSlide = [
     {
         key: 'how_to',
-        image: require('./rsc/how_to_play_modal.png'),
+        image: require('./rsc/D11-How-To-Play.jpg'),
         next: 'prize2',
         prev: null,
     },
@@ -324,10 +325,10 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                         <div
                                             onClick={
                                                 () => {
-                                                    if (!this.state.gameAccessToken) {
-                                                        alert('Please wait while the game loading');
-                                                        return null;
-                                                    }
+                                                    // if (!this.state.gameAccessToken) {
+                                                    //     alert('Please wait while the game loading');
+                                                    //     return null;
+                                                    // }
 
                                                     if (this.state.playMusic) {
                                                         const startSound = new Audio(require('./rsc/sound/Start_button.wav'));
@@ -343,7 +344,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                         >
                                             <img
                                                 draggable="false"
-                                                src={require('./rsc/button_play.png')}
+                                                src={require('./rsc/D11-Button-image_Play_529x130.png')}
                                                 alt="play"
                                                 className="main-menu-button-item animated slideInRight"
                                             />
@@ -351,7 +352,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                         <div onClick={() => this.setState({ showModal: 'slideShow', slideArray: prizeSlide })}>
                                             <img
                                                 draggable="false"
-                                                src={require('./rsc/button_prizes.png')}
+                                                src={require('./rsc/D11-Button-image_Prize_529x130.png')}
                                                 alt="prizes"
                                                 className="main-menu-button-item animated slideInLeft"
                                             />
@@ -359,7 +360,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                         <div onClick={() => this.setState({ showModal: 'slideShow', slideArray: howToSlide })}>
                                             <img
                                                 draggable="false"
-                                                src={require('./rsc/button_how.png')}
+                                                src={require('./rsc/D11-Button-image_How-to-play_529x130.png')}
                                                 alt="how to play"
                                                 className="main-menu-button-item animated slideInRight"
                                             />
@@ -370,7 +371,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                     }
                     <img
                         draggable="false"
-                        src={require('./rsc/main_menu.jpg')}
+                        src={require('./rsc/D11-Landing-image.jpg')}
                         alt="main menu background"
                         className="main-menu-bg animated fadeIn"
                     />
