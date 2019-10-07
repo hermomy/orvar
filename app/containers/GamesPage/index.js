@@ -341,28 +341,35 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                                     return true;
                                                 }
                                             }
+                                            className="animated slideInRight"
                                         >
                                             <img
                                                 draggable="false"
                                                 src={require('./rsc/D11-Button-image_Play_529x130.png')}
                                                 alt="play"
-                                                className="main-menu-button-item animated slideInRight"
+                                                className="main-menu-button-item"
                                             />
                                         </div>
-                                        <div onClick={() => this.setState({ showModal: 'slideShow', slideArray: prizeSlide })}>
+                                        <div
+                                            onClick={() => this.setState({ showModal: 'slideShow', slideArray: prizeSlide })}
+                                            className="animated slideInLeft"
+                                        >
                                             <img
                                                 draggable="false"
                                                 src={require('./rsc/D11-Button-image_Prize_529x130.png')}
                                                 alt="prizes"
-                                                className="main-menu-button-item animated slideInLeft"
+                                                className="main-menu-button-item"
                                             />
                                         </div>
-                                        <div onClick={() => this.setState({ showModal: 'slideShow', slideArray: howToSlide })}>
+                                        <div
+                                            onClick={() => this.setState({ showModal: 'slideShow', slideArray: howToSlide })}
+                                            className="animated slideInRight"
+                                        >
                                             <img
                                                 draggable="false"
                                                 src={require('./rsc/D11-Button-image_How-to-play_529x130.png')}
                                                 alt="how to play"
-                                                className="main-menu-button-item animated slideInRight"
+                                                className="main-menu-button-item"
                                             />
                                         </div>
                                     </div>
