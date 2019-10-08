@@ -57,7 +57,7 @@ const loseSound = new Audio(require('./rsc/sound/xmas_loser.mp3'));
 
 const initialState = {
     delay: null,
-    popup: false,
+    shareModal: false,
     tips: '',
     countingDown: null,
     preparationDone: false,
@@ -73,6 +73,7 @@ const initialState = {
     flipped_9: false,
     flipped_10: false,
     flipped_11: false,
+    correct: 0,
     correctMatch: {},
     wrongMatch: {},
     onHand1: null,
@@ -161,7 +162,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
         setTimeout(() => {
             this.setState({
                 delay: 24 * TIME_UNIT,
-                countingDown: Date.now() + (300400 - 300000),
+                countingDown: Date.now() + (30400),
                 tips: 'Try to get a match',
                 flipped_0: true,
                 flipped_1: true,
@@ -246,6 +247,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     if (this.props.playMusic) {
                                         loseSound.play();
                                     }
+                                    alert('lost');
                                     this.setState({
                                         complete: 'lose',
                                     });
@@ -320,7 +322,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                             const correctSound = new Audio(require('./rsc/sound/flip_correct.mp3'));
                                             correctSound.play();
                                         }
-                                        this.setState({ tips: 'Its a perfect match!' });
+                                        obj.tips = 'Its a perfect match!';
                                         obj.correctMatch[index] = true;
                                         obj.correctMatch[obj.onHand1.index] = true;
 
@@ -329,12 +331,13 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                             if (this.props.playMusic) {
                                                 winSound.play();
                                             }
+                                            alert('win');
                                             result = 'win';
                                         }
                                     } else {
                                         obj.wrongMatch[index] = true;
                                         obj.wrongMatch[obj.onHand1.index] = true;
-                                        this.setState({ tips: 'Oops! That\s not a match.' });
+                                        obj.tips = 'Oops! That\s not a match.';
                                         if (this.props.playMusic) {
                                             const bombSound = new Audio(require('./rsc/sound/Bomb.mp3'));
                                             bombSound.play();
@@ -402,7 +405,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
     )
 
     renderResult = () => (
-        <div>
+        <div className="result-screen-content">
             {
                 dataChecking(this.props, 'gameResultImagelink', 'result', 'image', 'mobile') ?
                     <div className="prize-inner-section animated zoomIn">
@@ -428,7 +431,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                             </div>
                             <div
                                 className="share result-content"
-                                onClick={() => this.setState({ popup: true })}
+                                onClick={() => this.setState({ shareModal: true })}
                             >
                                 <img
                                     className="result-button-item animated zoomIn"
@@ -472,7 +475,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                             </div>
                             <div
                                 className="share result-content"
-                                onClick={() => this.setState({ popup: true })}
+                                onClick={() => this.setState({ shareModal: true })}
                             >
                                 <img
                                     className="result-button-item animated zoomIn"
@@ -583,10 +586,10 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                             </div>
                 }
                 {
-                    this.state.popup ?
-                        <div className="perfect-match-popup-modal">
+                    this.state.shareModal ?
+                        <div className="perfect-match-share-modal">
                             <div className="modal-inner-div">
-                                <IconButton className="close modal-inner-button" onClick={() => this.setState({ popup: false })}>
+                                <IconButton className="close modal-inner-button" onClick={() => this.setState({ shareModal: false })}>
                                     <Close />
                                 </IconButton>
                                 {this.renderDialogContent()}

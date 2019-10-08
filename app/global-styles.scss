@@ -5,10 +5,7 @@
 html {
     font-size: .7vw;
 
-    @include media-breakpoint-dow
-      
-      
-      n(lg) {
+    @include media-breakpoint-down(lg) {
         font-size: 1vw;
     }
 

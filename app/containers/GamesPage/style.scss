@@ -19,7 +19,6 @@
     }
 }
 
-
 .games-page {
     min-height: 300px;
     max-height: 100vh;
@@ -28,6 +27,14 @@
     display: flex;
     flex: 1;
     justify-content: center;
+
+    .ppg-version {
+        color: #0005;
+        position: absolute;
+        right: 1%;
+        bottom: 1%;
+        z-index: 100;
+    }
 
     img {
         -webkit-user-select: none;
