@@ -117,6 +117,7 @@ export class HomePage extends React.PureComponent {
                                 product={product}
                                 url={product.url}
                                 image={true}
+                                className="product-card animated fadeIn"
                             />
                         ))
                     }
@@ -133,7 +134,7 @@ export class HomePage extends React.PureComponent {
             {
                 dataChecking(this.props.homePage, 'banner', 'data', 'data', 'result', 'items') &&
                     <div>
-                        <Hidden className=" carousel home-banner-desktop" smDown={true}>
+                        <Hidden className="home-banner-desktop carousel animated fadeIn" smDown={true}>
                             <OwlCarousel
                                 options={{
                                     items: 1,
@@ -149,7 +150,7 @@ export class HomePage extends React.PureComponent {
                                 {
                                     dataChecking(this.props.homePage, 'banner', 'data', 'data', 'result', 'items').map((banner) => (
                                         (banner.visibility.desktop) &&
-                                            <NavLink key={banner.id} to={banner.url}>
+                                            <NavLink key={banner.id} to={banner.url} className="home-banner-item">
                                                 <img src={banner.image.desktop} alt={`banner ${banner.caption}`} />
                                             </NavLink>
                                     ))

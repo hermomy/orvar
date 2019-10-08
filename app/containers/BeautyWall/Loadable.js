@@ -1,6 +1,6 @@
 /**
  *
- * Asynchronously loads the component for App
+ * Asynchronously loads the component for BeautyWall
  *
  */
 

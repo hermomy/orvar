@@ -23,7 +23,6 @@ import {
     CardActions,
     Container,
     FormControl,
-    FormHelperText,
     Typography,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -56,7 +55,7 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.loginForm.loginSuccess !== this.props.loginSuccess && nextProps.loginForm.loginSuccess) {
-            window.location.href = globalScope.previousPage || window.location.pathname;
+            window.location.href = globalScope.previousPage || '/';
             console.log(window.location.href);
         }
 
@@ -113,7 +112,6 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                     autoComplete="off"
                     togglePassword={true}
                 />
-                <FormHelperText id="password-helper">Password should contain at least 8 characters.</FormHelperText>
             </FormControl>
         </div>
     )
@@ -138,9 +136,9 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                     <Button
                         type="button"
                         variant="contained"
-                        color="secondary"
+                        style={{ backgroundColor: '#3b5998', color: 'white' }}
                     >
-                        <Typography>FACEBOOK</Typography>
+                        LOGIN WITH FACEBOOK
                     </Button>
                 )}
             />

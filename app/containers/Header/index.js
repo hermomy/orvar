@@ -50,8 +50,10 @@ import {
     Card,
     Box,
     Badge,
+    Button,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import CartList from 'components/CartList';
 import {
     layoutTopNav,
     searchResult,
@@ -670,7 +672,7 @@ export class Header extends React.PureComponent {
                                 <Grid container={true}>
                                     <Grid item={true} xs={11} md={12}>
                                         <NavLink
-                                            to="/login"
+                                            to="/auth"
                                             style={{ textDecoration: 'none' }}
                                             onClick={() => this.setState({ userOpen: false })}
                                         >
@@ -679,7 +681,7 @@ export class Header extends React.PureComponent {
                                                     variant="body1"
                                                     style={{ color: '#000' }}
                                                 >
-                                                    Log in
+                                                    Log in / {dataChecking(this.props.header, 'imgLink', 'data', 'items') && this.props.header.imgLink.data.items[0].title}
                                                 </Typography>
                                             </div>
                                         </NavLink>
@@ -692,7 +694,7 @@ export class Header extends React.PureComponent {
                                 </Grid>
                             </Box>
                         </Grid>
-                        <Grid item={true} xs={12}>
+                        {/* <Grid item={true} xs={12}>
                             <NavLink to="/signup" style={{ textDecoration: 'none' }}>
                                 <Box
                                     className="p-1"
@@ -716,7 +718,7 @@ export class Header extends React.PureComponent {
                                     </Typography>
                                 </Box>
                             </NavLink>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                     )
             }
@@ -724,6 +726,60 @@ export class Header extends React.PureComponent {
     )
 
     renderCartTimer = () => {}
+    /**
+     * User cart dropdown
+     */
+    renderCartSection = () => (
+        <div>
+            <Card
+                className={this.props.classes.cardCart}
+                style={{
+                    backgroundColor: '#fff',
+                }}
+            >
+                {
+                    dataChecking(this.state, 'cart', 'attribute', 'is_empty') ?
+                        <div>
+                            <Typography>Your cart is empty.</Typography>
+                            <NavLink to="/mall">
+                                <Button>Go shopping</Button>
+                            </NavLink>
+                        </div>
+                    :
+                        <div>
+                            <div>
+                                {this.renderCartTimer()}
+                                <Typography>SUBTOTAL</Typography>
+                            </div>
+                            <Divider />
+                            <div
+                                style={{
+                                    overflow: 'auto',
+                                    maxHeight: '40rem',
+                                }}
+                            >
+                                {
+                                    dataChecking(this.state, 'cart', 'merchants') && this.state.cart.merchants.map((merchant) => (
+                                        <CartList
+                                            cart={this.state.cart}
+                                            merchant={merchant}
+                                            deleteCart={this.deleteCart}
+                                            key={merchant.id}
+                                            noEditQuantity={true}
+                                            noSummary={true}
+                                        />
+                                    ))
+                                }
+                            </div>
+                            <Divider />
+                            <div style={{ float: 'right' }}>
+                                <Button variant="contained">Checkout now</Button>
+                            </div>
+                        </div>
+                }
+            </Card>
+        </div>
+    )
 
     /**
      * quicklink section which is right side of the header
@@ -903,10 +959,6 @@ export class Header extends React.PureComponent {
      * - Component will consists of hermo logo, top nav and quicklinks
      */
     render() {
-        if (this.state.hideHeader) {
-            return null;
-        }
-
         return (
             <div className="header-wrapper">
                 <AppBar color="default">

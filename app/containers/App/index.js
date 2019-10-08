@@ -38,10 +38,12 @@ import SignUp from 'containers/SignUpPage';
 import LogIn from 'containers/LoginForm';
 import ProfileAddress from 'containers/ProfileAddress';
 import ProfileRewards from 'containers/ProfileRewards';
+import BeautyWall from 'containers/BeautyWall';
 
 import GamesPage from 'containers/GamesPage';
 
 import Header from 'containers/Header';
+import Footer from 'containers/Footer';
 import { ProfileWallet } from '../ProfileWallet';
 import './style.scss';
 
@@ -63,6 +65,7 @@ export default function App() {
                     <Route exact={true} path="/mall" component={MallPage} />
                     <Route exact={true} path="/brand" component={BrandPage} />
                     <Route exact={true} path="/mall/page-:pageNum?" component={MallPage} />
+                    <Route exact={true} path="/wall/beauty" component={BeautyWall} />
                     {/* group or category without pagenum */}
                     <Route
                         exact={true}
@@ -113,6 +116,7 @@ export default function App() {
                     <Route component={NotFoundPage} />
                 </Switch>
             </div>
+            <Footer />
         </section>
     );
 }

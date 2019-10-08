@@ -1,9 +1,12 @@
-# Clone
-
+# Developing
+- Fork this repo
+- Clone it with `git clone git@github.com:<your_github_username>/orvar`
+- Start developing
+## Linux 
 ```
-git clone --single-branch --branch windows https://github.com/Oskang09/orvar.git
+sudo apt install libpng-dev
+npm i && npm start
 ```
-
 # Readme
 
 Orvar
