@@ -27,12 +27,14 @@
         }
     }
 
-    .prize-inner-section {  padding: 3% 22%;
+
+.prize-inner-section {
 
         .result-bottom-content {
             position: absolute;
             z-index: 10;
-            bottom: 15%;
+            bottom: 8%;
+            padding: 3% 22%;
             left: 0;
             right: 0;
             display: flex;
@@ -51,8 +53,7 @@
                 transition: transform .5s, background-color.5s;
 
                 &:hover {
-                    transform: scale(1.02);
-                    background-color: #0002;
+                    transform: scale(1.1);
                     border-radius: 10%;
                 }
             }
@@ -95,7 +96,7 @@
         }
 
         .countdown-timer {
-            font-size: 3rem;
+            font-size: 2rem;
         }
 
         .card-field {
