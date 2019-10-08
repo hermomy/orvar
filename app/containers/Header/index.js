@@ -667,7 +667,7 @@ export class Header extends React.PureComponent {
                                 <Grid container={true}>
                                     <Grid item={true} xs={11} md={12}>
                                         <NavLink
-                                            to="/login"
+                                            to="/auth"
                                             style={{ textDecoration: 'none' }}
                                             onClick={() => this.setState({ userOpen: false })}
                                         >
@@ -676,7 +676,7 @@ export class Header extends React.PureComponent {
                                                     variant="body1"
                                                     style={{ color: '#000' }}
                                                 >
-                                                    Log in
+                                                    Log in / {dataChecking(this.props.header, 'imgLink', 'data', 'items') && this.props.header.imgLink.data.items[0].title}
                                                 </Typography>
                                             </div>
                                         </NavLink>
@@ -689,7 +689,7 @@ export class Header extends React.PureComponent {
                                 </Grid>
                             </Box>
                         </Grid>
-                        <Grid item={true} xs={12}>
+                        {/* <Grid item={true} xs={12}>
                             <NavLink to="/signup" style={{ textDecoration: 'none' }}>
                                 <Box
                                     className="p-1"
@@ -713,7 +713,7 @@ export class Header extends React.PureComponent {
                                     </Typography>
                                 </Box>
                             </NavLink>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                     )
             }
