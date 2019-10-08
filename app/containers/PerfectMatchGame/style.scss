@@ -27,14 +27,14 @@
         }
     }
 
-    .prize-inner-section {
-        position: absolute;
-        z-index: 10;
-        bottom: 15%;
-        left: 0;
-        right: 0;    padding: 3% 22%;
+    .prize-inner-section {  padding: 3% 22%;
 
         .result-bottom-content {
+            position: absolute;
+            z-index: 10;
+            bottom: 15%;
+            left: 0;
+            right: 0;
             display: flex;
 
             .result-content {
