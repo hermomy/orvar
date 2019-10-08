@@ -27,7 +27,7 @@ import {
     Phone,
     Mail,
 } from '@material-ui/icons';
-import { dataChecking } from 'globalUtils';
+import { dataChecking, Events } from 'globalUtils';
 import {
     getLayoutFooter,
 } from './actions';
@@ -37,6 +37,18 @@ import saga from './saga';
 import './style.scss';
 
 export class Footer extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            hideFooter: false,
+        };
+
+        Events.listen('hideFooter', 123456, () => {
+            this.setState({ hideFooter: true });
+        });
+    }
+
     componentDidMount() {
         this.props.dispatch(getLayoutFooter());
     }
@@ -254,6 +266,10 @@ export class Footer extends React.PureComponent { // eslint-disable-line react/p
         </div>
     )
     render() {
+        if (this.state.hideFooter) {
+            return null;
+        }
+
         return (
             <div>
                 <Hidden smDown={true}>

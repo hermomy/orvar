@@ -959,6 +959,10 @@ export class Header extends React.PureComponent {
      * - Component will consists of hermo logo, top nav and quicklinks
      */
     render() {
+        if (this.state.hideHeader) {
+            return null;
+        }
+
         return (
             <div className="header-wrapper">
                 <AppBar color="default">

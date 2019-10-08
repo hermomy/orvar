@@ -29,7 +29,7 @@
             "source": "**/main.*.js",
             "headers": [{
                 "key": "Cache-Control",
-                "value": "max-age=600"
+                "value": "max-age=60"
             }]
         }, {
             "source": "404.html",
