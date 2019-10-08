@@ -87,16 +87,21 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
     componentDidMount = () => {
         document.ondragstart = () => null;
         Events.trigger('hideHeader', {});
+        Events.trigger('hideFooter', {});
         setTimeout(() => {
             this.setState({ isRendered: true });
         }, 1100);
 
-        if (!globalScope.token) {
-            if (window.takePocket) {
-                globalScope.token = window.takePocket();
-            } else {
-                this.setState({ requestToken: true });
-            }
+        alert('taking pocket');
+        if (window.takePocket) {
+            const pocket = window.takePocket();
+            alert(pocket);
+            globalScope.token = window.takePocket();
+        } else if (!globalScope.token) {
+            alert('no take pocket and no token');
+            this.setState({ requestToken: true });
+        } else {
+            alert('no take pocket and use token');
         }
 
         // dispatch action, POST https://api.hermo.my/xmas/game, they return gameAccessToken, set in state
