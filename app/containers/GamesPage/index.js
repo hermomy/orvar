@@ -22,9 +22,11 @@ import {
     Typography,
 } from '@material-ui/core';
 import InputForm from 'components/InputForm';
+import AuthPage from '../AuthPage';
 import PerfectMatchGame from '../PerfectMatchGame';
 import {
     doLogin,
+    getResult,
 } from './actions';
 import makeSelectGamesPage from './selectors';
 import reducer from './reducer';
@@ -69,18 +71,17 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         this.state = {
             email: '',
             password: '',
-            showPassword: false,
+            availableChance: null,
             showModal: null,
-            showUsername: false,
             slideArray: null,
             gameId: null,
             // gameId: 1,
             // showModal: 'showPlay',
             playMusic: false,
+            showPassword: false,
             showLogin: false,
             requestToken: false,
             hideLoginModal: false,
-            availableChance: null,
         };
     }
 
@@ -103,9 +104,6 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         } else {
             alert('no take pocket and use token');
         }
-
-        // dispatch action, POST https://api.hermo.my/xmas/game, they return gameAccessToken, set in state
-        // set reducer gameAccessToken
         // (if have) set reducer availableChance
     }
 
@@ -116,30 +114,25 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             }, 1000);
         }
 
-        // if (gameAccessToken !== gameAccessToken) {
-        //     // setState gameAccessToken
-        // }
-
+        if (dataChecking(nextProps, 'gamesPage', 'result') !== dataChecking(this.props, 'gamesPage', 'result') && nextProps.gamesPage.result.success) {
+            this.setState({ gameResultImagelink: nextProps.gamesPage.result.data });
+        }
         // if (availableChance !== availableChance) {
         //     // setState availableChance
         // }
     }
 
-    componentWillReceiveProps = (nextProps) => {
-        if (dataChecking(nextProps, 'gamesPage', 'login', 'success') !== dataChecking(this.props, 'gamesPage', 'login', 'success') && nextProps.gamesPage.login.success) {
-            setTimeout(() => {
-                this.setState({ hideLoginModal: true });
-            }, 1000);
+    onGameComplete = (payload) => {
+        this.props.dispatch(getResult(payload));
+    }
+
+    onBackToMenu = () => {
+        this.setState({ showModal: null });
+        if (this.state.playMusic && this.state.showModal === 'showPlay') {
+            idleMusic.currentTime = 0;
+            idleMusic.play();
         }
     }
-
-    onGameComplete = (result) => {
-        alert(JSON.stringify(result));
-
-        // dispatch action(this.state.gameAccessToken, 'success' || 'lose'), PUI https://api.hermo.my/xmas/game, they will return imagelink, show the imagelink
-        // set reducer gameResultImagelink
-    }
-
     handleChange = (event) => {
         this.setState({ [event.target.id]: event.target.value });
     };
@@ -202,8 +195,9 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                         props={{ smth: true }}
                         playMusic={this.state.playMusic}
                         onGameStart={() => alert('gamestart')}
-                        onGameWin={(result) => this.onGameComplete(result)}
-                        onGameLose={(result) => this.onGameComplete(result)}
+                        onGameWin={(payload) => this.onGameComplete(payload)}
+                        onGameLose={(payload) => this.onGameComplete(payload)}
+                        onBackToMenu={this.onBackToMenu}
                         gameResultImagelink={this.state.gameResultImagelink}
                     />
                 );
@@ -243,13 +237,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                             this.state.showModal ?
                                 <div
                                     className="toggle-back page-button-item"
-                                    onClick={() => {
-                                        this.setState({ showModal: null });
-                                        if (this.state.playMusic && this.state.showModal === 'showPlay') {
-                                            idleMusic.currentTime = 0;
-                                            idleMusic.play();
-                                        }
-                                    }}
+                                    onClick={() => this.onBackToMenu()}
                                 >
                                     <img
                                         draggable="false"
@@ -291,8 +279,9 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                     </div>
                     {
                         this.state.requestToken && !this.state.hideLoginModal ?
-                            <span className="games-login-modal animated fa">
-                                {this.renderLogin()}
+                            <span className="games-login-modal animated fa" style={{ backgroundColor: 'rgba(255,255,255,0.7)', overflow: 'auto' }}>
+                                {/* {this.renderLogin()} */}
+                                <AuthPage isModal={true} />
                             </span>
                             :
                             <div className="main-menu-wrapper">
@@ -312,9 +301,9 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                     <div className="main-menu-bottom-content animated slideInDown fadeIn">
                                         <div className="game-info pb-1">
                                             {
-                                                dataChecking(globalScope, 'username') &&
+                                                dataChecking(globalScope, 'profile') &&
                                                     <div className="main-menu-username animated fadeIn">
-                                                        <Typography variant="h5">Welcome, {globalScope.username}!</Typography>
+                                                        <Typography>Welcome, {globalScope.profile.name || globalScope.profile.username}!</Typography>
                                                     </div>
                                             }
                                             {
@@ -330,11 +319,6 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                         <div
                                             onClick={
                                                 () => {
-                                                    // if (!this.state.gameAccessToken) {
-                                                    //     alert('Please wait while the game loading');
-                                                    //     return null;
-                                                    // }
-
                                                     if (this.state.playMusic) {
                                                         const startSound = new Audio(require('./rsc/sound/Start_button.wav'));
                                                         startSound.play();

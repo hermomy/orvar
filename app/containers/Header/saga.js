@@ -61,7 +61,7 @@ export function* getUserDataWorker() {
         const response = yield call(apiRequest, '/profile');
         if (response && response.ok !== false) {
             yield put(getUserDataSuccess(response));
-            globalScope.username = response.data.username;
+            globalScope.profile = response.data;
         } else if (response && response.ok === false) {
             yield put(getUserDataFailed(response));
         } else {

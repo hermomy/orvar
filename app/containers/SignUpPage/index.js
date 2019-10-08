@@ -289,7 +289,6 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
             <Button
                 type="submit"
                 variant="contained"
-                color="secondary"
                 style={{ backgroundColor: '#3b5998', color: 'white' }}
             >
                 <Typography>LOGIN WITH FACEBOOK</Typography>

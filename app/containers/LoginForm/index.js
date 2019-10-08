@@ -19,7 +19,6 @@ import globalScope from 'globalScope';
 import {
     Button,
     Card,
-    CardContent,
     CardActions,
     Container,
     FormControl,
@@ -72,16 +71,27 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
         this.setState((state) => ({ showPassword: !state.showPassword }));
     }
 
-    cardHeader = () => (
-        <div className=" mt-2 pl-1">
-            <Typography variant="h5" color="primary">
-                <b>{dataChecking(this.props.loginForm, 'image', 'items') && this.props.loginForm.image.items[0].title}</b>
-            </Typography>
-            <Typography variant="h6" color="textSecondary">
-                <br />{dataChecking(this.props.loginForm, 'image', 'items') && this.props.loginForm.image.items[0].brief}
-            </Typography>
-        </div>
-    )
+    cardHeader = () => {
+        if (this.props.isModal) {
+            return (
+                <div className="pl-1">
+                    <Typography variant="h5" color="primary">
+                        <b>Log in now!</b>
+                    </Typography>
+                </div>
+            );
+        }
+        return (
+            <div className=" mt-2 pl-1">
+                <Typography variant="h5" color="primary">
+                    <b>{dataChecking(this.props.loginForm, 'image', 'items') && this.props.loginForm.image.items[0].title}</b>
+                </Typography>
+                <Typography variant="h6" color="textSecondary">
+                    <br />{dataChecking(this.props.loginForm, 'image', 'items') && this.props.loginForm.image.items[0].brief}
+                </Typography>
+            </div>
+        );
+    }
 
     formInput = () => (
         <div>
@@ -152,13 +162,13 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                     <Container className="p-3">
                         {this.cardHeader()}
                         <form onSubmit={() => { this.props.dispatch(doLogin(this.state)); event.preventDefault(); }}>
-                            <CardContent>
+                            <div className="py-1 px-1">
                                 {this.formInput()}
                                 {this.forgotPassword()}
                                 {
                                     this.props.loginForm.error && <ErrorMessage error={this.props.loginForm.error} type="danger" />
                                 }
-                            </CardContent>
+                            </div>
                             <CardActions>
                                 {this.formAction()}
                             </CardActions>

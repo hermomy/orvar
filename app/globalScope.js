@@ -1,7 +1,7 @@
 const globalScope = {
     token: '',
     isAdmin: false,
-    username: '',
+    profile: {},
     api: process.env.API_URL,
     previousPage: '',
     config: {},

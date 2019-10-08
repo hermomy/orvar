@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
@@ -14,9 +14,26 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import Countdown from 'react-countdown-now';
 import ReactCardFlip from 'react-card-flip';
-
-import { Events } from 'globalUtils';
-
+import {
+    FacebookShareButton,
+    FacebookIcon,
+    TwitterShareButton,
+    TwitterIcon,
+    TelegramShareButton,
+    TelegramIcon,
+    WhatsappShareButton,
+    WhatsappIcon,
+} from 'react-share';
+import { dataChecking, Events } from 'globalUtils';
+import {
+    IconButton,
+} from '@material-ui/core';
+import {
+    Close,
+} from '@material-ui/icons';
+import {
+    getGameToken,
+} from './actions';
 import makeSelectPerfectMatchGame from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -38,32 +55,64 @@ gameMusic.loop = true;
 const winSound = new Audio(require('./rsc/sound/xmas_winner.mp3'));
 const loseSound = new Audio(require('./rsc/sound/xmas_loser.mp3'));
 
+const initialState = {
+    delay: null,
+    popup: false,
+    tips: '',
+    countingDown: null,
+    preparationDone: false,
+    flipped_0: false,
+    flipped_1: false,
+    flipped_2: false,
+    flipped_3: false,
+    flipped_4: false,
+    flipped_5: false,
+    flipped_6: false,
+    flipped_7: false,
+    flipped_8: false,
+    flipped_9: false,
+    flipped_10: false,
+    flipped_11: false,
+    correctMatch: {},
+    wrongMatch: {},
+    onHand1: null,
+    onHand2: null,
+    complete: null,
+    gameAccessToken: null,
+    brandArr: [],
+};
+
 export class PerfectMatchGame extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
         super(props);
 
-        this.state = {
-            preparationDone: false,
-            fliped: {},
-            correctMatch: {},
-            wrongMatch: {},
-            onHand1: null,
-            onHand2: null,
-        };
-    }
-
-    componentDidMount = () => {
         document.ondragstart = () => null;
         Events.trigger('hideHeader', {});
         this.state = {
-            preparationDone: false,
-            fliped: {},
-            correctMatch: {},
-            wrongMatch: {},
-            onHand1: null,
-            onHand2: null,
+            ...initialState,
+            brandArr: this.shuffleArray([...BRANDS, ...BRANDS]),
         };
+        this.props.dispatch(getGameToken());
+    }
 
+    componentWillReceiveProps = (nextProps) => {
+        if (dataChecking(nextProps, 'perfectMatchGame', 'gameToken', 'success') !== dataChecking(this.props, 'perfectMatchGame', 'gameToken', 'success') && nextProps.perfectMatchGame.gameToken.success) {
+            this.setState({ gameAccessToken: nextProps.perfectMatchGame.gameToken.data.token });
+            this.initialiseGame();
+        }
+    }
+
+    componentWillUpdate = (nextProps) => {
+        if (nextProps.playMusic !== this.props.playMusic) {
+            gameMusic[nextProps.playMusic ? 'play' : 'pause']();
+        }
+    }
+
+    componentWillUnmount() {
+        gameMusic.pause();
+    }
+
+    initialiseGame = () => {
         setTimeout(() => {
             this.setState({ delay: 1 * TIME_UNIT });
         }, 1 * TIME_UNIT);
@@ -112,19 +161,20 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
         setTimeout(() => {
             this.setState({
                 delay: 24 * TIME_UNIT,
-                countingDown: Date.now() + 300400,
-                fliped_0: true,
-                fliped_1: true,
-                fliped_2: true,
-                fliped_3: true,
-                fliped_4: true,
-                fliped_5: true,
-                fliped_6: true,
-                fliped_7: true,
-                fliped_8: true,
-                fliped_9: true,
-                fliped_10: true,
-                fliped_11: true,
+                countingDown: Date.now() + (300400 - 300000),
+                tips: 'Try to get a match',
+                flipped_0: true,
+                flipped_1: true,
+                flipped_2: true,
+                flipped_3: true,
+                flipped_4: true,
+                flipped_5: true,
+                flipped_6: true,
+                flipped_7: true,
+                flipped_8: true,
+                flipped_9: true,
+                flipped_10: true,
+                flipped_11: true,
             });
         }, 24 * TIME_UNIT);
         setTimeout(() => {
@@ -135,18 +185,6 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
         if (this.props.playMusic) {
             gameMusic.play();
         }
-
-        this.setState({ brandArr: this.shuffleArray([...BRANDS, ...BRANDS]) });
-    }
-
-    componentWillUpdate = (nextProps) => {
-        if (nextProps.playMusic !== this.props.playMusic) {
-            gameMusic[nextProps.playMusic ? 'play' : 'pause']();
-        }
-    }
-
-    componentWillUnmount() {
-        gameMusic.pause();
     }
 
     shuffleArray = (array) => {
@@ -211,17 +249,29 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     this.setState({
                                         complete: 'lose',
                                     });
-                                    // this.props.onGameLose({ status: 'lose' });
+                                    this.props.onGameLose({ score: 0, token: this.state.gameAccessToken });
                                 }
                                 return <span className="countdown-timer">{seconds}s</span>;
                             }}
                         />
                         :
-                        <div className="countdown-timer">30s</div>
+                        <div className="countdown-timer">
+                            {
+                                (() => {
+                                    if (this.state.delay < 15 * TIME_UNIT) {
+                                        return 'MEMORISE';
+                                    } else if (this.state.delay < 21 * TIME_UNIT) {
+                                        return 'READY';
+                                    }
+
+                                    return 'GO';
+                                })()
+                            }
+                        </div>
                 }
             </div>
             {/* <div onClick={() => this.setState({ brandArr: this.shuffleArray([...BRANDS, ...BRANDS]) })}>randomise</div> */}
-            <div>tips</div>
+            <div>{this.state.tips}</div>
             <div className="card-field">
                 {
                     this.state.brandArr && this.state.brandArr.map((brandImage, index) => (
@@ -231,13 +281,13 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                 const obj = { ...this.state };
                                 let result = null;
 
-                                if (!obj[`fliped_${index}`]) {
+                                if (!obj[`flipped_${index}`]) {
                                     return null;
                                 }
 
                                 if (obj.onHand1 && obj.onHand2) {
-                                    obj[`fliped_${obj.onHand1.index}`] = obj.onHand1.image !== obj.onHand2.image;
-                                    obj[`fliped_${obj.onHand2.index}`] = obj.onHand1.image !== obj.onHand2.image;
+                                    obj[`flipped_${obj.onHand1.index}`] = obj.onHand1.image !== obj.onHand2.image;
+                                    obj[`flipped_${obj.onHand2.index}`] = obj.onHand1.image !== obj.onHand2.image;
                                     obj.wrongMatch = {};
                                     obj.onHand1 = null;
                                     obj.onHand2 = null;
@@ -251,7 +301,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                 }
 
                                 // put card onhand
-                                obj[`fliped_${index}`] = false;
+                                obj[`flipped_${index}`] = false;
                                 if (!obj.onHand1) {
                                     obj.onHand1 = {
                                         index,
@@ -270,7 +320,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                             const correctSound = new Audio(require('./rsc/sound/flip_correct.mp3'));
                                             correctSound.play();
                                         }
-
+                                        this.setState({ tips: 'Its a perfect match!' });
                                         obj.correctMatch[index] = true;
                                         obj.correctMatch[obj.onHand1.index] = true;
 
@@ -284,7 +334,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     } else {
                                         obj.wrongMatch[index] = true;
                                         obj.wrongMatch[obj.onHand1.index] = true;
-
+                                        this.setState({ tips: 'Oops! That\s not a match.' });
                                         if (this.props.playMusic) {
                                             const bombSound = new Audio(require('./rsc/sound/Bomb.mp3'));
                                             bombSound.play();
@@ -297,14 +347,17 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     this.flipTimer = setTimeout(() => {
                                         this.setState({
                                             disableClick: false,
-                                            [`fliped_${obj.onHand1.index}`]: obj.onHand1.image !== obj.onHand2.image,
-                                            [`fliped_${obj.onHand2.index}`]: obj.onHand1.image !== obj.onHand2.image,
+                                            [`flipped_${obj.onHand1.index}`]: obj.onHand1.image !== obj.onHand2.image,
+                                            [`flipped_${obj.onHand2.index}`]: obj.onHand1.image !== obj.onHand2.image,
                                             wrongMatch: {},
                                             onHand1: null,
                                             onHand2: null,
                                             complete: result || this.state.complete,
+                                        }, () => {
+                                            if (result === 'win') {
+                                                this.props.onGameWin({ score: 6, token: this.state.gameAccessToken });
+                                            }
                                         });
-                                        // this.props.onGameWin({ status: 'win' });
                                     }, 2 * TIME_UNIT);
                                 }
 
@@ -312,7 +365,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                             }}
                             className="flipable-card"
                         >
-                            <ReactCardFlip isFlipped={this.state[`fliped_${index}`]}>
+                            <ReactCardFlip isFlipped={this.state[`flipped_${index}`]}>
                                 <img
                                     draggable="false"
                                     key="back"
@@ -350,48 +403,162 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
 
     renderResult = () => (
         <div>
-            {/* {
-                this.props.gameResultImagelink ?
+            {
+                dataChecking(this.props, 'gameResultImagelink', 'result', 'image', 'mobile') ?
                     <div className="prize-inner-section animated zoomIn">
                         <img
                             draggable="false"
                             key={1}
                             width="100%"
-                            src={this.props.gameResultImagelink}
+                            src={this.props.gameResultImagelink.result.image.desktop}
                             alt="carousel slide show"
                             className="slideshow-image"
                         />
+                        <span className="result-bottom-content">
+                            <div
+                                className="menu result-content"
+                                onClick={this.props.onBackToMenu}
+                            >
+                                <img
+                                    className="result-button-item animated zoomIn"
+                                    draggable="false"
+                                    src={require('./rsc/button_menu.png')}
+                                    alt="menu button"
+                                />
+                            </div>
+                            <div
+                                className="share result-content"
+                                onClick={() => this.setState({ popup: true })}
+                            >
+                                <img
+                                    className="result-button-item animated zoomIn"
+                                    draggable="false"
+                                    src={require('./rsc/button_share.png')}
+                                    alt="share button"
+                                />
+                            </div>
+                            <div
+                                className="replay result-content"
+                                onClick={() => {
+                                    this.props.dispatch(getGameToken());
+                                    this.setState({
+                                        ...initialState,
+                                        brandArr: this.shuffleArray([...BRANDS, ...BRANDS]),
+                                    });
+                                }}
+                            >
+                                <img
+                                    className="result-button-item animated zoomIn"
+                                    draggable="false"
+                                    src={require('./rsc/button_replay.png')}
+                                    alt="replay button"
+                                />
+                            </div>
+                        </span>
                     </div>
                     :
-                    null
-            } */}
-            {/* {
-                this.state.complete === 'win' ?
                     <div className="prize-inner-section animated zoomIn">
-                        <img
-                            draggable="false"
-                            key={1}
-                            width="100%"
-                            src={require('./rsc/success.jpg')}
-                            alt="carousel slide show"
-                            className="slideshow-image"
-                        />
+                        <span className="result-bottom-content">
+                            <div
+                                className="menu result-content"
+                                onClick={this.props.onBackToMenu}
+                            >
+                                <img
+                                    className="result-button-item animated zoomIn"
+                                    draggable="false"
+                                    src={require('./rsc/button_menu.png')}
+                                    alt="menu button"
+                                />
+                            </div>
+                            <div
+                                className="share result-content"
+                                onClick={() => this.setState({ popup: true })}
+                            >
+                                <img
+                                    className="result-button-item animated zoomIn"
+                                    draggable="false"
+                                    src={require('./rsc/button_share.png')}
+                                    alt="share button"
+                                />
+                            </div>
+                            <div
+                                className="replay result-content"
+                                onClick={() => {
+                                    this.props.dispatch(getGameToken());
+                                    this.setState({
+                                        ...initialState,
+                                        brandArr: this.shuffleArray([...BRANDS, ...BRANDS]),
+                                    });
+                                }}
+                            >
+                                <img
+                                    className="result-button-item animated zoomIn"
+                                    draggable="false"
+                                    src={require('./rsc/button_replay.png')}
+                                    alt="replay button"
+                                />
+                            </div>
+                        </span>
                     </div>
-                    :
-                    <div className="prize-inner-section animated zoomIn">
-                        <img
-                            draggable="false"
-                            key={1}
-                            width="100%"
-                            src={require('./rsc/failed.jpg')}
-                            alt="carousel slide show"
-                            className="slideshow-image"
-                        />
-                    </div>
-            } */}
+            }
         </div>
     )
 
+    renderDialogContent = () => {
+        const shareUrl = window.location.href;
+        const shareTitle = '';
+        const shareHashtag = '';
+        const shareVia = '';
+        return (
+            <div>
+                <div className="share-dialog-title">
+                    Share to others!
+                </div>
+                <span className="share-dialog-content">
+                    <div className="facebook share-content">
+                        <FacebookShareButton
+                            className="facebook share-button-item"
+                            url={shareUrl}
+                            quote={shareTitle}
+                            hashtag={shareHashtag}
+                        >
+                            <FacebookIcon round={true} />
+                        </FacebookShareButton>
+                    </div>
+                    <div className="twitter share-content">
+                        <TwitterShareButton
+                            className="twitter share-button-item"
+                            url={shareUrl}
+                            title={shareTitle}
+                            via={shareVia}
+                            hashtag={shareHashtag}
+                        >
+                            <TwitterIcon round={true} />
+                        </TwitterShareButton>
+                    </div>
+                    <div className="telegram share-content">
+                        <TelegramShareButton
+                            className="telegram share-button-item"
+                            url={shareUrl}
+                            title={shareTitle}
+                        >
+                            <TelegramIcon round={true} />
+                        </TelegramShareButton>
+                    </div>
+                    <div className="whatsapp share-content">
+                        <WhatsappShareButton
+                            className="whatsapp share-button-item"
+                            url={shareUrl}
+                            title={shareTitle}
+                            separator="\n"
+                        >
+                            <WhatsappIcon round={true} />
+                        </WhatsappShareButton>
+                    </div>
+                </span>
+            </div>
+        );
+    }
     render() {
         return (
             <div className="perfect-match-game-page animated fadeIn">
@@ -403,14 +570,30 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                     className="game-background"
                 />
                 {
-                    this.state.complete ?
-                        <div className="result-screen">
-                            {this.renderResult()}
+                    dataChecking(this.props, 'perfectMatchGame', 'gameToken', 'loading') ?
+                        <div>Loading...</div>
+                        :
+                        this.state.complete ?
+                            <div className="result-screen">
+                                {this.renderResult()}
+                            </div>
+                            :
+                            <div className="game-screen animated fadeIn">
+                                {this.renderGame()}
+                            </div>
+                }
+                {
+                    this.state.popup ?
+                        <div className="perfect-match-popup-modal">
+                            <div className="modal-inner-div">
+                                <IconButton className="close modal-inner-button" onClick={() => this.setState({ popup: false })}>
+                                    <Close />
+                                </IconButton>
+                                {this.renderDialogContent()}
+                            </div>
                         </div>
                         :
-                        <div className="game-screen animated fadeIn">
-                            {this.renderGame()}
-                        </div>
+                        null
                 }
             </div>
         );
@@ -418,7 +601,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
 }
 
 PerfectMatchGame.propTypes = {
-    // dispatch: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
