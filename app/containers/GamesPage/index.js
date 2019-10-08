@@ -95,8 +95,11 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
 
         if (window.takePocket) {
             const pocket = window.takePocket();
-            globalScope.profile = pocket;
-            globalScope.token = pocket.hertoken;
+
+            if (pocket.hertoken) {
+                globalScope.profile = pocket;
+                globalScope.token = pocket.hertoken;
+            }
         } else if (!globalScope.token) {
             globalScope.previousPage = window.location.pathname;
             this.setState({ requestToken: true });
