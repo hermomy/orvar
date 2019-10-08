@@ -299,7 +299,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                             {
                                                 dataChecking(globalScope, 'profile') &&
                                                     <div className="main-menu-username animated fadeIn">
-                                                        <Typography>Welcome, {globalScope.profile.name || globalScope.profile.username}!</Typography>
+                                                        <Typography style={{ fontSize: '2rem' }}>Welcome, {globalScope.profile.name || globalScope.profile.username}!</Typography>
                                                     </div>
                                             }
                                             {
