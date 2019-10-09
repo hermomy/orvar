@@ -364,7 +364,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                 </div>
                             </div>
                     }
-                    <div className="ppg-version">0.1.0</div>
+                    <div className="ppg-version">0.1.2</div>
                     <img
                         draggable="false"
                         src={require('./rsc/D11-Landing-image-v2.jpg')}

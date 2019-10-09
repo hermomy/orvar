@@ -410,14 +410,28 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
             <div className="prize-inner-section animated zoomIn">
                 {
                     dataChecking(this.props, 'gameResultImagelink', 'result', 'image', 'mobile') ?
-                        <img
-                            draggable="false"
-                            width="100%"
-                            key={1}
-                            src={this.props.gameResultImagelink.result.image.desktop}
-                            alt="result background"
-                            className="result-image"
-                        />
+                        <div
+                            onClick={() => {
+                                if (window.postMessage) {
+                                    window.postMessage(`${JSON.stringify(this.state.gameResultImagelink.result._applink)}`, 'applink');
+
+                                    if (window.onCloseWindow) {
+                                        window.onCloseWindow();
+                                    }
+                                } else {
+                                    alert('weblink handling');
+                                }
+                            }}
+                        >
+                            <img
+                                draggable="false"
+                                width="100%"
+                                key={1}
+                                src={this.props.gameResultImagelink.result.image.desktop}
+                                alt="result background"
+                                className="result-image"
+                            />
+                        </div>
                         :
                         null
                 }
