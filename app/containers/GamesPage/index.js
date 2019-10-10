@@ -296,12 +296,14 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                     </div> */}
                                     <div className="main-menu-bottom-content animated slideInDown fadeIn">
                                         <div className="game-info pb-1">
-                                            {
-                                                dataChecking(globalScope, 'profile') &&
-                                                    <div className="main-menu-username animated fadeIn">
-                                                        <Typography style={{ fontSize: '2rem' }}>Welcome, {globalScope.profile.name || globalScope.profile.username}!</Typography>
-                                                    </div>
-                                            }
+                                            <div className="main-menu-username">
+                                                {
+                                                    dataChecking(globalScope, 'profile', 'name') && dataChecking(globalScope, 'profile', 'username') ?
+                                                        <Typography className="animated fadeIn" style={{ fontSize: '2em' }}>Welcome, {globalScope.profile.name || globalScope.profile.username}!</Typography>
+                                                        :
+                                                        <img className="username-loading" src={require('images/preloader-02.gif')} alt="" style={{ width: '2.6em' }} />
+                                                }
+                                            </div>
                                             {
                                                 this.state.availableChance !== null ?
                                                     <div className="main-menu-username animated fadeIn">

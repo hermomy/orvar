@@ -1,5 +1,6 @@
 .perfect-match-game-page {
     position: relative;
+    font-size: 15px;
 
     div, img {
         -webkit-user-select: none;
@@ -46,7 +47,7 @@
 
             .result-button-item {
                 width: 100%;
-                max-height: 10rem;
+                max-height: 10em;
                 cursor: pointer;
                 background-color: #AAA0;
                 border-radius: 10%;
@@ -80,7 +81,7 @@
         // }
 
         .ready-go-container {
-            font-size: 15rem;
+            font-size: 15em;
             position: absolute;
             top: 0;
             left: 0;
@@ -96,7 +97,7 @@
         }
 
         .countdown-timer {
-            font-size: 2rem;
+            font-size: 2em;
         }
 
         .card-field {
