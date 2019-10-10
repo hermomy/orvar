@@ -110,6 +110,10 @@
                 cursor: pointer;
                 background-color: #FFF3;
 
+                &.four-per-row{
+                    width: 22%;
+                }
+
                 .react-card-front,
                 .react-card-back {
                     display: flex;

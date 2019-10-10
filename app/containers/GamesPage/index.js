@@ -99,6 +99,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             if (pocket.hertoken) {
                 globalScope.profile = pocket;
                 globalScope.token = pocket.hertoken;
+                globalScope.axios.setHeader('hertoken', globalScope.token);
             }
         } else if (!globalScope.token) {
             globalScope.previousPage = window.location.pathname;
@@ -116,9 +117,6 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         if (dataChecking(nextProps, 'gamesPage', 'result') !== dataChecking(this.props, 'gamesPage', 'result') && nextProps.gamesPage.result.success) {
             this.setState({ gameResultImagelink: nextProps.gamesPage.result.data });
         }
-        // if (availableChance !== availableChance) {
-        //     // setState availableChance
-        // }
     }
 
     onGameComplete = (payload) => {
@@ -364,7 +362,18 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                 </div>
                             </div>
                     }
-                    <div className="ppg-version">0.1.2</div>
+                    <div
+                        className="ppg-version"
+                        onClick={() => {
+                            if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+                                window.ReactNativeWebView.postMessage('adasdadasd', 'applink');
+
+                                if (window.onCloseWindow) {
+                                    window.onCloseWindow();
+                                }
+                            }
+                        }}
+                    >0.1.5</div>
                     <img
                         draggable="false"
                         src={require('./rsc/D11-Landing-image-v2.jpg')}

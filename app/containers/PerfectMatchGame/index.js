@@ -39,6 +39,9 @@ import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
 
+const CARD_PAIR = 6;
+const GAME_DURATION = 30000;
+
 const TIME_UNIT = 330;
 const shareUrl = 'https://app.hermo.my/N1B7NUpi3Z';
 const shareTitle = '';
@@ -51,6 +54,12 @@ const BRANDS = [
     require('./rsc/brands/D11-Brand_Image_innisfree_300x300.jpg'),
     require('./rsc/brands/D11-Brand_Image_Laneige_300x300.jpg'),
     require('./rsc/brands/D11-Brand_Image_Loreal_300x300.jpg'),
+    require('./rsc/brands/D11-Brand_Image_Maybelline_300x300.jpg'),
+    require('./rsc/brands/D11-Brand_Image_MIRAE_300x300.jpg'),
+    require('./rsc/brands/D11-Brand_Image_NIVEA_300x300.jpg'),
+    require('./rsc/brands/D11-Brand_Image_NYX_300x300.jpg'),
+    require('./rsc/brands/D11-Brand_Image_Ogawa_300x300.jpg'),
+    require('./rsc/brands/D11-Brand_Image_Watashi_300x300.jpg'),
 ];
 
 const gameMusic = new Audio(require('./rsc/sound/Prizefighter.mp3'));
@@ -64,18 +73,6 @@ const initialState = {
     tips: '',
     countingDown: null,
     preparationDone: false,
-    flipped_0: false,
-    flipped_1: false,
-    flipped_2: false,
-    flipped_3: false,
-    flipped_4: false,
-    flipped_5: false,
-    flipped_6: false,
-    flipped_7: false,
-    flipped_8: false,
-    flipped_9: false,
-    flipped_10: false,
-    flipped_11: false,
     correct: 0,
     correctMatch: {},
     wrongMatch: {},
@@ -94,9 +91,15 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
         Events.trigger('hideHeader', {});
         this.state = {
             ...initialState,
-            brandArr: this.shuffleArray([...BRANDS, ...BRANDS]),
+            brandArr: this.shuffleArray(this.getRandomBrands()),
         };
         this.props.dispatch(getGameToken());
+
+        let counter = 0;
+        while (counter < CARD_PAIR) {
+            this.state[`flipped_${counter}`] = false;
+            counter++;
+        }
     }
 
     componentWillReceiveProps = (nextProps) => {
@@ -116,74 +119,118 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
         gameMusic.pause();
     }
 
+
+    getRandomBrands = () => {
+        const brands = [...BRANDS];
+        let index = null;
+        const newArr = [];
+
+        let counter = 0;
+        while (counter < CARD_PAIR) {
+            index = Math.floor(Math.random() * CARD_PAIR);
+            newArr.push(brands[index]);
+            brands.splice(index, 1);
+            counter++;
+        }
+        return [...newArr, ...newArr];
+    }
+
+    setDelayState = (value, getExtraObj) => {
+        setTimeout(() => {
+            const obj = getExtraObj ? getExtraObj() : {};
+            this.setState({ ...obj, delay: value * TIME_UNIT });
+        }, value * TIME_UNIT);
+    }
+
     initialiseGame = () => {
-        setTimeout(() => {
-            this.setState({ delay: 1 * TIME_UNIT });
-        }, 1 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 2 * TIME_UNIT });
-        }, 2 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 3 * TIME_UNIT });
-        }, 3 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 4 * TIME_UNIT });
-        }, 4 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 5 * TIME_UNIT });
-        }, 5 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 6 * TIME_UNIT });
-        }, 6 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 7 * TIME_UNIT });
-        }, 7 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 8 * TIME_UNIT });
-        }, 8 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 9 * TIME_UNIT });
-        }, 9 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 10 * TIME_UNIT });
-        }, 10 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 11 * TIME_UNIT });
-        }, 11 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 12 * TIME_UNIT });
-        }, 12 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 15 * TIME_UNIT });
-        }, 15 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 18 * TIME_UNIT });
-        }, 18 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 21 * TIME_UNIT });
-        }, 21 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({
-                delay: 24 * TIME_UNIT,
-                countingDown: Date.now() + (30400),
+        let counter = 0;
+        while (counter < (CARD_PAIR * 2)) {
+            this.setDelayState(counter + 1);
+            counter++;
+        }
+        this.setDelayState((CARD_PAIR * 2) + 3);
+        this.setDelayState((CARD_PAIR * 2) + 6);
+        this.setDelayState((CARD_PAIR * 2) + 9);
+
+        const getExtraObj = () => {
+            const obj = {
+                countingDown: Date.now() + (GAME_DURATION + 400),
                 tips: 'Try to get a match!',
-                flipped_0: true,
-                flipped_1: true,
-                flipped_2: true,
-                flipped_3: true,
-                flipped_4: true,
-                flipped_5: true,
-                flipped_6: true,
-                flipped_7: true,
-                flipped_8: true,
-                flipped_9: true,
-                flipped_10: true,
-                flipped_11: true,
-            });
-        }, 24 * TIME_UNIT);
-        setTimeout(() => {
-            this.setState({ delay: 27 * TIME_UNIT });
-        }, 27 * TIME_UNIT);
+            };
+            let counter2 = 0;
+            while (counter2 < (CARD_PAIR * 2)) {
+                obj[`flipped_${counter2}`] = true;
+                counter2++;
+            }
+
+            return obj;
+        };
+        this.setDelayState((CARD_PAIR * 2) + 12, getExtraObj);
+        this.setDelayState((CARD_PAIR * 2) + 15);
+
+        // setTimeout(() => {
+        //     this.setState({ delay: 1 * TIME_UNIT });
+        // }, 1 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 2 * TIME_UNIT });
+        // }, 2 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 3 * TIME_UNIT });
+        // }, 3 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 4 * TIME_UNIT });
+        // }, 4 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 5 * TIME_UNIT });
+        // }, 5 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 6 * TIME_UNIT });
+        // }, 6 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 7 * TIME_UNIT });
+        // }, 7 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 8 * TIME_UNIT });
+        // }, 8 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 9 * TIME_UNIT });
+        // }, 9 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 10 * TIME_UNIT });
+        // }, 10 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 11 * TIME_UNIT });
+        // }, 11 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 12 * TIME_UNIT });
+        // }, 12 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 15 * TIME_UNIT });
+        // }, 15 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 18 * TIME_UNIT });
+        // }, 18 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 21 * TIME_UNIT });
+        // }, 21 * TIME_UNIT);
+        // setTimeout(() => {
+        //     const obj = {
+        //         delay: 24 * TIME_UNIT,
+        //         countingDown: Date.now() + (30400),
+        //         tips: 'Try to get a match!',
+        //     };
+
+        //     let counter = 0;
+        //     while (counter < CARD_PAIR) {
+        //         obj[`flipped_${counter}`] = true;
+        //         counter++;
+        //     }
+
+        //     this.setState(obj);
+        // }, 24 * TIME_UNIT);
+        // setTimeout(() => {
+        //     this.setState({ delay: 27 * TIME_UNIT });
+        // }, 27 * TIME_UNIT);
 
         gameMusic.currentTime = 0;
         if (this.props.playMusic) {
@@ -191,54 +238,54 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
         }
     }
 
+
     shuffleArray = (array) => {
-        // const newArr = [];
-        // array.forEach((item) => {
-        //     newArr[Math.floor(Math.random() * 2) ? 'push' : 'unshift'](item);
-        // });
-        // return newArr;
-
-        let index = null;
-        let temp = null;
-        const newArr = [...array];
-        let counter = newArr.length - 1;
-        while (counter > 0) {
-            index = Math.floor(Math.random() * counter);
-            temp = newArr[counter];
-            newArr[counter] = newArr[index];
-            newArr[index] = temp;
-            counter--;
-        }
-
+        const newArr = [];
+        array.forEach((item) => {
+            newArr[Math.floor(Math.random() * 2) ? 'push' : 'unshift'](item);
+        });
         return newArr;
+
+        // let index = null;
+        // let temp = null;
+        // const newArr = [...array];
+        // let counter = newArr.length - 1;
+        // while (counter > 0) {
+        //     index = Math.floor(Math.random() * counter);
+        //     temp = newArr[counter];
+        //     newArr[counter] = newArr[index];
+        //     newArr[index] = temp;
+        //     counter--;
+        // }
+        // return newArr;
     }
 
     renderGame = () => (
         <div className="game-panel">
             {
-                this.state.delay > (12 * TIME_UNIT) && !this.state.countingDown ?
+                this.state.delay > ((CARD_PAIR * 2) * TIME_UNIT) && !this.state.countingDown ?
                     <div className="ready-go-container animated fadeIn">
                         {
-                            this.state.delay > 12 * TIME_UNIT && this.state.delay <= 15 * TIME_UNIT ?
+                            this.state.delay > (CARD_PAIR * 2) * TIME_UNIT && this.state.delay <= ((CARD_PAIR * 2) + 3) * TIME_UNIT ?
                                 <div className="ready-go count-3 animated zoomIn">3</div>
                                 :
                                 null
                         }
                         {
-                            this.state.delay > 15 * TIME_UNIT && this.state.delay <= 18 * TIME_UNIT ?
+                            this.state.delay > ((CARD_PAIR * 2) + 3) * TIME_UNIT && this.state.delay <= ((CARD_PAIR * 2) + 6) * TIME_UNIT ?
                                 <div className="ready-go count-2 animated zoomIn">2</div>
                                 :
                                 null
                         }
                         {
-                            this.state.delay > 18 * TIME_UNIT && this.state.delay <= 21 * TIME_UNIT ?
+                            this.state.delay > ((CARD_PAIR * 2) + 6) * TIME_UNIT && this.state.delay <= ((CARD_PAIR * 2) + 9) * TIME_UNIT ?
                                 <div className="ready-go count-1 animated zoomIn">1</div>
                                 :
                                 null
                         }
                     </div>
                     :
-                    <div className={`ready-go-container animated fadeOut ${this.state.delay < (24 * TIME_UNIT) ? '' : 'hidden'}`} />
+                    <div className={`ready-go-container animated fadeOut ${this.state.delay < (((CARD_PAIR * 2) + 12) * TIME_UNIT) ? '' : 'hidden'}`} />
             }
             <div>
                 {
@@ -262,9 +309,9 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                         <div className="countdown-timer">
                             {
                                 (() => {
-                                    if (this.state.delay < 15 * TIME_UNIT) {
+                                    if (this.state.delay < ((CARD_PAIR * 2) + 3) * TIME_UNIT) {
                                         return 'Memorise the cards!';
-                                    } else if (this.state.delay < 21 * TIME_UNIT) {
+                                    } else if (this.state.delay < ((CARD_PAIR * 2) + 9) * TIME_UNIT) {
                                         return 'Ready?';
                                     }
 
@@ -274,13 +321,13 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                         </div>
                 }
             </div>
-            {/* <div onClick={() => this.setState({ brandArr: this.shuffleArray([...BRANDS, ...BRANDS]) })}>randomise</div> */}
             <div className="perfect-game-tips p-1" style={{ fontSize: '1.5rem' }}>{this.state.tips}</div>
             <div className="card-field">
                 {
                     this.state.brandArr && this.state.brandArr.map((brandImage, index) => (
                         <span
                             key={index}
+                            className={`flipable-card ${CARD_PAIR > 6 ? 'four-per-row' : ''}`}
                             onClick={() => {
                                 const obj = { ...this.state };
                                 let result = null;
@@ -329,7 +376,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                         obj.correctMatch[obj.onHand1.index] = true;
 
                                         obj.correct = (obj.correct || 0) + 1;
-                                        if (obj.correct >= BRANDS.length) {
+                                        if (obj.correct >= CARD_PAIR) {
                                             if (this.props.playMusic) {
                                                 winSound.play();
                                             }
@@ -367,7 +414,6 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
 
                                 return true;
                             }}
-                            className="flipable-card"
                         >
                             <ReactCardFlip isFlipped={this.state[`flipped_${index}`]}>
                                 <img
@@ -412,12 +458,16 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                     dataChecking(this.props, 'gameResultImagelink', 'result', 'image', 'mobile') ?
                         <div
                             onClick={() => {
-                                if (window.postMessage) {
-                                    window.postMessage(`${JSON.stringify(this.state.gameResultImagelink.result._applink)}`, 'applink');
-
+                                if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
                                     if (window.onCloseWindow) {
                                         window.onCloseWindow();
                                     }
+                                    const link = {
+                                        key: '_appLink',
+                                        value: this.props.gameResultImagelink.result._applink,
+                                    };
+                                    const str = JSON.stringify(link);
+                                    window.ReactNativeWebView.postMessage(str);
                                 } else {
                                     alert('weblink handling');
                                 }
@@ -464,7 +514,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                             this.props.dispatch(getGameToken());
                             this.setState({
                                 ...initialState,
-                                brandArr: this.shuffleArray([...BRANDS, ...BRANDS]),
+                                brandArr: this.shuffleArray(this.getRandomBrands()),
                             });
                         }}
                     >

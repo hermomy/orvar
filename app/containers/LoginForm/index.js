@@ -140,7 +140,7 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
             <Typography className="text-xs-center my-half" variant="h6">or<br /></Typography>
             <FacebookLogin
                 appId={process.env.FACEBOOK_APP_ID}
-                autoLoad={true}
+                autoLoad={false}
                 // callback={responseFacebook}
                 render={() => (
                     <Button
