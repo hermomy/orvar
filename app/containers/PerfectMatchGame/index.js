@@ -45,7 +45,7 @@ const GAME_DURATION = 30000;
 const TIME_UNIT = 330;
 const shareUrl = 'https://app.hermo.my/N1B7NUpi3Z';
 const shareTitle = '';
-const shareHashtag = '#FUNFACTS';
+const shareHashtag = '#Double11Fiesta';
 const shareVia = '';
 const BRANDS = [
     require('./rsc/brands/D11-Brand_Image_Au-Fairy_300x300.jpg'),
@@ -302,7 +302,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     });
                                     this.props.onGameLose({ score: 0, token: this.state.gameAccessToken });
                                 }
-                                return <span className="countdown-timer" style={{ fontSize: '2.5rem' }}>{seconds}s</span>;
+                                return <span className="countdown-timer" style={{ fontSize: '2.5em' }}>{seconds}s</span>;
                             }}
                         />
                         :
@@ -321,7 +321,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                         </div>
                 }
             </div>
-            <div className="perfect-game-tips p-1" style={{ fontSize: '1.5rem' }}>{this.state.tips}</div>
+            <div className="perfect-game-tips p-1" style={{ fontSize: '1.5em' }}>{this.state.tips}</div>
             <div className="card-field">
                 {
                     this.state.brandArr && this.state.brandArr.map((brandImage, index) => (
