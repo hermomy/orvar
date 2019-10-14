@@ -4,7 +4,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 9999;
+    z-index: 1000;
     background-color: #000A;
 
     .login-container {
@@ -72,7 +72,7 @@
         left: 0;
         right: 0;
         width: 94%;
-        z-index: 5000;
+        z-index: 500;
         margin: auto;
 
         .page-button-item {

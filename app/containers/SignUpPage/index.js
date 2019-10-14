@@ -318,7 +318,7 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
                         </form>
                         <div className="text-xs-center">
                             <Typography className="mt-1" variant="caption" color="textSecondary">
-                                By signing up, you agree to the <u>Terms Conditions</u> and will automatically receive insider offers via email.{/* Need to add Link for Terms and condition */}
+                                By signing up, you agree to the <a href="https://www.hermo.my/about#/userterm?ucf=login-modal"><u>Terms & Conditions</u></a> and will automatically receive insider offers via email.{/* Need to add Link for Terms and condition */}
                             </Typography>
                         </div>
                     </Container>

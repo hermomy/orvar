@@ -18,6 +18,7 @@ import globalScope from 'globalScope';
 
 import {
     Button,
+    ButtonBase,
     Card,
     CardActions,
     Container,
@@ -127,8 +128,10 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
     )
     // Need update on function
     forgotPassword = () => (
-        <FormControl fullWidth={true}>
-            <Typography variant="caption" color="textSecondary"><u>Forgot Password?</u></Typography>
+        <FormControl>
+            <ButtonBase onClick={() => this.props.onClickForgot()}>
+                <u>Forgot Password?</u>
+            </ButtonBase>
         </FormControl>
     )
 
@@ -175,7 +178,7 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                         </form>
                         <div className="text-xs-center">
                             <Typography className="mt-1" variant="caption" color="textSecondary">
-                                By logging, you agree to our <br /><u>Terms Conditions</u> {/* Need to add Link for Terms and condition */}
+                                By logging, you agree to our <br /><a href="https://www.hermo.my/about#/userterm?ucf=login-modal"><u>Terms & Conditions</u></a>
                             </Typography>
                         </div>
 
