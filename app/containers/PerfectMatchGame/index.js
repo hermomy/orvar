@@ -47,25 +47,6 @@ const shareUrl = 'https://app.hermo.my/N1B7NUpi3Z';
 const shareTitle = '';
 const shareHashtag = '#Double11Fiesta';
 const shareVia = '';
-const BRANDS = [
-    require('./rsc/brands/D11-Brand_Image_Au-Fairy_300x300.jpg'),
-    require('./rsc/brands/D11-Brand_Image_COSRX_300x300.jpg'),
-    require('./rsc/brands/D11-Brand_Image_Eucerin_300x300.jpg'),
-    require('./rsc/brands/D11-Brand_Image_innisfree_300x300.jpg'),
-    require('./rsc/brands/D11-Brand_Image_Laneige_300x300.jpg'),
-    require('./rsc/brands/D11-Brand_Image_Loreal_300x300.jpg'),
-    require('./rsc/brands/D11-Brand_Image_Maybelline_300x300.jpg'),
-    require('./rsc/brands/D11-Brand_Image_MIRAE_300x300.jpg'),
-    require('./rsc/brands/D11-Brand_Image_NIVEA_300x300.jpg'),
-    require('./rsc/brands/D11-Brand_Image_NYX_300x300.jpg'),
-    require('./rsc/brands/D11-Brand_Image_Ogawa_300x300.jpg'),
-    require('./rsc/brands/D11-Brand_Image_Watashi_300x300.jpg'),
-];
-
-const gameMusic = new Audio(require('./rsc/sound/Prizefighter.mp3'));
-gameMusic.loop = true;
-const winSound = new Audio(require('./rsc/sound/xmas_winner.mp3'));
-const loseSound = new Audio(require('./rsc/sound/xmas_loser.mp3'));
 
 const initialState = {
     delay: null,
@@ -92,7 +73,14 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
         this.state = {
             ...initialState,
             brandArr: this.shuffleArray(this.getRandomBrands()),
+            gameMusic: new Audio(this.props.gameConfig.background_music),
+            correctSound: new Audio(this.props.gameConfig.flip_corret_sound),
+            wrongSound: new Audio(this.props.gameConfig.flip_wrong_sound),
+            winSound: new Audio(this.props.gameConfig.winner_sound),
+            loseSound: new Audio(this.props.gameConfig.loser_sound),
+            clickSound: new Audio(this.props.gameConfig.flip_sound),
         };
+        this.state.gameMusic.loop = true;
         this.props.dispatch(getGameToken());
 
         let counter = 0;
@@ -111,17 +99,17 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
 
     componentWillUpdate = (nextProps) => {
         if (nextProps.playMusic !== this.props.playMusic) {
-            gameMusic[nextProps.playMusic ? 'play' : 'pause']();
+            this.state.gameMusic[nextProps.playMusic ? 'play' : 'pause']();
         }
     }
 
     componentWillUnmount() {
-        gameMusic.pause();
+        this.state.gameMusic.pause();
     }
 
 
     getRandomBrands = () => {
-        const brands = [...BRANDS];
+        const brands = [...this.props.gameConfig.card_image];
         let index = null;
         const newArr = [];
 
@@ -232,9 +220,9 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
         //     this.setState({ delay: 27 * TIME_UNIT });
         // }, 27 * TIME_UNIT);
 
-        gameMusic.currentTime = 0;
+        this.state.gameMusic.currentTime = 0;
         if (this.props.playMusic) {
-            gameMusic.play();
+            this.state.gameMusic.play();
         }
     }
 
@@ -295,7 +283,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                             renderer={({ seconds, completed }) => {
                                 if (completed) {
                                     if (this.props.playMusic) {
-                                        loseSound.play();
+                                        this.state.loseSound.play();
                                     }
                                     this.setState({
                                         complete: 'lose',
@@ -347,8 +335,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
 
                                 // play flip music
                                 if (this.props.playMusic) {
-                                    const clickSound = new Audio(require('./rsc/sound/flip.mp3'));
-                                    clickSound.play();
+                                    this.state.clickSound.play();
                                 }
 
                                 // put card onhand
@@ -368,8 +355,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     // play pair result music
                                     if (brandImage === obj.onHand1.image) {
                                         if (this.props.playMusic) {
-                                            const correctSound = new Audio(require('./rsc/sound/flip_correct.mp3'));
-                                            correctSound.play();
+                                            this.state.correctSound.play();
                                         }
                                         obj.tips = 'It’s a perfect match!';
                                         obj.correctMatch[index] = true;
@@ -378,7 +364,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                         obj.correct = (obj.correct || 0) + 1;
                                         if (obj.correct >= CARD_PAIR) {
                                             if (this.props.playMusic) {
-                                                winSound.play();
+                                                this.state.winSound.play();
                                             }
                                             result = 'win';
                                         }
@@ -387,8 +373,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                         obj.wrongMatch[obj.onHand1.index] = true;
                                         obj.tips = 'Oops! That’s not a match.';
                                         if (this.props.playMusic) {
-                                            const bombSound = new Audio(require('./rsc/sound/Bomb.mp3'));
-                                            bombSound.play();
+                                            this.state.wrongSound.play();
                                         }
                                     }
                                 }
@@ -421,7 +406,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     key="back"
                                     width="100%"
                                     height="100%"
-                                    src={require('./rsc/D11-Brand_Cover-Image_300x300.jpg')}
+                                    src={this.props.gameConfig.card_cover}
                                     // src={brandImage}
                                     alt="game card"
                                     className={`
@@ -493,7 +478,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                         <img
                             className="result-button-item animated zoomIn"
                             draggable="false"
-                            src={require('./rsc/D11-Button-Image_Menu_243x332.png')}
+                            src={this.props.gameConfig.result_actions.menu_button}
                             alt="menu button"
                         />
                     </div>
@@ -504,7 +489,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                         <img
                             className="result-button-item animated zoomIn"
                             draggable="false"
-                            src={require('./rsc/D11-Button-Image_Share_243x332.png')}
+                            src={this.props.gameConfig.result_actions.share_button}
                             alt="share button"
                         />
                     </div>
@@ -521,7 +506,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                         <img
                             className="result-button-item animated zoomIn"
                             draggable="false"
-                            src={require('./rsc/D11-Button-Image_Replay_243x332.png')}
+                            src={this.props.gameConfig.result_actions.replay_button}
                             alt="replay button"
                         />
                     </div>
@@ -586,7 +571,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                 <img
                     draggable="false"
                     width="100%"
-                    src={require('./rsc/D11-Game-background.jpg')}
+                    src={this.props.gameConfig.background_image}
                     alt="game background"
                     className="game-background"
                 />

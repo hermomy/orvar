@@ -34,35 +34,38 @@ import saga from './saga';
 // import messages from './messages';
 import './style.scss';
 
-const prizeSlide = [
-    {
-        key: 'prize1',
-        image: require('./rsc/D11-prize-image.jpg'),
-        next: null,
-        prev: null,
-    // }, {
-    //     key: 'prize2',
-    //     image: require('./rsc/prize_two.jpg'),
-    //     next: 'prize3',
-    //     prev: 'prize1',
-    // }, {
-    //     key: 'prize3',
-    //     key: 'prize3',
-    //     image: require('./rsc/prize_three.jpg'),
-    //     next: null,
-    //     prev: 'prize2',
-    },
-];
-const howToSlide = [
-    {
-        key: 'how_to',
-        image: require('./rsc/D11-How-To-Play.jpg'),
-        next: 'prize2',
-        prev: null,
-    },
-];
-const idleMusic = new Audio(require('./rsc/sound/Prizefighter.mp3'));
+import mockData from './mockDataReturnFromAPI';
+
+// const prizeSlide = [
+//     {
+//         key: 'prize1',
+//         image: require('./rsc/D11-prize-image.jpg'),
+//         next: null,
+//         prev: null,
+//     // }, {
+//     //     key: 'prize2',
+//     //     image: require('./rsc/prize_two.jpg'),
+//     //     next: 'prize3',
+//     //     prev: 'prize1',
+//     // }, {
+//     //     key: 'prize3',
+//     //     key: 'prize3',
+//     //     image: require('./rsc/prize_three.jpg'),
+//     //     next: null,
+//     //     prev: 'prize2',
+//     },
+// ];
+// const howToSlide = [
+//     {
+//         key: 'how_to',
+//         image: require('./rsc/D11-How-To-Play.jpg'),
+//         next: 'prize2',
+//         prev: null,
+//     },
+// ];
+const idleMusic = new Audio(mockData.config.menu.background_music);
 idleMusic.loop = true;
+const startSound = new Audio(mockData.config.menu.start_sound);
 
 export class GamesPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
@@ -196,6 +199,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                         onGameLose={(payload) => this.onGameComplete(payload)}
                         onBackToMenu={this.onBackToMenu}
                         gameResultImagelink={this.state.gameResultImagelink}
+                        gameConfig={mockData.config.game}
                     />
                 );
             }
@@ -211,7 +215,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                     draggable="false"
                                     key={index}
                                     width="100%"
-                                    src={item.image}
+                                    src={item}
                                     alt="carousel slide show"
                                     className="slideshow-image"
                                 />
@@ -319,7 +323,6 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                             onClick={
                                                 () => {
                                                     if (this.state.playMusic) {
-                                                        const startSound = new Audio(require('./rsc/sound/Start_button.wav'));
                                                         startSound.play();
                                                     }
                                                     setTimeout(() => {
@@ -339,7 +342,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                             />
                                         </div>
                                         <div
-                                            onClick={() => this.setState({ showModal: 'slideShow', slideArray: prizeSlide })}
+                                            onClick={() => this.setState({ showModal: 'slideShow', slideArray: mockData.config.prize_slider })}
                                             className="animated slideInLeft"
                                         >
                                             <img
@@ -350,7 +353,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                             />
                                         </div>
                                         <div
-                                            onClick={() => this.setState({ showModal: 'slideShow', slideArray: howToSlide })}
+                                            onClick={() => this.setState({ showModal: 'slideShow', slideArray: mockData.config.how_to_play_slider })}
                                             className="animated slideInRight"
                                         >
                                             <img
@@ -367,15 +370,21 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                     <div
                         className="ppg-version"
                         onClick={() => {
-                            if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
-                                window.ReactNativeWebView.postMessage('adasdadasd', 'applink');
-
-                                if (window.onCloseWindow) {
-                                    window.onCloseWindow();
-                                }
+                            alert('asdfadsf');
+                            alert(`${window.parent ? 'have window.parent' : 'no window.parent'}`);
+                            // alert(`${window.parent && window.parent.onPerfectGame ? 'have window.parent.onPerfectGame' : 'no window.parent.onPerfectGame'}`);
+                            if (window.parent && window.parent.onPerfectGame) {
+                                window.parent.onPerfectGame();
                             }
+                            // if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+                            //     window.ReactNativeWebView.postMessage('adasdadasd', 'applink');
+
+                            //     if (window.onCloseWindow) {
+                            //         window.onCloseWindow();
+                            //     }
+                            // }
                         }}
-                    >0.1.5</div>
+                    >0.2.0</div>
                     <img
                         draggable="false"
                         src={require('./rsc/D11-Landing-image-v2.jpg')}

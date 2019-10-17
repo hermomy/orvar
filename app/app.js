@@ -74,6 +74,7 @@ const theme = createMuiTheme({
         },
         MuiTypography: {
             root: { display: 'inline' },
+            h5: { fontSize: '1.5em' },
         },
     },
     typography: {
