@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
@@ -20,11 +21,12 @@ import {
     Container,
     FormControl,
     FormHelperText,
-    Typography,
     Grid,
-    Select,
     InputLabel,
+    Link,
     OutlinedInput,
+    Select,
+    Typography,
 } from '@material-ui/core';
 import ErrorMessage from 'components/ErrorMessage';
 import { dataChecking } from 'globalUtils';
@@ -135,13 +137,13 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
         return (
             <Grid container={true} className="py-1" justify="space-around" alignItems="center" direction="row">
                 <Grid item={true} className="p-quater" align="center" xs={4}>
-                    <img src={require('resources/authPage/signup-wishlist.png')} alt="Wishlist" style={imgStyle} />
+                    <img src={require('resources/authPage/signup-wishlist.png')} alt="Save your favorites" style={imgStyle} />
                 </Grid>
                 <Grid item={true} className="p-quater" align="center" xs={4}>
-                    <img src={require('resources/authPage/signup-order.png')} alt="Order" style={imgStyle} />
+                    <img src={require('resources/authPage/signup-order.png')} alt="Easily track orders" style={imgStyle} />
                 </Grid>
                 <Grid item={true} className="p-quater" align="center" xs={4}>
-                    <img src={require('resources/authPage/signup-birthday-rewards.png')} alt="rewards" style={imgStyle} />
+                    <img src={require('resources/authPage/signup-birthday-rewards.png')} alt="Birthday rewards" style={imgStyle} />
                 </Grid>
             </Grid>
         );
@@ -177,7 +179,7 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
         <div>
             <InputLabel className="text-capitalize pb-half">Mobile number</InputLabel>
             <Grid container={true} direction="row" justify="space-around" align="stretch">
-                <Grid item={true} xs={3}>
+                <Grid item={true} xs={4} sm={3}>
                     <FormControl variant="outlined">
                         <Select
                             native={true}
@@ -193,7 +195,7 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item={true} xs={9}>
+                <Grid item={true} xs={8} sm={9}>
                     <FormControl>
                         <InputForm
                             id="sms_number"
@@ -212,9 +214,11 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
                     </FormControl>
                 </Grid>
             </Grid>
-            {
-                this.state.sendSuccess ? <Typography variant="caption" className="text-success">{this.props.signUpPage.response.messages[0].text}</Typography> : null
-            }
+            <div className="pb-1">
+                {
+                    dataChecking(this.props, 'signUpPage', 'otp', 'message') && <ErrorMessage error={this.props.signUpPage.otp.message} />
+                }
+            </div>
             <FormControl fullWidth={true}>
                 <InputForm
                     label="OTP Number"
@@ -273,6 +277,12 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
                     autoComplete="off"
                 />
             </FormControl>
+            <FormControl fullWidth={true}>
+                <ReCAPTCHA
+                    sitekey="6LcKZVMUAAAAABT4fKxxTImskc2dTbY5J8QjsXFa"
+                    style={{ margin: 'auto' }}
+                />
+            </FormControl>
         </div>
     )
 
@@ -307,18 +317,17 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
                         <form onSubmit={this.handleSubmit}>
                             <CardContent>
                                 {this.formInput()}
-                                {/* Add reCAPTCHA*/}
                             </CardContent>
-                            {
-                                this.props.signUpPage.error && <ErrorMessage error={this.props.signUpPage.error} type="danger" />
-                            }
+                            <div className="py-1 px-2">
+                                {this.props.signUpPage.error && <ErrorMessage error={this.props.signUpPage.error} />}
+                            </div>
                             <CardActions>
                                 {this.formAction()}
                             </CardActions>
                         </form>
                         <div className="text-xs-center">
                             <Typography className="mt-1" variant="caption" color="textSecondary">
-                                By signing up, you agree to the <u>Terms Conditions</u> and will automatically receive insider offers via email.{/* Need to add Link for Terms and condition */}
+                                By signing up, you agree to the <Link href="https://www.hermo.my/about#/userterm?ucf=login-modal"><u>Terms & Conditions</u></Link> and will automatically receive insider offers via email.{/* Need to add Link for Terms and condition */}
                             </Typography>
                         </div>
                     </Container>

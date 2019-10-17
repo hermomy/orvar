@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import './style.scss';
 
 // const ErrorContainer = styled.section`
 //     &:hover {
@@ -16,9 +17,9 @@ import PropTypes from 'prop-types';
 
 function ErrorMessage({ component: Component, error, ...props }) {
     return (
-        <span>
+        <span className="error-messages">
             {error && error.messages && error.messages.map((msg) => (
-                <section key={msg} className={`alert alert-${props.type || 'warning'}`}>
+                <section key={msg} className={`alert alert-${props.type || msg.type || 'warning'}`}>
                     <div>{ msg.text }</div>
                 </section>
             ))}

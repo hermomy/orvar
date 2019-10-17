@@ -11,12 +11,14 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { Grid, Container, Hidden, Button, Typography } from '@material-ui/core';
+import { Grid, Container, Hidden, Button, Typography, Divider, FormControl } from '@material-ui/core';
 
 import LoginForm from 'containers/LoginForm';
 import SignUpPage from 'containers/SignUpPage';
-
+import InputForm from 'components/InputForm';
+import PopupDialog from 'components/PopupDialog';
 import makeSelectAuthPage from './selectors';
+import { resetPassword } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 import './style.scss';
@@ -27,8 +29,26 @@ export class AuthPage extends React.PureComponent { // eslint-disable-line react
 
         this.state = {
             login: true,
+            forgotDialog: false,
+            forgotEmail: '',
         };
     }
+
+    componentWillReceiveProps = (nextProps) => {
+        if (nextProps.authPage.resetSuccess !== this.props.authPage.resetSuccess && nextProps.authPage.resetSuccess) {
+            this.setState({ forgotDialog: false, forgotEmail: '' });
+        }
+    }
+    onClickForgot = () => this.setState({ forgotDialog: true })
+    onClose = () => {
+        this.setState({
+            forgotDialog: false,
+            forgotEmail: '',
+        });
+    }
+    handleChange = (event) => {
+        this.setState({ [event.target.id]: event.target.value });
+    };
 
     renderLite = () => {
         const variantLogin = this.state.login ? 'contained' : 'outlined';
@@ -66,7 +86,7 @@ export class AuthPage extends React.PureComponent { // eslint-disable-line react
 
                     </Grid>
                 </Container>
-                {this.state.login ? <LoginForm isModal={this.props.isModal} /> : <SignUpPage isModal={this.props.isModal} />}
+                {this.state.login ? <LoginForm isModal={this.props.isModal} onClickForgot={this.onClickForgot} /> : <SignUpPage isModal={this.props.isModal} />}
             </div>
         );
     }
@@ -83,7 +103,7 @@ export class AuthPage extends React.PureComponent { // eslint-disable-line react
                                 <Container className="authpage-desktop">
                                     <Grid container={true} justify="space-evenly">
                                         <Grid item={true}>
-                                            <LoginForm />
+                                            <LoginForm onClickForgot={this.onClickForgot} />
                                         </Grid>
                                         <Grid item={true}>
                                             <SignUpPage />
@@ -96,6 +116,40 @@ export class AuthPage extends React.PureComponent { // eslint-disable-line react
                             </Hidden>
                         </div>
                 }
+                <PopupDialog
+                    display={this.state.forgotDialog}
+                    title="Reset Your Password"
+                    onClose={() => this.onClose()}
+                >
+                    <Divider />
+                    <form onSubmit={() => { this.props.dispatch(resetPassword(this.state.forgotEmail)); event.preventDefault(); }}>
+                        <div className="p-1" style={{ textAlign: 'center' }} >
+                            <Typography variant="body1">Please enter your registered email address so we can send you the reset instructions.</Typography>
+                        </div>
+                        <FormControl fullWidth={true}>
+                            <InputForm
+                                label="Email address"
+                                placeholder="Enter your registered email address"
+                                id="forgotEmail"
+                                type="email"
+                                handleChange={this.handleChange}
+                                value={this.state.forgotEmail}
+                                onClear={() => {
+                                    this.setState({ forgotEmail: '' });
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl fullWidth={true}>
+                            <Button type="submit" variant="contained" color="primary">
+                                Send me the instructions
+                            </Button>
+                        </FormControl>
+                    </form>
+                    <div className="p-1" style={{ textAlign: 'center' }} >
+                        <Divider />
+                        <Typography variant="caption">Trouble logging in? Drop our helpdesk an email admin@hermo.my or call 07-5623567</Typography>
+                    </div>
+                </PopupDialog>
             </div>
         );
     }
