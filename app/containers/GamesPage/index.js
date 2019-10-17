@@ -84,6 +84,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             showLogin: false,
             requestToken: false,
             hideLoginModal: false,
+            pageFontSize: '13px',
         };
     }
 
@@ -139,6 +140,16 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         if (dataChecking(nextProps, 'gamesPage', 'result') !== dataChecking(this.props, 'gamesPage', 'result') && nextProps.gamesPage.result.success) {
             this.setState({ gameResultImagelink: nextProps.gamesPage.result.data });
         }
+    }
+
+    onBgImageLoaded = ({ target: imageEl }) => {
+        this.setState({
+            // dimensions: {
+            //     height: imageEl.offsetHeight,
+            //     width: imageEl.offsetWidth,
+            // },
+            pageFontSize: `${imageEl.offsetWidth / 36}px`,
+        });
     }
 
     onGameComplete = (payload) => {
@@ -250,7 +261,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
 
     render() {
         return (
-            <div className="games-page">
+            <div className="games-page" style={{ fontSize: this.state.pageFontSize }}>
                 <div className="game-container">
                     <div className="page-buttons">
                         {
@@ -407,6 +418,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                     >0.2.0</div>
                     <img
                         draggable="false"
+                        onLoad={this.onBgImageLoaded}
                         src={require('./rsc/D11-Landing-image-v2.jpg')}
                         alt="main menu background"
                         className="main-menu-bg animated fadeIn"

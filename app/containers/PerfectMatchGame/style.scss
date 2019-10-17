@@ -2,10 +2,6 @@
 
 .perfect-match-game-page {
     position: relative;
-    font-size: 13px;
-    @include media-breakpoint-down(xs) {
-        font-size: 2.7vw;
-    }
 
     div, img {
         -webkit-user-select: none;
