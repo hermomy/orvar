@@ -40,6 +40,8 @@ import saga from './saga';
 import './style.scss';
 
 const CARD_PAIR = 6;
+// const TIME_WAIT_FOR_CARD_ONE_BY_ONE = CARD_PAIR * 2;
+const TIME_WAIT_FOR_CARD_ONE_BY_ONE = 0; // XH request dont wait one by one
 const GAME_DURATION = 30000;
 
 const TIME_UNIT = 330;
@@ -62,6 +64,7 @@ const initialState = {
     complete: null,
     gameAccessToken: null,
     brandArr: [],
+    gameResultImage: null,
 };
 
 export class PerfectMatchGame extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -94,6 +97,10 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
         if (dataChecking(nextProps, 'perfectMatchGame', 'gameToken', 'success') !== dataChecking(this.props, 'perfectMatchGame', 'gameToken', 'success') && nextProps.perfectMatchGame.gameToken.success) {
             this.setState({ gameAccessToken: nextProps.perfectMatchGame.gameToken.data.token });
             this.initialiseGame();
+        }
+
+        if (dataChecking(nextProps, 'gameResultImagelink') !== dataChecking(this.props, 'gameResultImagelink') && dataChecking(nextProps, 'gameResultImagelink', 'result', 'image', 'mobile')) {
+            this.setState({ gameResultImage: nextProps.gameResultImagelink.result.image.mobile });
         }
     }
 
@@ -132,13 +139,13 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
 
     initialiseGame = () => {
         let counter = 0;
-        while (counter < (CARD_PAIR * 2)) {
+        while (counter < TIME_WAIT_FOR_CARD_ONE_BY_ONE) {
             this.setDelayState(counter + 1);
             counter++;
         }
-        this.setDelayState((CARD_PAIR * 2) + 3);
-        this.setDelayState((CARD_PAIR * 2) + 6);
-        this.setDelayState((CARD_PAIR * 2) + 9);
+        this.setDelayState(TIME_WAIT_FOR_CARD_ONE_BY_ONE + 3);
+        this.setDelayState(TIME_WAIT_FOR_CARD_ONE_BY_ONE + 6);
+        this.setDelayState(TIME_WAIT_FOR_CARD_ONE_BY_ONE + 9);
 
         const getExtraObj = () => {
             const obj = {
@@ -153,72 +160,8 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
 
             return obj;
         };
-        this.setDelayState((CARD_PAIR * 2) + 12, getExtraObj);
-        this.setDelayState((CARD_PAIR * 2) + 15);
-
-        // setTimeout(() => {
-        //     this.setState({ delay: 1 * TIME_UNIT });
-        // }, 1 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 2 * TIME_UNIT });
-        // }, 2 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 3 * TIME_UNIT });
-        // }, 3 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 4 * TIME_UNIT });
-        // }, 4 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 5 * TIME_UNIT });
-        // }, 5 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 6 * TIME_UNIT });
-        // }, 6 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 7 * TIME_UNIT });
-        // }, 7 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 8 * TIME_UNIT });
-        // }, 8 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 9 * TIME_UNIT });
-        // }, 9 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 10 * TIME_UNIT });
-        // }, 10 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 11 * TIME_UNIT });
-        // }, 11 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 12 * TIME_UNIT });
-        // }, 12 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 15 * TIME_UNIT });
-        // }, 15 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 18 * TIME_UNIT });
-        // }, 18 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 21 * TIME_UNIT });
-        // }, 21 * TIME_UNIT);
-        // setTimeout(() => {
-        //     const obj = {
-        //         delay: 24 * TIME_UNIT,
-        //         countingDown: Date.now() + (30400),
-        //         tips: 'Try to get a match!',
-        //     };
-
-        //     let counter = 0;
-        //     while (counter < CARD_PAIR) {
-        //         obj[`flipped_${counter}`] = true;
-        //         counter++;
-        //     }
-
-        //     this.setState(obj);
-        // }, 24 * TIME_UNIT);
-        // setTimeout(() => {
-        //     this.setState({ delay: 27 * TIME_UNIT });
-        // }, 27 * TIME_UNIT);
+        this.setDelayState(TIME_WAIT_FOR_CARD_ONE_BY_ONE + 12, getExtraObj);
+        this.setDelayState(TIME_WAIT_FOR_CARD_ONE_BY_ONE + 15);
 
         this.state.gameMusic.currentTime = 0;
         if (this.props.playMusic) {
@@ -251,29 +194,29 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
     renderGame = () => (
         <div className="game-panel">
             {
-                this.state.delay > ((CARD_PAIR * 2) * TIME_UNIT) && !this.state.countingDown ?
+                this.state.delay > (TIME_WAIT_FOR_CARD_ONE_BY_ONE * TIME_UNIT) && !this.state.countingDown ?
                     <div className="ready-go-container animated fadeIn">
                         {
-                            this.state.delay > (CARD_PAIR * 2) * TIME_UNIT && this.state.delay <= ((CARD_PAIR * 2) + 3) * TIME_UNIT ?
+                            this.state.delay > TIME_WAIT_FOR_CARD_ONE_BY_ONE * TIME_UNIT && this.state.delay <= (TIME_WAIT_FOR_CARD_ONE_BY_ONE + 3) * TIME_UNIT ?
                                 <div className="ready-go count-3 animated zoomIn">3</div>
                                 :
                                 null
                         }
                         {
-                            this.state.delay > ((CARD_PAIR * 2) + 3) * TIME_UNIT && this.state.delay <= ((CARD_PAIR * 2) + 6) * TIME_UNIT ?
+                            this.state.delay > (TIME_WAIT_FOR_CARD_ONE_BY_ONE + 3) * TIME_UNIT && this.state.delay <= (TIME_WAIT_FOR_CARD_ONE_BY_ONE + 6) * TIME_UNIT ?
                                 <div className="ready-go count-2 animated zoomIn">2</div>
                                 :
                                 null
                         }
                         {
-                            this.state.delay > ((CARD_PAIR * 2) + 6) * TIME_UNIT && this.state.delay <= ((CARD_PAIR * 2) + 9) * TIME_UNIT ?
+                            this.state.delay > (TIME_WAIT_FOR_CARD_ONE_BY_ONE + 6) * TIME_UNIT && this.state.delay <= (TIME_WAIT_FOR_CARD_ONE_BY_ONE + 9) * TIME_UNIT ?
                                 <div className="ready-go count-1 animated zoomIn">1</div>
                                 :
                                 null
                         }
                     </div>
                     :
-                    <div className={`ready-go-container animated fadeOut ${this.state.delay < (((CARD_PAIR * 2) + 12) * TIME_UNIT) ? '' : 'hidden'}`} />
+                    <div className={`ready-go-container animated fadeOut ${this.state.delay < ((TIME_WAIT_FOR_CARD_ONE_BY_ONE + 12) * TIME_UNIT) ? '' : 'hidden'}`} />
             }
             <div>
                 {
@@ -297,10 +240,13 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                         <div className="countdown-timer">
                             {
                                 (() => {
-                                    if (this.state.delay < ((CARD_PAIR * 2) + 3) * TIME_UNIT) {
+                                    // if (this.state.delay < (TIME_WAIT_FOR_CARD_ONE_BY_ONE + 3) * TIME_UNIT) {
+                                    //     return 'Memorise the cards!';
+                                    // } else if (this.state.delay < (TIME_WAIT_FOR_CARD_ONE_BY_ONE + 9) * TIME_UNIT) {
+                                    //     return 'Ready?';
+                                    // }
+                                    if (this.state.delay < (TIME_WAIT_FOR_CARD_ONE_BY_ONE + 9) * TIME_UNIT) {
                                         return 'Memorise the cards!';
-                                    } else if (this.state.delay < ((CARD_PAIR * 2) + 9) * TIME_UNIT) {
-                                        return 'Ready?';
                                     }
 
                                     return 'GO!';
@@ -423,7 +369,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     alt="game card"
                                     className={`
                                         game-card-image
-                                        ${(this.state.delay) > index * TIME_UNIT ? '' : 'opacity-zero'}
+                                        ${(this.state.delay) > 0 * TIME_UNIT ? '' : 'opacity-zero'}
                                         ${this.state.correctMatch[index] ? 'correct-match' : ''}
                                         ${this.state.wrongMatch[index] ? 'wrong-match' : ''}
                                     `}
@@ -440,7 +386,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
         <div className="result-screen-content">
             <div className="prize-inner-section animated zoomIn">
                 {
-                    dataChecking(this.props, 'gameResultImagelink', 'result', 'image', 'mobile') ?
+                    this.state.gameResultImage ?
                         <div
                             onClick={() => {
                                 if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
@@ -462,7 +408,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                 draggable="false"
                                 width="100%"
                                 key={1}
-                                src={this.props.gameResultImagelink.result.image.desktop}
+                                src={this.state.gameResultImage}
                                 alt="result background"
                                 className="result-image"
                             />

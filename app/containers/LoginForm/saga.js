@@ -17,7 +17,7 @@ export function* loginQuery(action) {
     try {
         const base64 = require('base-64');
         const hash = base64.encode(`${action.loginData.email}:${action.loginData.password}`);
-        const response = yield call(apiRequest, 'auth/token', 'post', {}, null, { headers: { 'Authorization': `Basic ${hash}` } });
+        const response = yield call(apiRequest, 'auth/token', 'post', {}, 'https://api.hermo.my', { headers: { 'Authorization': `Basic ${hash}` } });
         if (response && response.ok) {
             globalScope.token = response.data.token;
             globalScope.axios.setHeader('hertoken', globalScope.token);

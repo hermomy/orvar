@@ -176,6 +176,10 @@ body {
 
     .slider {
         overflow: initial;
+
+        > li.slide {
+            padding: 0;
+        }
     }
 }
 

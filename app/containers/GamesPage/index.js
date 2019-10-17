@@ -85,6 +85,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             requestToken: false,
             hideLoginModal: false,
             pageFontSize: '13px',
+            showUsername: false,
         };
     }
 
@@ -97,37 +98,18 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         }, 1100);
 
         if (window.takePocket) {
-            const pocket = window.takePocket();
-
-            if (pocket.hertoken) {
-                globalScope.profile = pocket;
-                globalScope.token = pocket.hertoken;
-                globalScope.axios.setHeader('hertoken', globalScope.token);
+            this.handlePocket(window.takePocket());
+        } else if (this.props.match.params.pickPocket || window.location !== window.parent.location) {
+            if (window.addEventListener) {
+                // For standards-compliant web browsers
+                window.addEventListener('message', this.parsePocketFromWeb, false);
+            } else {
+                window.attachEvent('onmessage', this.parsePocketFromWeb);
             }
         } else if (!globalScope.token) {
             globalScope.previousPage = window.location.pathname;
-            this.setState({ requestToken: true });
+            this.setState({ requestToken: true, showUsername: true });
         }
-
-        // function displayMessage (evt) {
-        //     var message;
-        //     if (evt.origin !== "https://robertnyman.com") {
-        //         message = 'You are not worthy';
-        //     } else {
-        //         message = 'I got ' + evt.data + ' from ' + evt.origin;
-        //     }
-        //         document.getElementById('received-message').innerHTML = message;
-        //     }
-
-        //     if (window.addEventListener) {
-        //         // For standards-compliant web browsers
-        //         window.addEventListener('message', displayMessage, false);
-        //     } else {
-        //         window.attachEvent('onmessage', displayMessage);
-        //     }
-
-
-        // window.addEventListener('takePocket', alert);
     }
 
     componentWillReceiveProps = (nextProps) => {
@@ -163,6 +145,39 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             idleMusic.play();
         }
     }
+
+    parsePocketFromWeb = (event) => {
+        if (event.origin !== 'https://www.hermo.my'
+            && event.origin !== 'https://hermo.my'
+            && event.origin !== 'https://devshop.hermo.my'
+            && event.origin !== 'http://hershop.hermo.my') {
+            console.log(`Receive postMessage from invalid source: ${event.origin}`);
+        }
+
+        if (event.data) {
+            try {
+                const pocket = JSON.parse(event.data);
+                if (pocket.hertoken) {
+                    this.handlePocket(pocket);
+                    return pocket;
+                }
+            } catch (error) {
+                console.log('Error happen when parsing pocket', error);
+            }
+        }
+
+        return null;
+    };
+
+    handlePocket = (pocket) => {
+        if (pocket.hertoken) {
+            globalScope.profile = pocket;
+            globalScope.token = pocket.hertoken;
+            globalScope.axios.setHeader('hertoken', globalScope.token);
+            this.setState({ showUsername: true });
+        }
+    }
+
     handleChange = (event) => {
         this.setState({ [event.target.id]: event.target.value });
     };
@@ -238,7 +253,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         if (showModal === 'slideShow' && slideArray) {
             return (
                 <div className="prize-inner-section">
-                    <Carousel showThumbs={false} showStatus={false} showIndicators={true} emulateTouch={true}>
+                    <Carousel showThumbs={false} showStatus={false} showIndicators={slideArray.length > 1} emulateTouch={true}>
                         {
                             slideArray.map((item, index) => (
                                 <img
