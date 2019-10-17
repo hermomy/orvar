@@ -18,8 +18,8 @@ import './style.scss';
 function ErrorMessage({ component: Component, error, ...props }) {
     return (
         <span className="error-messages">
-            {error && error.messages && error.messages.map((msg) => (
-                <section key={msg} className={`alert alert-${props.type || msg.type || 'warning'}`}>
+            {error && error.messages && error.messages.map((msg, index) => (
+                <section key={index} className={`alert alert-${props.type || msg.type || 'warning'}`}>
                     <div>{ msg.text }</div>
                 </section>
             ))}

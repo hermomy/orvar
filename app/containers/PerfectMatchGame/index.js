@@ -290,7 +290,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     });
                                     this.props.onGameLose({ score: 0, token: this.state.gameAccessToken });
                                 }
-                                return <span className="countdown-timer" style={{ fontSize: '4vh' }}>{seconds}s</span>;
+                                return <span className="countdown-timer">{seconds}s</span>;
                             }}
                         />
                         :
@@ -309,7 +309,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                         </div>
                 }
             </div>
-            <div className="perfect-game-tips p-1" style={{ fontSize: '3vh' }}>{this.state.tips}</div>
+            <div className="perfect-game-tips p-1">{this.state.tips}</div>
             <div className="card-field">
                 {
                     this.state.brandArr && this.state.brandArr.map((brandImage, index) => (

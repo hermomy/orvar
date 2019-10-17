@@ -19,7 +19,6 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import 'assets/animate.min.scss';
 import {
     Button,
-    Typography,
 } from '@material-ui/core';
 import InputForm from 'components/InputForm';
 import AuthPage from '../AuthPage';
@@ -108,6 +107,26 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             globalScope.previousPage = window.location.pathname;
             this.setState({ requestToken: true });
         }
+
+        // function displayMessage (evt) {
+        //     var message;
+        //     if (evt.origin !== "https://robertnyman.com") {
+        //         message = 'You are not worthy';
+        //     } else {
+        //         message = 'I got ' + evt.data + ' from ' + evt.origin;
+        //     }
+        //         document.getElementById('received-message').innerHTML = message;
+        //     }
+
+        //     if (window.addEventListener) {
+        //         // For standards-compliant web browsers
+        //         window.addEventListener('message', displayMessage, false);
+        //     } else {
+        //         window.attachEvent('onmessage', displayMessage);
+        //     }
+
+
+        // window.addEventListener('takePocket', alert);
     }
 
     componentWillReceiveProps = (nextProps) => {
@@ -299,20 +318,20 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                     >
                                         <i className="fas fa-store-alt"></i>
                                     </div> */}
-                                    <div className="main-menu-bottom-content animated slideInDown fadeIn">
-                                        <div className="game-info pb-1">
+                                    <div className="main-menu-bottom-content animated fadeIn">
+                                        <div className="game-info">
                                             <div className="main-menu-username">
                                                 {
                                                     dataChecking(globalScope, 'profile', 'name') && dataChecking(globalScope, 'profile', 'username') ?
-                                                        <Typography className="animated fadeIn" style={{ fontSize: '4vh' }}>Welcome, {globalScope.profile.name || globalScope.profile.username}!</Typography>
+                                                        <div className="profile-name animated fadeIn">Welcome, {globalScope.profile.name || globalScope.profile.username}!</div>
                                                         :
-                                                        <img className="username-loading" src={require('images/preloader-02.gif')} alt="" style={{ width: '4vh' }} />
+                                                        <img className="username-loading" src={require('images/preloader-02.gif')} alt="" />
                                                 }
                                             </div>
                                             {
                                                 this.state.availableChance !== null ?
                                                     <div className="main-menu-username animated fadeIn">
-                                                        <Typography variant="h4">You have {this.state.availableChance || 0} token</Typography>
+                                                        <div variant="h4">You have {this.state.availableChance || 0} token</div>
                                                     </div>
                                                     :
                                                     null
@@ -332,7 +351,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                                     return true;
                                                 }
                                             }
-                                            className="animated slideInRight"
+                                            className="animated fadeIn"
                                         >
                                             <img
                                                 draggable="false"
@@ -342,8 +361,8 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                             />
                                         </div>
                                         <div
-                                            onClick={() => this.setState({ showModal: 'slideShow', slideArray: mockData.config.prize_slider })}
-                                            className="animated slideInLeft"
+                                            onClick={() => this.setState({ showModal: 'slideShow', slideArray: mockData.config.menu.prize_slider })}
+                                            className="animated fadeIn"
                                         >
                                             <img
                                                 draggable="false"
@@ -353,8 +372,8 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                             />
                                         </div>
                                         <div
-                                            onClick={() => this.setState({ showModal: 'slideShow', slideArray: mockData.config.how_to_play_slider })}
-                                            className="animated slideInRight"
+                                            onClick={() => this.setState({ showModal: 'slideShow', slideArray: mockData.config.menu.how_to_play_slider })}
+                                            className="animated fadeIn"
                                         >
                                             <img
                                                 draggable="false"
@@ -376,6 +395,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                             if (window.parent && window.parent.onPerfectGame) {
                                 window.parent.onPerfectGame();
                             }
+
                             // if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
                             //     window.ReactNativeWebView.postMessage('adasdadasd', 'applink');
 

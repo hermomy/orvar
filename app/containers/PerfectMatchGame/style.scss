@@ -1,6 +1,11 @@
+@import 'app/breakpoints';
+
 .perfect-match-game-page {
     position: relative;
-    font-size: 15px;
+    font-size: 13px;
+    @include media-breakpoint-down(xs) {
+        font-size: 2.7vw;
+    }
 
     div, img {
         -webkit-user-select: none;
@@ -73,6 +78,10 @@
 
         .game-panel {
             padding-top: 10%;
+
+            .perfect-game-tips {
+                font-size: 1.5em;
+            }
         }
 
         // .game-card-image {
@@ -97,7 +106,7 @@
         }
 
         .countdown-timer {
-            font-size: 4vh;
+            font-size: 2em;
         }
 
         .card-field {

@@ -1,3 +1,5 @@
+@import 'app/breakpoints';
+
 .games-login-modal {
     position: fixed;
     top: 0;
@@ -25,9 +27,12 @@
     margin: auto;
     overflow: hidden;
     display: flex;
-    font-size: 13px;
     flex: 1;
     justify-content: center;
+    font-size: 13px;
+    @include media-breakpoint-down(xs) {
+        font-size: 2.7vw;
+    }
 
     .ppg-version {
         color: #0005;
@@ -104,6 +109,18 @@
         left: 0;
         right: 0;
         text-align: center;
+
+        .game-info {
+            padding-bottom: 3%;
+
+            .main-menu-username {
+                font-size: 2em;
+            }
+
+            .username-loading {
+                width: 1.5em;
+            }
+        }
 
         .main-menu-button-item {
             width: 50%;
