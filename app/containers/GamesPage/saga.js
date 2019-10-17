@@ -44,7 +44,7 @@ export function* loginQuery(action) {
 export function* getResultQuery(action) {
     let err;
     try {
-        const response = yield call(apiRequest, '/xmas/game', 'put', JSON.stringify(action.payload), 'https://devapi.hermo.my');
+        const response = yield call(apiRequest, '/xmas/game', 'put', JSON.stringify(action.payload));
         if (response && response.ok !== false) {
             yield put(getResultSuccess(response.data));
         } else if (response && response.ok === false) {

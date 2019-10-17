@@ -11,7 +11,7 @@ import {
 export function* getGameTokenQuery() {
     let err;
     try { // Trying the HTTP Request
-        const response = yield call(apiRequest, '/xmas/game', 'post', null, 'https://devapi.hermo.my');
+        const response = yield call(apiRequest, '/xmas/game', 'post', null);
         if (response && response.ok !== false) {
             yield put(getGameTokenSuccess(response.data));
         } else if (response && response.ok === false) {
