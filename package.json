@@ -388,6 +388,7 @@
         "offline-plugin": "4.8.1",
         "plop": "^2.1.0",
         "pre-commit": "1.2.2",
+        "react-google-recaptcha": "^2.0.1",
         "react-infinite-scroller": "^1.2.4",
         "react-scroll": "^1.7.12",
         "react-share": "^3.0.1",

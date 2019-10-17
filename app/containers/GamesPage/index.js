@@ -275,7 +275,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                     </div>
                     {
                         this.state.requestToken && !this.state.hideLoginModal ?
-                            <span className="games-login-modal animated fa" style={{ backgroundColor: 'rgba(255,255,255,0.7)', overflow: 'auto' }}>
+                            <span className="games-login-modal animated fa" style={{ backgroundColor: 'rgba(255,255,255)', overflow: 'auto' }}>
                                 {/* {this.renderLogin()} */}
                                 <AuthPage isModal={true} />
                             </span>
@@ -299,9 +299,9 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                                             <div className="main-menu-username">
                                                 {
                                                     dataChecking(globalScope, 'profile', 'name') && dataChecking(globalScope, 'profile', 'username') ?
-                                                        <Typography className="animated fadeIn" style={{ fontSize: '2em' }}>Welcome, {globalScope.profile.name || globalScope.profile.username}!</Typography>
+                                                        <Typography className="animated fadeIn" style={{ fontSize: '4vh' }}>Welcome, {globalScope.profile.name || globalScope.profile.username}!</Typography>
                                                         :
-                                                        <img className="username-loading" src={require('images/preloader-02.gif')} alt="" style={{ width: '2.6em' }} />
+                                                        <img className="username-loading" src={require('images/preloader-02.gif')} alt="" style={{ width: '4vh' }} />
                                                 }
                                             </div>
                                             {

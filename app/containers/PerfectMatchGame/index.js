@@ -255,7 +255,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     });
                                     this.props.onGameLose({ score: 0, token: this.state.gameAccessToken });
                                 }
-                                return <span className="countdown-timer" style={{ fontSize: '2.5em' }}>{seconds}s</span>;
+                                return <span className="countdown-timer" style={{ fontSize: '4vh' }}>{seconds}s</span>;
                             }}
                         />
                         :
@@ -275,7 +275,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                 }
             </div>
             {/* <div onClick={() => this.setState({ brandArr: this.shuffleArray([...BRANDS, ...BRANDS]) })}>randomise</div> */}
-            <div className="perfect-game-tips p-1" style={{ fontSize: '1.5em' }}>{this.state.tips}</div>
+            <div className="perfect-game-tips p-1" style={{ fontSize: '3vh' }}>{this.state.tips}</div>
             <div className="card-field">
                 {
                     this.state.brandArr && this.state.brandArr.map((brandImage, index) => (
@@ -409,7 +409,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
         <div className="result-screen-content">
             <div className="prize-inner-section animated zoomIn">
                 {
-                    dataChecking(this.props, 'gameResultImagelink', 'result', 'image', 'mobile') ?
+                    dataChecking(this.props, 'gameResultImagelink', 'result', 'image', 'desktop') ?
                         <img
                             draggable="false"
                             width="100%"

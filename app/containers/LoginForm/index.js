@@ -23,6 +23,7 @@ import {
     CardActions,
     Container,
     FormControl,
+    Link,
     Typography,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -141,10 +142,16 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                 <Typography>Login</Typography>
             </Button>
             <Typography className="text-xs-center my-half" variant="h6">or<br /></Typography>
+            {/* <FacebookLogin
+                appId={process.env.FACEBOOK_APP_ID}
+                fields="name, email, picture"
+                autoLoad={true}
+                callback={(response) => { console.log(response); }}
+            /> */}
             <FacebookLogin
                 appId={process.env.FACEBOOK_APP_ID}
                 autoLoad={true}
-                // callback={responseFacebook}
+                // callback={(response) => { console.log(response); }}
                 render={() => (
                     <Button
                         type="button"
@@ -168,9 +175,11 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                             <div className="py-1 px-1">
                                 {this.formInput()}
                                 {this.forgotPassword()}
-                                {
-                                    this.props.loginForm.error && <ErrorMessage error={this.props.loginForm.error} type="danger" />
-                                }
+                                <div className="py-half">
+                                    {
+                                        this.props.loginForm.error && <ErrorMessage error={this.props.loginForm.error} />
+                                    }
+                                </div>
                             </div>
                             <CardActions>
                                 {this.formAction()}
@@ -178,7 +187,7 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                         </form>
                         <div className="text-xs-center">
                             <Typography className="mt-1" variant="caption" color="textSecondary">
-                                By logging, you agree to our <br /><a href="https://www.hermo.my/about#/userterm?ucf=login-modal"><u>Terms & Conditions</u></a>
+                                By logging, you agree to our <br /><Link href="https://www.hermo.my/about#/userterm?ucf=login-modal"><u>Terms & Conditions</u></Link>
                             </Typography>
                         </div>
 

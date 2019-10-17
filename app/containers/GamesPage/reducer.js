@@ -47,7 +47,8 @@ function gamesPageReducer(state = initialState, action) {
         case GET_RESULT:
             return state
                 .setIn(['result', 'loading'], true)
-                .setIn(['result', 'error'], false);
+                .setIn(['result', 'error'], false)
+                .setIn(['result', 'data'], null);
         case GET_RESULT_SUCCESS:
             return state
                 .setIn(['result', 'loading'], false)

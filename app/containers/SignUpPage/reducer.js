@@ -57,24 +57,23 @@ function signUpPageReducer(state = initialState, action) {
             return state
                 .set('data', false)
                 .set('loading', true)
-                .set('error', false);
+                .setIn(['otp', 'message'], null);
         case AUTH_SENDOTP_SUCCESS:
             return state
                 .set('sendOtpSuccess', true)
                 .set('loading', false)
-                .set('error', false)
-                .set('response', action.response)
-                .setIn(['success'], action.payload || {
+                .setIn(['otp', 'message'], action.payload || {
                     message: [{
                         text: 'OTP has been sent.',
                         type: 'success',
                     }],
-                });
+                })
+                .set('response', action.response);
         case AUTH_SENDOTP_FAILED:
             return state
                 .set('loading', false)
                 .set('sendOtpSuccess', false)
-                .setIn(['error'], action.payload || {
+                .setIn(['otp', 'message'], action.payload || {
                     messages: [{
                         text: 'ERROR: Please contact system admin...',
                         type: 'error',
