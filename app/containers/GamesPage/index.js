@@ -152,6 +152,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             && event.origin !== 'https://devshop.hermo.my'
             && event.origin !== 'http://hershop.hermo.my') {
             console.log(`Receive postMessage from invalid source: ${event.origin}`);
+            return null;
         }
 
         if (event.data) {
@@ -415,12 +416,12 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                     <div
                         className="ppg-version"
                         onClick={() => {
-                            alert('asdfadsf');
-                            alert(`${window.parent ? 'have window.parent' : 'no window.parent'}`);
-                            // alert(`${window.parent && window.parent.onPerfectGame ? 'have window.parent.onPerfectGame' : 'no window.parent.onPerfectGame'}`);
-                            if (window.parent && window.parent.onPerfectGame) {
-                                window.parent.onPerfectGame();
-                            }
+                            // alert('asdfadsf');
+                            // alert(`${window.parent ? 'have window.parent' : 'no window.parent'}`);
+                            // // alert(`${window.parent && window.parent.onPerfectGame ? 'have window.parent.onPerfectGame' : 'no window.parent.onPerfectGame'}`);
+                            // if (window.parent && window.parent.onPerfectGame) {
+                            //     window.parent.onPerfectGame();
+                            // }
 
                             // if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
                             //     window.ReactNativeWebView.postMessage('adasdadasd', 'applink');

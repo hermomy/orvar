@@ -400,7 +400,7 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     const str = JSON.stringify(link);
                                     window.ReactNativeWebView.postMessage(str);
                                 } else {
-                                    alert('weblink handling');
+                                    window.parent.postMessage(JSON.stringify(this.props.gameResultImagelink.result._weblink), 'http://hershop.hermo.my');
                                 }
                             }}
                         >
