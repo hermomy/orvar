@@ -143,15 +143,15 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
             </Button>
             <Typography className="text-xs-center my-half" variant="h6">or<br /></Typography>
             {/* <FacebookLogin
-                appId={process.env.FACEBOOK_APP_ID}
-                fields="name, email, picture"
+                appId={globalScope.fb_id}
                 autoLoad={true}
+                fields="name, email, picture"
                 callback={(response) => { console.log(response); }}
             /> */}
             <FacebookLogin
-                appId={process.env.FACEBOOK_APP_ID}
+                appId={globalScope.fb_id}
                 autoLoad={true}
-                // callback={(response) => { console.log(response); }}
+                callback={(response) => { console.log(response); }}
                 render={() => (
                     <Button
                         type="button"

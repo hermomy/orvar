@@ -6,6 +6,7 @@ const globalScope = {
     previousPage: '',
     config: {},
     axios: null, // create in initialiseApp.js
+    fb_id: process.env.FACEBOOK_APP_ID,
 };
 
 export default globalScope;
