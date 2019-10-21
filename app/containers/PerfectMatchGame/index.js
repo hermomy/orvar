@@ -430,7 +430,18 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                     </div>
                     <div
                         className="share result-content"
-                        onClick={() => this.setState({ shareModal: true })}
+                        onClick={() => {
+                            if (window.takePocket) {
+                                const link = {
+                                    key: 'share',
+                                    value: dataChecking(this.props, 'gameResultImagelink', 'share'),
+                                };
+                                const str = JSON.stringify(link);
+                                window.ReactNativeWebView.postMessage(str);
+                            } else {
+                                this.setState({ shareModal: true });
+                            }
+                        }}
                     >
                         <img
                             className="result-button-item animated zoomIn"
