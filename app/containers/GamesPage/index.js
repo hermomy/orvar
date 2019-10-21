@@ -7,7 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
@@ -17,20 +16,14 @@ import globalScope from 'globalScope';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import 'assets/animate.min.scss';
-import {
-    Button,
-} from '@material-ui/core';
-import InputForm from 'components/InputForm';
 import AuthPage from '../AuthPage';
 import PerfectMatchGame from '../PerfectMatchGame';
 import {
-    doLogin,
     getResult,
 } from './actions';
 import makeSelectGamesPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-// import messages from './messages';
 import './style.scss';
 
 import mockData from './mockDataReturnFromAPI';
@@ -81,9 +74,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             // showModal: 'showPlay',
             playMusic: false,
             showPassword: false,
-            showLogin: false,
             requestToken: false,
-            hideLoginModal: false,
             pageFontSize: '13px',
             showUsername: false,
         };
@@ -113,12 +104,6 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
     }
 
     componentWillReceiveProps = (nextProps) => {
-        if (dataChecking(nextProps, 'gamesPage', 'login', 'success') !== dataChecking(this.props, 'gamesPage', 'login', 'success') && nextProps.gamesPage.login.success) {
-            setTimeout(() => {
-                this.setState({ hideLoginModal: true });
-            }, 1000);
-        }
-
         if (dataChecking(nextProps, 'gamesPage', 'result') !== dataChecking(this.props, 'gamesPage', 'result') && nextProps.gamesPage.result.success) {
             this.setState({ gameResultImagelink: nextProps.gamesPage.result.data });
         }
@@ -183,52 +168,6 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         this.setState({ [event.target.id]: event.target.value });
     };
 
-    renderLogin = () => (
-        <div className="login-container">
-            <form onSubmit={() => { this.props.dispatch(doLogin(this.state)); event.preventDefault(); }}>
-                <div>
-                    <InputForm
-                        label="Email address"
-                        id="email"
-                        type="email"
-                        handleChange={this.handleChange}
-                        value={this.state.email}
-                        onClear={() => {
-                            this.setState({ email: '' });
-                        }}
-                    />
-                </div>
-                <div>
-                    <InputForm
-                        label="Password"
-                        id="password"
-                        type={this.state.showPassword ? 'text' : 'password'}
-                        value={this.state.password}
-                        showPassword={this.state.showPassword}
-                        handleChange={this.handleChange}
-                        handleClickShowPassword={() => {
-                            this.setState((state) => ({ showPassword: !state.showPassword }));
-                        }}
-                        onClear={() => {
-                            this.setState({ password: '' });
-                        }}
-                        autoComplete="off"
-                        togglePassword={true}
-                    />
-                </div>
-                <div>
-                    <Button variant="contained" color="primary" type="submit" style={{ width: '100%' }}>
-                        {
-                            dataChecking(this.props, 'gamesPage', 'login', 'loading') || dataChecking(this.props, 'gamesPage', 'login', 'success') ?
-                                'Loading...'
-                                :
-                                'Login'
-                        }
-                    </Button>
-                </div>
-            </form>
-        </div>
-    )
 
     renderModalContent = () => {
         const { showModal, slideArray, gameId } = this.state;
@@ -325,9 +264,8 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                         </div>
                     </div>
                     {
-                        this.state.requestToken && !this.state.hideLoginModal ?
+                        this.state.requestToken ?
                             <span className="games-login-modal animated fa" style={{ backgroundColor: 'rgba(255,255,255)', overflow: 'auto' }}>
-                                {/* {this.renderLogin()} */}
                                 <AuthPage isModal={true} />
                             </span>
                             :
