@@ -12,7 +12,6 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 
 import globalScope from 'globalScope';
 
@@ -148,7 +147,7 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                 fields="name, email, picture"
                 callback={(response) => { console.log(response); }}
             /> */}
-            <FacebookLogin
+            {/* <FacebookLogin
                 appId={globalScope.fb_id}
                 autoLoad={true}
                 callback={(response) => { console.log(response); }}
@@ -161,7 +160,7 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                         LOGIN WITH FACEBOOK
                     </Button>
                 )}
-            />
+            /> */}
         </FormControl>
     )
 

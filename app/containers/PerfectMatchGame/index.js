@@ -98,7 +98,10 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
             this.setState({ gameAccessToken: nextProps.perfectMatchGame.gameToken.data.token });
             this.initialiseGame();
         }
-
+        if (dataChecking(nextProps, 'perfectMatchGame', 'gameToken', 'error') !== dataChecking(this.props, 'perfectMatchGame', 'gameToken', 'error') && nextProps.perfectMatchGame.gameToken.error) {
+            alert(nextProps.perfectMatchGame.gameToken.data.messages[0].text);
+            this.props.onBackToMenu();
+        }
         if (dataChecking(nextProps, 'gameResultImagelink') !== dataChecking(this.props, 'gameResultImagelink') && dataChecking(nextProps, 'gameResultImagelink', 'result', 'image', 'mobile')) {
             this.setState({ gameResultImage: nextProps.gameResultImagelink.result.image.mobile });
         }
@@ -400,7 +403,8 @@ export class PerfectMatchGame extends React.PureComponent { // eslint-disable-li
                                     const str = JSON.stringify(link);
                                     window.ReactNativeWebView.postMessage(str);
                                 } else {
-                                    window.parent.postMessage(JSON.stringify(this.props.gameResultImagelink.result._weblink), 'http://hershop.hermo.my');
+                                    // window.parent.postMessage(JSON.stringify(this.props.gameResultImagelink.result._weblink), 'http://hershop.hermo.my');
+                                    window.parent.postMessage(JSON.stringify(this.props.gameResultImagelink.result._weblink), 'https://devshop.hermo.my');
                                 }
                             }}
                         >

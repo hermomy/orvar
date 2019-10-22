@@ -25,6 +25,6 @@ export function getGameTokenSuccess(gameTokenData) {
 export function getGameTokenFailed(gameTokenData) {
     return {
         type: GET_GAME_TOKEN_FAILED,
-        payload: gameTokenData,
+        gameTokenData,
     };
 }
