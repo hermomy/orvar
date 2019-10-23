@@ -8,7 +8,6 @@
     right: 0;
     bottom: 0;
     z-index: 1000;
-    background-color: #000A;
 
     .login-container {
         margin: auto;
@@ -21,7 +20,23 @@
         transform: translateY(-50%);
     }
 }
+.token-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    background-color:white;
 
+    .token-loading-gif {
+        position: absolute;
+        margin: auto;
+        top: 45%;
+        left: 45%;
+        width: 2.5em;
+    }
+}
 .games-page {
     min-height: 300px;
     max-height: 100vh;

@@ -70,13 +70,13 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             showModal: null,
             slideArray: null,
             gameId: null,
+            loading: true,
             // gameId: 1,
             // showModal: 'showPlay',
             playMusic: false,
             showPassword: false,
             requestToken: false,
             pageFontSize: '13px',
-            showUsername: false,
         };
     }
 
@@ -87,20 +87,24 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         setTimeout(() => {
             this.setState({ isRendered: true });
         }, 1100);
+        alert('12');
 
         if (window.takePocket) {
+            alert('take pocket');
             this.handlePocket(window.takePocket());
         } else if (this.props.location.search.indexOf('pickPocket') || window.location !== window.parent.location) {
+            alert('pick pocket');
             if (window.addEventListener) {
                 // For standards-compliant web browsers
+                alert('addEvent Listener');
                 window.addEventListener('message', this.parsePocketFromWeb, false);
             } else {
                 window.attachEvent('onmessage', this.parsePocketFromWeb);
             }
-        } else if (!globalScope.token) {
+        } else {
             alert('Please login to continue.');
             globalScope.previousPage = window.location.pathname;
-            this.setState({ requestToken: true, showUsername: true });
+            this.setState({ requestToken: true, loading: false });
         }
     }
 
@@ -133,21 +137,31 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
     }
 
     parsePocketFromWeb = (event) => {
+        alert('parsePocket');
         if (event.origin !== 'https://www.hermo.my'
             && event.origin !== 'https://hermo.my'
             && event.origin !== 'https://devshop.hermo.my'
+            && event.origin !== 'http://localhost:1234'
             && event.origin !== 'http://hershop.hermo.my') {
             console.log(`Receive postMessage from invalid source: ${event.origin}`);
             return null;
         }
-
         if (event.data) {
             try {
+                alert('eventdata');
                 const pocket = JSON.parse(event.data);
                 if (pocket.hertoken) {
+                    alert('in event.data', pocket.hertoken);
                     this.handlePocket(pocket);
                     return pocket;
+                } else if (globalScope.token) {
+                    return (
+                        this.setState({ loading: false, requestToken: false })
+                    );
                 }
+                alert('Please login to continue.');
+                globalScope.previousPage = window.location.pathname;
+                this.setState({ loading: false, requestToken: true });
             } catch (error) {
                 console.log('Error happen when parsing pocket', error);
             }
@@ -157,11 +171,20 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
     };
 
     handlePocket = (pocket) => {
+        alert('in handlePocket', pocket);
         if (pocket.hertoken) {
             globalScope.profile = pocket;
             globalScope.token = pocket.hertoken;
             globalScope.axios.setHeader('hertoken', globalScope.token);
-            this.setState({ showUsername: true });
+            this.setState({ loading: false });
+            alert('b');
+        } else if (globalScope.token) {
+            this.setState({ loading: false, requestToken: false });
+        } else {
+            alert('handlePocket');
+            alert('Please login to continue.');
+            globalScope.previousPage = window.location.pathname;
+            this.setState({ requestToken: true, loading: false });
         }
     }
 
@@ -370,7 +393,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                             //     }
                             // }
                         }}
-                    >0.3.4</div>
+                    >0.3.4.11</div>
                     <img
                         draggable="false"
                         onLoad={this.onBgImageLoaded}
@@ -378,6 +401,14 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                         alt="main menu background"
                         className="main-menu-bg animated fadeIn"
                     />
+                    {
+                        this.state.loading ?
+                            <div className="token-loading">
+                                <img className="token-loading-gif" src={require('images/preloader-02.gif')} alt="loading" />
+                            </div>
+                            :
+                            null
+                    }
                     {
                         this.state.showModal ?
                             <div

@@ -8,12 +8,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import globalScope from 'globalScope';
 import { connect } from 'react-redux';
-// import { FacebookProvider, LoginButton } from 'react-facebook';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { ButtonBase } from '@material-ui/core';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-
 import makeSelectExample from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -37,7 +36,7 @@ export class Example extends React.PureComponent { // eslint-disable-line react/
             const fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
             js = d.createElement(s); js.id = id;
-            js.src = '//connect.facebook.net/en_US/sdk.js';
+            js.src = '//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v4.0';
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
     }
@@ -52,8 +51,6 @@ export class Example extends React.PureComponent { // eslint-disable-line react/
     }
 
     statusChangeCallback(response) {
-        console.log('statusChangeCallback');
-        console.log(response);
         if (response.status === 'connected') {
             this.testAPI();
         } else if (response.status === 'not_authorized') {
@@ -65,25 +62,26 @@ export class Example extends React.PureComponent { // eslint-disable-line react/
 
     checkLoginState() {
         FB.getLoginStatus((response) => {
-            console.log('response', response);
             this.statusChangeCallback(response);
         });
     }
 
     handleFBLogin() {
-        FB.login(this.checkLoginState());
+        FB.login(() => {
+            this.checkLoginState();
+        }, { scope: 'public_profile, email' });
     }
 
     render() {
         return (
             <div>
-                <button
+                <ButtonBase
                     className="btn-facebook"
                     id="btn-social-login"
                     onClick={() => this.handleFBLogin()}
                 >
-                    <span className="fa fa-facebook"></span> Sign in with Facebook
-                </button>
+                    <div className="fb-login-button" data-width="" data-size="large" data-button-type="login_with" data-auto-logout-link="true" data-use-continue-as="true" />
+                </ButtonBase>
             </div>
         );
     }
