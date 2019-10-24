@@ -6,7 +6,7 @@
 
 /* global FB */
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import globalScope from 'globalScope';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -127,7 +127,7 @@ export class FacebookButton extends React.PureComponent {
 }
 
 FacebookButton.propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    // dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
