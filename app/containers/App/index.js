@@ -39,9 +39,8 @@ import LogIn from 'containers/LoginForm';
 import ProfileAddress from 'containers/ProfileAddress';
 import ProfileRewards from 'containers/ProfileRewards';
 import BeautyWall from 'containers/BeautyWall';
-
 import GamesPage from 'containers/GamesPage';
-import Example from 'containers/Example';
+
 import Header from 'containers/Header';
 import Footer from 'containers/Footer';
 import { ProfileWallet } from '../ProfileWallet';
@@ -112,7 +111,6 @@ export default function App() {
                     <PrivateRoute exact={true} path="/cart" component={CartPage} />
 
                     <Route exact={true} path="/games/:id" component={GamesPage} />
-                    <Route exact={true} path="/example" component={Example} />
 
                     <Route component={NotFoundPage} />
                 </Switch>

@@ -30,6 +30,7 @@ import { dataChecking } from 'globalUtils';
 
 import ErrorMessage from 'components/ErrorMessage';
 import InputForm from 'components/InputForm';
+import FacebookButton from 'containers/FacebookButton';
 import makeSelectLoginForm from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -141,26 +142,7 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
                 <Typography>Login</Typography>
             </Button>
             <Typography className="text-xs-center my-half" variant="h6">or<br /></Typography>
-            {/* <FacebookLogin
-                appId={globalScope.fb_id}
-                autoLoad={true}
-                fields="name, email, picture"
-                callback={(response) => { console.log(response); }}
-            /> */}
-            {/* <FacebookLogin
-                appId={globalScope.fb_id}
-                autoLoad={true}
-                callback={(response) => { console.log(response); }}
-                render={() => (
-                    <Button
-                        type="button"
-                        variant="contained"
-                        style={{ backgroundColor: '#3b5998', color: 'white' }}
-                    >
-                        LOGIN WITH FACEBOOK
-                    </Button>
-                )}
-            /> */}
+            <FacebookButton isLogin={true} />
         </FormControl>
     )
 
