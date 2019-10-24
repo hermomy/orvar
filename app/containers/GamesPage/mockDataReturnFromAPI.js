@@ -13,7 +13,7 @@ const game = {
     config: { // json
         menu: {
             background_music: require('./rsc/Prizefighter.mp3'),
-            start_sound: require('./rsc/Start_button.wav'),
+            start_sound: require('./rsc/Start_button.mp3'),
 
             background_image: require('./rsc/D11-Landing-image-v2.jpg'), // game landing background
             start_button: require('./rsc/D11-Button-image_Play_529x130.png'), // start button icon
@@ -29,7 +29,7 @@ const game = {
         game: {
             background_music: require('./rsc/Prizefighter.mp3'),
             fail_sound: require('./rsc/Bomb.mp3'),
-            click_sound: require('./rsc/click_sound.wav'),
+            click_sound: require('./rsc/click_sound.mp3'),
             flip_sound: require('./rsc/flip.mp3'),
             flip_corret_sound: require('./rsc/flip_correct.mp3'),
             flip_wrong_sound: require('./rsc/flip_wrong.mp3'),
