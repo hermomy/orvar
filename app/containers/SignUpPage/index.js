@@ -27,6 +27,7 @@ import {
     OutlinedInput,
 } from '@material-ui/core';
 import ErrorMessage from 'components/ErrorMessage';
+import FacebookButton from 'containers/FacebookButton';
 import { dataChecking } from 'globalUtils';
 import InputForm from 'components/InputForm';
 import { withStyles } from '@material-ui/core/styles';
@@ -286,14 +287,7 @@ export class SignUpPage extends React.PureComponent { // eslint-disable-line rea
                 <Typography>Sign Up</Typography>
             </Button>
             <Typography className="text-xs-center my-half" variant="h6">or<br /></Typography>
-            <Button
-                type="submit"
-                variant="contained"
-                color="secondary"
-                style={{ backgroundColor: '#3b5998', color: 'white' }}
-            >
-                <Typography>LOGIN WITH FACEBOOK</Typography>
-            </Button>
+            <FacebookButton />
         </FormControl>
     )
 
