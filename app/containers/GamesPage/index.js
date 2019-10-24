@@ -94,6 +94,12 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
             if (window.addEventListener) {
                 // For standards-compliant web browsers
                 window.addEventListener('message', this.parsePocketFromWeb, false);
+                if (globalScope.token) {
+                    this.setState({ loading: false });
+                } else {
+                    globalScope.previousPage = window.location.pathname;
+                    this.setState({ loading: false, requestToken: true });
+                }
             } else {
                 window.attachEvent('onmessage', this.parsePocketFromWeb);
             }
@@ -380,7 +386,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                             //     }
                             // }
                         }}
-                    >0.3.4.11</div>
+                    >0.3.8</div>
                     <img
                         draggable="false"
                         onLoad={this.onBgImageLoaded}
