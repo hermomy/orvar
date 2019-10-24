@@ -87,19 +87,12 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         setTimeout(() => {
             this.setState({ isRendered: true });
         }, 1100);
-
         if (window.takePocket) {
             this.handlePocket(window.takePocket());
         } else if (this.props.location.search.indexOf('pickPocket') || window.location !== window.parent.location) {
             if (window.addEventListener) {
                 // For standards-compliant web browsers
                 window.addEventListener('message', this.parsePocketFromWeb, false);
-                if (globalScope.token) {
-                    this.setState({ loading: false });
-                } else {
-                    globalScope.previousPage = window.location.pathname;
-                    this.setState({ loading: false, requestToken: true });
-                }
             } else {
                 window.attachEvent('onmessage', this.parsePocketFromWeb);
             }
@@ -141,6 +134,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
         if (event.origin !== 'https://www.hermo.my'
             && event.origin !== 'https://hermo.my'
             && event.origin !== 'https://devshop.hermo.my'
+            && event.origin !== 'http://10.0.2.181:1234'
             && event.origin !== 'http://localhost:1234'
             && event.origin !== 'http://hershop.hermo.my') {
             console.log(`Receive postMessage from invalid source: ${event.origin}`);
@@ -386,7 +380,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
                             //     }
                             // }
                         }}
-                    >0.3.8</div>
+                    >0.3.9</div>
                     <img
                         draggable="false"
                         onLoad={this.onBgImageLoaded}
