@@ -1,5 +1,7 @@
 /* eslint consistent-return:0 */
 
+const https = require('https');
+const fs = require('fs');
 const express = require('express');
 const logger = require('./logger');
 
@@ -26,7 +28,10 @@ const host = customHost || null; // Let http.Server use its default IPv6/4 host
 const prettyHost = customHost || 'localhost';
 
 // Start your app.
-app.listen(port, host, (err) => {
+https.createServer({
+    key: fs.readFileSync('./server.key'),
+    cert: fs.readFileSync('./server.crt'),
+}, app).listen(port, host, (err) => {
     if (err) {
         return logger.error(err.message);
     }
