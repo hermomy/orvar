@@ -10,5 +10,4 @@ stats.json
 npm-debug.log
 .idea
 .env-local
-package-lock.json
 .vscode
