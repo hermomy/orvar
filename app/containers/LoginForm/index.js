@@ -131,7 +131,7 @@ export class LoginForm extends React.PureComponent { // eslint-disable-line reac
     forgotPassword = () => (
         <FormControl>
             <ButtonBase onClick={() => this.props.onClickForgot()}>
-                <u>Forgot Password?</u>
+                <Typography variant="body2" color="textSecondary"><u>Forgot Password?</u></Typography>
             </ButtonBase>
         </FormControl>
     )

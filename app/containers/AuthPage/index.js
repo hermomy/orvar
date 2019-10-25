@@ -147,7 +147,7 @@ export class AuthPage extends React.PureComponent { // eslint-disable-line react
                     </form>
                     <div className="p-1" style={{ textAlign: 'center' }} >
                         <Divider />
-                        <Typography variant="caption">Trouble logging in? Drop our helpdesk an email admin@hermo.my or call 07-5623567</Typography>
+                        <Typography variant="caption">Trouble logging in? Drop our helpdesk an email <a href="mailto:admin@hermo.my" style={{ color: '#603' }}>admin@hermo.my</a> or call <a href="tel:+607-5623567" style={{ color: '#603' }}>07-5623567</a></Typography>
                     </div>
                 </PopupDialog>
             </div>
