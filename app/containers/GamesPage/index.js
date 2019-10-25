@@ -133,7 +133,7 @@ export class GamesPage extends React.PureComponent { // eslint-disable-line reac
     parsePocketFromWeb = (event) => {
         if (event.origin !== 'https://www.hermo.my'
             && event.origin !== 'https://hermo.my'
-            && event.origin !== 'https://devshop.hermo.my'
+            && event.origin !== 'https://devshop2.hermo.my'
             && event.origin !== 'http://10.0.2.181:1234'
             && event.origin !== 'http://localhost:1234'
             && event.origin !== 'http://hershop.hermo.my') {
