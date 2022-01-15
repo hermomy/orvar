@@ -392,7 +392,7 @@
     "react-test-renderer": "15.6.1",
     "rimraf": "2.6.1",
     "sass-loader": "^6.0.6",
-    "shelljs": "^0.7.8",
+    "shelljs": "^0.8.5",
     "style-loader": "0.18.1",
     "url-loader": "0.5.8",
     "webpack": "3.5.5",
