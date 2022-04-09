@@ -298,7 +298,7 @@
     "ip": "1.1.5",
     "lodash": "^4.17.11",
     "minimist": "1.2.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.14",
     "prop-types": "15.5.10",
     "react": "^16.6.3",
